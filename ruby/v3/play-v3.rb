@@ -19,14 +19,16 @@ end
 # Cell.new(world: world, x: 1, y: 2, dead: true)
 
 while true
-  # system('clear')
-  ((world.boundaries[:y][:min])..(world.boundaries[:y][:max])).each do |y|
-    ((world.boundaries[:x][:min])..(world.boundaries[:x][:max])).each do |x|
+  output = ((world.boundaries[:y][:min])..(world.boundaries[:y][:max])).collect { |y|
+    ((world.boundaries[:x][:min])..(world.boundaries[:x][:max])).collect { |x|
       cell = world.cell_at(x: x, y: y)
-      print (cell ? cell.to_char : ' ')
-    end
-    puts
-  end
+      (cell ? cell.to_char : ' ')
+    }.join
+  }.join("\n")
+
+  system('clear')
+  puts output
+
   b = Time.now
   world.tick!
   a = Time.now
