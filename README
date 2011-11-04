@@ -1,8 +1,2 @@
-Ruby implementation of Conway's Game of Life
-* http://en.wikipedia.org/wiki/Conway's_Game_of_Life
-
-Examples:
-* http://bjorkoy.com/2010/05/conways-game-of-life-in-ruby/
-* http://madcoderspeak.blogspot.com/2007/02/test-driving-conways-game-of-life-in.html
-* https://github.com/5v3n/Conways-Game-Of-LIFE/tree/master/lib
-* http://vimeo.com/31403388
+Multi-language implementations of Conway's Game of Life
+http://en.wikipedia.org/wiki/Conway's_Game_of_Life
