@@ -5,8 +5,8 @@ require 'game-v1'
 world = World.new
 
 # Randomized
-50.times do |x|
-  25.times do |y|
+150.times do |x|
+  40.times do |y|
     Cell.new(world: world, x: x, y: y, dead: (rand > 0.2))
   end
 end
@@ -19,6 +19,7 @@ end
 # Cell.new(world: world, x: 1, y: 2, dead: true)
 
 while true
+  # system('clear')
   ((world.boundaries[:y][:min])..(world.boundaries[:y][:max])).each do |y|
     ((world.boundaries[:x][:min])..(world.boundaries[:x][:max])).each do |x|
       cell = world.cell_at(x: x, y: y)
