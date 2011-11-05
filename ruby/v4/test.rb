@@ -13,6 +13,7 @@ describe "Conway's Game of Life" do
     it "can be initialized" do
       world.should be_instance_of World
       world.cells.should be_instance_of Hash
+      world.neighbours.should be_instance_of Hash
     end
 
     it "cannot add cells if location already contains a cell" do
