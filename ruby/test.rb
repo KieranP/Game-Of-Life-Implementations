@@ -28,19 +28,19 @@ describe "Conway's Game of Life" do
       cell.y.should eq 0
     end
 
+    it "can retrieve cells at a given location" do
+      cell = world.add_cell(0, 0)
+      world.cell_at(0, 0).should eq cell
+    end
+
     it "resets neighbours data when adding cells" do
       cell1 = world.add_cell(0, 0)
       cell2 = world.add_cell(0, 1)
       world.neighbours_at(0, 0).should include cell2
-      world.neighbours.keys.should_not be_empty
+      world.neighbours.should_not be_empty
 
-      cell2 = world.add_cell(1, 0)
-      world.neighbours.keys.should be_empty
-    end
-
-    it "can retrieve cells at a given location" do
-      cell = world.add_cell(0, 0)
-      world.cell_at(0, 0).should eq cell
+      cell3 = world.add_cell(1, 0)
+      world.neighbours.should be_empty
     end
 
     it "can retrieve neighbours for a given location" do
@@ -105,8 +105,7 @@ describe "Conway's Game of Life" do
 
   describe Cell do
 
-    let(:world) { World.new }
-    let(:cell) { world.add_cell(0, 0) }
+    let(:cell) { Cell.new(0, 0) }
 
     it "can be initialized" do
       cell.should be_instance_of Cell
@@ -117,13 +116,8 @@ describe "Conway's Game of Life" do
     end
 
     it "can initialize a dead cell" do
-      other_cell = world.add_cell(0, 0, true)
+      other_cell = Cell.new(0, 0, true)
       other_cell.dead.should be_true
-    end
-
-    it "can store a next action" do
-      cell.next_action = :kill!
-      cell.next_action.should eq :kill!
     end
 
     it "should print out according to it's state" do
