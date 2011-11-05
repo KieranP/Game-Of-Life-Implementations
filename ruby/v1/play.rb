@@ -1,12 +1,12 @@
 $:.push(File.dirname(__FILE__))
 
-require 'game-v4'
+require 'game'
 
 def setup_world
   @world = World.new
   150.times do |x|
     40.times do |y|
-      @world.add_cell(x, y, (rand > 0.2))
+      Cell.new(world: @world, x: x, y: y, dead: (rand > 0.2))
     end
   end
 end
@@ -14,7 +14,7 @@ end
 def render_world
   ((@world.boundaries[:y][:min])..(@world.boundaries[:y][:max])).collect { |y|
     ((@world.boundaries[:x][:min])..(@world.boundaries[:x][:max])).collect { |x|
-      cell = @world.cell_at(x, y)
+      cell = @world.cell_at(x: x, y: y)
       (cell ? cell.to_char : ' ')
     }.join
   }.join("\n")

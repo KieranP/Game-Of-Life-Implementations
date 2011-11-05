@@ -1,12 +1,12 @@
 $:.push(File.dirname(__FILE__))
 
-require 'game-v1'
+require 'game'
 
 def setup_world
   @world = World.new
   150.times do |x|
     40.times do |y|
-      Cell.new(world: @world, x: x, y: y, dead: (rand > 0.2))
+      @world.add_cell(x: x, y: y, dead: (rand > 0.2))
     end
   end
 end

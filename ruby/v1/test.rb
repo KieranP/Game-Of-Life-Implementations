@@ -2,7 +2,7 @@ $:.push(File.dirname(__FILE__))
 
 require 'rubygems'
 require 'rspec'
-require 'game-v1'
+require 'game'
 
 describe "Conway's Game of Life" do
 

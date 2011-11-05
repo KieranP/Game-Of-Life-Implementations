@@ -2,7 +2,7 @@ $:.push(File.dirname(__FILE__))
 
 require 'rubygems'
 require 'rspec'
-require 'game-v2'
+require 'game'
 
 describe "Conway's Game of Life" do
 
@@ -12,8 +12,7 @@ describe "Conway's Game of Life" do
 
     it "can be initialized" do
       world.should be_instance_of World
-      world.cells.should be_instance_of Array
-      world.cells.should be_empty
+      world.cells.should be_instance_of Hash
     end
 
     it "can add cells" do
@@ -84,7 +83,7 @@ describe "Conway's Game of Life" do
     it "can be reset" do
       cell = world.add_cell(x: 0, y: 0)
       world.tick = 100
-      world.cells.should include cell
+      world.cells.values.should include cell
       world.reset!
       world.tick.should eq 0
       world.cells.should be_empty

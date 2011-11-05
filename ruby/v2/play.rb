@@ -1,6 +1,6 @@
 $:.push(File.dirname(__FILE__))
 
-require 'game-v2'
+require 'game'
 
 def setup_world
   @world = World.new
