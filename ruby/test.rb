@@ -86,13 +86,13 @@ describe "Conway's Game of Life" do
     it "can be reset" do
       cell = world.add_cell(0, 0)
       world.tick = 100
-      world.cells.values.should include cell
+      world.cells.should_not be_empty
       world.reset!
       world.tick.should eq 0
       world.cells.should be_empty
     end
 
-    it "has bounaries" do
+    it "has boundaries" do
       cell1 = world.add_cell(0, 0)
       cell2 = world.add_cell(5, 5)
       world.boundaries[:x][:min].should eq 0
@@ -178,12 +178,9 @@ describe "Conway's Game of Life" do
       cell1 = world.add_cell(0, 0, true)
       cell2 = world.add_cell(0, 1)
       cell3 = world.add_cell(1, 0)
-      world.tick!
-      cell1.dead.should be_true
-
       cell4 = world.add_cell(1, 1)
       world.tick!
-      cell1.dead.should be_true
+      cell1.dead.should be_false
     end
 
   end

@@ -11,6 +11,7 @@ class World
   def add_cell(x, y, dead = false)
     raise LocationOccupied if self.cell_at(x, y)
     @neighbours = Hash.new # so it recomputes
+    @boundaries = nil # so it recomputes
     @cells["#{x}-#{y}"] = Cell.new(x, y, dead)
   end
 
@@ -63,6 +64,7 @@ class World
     @tick = 0
     @cells = Hash.new
     @neighbours = Hash.new
+    @boundaries = nil
   end
 
   def boundaries

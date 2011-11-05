@@ -2,34 +2,31 @@ $:.push(File.dirname(__FILE__))
 
 require 'game'
 
-def setup_world
-  @world = World.new
-  150.times do |x|
-    40.times do |y|
-      @world.add_cell(x, y, (rand > 0.2))
-    end
-  end
-end
-
-def render_world
-  ((@world.boundaries[:y][:min])..(@world.boundaries[:y][:max])).collect { |y|
-    ((@world.boundaries[:x][:min])..(@world.boundaries[:x][:max])).collect { |x|
-      cell = @world.cell_at(x, y)
+def render(world)
+  ((world.boundaries[:y][:min])..(world.boundaries[:y][:max])).collect { |y|
+    ((world.boundaries[:x][:min])..(world.boundaries[:x][:max])).collect { |x|
+      cell = world.cell_at(x, y)
       (cell ? cell.to_char : ' ')
     }.join
   }.join("\n")
 end
 
-setup_world
-render_world
+world = World.new
+150.times do |x|
+  40.times do |y|
+    world.add_cell(x, y, (rand > 0.2))
+  end
+end
+
+puts render(world)
 
 while true
   start = Time.now
-  @world.tick!
+  world.tick!
   finish = Time.now
 
-  output = render_world
+  output = "##{world.tick} - World tick took #{finish - start}\n"
+  output += render(world)
   system('clear')
-  puts "##{@world.tick} - World tick took #{finish - start}"
   puts output
 end
