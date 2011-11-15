@@ -38,6 +38,6 @@ $(document).ready(function() {
     output += " - Rendering took "+render_time;
     output += "<br />"+rendered;
     body.html(output);
-  });
+  }, 0);
 
 });
