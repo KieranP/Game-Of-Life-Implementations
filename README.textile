@@ -1,0 +1,16 @@
+h1. Multi-language implementations of Conway's Game of Life
+
+The goal is to provide near identical implementations of "Conway's Game of Life":http://en.wikipedia.org/wiki/Conway's_Game_of_Life in multiple languages to measure not only the speed of the language, but for each person to assess the syntax of each, and the ease and availability of unit testing tools.
+
+I started with the Ruby implementation, optimized it as much as I could, and then ported it to the other languages. Therefore, some languages may not be running as fast as they possibly could. Any suggestions for optimizations are greatly appreciated.
+
+h2. Speed Results
+
+*Note 1:* These speed results are taken on a Late 2008 Macbook, 2.4 GHz Intel Core 2 Duo, with 2 GB of 667 MHz DDR2 SDRAM.
+
+*Note 2:* The times were calculated by averaging the times from ticks 2 through 11 (tick 1 is ignored because of cache warm up).
+
+=. |_. Place|_. Language  |_. Tick Time|_. Render Time|_. % slower than 1st place|_. Notes          |
+=. |1st.    |Javascript   |0.014s      |0.004s        |                          |Chrome 16.0.912.36|
+=. |2nd.    |Ruby         |0.027s      |0.014s        |93%                       |Ruby 1.9.3p0      |
+=. |3rd.    |PHP          |0.129s      |0.018s        |821%                      |PHP 5.3.6         |
