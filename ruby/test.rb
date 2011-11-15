@@ -150,7 +150,6 @@ describe "Conway's Game of Life" do
       cell1 = world.add_cell(0, 0)
       cell2 = world.add_cell(0, 1)
       cell3 = world.add_cell(1, 0)
-
       world.tick!
       cell1.dead.should be_false
 

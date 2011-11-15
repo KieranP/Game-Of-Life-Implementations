@@ -21,12 +21,20 @@ end
 puts render(world)
 
 while true
-  start = Time.now
+  tick_start = Time.now
   world.tick!
-  finish = Time.now
+  tick_finish = Time.now
+  tick_time = (tick_finish - tick_start).round(3);
 
-  output = "##{world.tick} - World tick took #{finish - start}\n"
-  output += render(world)
+  render_start = Time.now
+  rendered = render(world)
+  render_finish = Time.now
+  render_time = (render_finish - render_start).round(3);
+
+  output = "##{world.tick}"
+  output += " - World tick took #{tick_time}"
+  output += " - Rendering took #{render_time}";
+  output += "\n#{rendered}"
   system('clear')
   puts output
 end

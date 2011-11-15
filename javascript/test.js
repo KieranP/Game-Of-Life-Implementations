@@ -154,7 +154,6 @@ $(document).ready(function() {
     var cell1 = world.add_cell(0, 0);
     var cell2 = world.add_cell(0, 1);
     var cell3 = world.add_cell(1, 0);
-
     world._tick();
     equal(cell1.dead, false);
 
