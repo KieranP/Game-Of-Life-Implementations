@@ -44,11 +44,6 @@ class World {
       }
     }
     return $alive_neighbours;
-    /*
-    return array_filter($this->neighbours_at($x, $y), function($cell) {
-      return !$cell->dead;
-    });
-    */
   }
 
   function tick() {
