@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 // Tests use SimpleTest - See http://simpletest.org/en/unit_test_documentation.html
 
 require_once('simpletest/autorun.php');
@@ -14,7 +16,7 @@ class WorldTest extends UnitTestCase {
   }
 
   function test_can_be_initialized() {
-    $this->assertEqual(get_class($this->world), World);
+    $this->assertEqual(get_class($this->world), 'World');
     $this->assertTrue(is_array($this->world->cells));
     $this->assertTrue(is_array($this->world->neighbours));
   }
@@ -27,7 +29,7 @@ class WorldTest extends UnitTestCase {
 
   function test_can_add_cells() {
     $cell = $this->world->add_cell(0, 0);
-    $this->assertEqual(get_class($cell), Cell);
+    $this->assertEqual(get_class($cell), 'Cell');
     $this->assertEqual($cell->x, 0);
     $this->assertEqual($cell->y, 0);
   }
@@ -117,11 +119,11 @@ class CellTest extends UnitTestCase {
   }
 
   function test_can_be_initialized() {
-    $this->assertEqual(get_class($this->cell), Cell);
-    $this->assertEqual($cell->x, 0);
-    $this->assertEqual($cell->y, 0);
-    $this->assertEqual($cell->dead, false);
-    $this->assertEqual($cell->next_action, null);
+    $this->assertEqual(get_class($this->cell), 'Cell');
+    $this->assertEqual($this->cell->x, 0);
+    $this->assertEqual($this->cell->y, 0);
+    $this->assertEqual($this->cell->dead, false);
+    $this->assertEqual($this->cell->next_action, null);
   }
 
   function test_can_initialize_a_dead_cell() {

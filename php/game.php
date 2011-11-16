@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 class LocationOccupied extends Exception { }
 
 class World {

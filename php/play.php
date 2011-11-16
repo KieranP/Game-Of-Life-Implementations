@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL);
+
 require_once('game.php');
 
 function render($world) {
