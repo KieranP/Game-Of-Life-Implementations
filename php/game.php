@@ -17,7 +17,7 @@ class World {
       throw new LocationOccupied;
     }
     unset($this->neighbours);
-    $this->boundaries = null;
+    unset($this->boundaries);
     return $this->cells["$x-$y"] = new Cell($x, $y, $dead);
   }
 
@@ -85,7 +85,7 @@ class World {
   }
 
   function boundaries() {
-    if (!$this->boundaries) {
+    if (!isset($this->boundaries)) {
       $x_vals = $y_vals = array();
       foreach ($this->cells as $cell) {
         array_push($x_vals, $cell->x);
