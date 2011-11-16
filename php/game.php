@@ -26,7 +26,7 @@ class World {
   }
 
   function neighbours_at($x, $y) {
-    if ( !isset($this->neighbours["$x-$y"])) {
+    if (!isset($this->neighbours["$x-$y"])) {
       $this->neighbours["$x-$y"] = array();
       foreach ($this->directions as $set) {
         $cell = $this->cell_at(($x + $set[0]), ($y + $set[1]));
@@ -39,9 +39,8 @@ class World {
 
   function alive_neighbours_at($x, $y) {
     $alive_neighbours = array();
-    $neighbours = $this->neighbours_at($x, $y);
-    foreach( $neighbours as $cell ) {
-      if( !$cell->dead ) {
+    foreach ($this->neighbours_at($x, $y) as $cell) {
+      if (!$cell->dead) {
         $alive_neighbours[] = $cell;
       }
     }
