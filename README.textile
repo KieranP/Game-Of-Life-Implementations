@@ -12,7 +12,7 @@ h2. Speed Results
 
 =. |_. Place|_. Language  |_. Tick Time|_. Render Time|_. % slower than 1st place|_. Notes          |
 =. |1st.    |Javascript   |0.014s      |0.004s        |                          |Chrome 16.0.912.36|
-=. |1st.    |Javascript   |0.024s      |0.005s        |71.4%                     |Firefox 8.0       |
-=. |2nd.    |Ruby         |0.027s      |0.014s        |92.9%                     |Ruby 1.9.3p0      |
-=. |2nd.    |Ruby         |0.035s      |0.015s        |150.0%                    |Ruby 1.9.2p290    |
-=. |3rd.    |PHP          |0.129s      |0.018s        |821.4%                    |PHP 5.3.6         |
+=. |1st.    |Javascript   |0.024s      |0.005s        |61.1%                     |Firefox 8.0       |
+=. |2nd.    |Ruby         |0.027s      |0.014s        |127.8%                    |Ruby 1.9.3p0      |
+=. |2nd.    |Ruby         |0.035s      |0.015s        |177.8%                    |Ruby 1.9.2p290    |
+=. |3rd.    |PHP          |0.107s      |0.023s        |622.2%                    |PHP 5.3.6         |
