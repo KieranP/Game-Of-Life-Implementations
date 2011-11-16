@@ -14,25 +14,19 @@ class World {
     if ($this->cell_at($x, $y)) {
       throw new LocationOccupied;
     }
-    $this->neighbours = array(); // so it recomputes
+    unset($this->neighbours);
     $this->boundaries = null;
     return $this->cells["$x-$y"] = new Cell($x, $y, $dead);
   }
 
   function cell_at($x, $y) {
-    return $this->cells["$x-$y"];
+    return @$this->cells["$x-$y"];
   }
 
   function neighbours_at($x, $y) {
-    if (!$this->neighbours["$x-$y"]) {
-      $directions = array(
-        array(-1, 1), array(0, 1), array(1, 1),   // above
-        array(-1, 0), array(1, 0),                // sides
-        array(-1, -1), array(0, -1), array(1, -1) // below
-      );
-
+    if ( !isset($this->neighbours["$x-$y"])) {
       $this->neighbours["$x-$y"] = array();
-      foreach ($directions as $set) {
+      foreach ($this->directions as $set) {
         $cell = $this->cell_at(($x + $set[0]), ($y + $set[1]));
         if ($cell) { array_push($this->neighbours["$x-$y"], $cell); }
       }
@@ -42,9 +36,14 @@ class World {
   }
 
   function alive_neighbours_at($x, $y) {
-    return array_filter($this->neighbours_at($x, $y), function($cell) {
-      return !$cell->dead;
-    });
+    $alive_neighbours = array();
+    $neighbours = $this->neighbours_at($x, $y);
+    foreach( $neighbours as $cell ) {
+      if( !$cell->dead ) {
+        $alive_neighbours[] = $cell;
+      }
+    }
+    return $alive_neighbours;
   }
 
   function tick() {
@@ -77,6 +76,13 @@ class World {
     $this->cells = array();
     $this->neighbours = array();
     $this->boundaries = null;
+    $this->directions = array(
+      array(-1, 1), array(0, 1), array(1, 1),   // above
+      array(-1, 0), array(1, 0),                // sides
+      array(-1, -1), array(0, -1), array(1, -1) // below
+    );
+
+
   }
 
   function boundaries() {
