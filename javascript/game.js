@@ -1,7 +1,5 @@
 function World() {
-  this.tick = 0;
-  this.cells = {};
-  this.neighbours = {};
+  this._reset();
 }
 
 World.LocationOccupied = function() {};
@@ -23,14 +21,8 @@ World.prototype.cell_at = function(x, y) {
 
 World.prototype.neighbours_at = function(x, y) {
   if (!this.neighbours[x+'-'+y]) {
-    var directions = [
-      [-1, 1], [0, 1], [1, 1],   // above
-      [-1, 0], [1, 0],           // sides
-      [-1, -1], [0, -1], [1, -1] // below
-    ];
-
     this.neighbours[x+'-'+y] = new Array;
-    $.each(directions, function(i, set) {
+    $.each(this.directions, function(i, set) {
       var cell = this.cell_at((x + set[0]), (y + set[1]));
       if (cell) { this.neighbours[x+'-'+y].push(cell); }
     }.bind(this));
@@ -75,6 +67,11 @@ World.prototype._reset = function(x, y) {
   this.cells = {};
   this.neighbours = {};
   this.cached_boundaries = null;
+  this.directions = [
+    [-1, 1], [0, 1], [1, 1],   // above
+    [-1, 0], [1, 0],           // sides
+    [-1, -1], [0, -1], [1, -1] // below
+  ];
 }
 
 World.prototype.boundaries = function() {

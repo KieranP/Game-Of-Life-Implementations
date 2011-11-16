@@ -21,10 +21,7 @@ class World
 
   def neighbours_at(x, y)
     @neighbours["#{x}-#{y}"] ||= begin
-      [ [-1, 1], [0, 1], [1, 1],   # above
-        [-1, 0], [1, 0],           # sides
-        [-1, -1], [0, -1], [1, -1] # below
-      ].collect { |rel_x, rel_y|
+      @directions.collect { |rel_x, rel_y|
         self.cell_at((x + rel_x), (y + rel_y))
       }.compact
     end
@@ -65,6 +62,11 @@ class World
     @cells = Hash.new
     @neighbours = Hash.new
     @boundaries = nil
+    @directions = [
+      [-1, 1], [0, 1], [1, 1],   # above
+      [-1, 0], [1, 0],           # sides
+      [-1, -1], [0, -1], [1, -1] # below
+    ]
   end
 
   def boundaries
