@@ -22,7 +22,9 @@ class World {
   }
 
   function cell_at($x, $y) {
-    return @$this->cells["$x-$y"];
+    if (isset($this->cells["$x-$y"])) {
+      return $this->cells["$x-$y"];
+    }
   }
 
   function neighbours_at($x, $y) {
