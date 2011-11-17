@@ -42,7 +42,7 @@ class WorldTest extends UnitTestCase {
   function test_resets_neighbours_data_when_adding_cells() {
     $cell1 = $this->world->add_cell(0, 0);
     $cell2 = $this->world->add_cell(0, 1);
-    $this->assertTrue(in_array($cell2, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell2, $this->world->neighbours_around($cell1)));
     $this->assertFalse(empty($this->world->neighbours));
 
     $cell3 = $this->world->add_cell(1, 0);
@@ -50,37 +50,38 @@ class WorldTest extends UnitTestCase {
   }
 
   function test_can_retrieve_neighbours_for_a_given_location() {
+    $center_cell = $this->world->add_cell(0, 0);
+
     $cell = $this->world->add_cell(0, 1);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(1, 1, true);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(1, 0);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(1, -1, true);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(0, -1);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(-1, -1, true);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(-1, 0);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
 
     $cell = $this->world->add_cell(-1, 1, true);
-    $this->assertTrue(in_array($cell, $this->world->neighbours_at(0, 0)));
+    $this->assertTrue(in_array($cell, $this->world->neighbours_around($center_cell)));
   }
 
   function test_can_retrieve_alive_neighbours_for_a_given_location() {
     $cell1 = $this->world->add_cell(0, 0);
     $cell2 = $this->world->add_cell(0, 1);
     $cell3 = $this->world->add_cell(1, 0, true);
-    $this->assertTrue(in_array($cell2, $this->world->alive_neighbours_at(0, 0)));
-    $this->assertFalse(in_array($cell3, $this->world->alive_neighbours_at(0, 0)));
+    $this->assertEqual($this->world->alive_neighbours_around($cell1), 1);
   }
 
   function test_can_tick_along() {

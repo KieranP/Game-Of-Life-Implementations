@@ -37,7 +37,7 @@ $(document).ready(function() {
     var world = new World;
     var cell1 = world.add_cell(0, 0);
     var cell2 = world.add_cell(0, 1);
-    ok($.inArray(cell2, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell2, world.neighbours_around(cell1)) > -1);
     equal($.isEmptyObject(world.neighbours), false);
 
     var cell3 = world.add_cell(1, 0);
@@ -47,29 +47,31 @@ $(document).ready(function() {
   test("can retrieve neighbours for a given location", function() {
     var world = new World;
 
+    var center_cell = world.add_cell(0, 0);
+
     var cell = world.add_cell(0, 1);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(1, 1, true);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(1, 0);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(1, -1, true);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(0, -1);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(-1, -1, true);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(-1, 0);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
 
     var cell = world.add_cell(-1, 1, true);
-    ok($.inArray(cell, world.neighbours_at(0, 0)) > -1);
+    ok($.inArray(cell, world.neighbours_around(center_cell)) > -1);
   });
 
   test("an retrieve alive neighbours for a given location", function() {
@@ -78,8 +80,7 @@ $(document).ready(function() {
     var cell1 = world.add_cell(0, 0);
     var cell2 = world.add_cell(0, 1);
     var cell3 = world.add_cell(1, 0, true);
-    ok($.inArray(cell2, world.alive_neighbours_at(0, 0)) > -1);
-    ok($.inArray(cell3, world.alive_neighbours_at(0, 0)) == -1);
+    equal(world.alive_neighbours_around(cell1), 1);
   });
 
   test("can tick along", function() {

@@ -19,16 +19,16 @@ class World
     @cells["#{x}-#{y}"]
   end
 
-  def neighbours_at(x, y)
-    @neighbours["#{x}-#{y}"] ||= begin
+  def neighbours_around(cell)
+    @neighbours[cell.key] ||= begin
       @directions.collect { |rel_x, rel_y|
-        self.cell_at((x + rel_x), (y + rel_y))
+        self.cell_at((cell.x + rel_x), (cell.y + rel_y))
       }.compact
     end
   end
 
-  def alive_neighbours_at(x, y)
-    neighbours_at(x, y).reject(&:dead)
+  def alive_neighbours_around(cell)
+    neighbours_around(cell).reject(&:dead).size
   end
 
   def tick!
@@ -36,10 +36,10 @@ class World
 
     # First determine the action for all cells
     cells.each do |cell|
-      alive_neighbours = self.alive_neighbours_at(cell.x, cell.y).size
+      alive_neighbours = self.alive_neighbours_around(cell)
       if cell.dead && alive_neighbours == 3
         cell.next_action = :revive
-      elsif !(2..3).include?(alive_neighbours)
+      elsif alive_neighbours < 2 || alive_neighbours > 3
         cell.next_action = :kill
       end
     end
@@ -86,11 +86,12 @@ end
 
 class Cell
 
-  attr_accessor :x, :y, :dead, :next_action
+  attr_accessor :x, :y, :key, :dead, :next_action
 
   def initialize(x, y, dead = false)
     @x = x
     @y = y
+    @key = "#{x}-#{y}"
     @dead = dead
   end
 

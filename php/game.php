@@ -16,8 +16,7 @@ class World {
     if ($this->cell_at($x, $y)) {
       throw new LocationOccupied;
     }
-    unset($this->neighbours);
-    unset($this->boundaries);
+    unset($this->neighbours, $this->boundaries);
     return $this->cells["$x-$y"] = new Cell($x, $y, $dead);
   }
 
@@ -27,43 +26,40 @@ class World {
     }
   }
 
-  function neighbours_at($x, $y) {
-    if (!isset($this->neighbours["$x-$y"])) {
-      $this->neighbours["$x-$y"] = array();
+  function neighbours_around($cell) {
+    if (!isset($this->neighbours[$cell->key])) {
+      $this->neighbours[$cell->key] = array();
       foreach ($this->directions as $set) {
-        $cell = $this->cell_at(($x + $set[0]), ($y + $set[1]));
-        if ($cell) { array_push($this->neighbours["$x-$y"], $cell); }
+        $neighbour = $this->cell_at(($cell->x + $set[0]), ($cell->y + $set[1]));
+        if ($neighbour) { $this->neighbours[$cell->key][] = $neighbour; }
       }
     }
-
-    return $this->neighbours["$x-$y"];
+    return $this->neighbours[$cell->key];
   }
 
-  function alive_neighbours_at($x, $y) {
-    $alive_neighbours = array();
-    foreach ($this->neighbours_at($x, $y) as $cell) {
+  function alive_neighbours_around($cell) {
+    $alive_neighbours = 0;
+    foreach ($this->neighbours_around($cell) as $cell) {
       if (!$cell->dead) {
-        $alive_neighbours[] = $cell;
+        $alive_neighbours++;
       }
     }
     return $alive_neighbours;
   }
 
   function tick() {
-    $cells = array_values($this->cells);
-
     // First determine the action for all cells
-    foreach ($cells as $cell) {
-      $alive_neighbours = count($this->alive_neighbours_at($cell->x, $cell->y));
+    foreach ($this->cells as $cell) {
+      $alive_neighbours = $this->alive_neighbours_around($cell);
       if ($cell->dead && $alive_neighbours == 3) {
         $cell->next_action = 'revive';
-      } else if (!in_array($alive_neighbours, array(2,3))) {
+      } else if ($alive_neighbours < 2 || $alive_neighbours > 3) {
         $cell->next_action = 'kill';
       }
     }
 
     // Then execute the determined action for all cells
-    foreach ($cells as $cell) {
+    foreach ($this->cells as $cell) {
       if ($cell->next_action == 'revive') {
         $cell->dead = false;
       } else if ($cell->next_action == 'kill') {
@@ -90,8 +86,8 @@ class World {
     if (!isset($this->boundaries)) {
       $x_vals = $y_vals = array();
       foreach ($this->cells as $cell) {
-        array_push($x_vals, $cell->x);
-        array_push($y_vals, $cell->y);
+        $x_vals[] = $cell->x;
+        $y_vals[] = $cell->y;
       }
 
       $this->boundaries = array(
@@ -113,11 +109,12 @@ class World {
 
 class Cell {
 
-  var $x, $y, $dead, $next_action;
+  var $x, $y, $key, $dead, $next_action;
 
   function __construct($x, $y, $dead = false) {
     $this->x = $x;
     $this->y = $y;
+    $this->key = "$x-$y";
     $this->dead = $dead;
   }
 

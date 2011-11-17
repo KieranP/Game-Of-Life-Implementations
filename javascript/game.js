@@ -19,22 +19,22 @@ World.prototype.cell_at = function(x, y) {
   return this.cells[x+'-'+y];
 }
 
-World.prototype.neighbours_at = function(x, y) {
-  if (!this.neighbours[x+'-'+y]) {
-    this.neighbours[x+'-'+y] = new Array;
+World.prototype.neighbours_around = function(cell) {
+  if (!this.neighbours[cell.key]) {
+    this.neighbours[cell.key] = new Array;
     $.each(this.directions, function(i, set) {
-      var cell = this.cell_at((x + set[0]), (y + set[1]));
-      if (cell) { this.neighbours[x+'-'+y].push(cell); }
+      var neighbour = this.cell_at((cell.x + set[0]), (cell.y + set[1]));
+      if (neighbour) { this.neighbours[cell.key].push(neighbour); }
     }.bind(this));
   }
 
-  return this.neighbours[x+'-'+y];
+  return this.neighbours[cell.key];
 }
 
-World.prototype.alive_neighbours_at = function(x, y) {
-  return $.grep(this.neighbours_at(x, y), function(cell) {
+World.prototype.alive_neighbours_around = function(cell) {
+  return $.grep(this.neighbours_around(cell), function(cell) {
     return !cell.dead;
-  });
+  }).length;
 }
 
 World.prototype._tick = function(x, y) {
@@ -42,10 +42,10 @@ World.prototype._tick = function(x, y) {
 
   // First determine the action for all cells
   $.each(cells, function(i, cell) {
-     var alive_neighbours = this.alive_neighbours_at(cell.x, cell.y).length;
+     var alive_neighbours = this.alive_neighbours_around(cell);
      if (cell.dead && alive_neighbours == 3) {
        cell.next_action = 'revive';
-     } else if ($.inArray(alive_neighbours, [2,3]) == -1) {
+     } else if (alive_neighbours < 2 || alive_neighbours > 3) {
        cell.next_action = 'kill';
      }
   }.bind(this));
@@ -100,6 +100,7 @@ World.prototype.boundaries = function() {
 function Cell(x, y, dead) {
   this.x = x;
   this.y = y;
+  this.key = (x+'-'+y);
   this.dead = (dead || false);
   this.next_action = null;
 }

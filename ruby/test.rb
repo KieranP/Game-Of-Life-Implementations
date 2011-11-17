@@ -36,7 +36,7 @@ describe "Conway's Game of Life" do
     it "resets neighbours data when adding cells" do
       cell1 = world.add_cell(0, 0)
       cell2 = world.add_cell(0, 1)
-      world.neighbours_at(0, 0).should include cell2
+      world.neighbours_around(cell1).should include cell2
       world.neighbours.should_not be_empty
 
       cell3 = world.add_cell(1, 0)
@@ -44,37 +44,38 @@ describe "Conway's Game of Life" do
     end
 
     it "can retrieve neighbours for a given location" do
+      center_cell = world.add_cell(0, 0)
+
       cell = world.add_cell(0, 1)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(1, 1, true)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(1, 0)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(1, -1, true)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(0, -1)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(-1, -1, true)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(-1, 0)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
 
       cell = world.add_cell(-1, 1, true)
-      world.neighbours_at(0, 0).should include cell
+      world.neighbours_around(center_cell).should include cell
     end
 
     it "can retrieve alive neighbours for a given location" do
       cell1 = world.add_cell(0, 0)
       cell2 = world.add_cell(0, 1)
       cell3 = world.add_cell(1, 0, true)
-      world.alive_neighbours_at(0, 0).should include cell2
-      world.alive_neighbours_at(0, 0).should_not include cell3
+      world.alive_neighbours_around(cell1).should eq 1
     end
 
     it "can tick along" do
