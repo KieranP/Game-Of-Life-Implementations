@@ -6,18 +6,17 @@ class LocationOccupied extends Exception { }
 
 class World {
 
-  var $tick, $cells, $neighbours;
+  var $tick, $cells;
 
   function __construct() {
     $this->reset();
   }
 
-  function add_cell($x, $y, $dead = false) {
+  function add_cell($x, $y, $alive = false) {
     if ($this->cell_at($x, $y)) {
       throw new LocationOccupied;
     }
-    unset($this->neighbours, $this->boundaries);
-    return $this->cells["$x-$y"] = new Cell($x, $y, $dead);
+    return $this->cells["$x-$y"] = new Cell($x, $y, $alive);
   }
 
   function cell_at($x, $y) {
@@ -27,20 +26,20 @@ class World {
   }
 
   function neighbours_around($cell) {
-    if (!isset($this->neighbours[$cell->key])) {
-      $this->neighbours[$cell->key] = array();
+    if (!$cell->neighbours) {
+      $cell->neighbours = array();
       foreach ($this->directions as $set) {
         $neighbour = $this->cell_at(($cell->x + $set[0]), ($cell->y + $set[1]));
-        if ($neighbour) { $this->neighbours[$cell->key][] = $neighbour; }
+        if ($neighbour) { $cell->neighbours[] = $neighbour; }
       }
     }
-    return $this->neighbours[$cell->key];
+    return $cell->neighbours;
   }
 
   function alive_neighbours_around($cell) {
     $alive_neighbours = 0;
     foreach ($this->neighbours_around($cell) as $cell) {
-      if (!$cell->dead) {
+      if ($cell->alive) {
         $alive_neighbours++;
       }
     }
@@ -51,19 +50,19 @@ class World {
     // First determine the action for all cells
     foreach ($this->cells as $cell) {
       $alive_neighbours = $this->alive_neighbours_around($cell);
-      if ($cell->dead && $alive_neighbours == 3) {
-        $cell->next_action = 'revive';
+      if (!$cell->alive && $alive_neighbours == 3) {
+        $cell->next_state = 1;
       } else if ($alive_neighbours < 2 || $alive_neighbours > 3) {
-        $cell->next_action = 'kill';
+        $cell->next_state = 0;
       }
     }
 
     // Then execute the determined action for all cells
     foreach ($this->cells as $cell) {
-      if ($cell->next_action == 'revive') {
-        $cell->dead = false;
-      } else if ($cell->next_action == 'kill') {
-        $cell->dead = true;
+      if ($cell->next_state == 1) {
+        $cell->alive = true;
+      } else if ($cell->next_state == 0) {
+        $cell->alive = false;
       }
     }
 
@@ -73,7 +72,6 @@ class World {
   function reset() {
     $this->tick = 0;
     $this->cells = array();
-    $this->neighbours = array();
     $this->boundaries = null;
     $this->directions = array(
       array(-1, 1), array(0, 1), array(1, 1),   // above
@@ -109,17 +107,18 @@ class World {
 
 class Cell {
 
-  var $x, $y, $key, $dead, $next_action;
+  var $x, $y, $key, $alive, $next_state, $neighbours;
 
-  function __construct($x, $y, $dead = false) {
+  function __construct($x, $y, $alive = false) {
     $this->x = $x;
     $this->y = $y;
     $this->key = "$x-$y";
-    $this->dead = $dead;
+    $this->alive = $alive;
+    $this->neighbours = null;
   }
 
   function to_char() {
-    return ($this->dead ? ' ' : 'o');
+    return ($this->alive ? 'o' : ' ');
   }
 
 }

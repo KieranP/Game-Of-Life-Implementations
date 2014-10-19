@@ -2,17 +2,16 @@ h1. Multi-language implementations of Conway's Game of Life
 
 The goal is to provide near identical implementations of "Conway's Game of Life":http://en.wikipedia.org/wiki/Conway's_Game_of_Life in multiple languages to measure not only the speed of the language, but for each person to assess the syntax of each, and the ease and availability of unit testing tools.
 
-I started with the Ruby implementation, optimized it as much as I could, and then ported it to the other languages. Therefore, some languages may not be running as fast as they possibly could. Any suggestions for optimizations are greatly appreciated.
+I started with the Ruby implementation, optimised it as much as I could, and then ported it to the other languages. Therefore, some languages may not be running as fast as they possibly could. Any suggestions for optimisations that can be translated to each implementation are greatly appreciated (minimal language specific optimisations please).
 
-h2. Speed Results
+h2. Speed Results (by tick time)
 
-*Note 1:* These speed results are taken on a Late 2008 Macbook, 2.4 GHz Intel Core 2 Duo, with 2 GB of 667 MHz DDR2 SDRAM.
+*Note 1:* These speed results are taken on a 13", Late 2011 Macbook Pro, 2.8 GHz Intel Core i7, with 4 GB of 1333 MHz DDR3 RAM.
 
-*Note 2:* The times were calculated by averaging the times from ticks 2 through 11 (tick 1 is ignored because of cache warm up).
+*Note 2:* The times were calculated by playing each simulation for a few thousand ticks until the game stopped moving and the average stabilised.
 
-=. |_. Place|_. Language  |_. Tick Time|_. Render Time|_. % slower than 1st place|_. Notes      |
-=. |1st.    |Javascript   |0.011s      |0.003s        |                          |V8 3.6.6.8    |
-=. |2nd.    |Javascript   |0.019s      |0.005s        |71.4%                     |Firefox 8.0   |
-=. |3rd.    |Ruby         |0.017s      |0.015s        |128.5%                    |Ruby 1.9.3p0  |
-=. |4th.    |Ruby         |0.023s      |0.019s        |200.0%                    |Ruby 1.9.2p290|
-=. |5th.    |PHP          |0.085s      |0.023s        |671.4%                    |PHP 5.3.6     |
+=. |_. Place|_. Language  |_. Tick Time|_. Render Time|_. % slower    |_. Notes                            |
+=. |1st.    |Javascript   |0.00511s    |0.00334s      |               |SpiderMonkey 31 (Firefox 33)        |
+=. |2nd.    |Javascript   |0.00670s    |0.00230s      |131.1% (1.31x) |V8 3.28.71.15 (Chrome 38.0.2125.104)|
+=. |3rd.    |Ruby         |0.00770s    |0.00730s      |150.6% (1.50x) |Ruby 2.1.2                          |
+=. |4th.    |PHP          |0.02718s    |0.00918s      |531.8% (5.31x) |PHP 5.4.30                          |

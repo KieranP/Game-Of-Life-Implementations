@@ -4,13 +4,12 @@ function World() {
 
 World.LocationOccupied = function() {};
 
-World.prototype.add_cell = function(x, y, dead) {
-  dead = (dead || false);
+World.prototype.add_cell = function(x, y, alive) {
+  alive = (alive || false);
   if (this.cell_at(x, y)) {
     throw new World.LocationOccupied;
   }
-  this.cells[x+'-'+y] = new Cell(x, y, dead);
-  this.neighbours = {}; // so it recomputes
+  this.cells[x+'-'+y] = new Cell(x, y, alive);
   this.cached_boundaries = null; // so it recomputes
   return this.cells[x+'-'+y];
 }
@@ -20,20 +19,20 @@ World.prototype.cell_at = function(x, y) {
 }
 
 World.prototype.neighbours_around = function(cell) {
-  if (!this.neighbours[cell.key]) {
-    this.neighbours[cell.key] = new Array;
+  if (!cell.neighbours) {
+    cell.neighbours = new Array;
     $.each(this.directions, function(i, set) {
       var neighbour = this.cell_at((cell.x + set[0]), (cell.y + set[1]));
-      if (neighbour) { this.neighbours[cell.key].push(neighbour); }
+      if (neighbour) { cell.neighbours.push(neighbour); }
     }.bind(this));
   }
 
-  return this.neighbours[cell.key];
+  return cell.neighbours;
 }
 
 World.prototype.alive_neighbours_around = function(cell) {
   return $.grep(this.neighbours_around(cell), function(cell) {
-    return !cell.dead;
+    return cell.alive;
   }).length;
 }
 
@@ -43,19 +42,19 @@ World.prototype._tick = function(x, y) {
   // First determine the action for all cells
   $.each(cells, function(i, cell) {
      var alive_neighbours = this.alive_neighbours_around(cell);
-     if (cell.dead && alive_neighbours == 3) {
-       cell.next_action = 'revive';
+     if (!cell.alive && alive_neighbours == 3) {
+       cell.next_state = 1;
      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-       cell.next_action = 'kill';
+       cell.next_state = 0;
      }
   }.bind(this));
 
   // Then execute the determined action for all cells
   $.each(cells, function(i, cell) {
-    if (cell.next_action == 'revive') {
-      cell.dead = false;
-    } else if (cell.next_action == 'kill') {
-      cell.dead = true;
+    if (cell.next_state == 1) {
+      cell.alive = true;
+    } else if (cell.next_state == 0) {
+      cell.alive = false;
     }
   });
 
@@ -65,7 +64,6 @@ World.prototype._tick = function(x, y) {
 World.prototype._reset = function(x, y) {
   this.tick = 0;
   this.cells = {};
-  this.neighbours = {};
   this.cached_boundaries = null;
   this.directions = [
     [-1, 1], [0, 1], [1, 1],   // above
@@ -97,14 +95,15 @@ World.prototype.boundaries = function() {
   return this.cached_boundaries;
 }
 
-function Cell(x, y, dead) {
+function Cell(x, y, alive) {
   this.x = x;
   this.y = y;
   this.key = (x+'-'+y);
-  this.dead = (dead || false);
-  this.next_action = null;
+  this.alive = (alive || false);
+  this.next_state = null;
+  this.neighbours = null;
 }
 
 Cell.prototype.to_char = function() {
-  return (this.dead ? ' ' : 'o');
+  return (this.alive ? 'o' : ' ');
 }

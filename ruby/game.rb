@@ -2,17 +2,16 @@ class World
 
   class LocationOccupied < Exception; end
 
-  attr_accessor :tick, :cells, :neighbours
+  attr_accessor :tick, :cells
 
   def initialize
     reset!
   end
 
-  def add_cell(x, y, dead = false)
+  def add_cell(x, y, alive = false)
     raise LocationOccupied if self.cell_at(x, y)
-    @neighbours = Hash.new # so it recomputes
     @boundaries = nil # so it recomputes
-    @cells["#{x}-#{y}"] = Cell.new(x, y, dead)
+    @cells["#{x}-#{y}"] = Cell.new(x, y, alive)
   end
 
   def cell_at(x, y)
@@ -20,7 +19,7 @@ class World
   end
 
   def neighbours_around(cell)
-    @neighbours[cell.key] ||= begin
+    cell.neighbours ||= begin
       @directions.collect { |rel_x, rel_y|
         self.cell_at((cell.x + rel_x), (cell.y + rel_y))
       }.compact
@@ -28,7 +27,7 @@ class World
   end
 
   def alive_neighbours_around(cell)
-    neighbours_around(cell).reject(&:dead).size
+    cell.neighbours.count(&:alive)
   end
 
   def tick!
@@ -37,20 +36,20 @@ class World
     # First determine the action for all cells
     cells.each do |cell|
       alive_neighbours = self.alive_neighbours_around(cell)
-      if cell.dead && alive_neighbours == 3
-        cell.next_action = :revive
+      if !cell.alive && alive_neighbours == 3
+        cell.next_state = 1
       elsif alive_neighbours < 2 || alive_neighbours > 3
-        cell.next_action = :kill
+        cell.next_state = 0
       end
     end
 
     # Then execute the determined action for all cells
     cells.each do |cell|
-      case cell.next_action
-      when :revive
-        cell.dead = false
-      when :kill
-        cell.dead = true
+      case cell.next_state
+      when 1
+        cell.alive = true
+      when 0
+        cell.alive = false
       end
     end
 
@@ -60,7 +59,6 @@ class World
   def reset!
     @tick = 0
     @cells = Hash.new
-    @neighbours = Hash.new
     @boundaries = nil
     @directions = [
       [-1, 1], [0, 1], [1, 1],   # above
@@ -86,17 +84,18 @@ end
 
 class Cell
 
-  attr_accessor :x, :y, :key, :dead, :next_action
+  attr_accessor :x, :y, :key, :alive, :next_state, :neighbours
 
-  def initialize(x, y, dead = false)
+  def initialize(x, y, alive = false)
     @x = x
     @y = y
     @key = "#{x}-#{y}"
-    @dead = dead
+    @alive = alive
+    @neighbours = nil
   end
 
   def to_char
-    @dead ? ' ' : 'o'
+    @alive ? 'o' : ' '
   end
 
 end
