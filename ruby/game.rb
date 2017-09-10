@@ -5,12 +5,17 @@ class World
   attr_accessor :tick, :cells
 
   def initialize
-    reset!
+    @tick = 0
+    @cells = Hash.new
+    @cached_directions = [
+      [-1, 1],  [0, 1],  [1, 1], # above
+      [-1, 0],           [1, 0], # sides
+      [-1, -1], [0, -1], [1, -1] # below
+    ]
   end
 
   def add_cell(x, y, alive = false)
-    raise LocationOccupied if self.cell_at(x, y)
-    @boundaries = nil # so it recomputes
+    raise LocationOccupied if cell_at(x, y)
     @cells["#{x}-#{y}"] = Cell.new(x, y, alive)
   end
 
@@ -20,22 +25,20 @@ class World
 
   def neighbours_around(cell)
     cell.neighbours ||= begin
-      @directions.collect { |rel_x, rel_y|
-        self.cell_at((cell.x + rel_x), (cell.y + rel_y))
+      @cached_directions.collect { |rel_x, rel_y|
+        cell_at((cell.x + rel_x), (cell.y + rel_y))
       }.compact
     end
   end
 
   def alive_neighbours_around(cell)
-    cell.neighbours.count(&:alive)
+    neighbours_around(cell).count(&:alive)
   end
 
   def tick!
-    cells = @cells.values
-
     # First determine the action for all cells
-    cells.each do |cell|
-      alive_neighbours = self.alive_neighbours_around(cell)
+    @cells.each do |key, cell|
+      alive_neighbours = alive_neighbours_around(cell)
       if !cell.alive && alive_neighbours == 3
         cell.next_state = 1
       elsif alive_neighbours < 2 || alive_neighbours > 3
@@ -44,40 +47,15 @@ class World
     end
 
     # Then execute the determined action for all cells
-    cells.each do |cell|
-      case cell.next_state
-      when 1
+    @cells.each do |key, cell|
+      if cell.next_state == 1
         cell.alive = true
-      when 0
+      elsif cell.next_state == 0
         cell.alive = false
       end
     end
 
     @tick += 1
-  end
-
-  def reset!
-    @tick = 0
-    @cells = Hash.new
-    @boundaries = nil
-    @directions = [
-      [-1, 1], [0, 1], [1, 1],   # above
-      [-1, 0], [1, 0],           # sides
-      [-1, -1], [0, -1], [1, -1] # below
-    ]
-  end
-
-  def boundaries
-    @boundaries ||= {
-      :x => {
-        :min => @cells.values.collect(&:x).min,
-        :max => @cells.values.collect(&:x).max
-      },
-      :y => {
-        :min => @cells.values.collect(&:y).min,
-        :max => @cells.values.collect(&:y).max
-      }
-    }
   end
 
 end
@@ -91,6 +69,7 @@ class Cell
     @y = y
     @key = "#{x}-#{y}"
     @alive = alive
+    @next_state = nil
     @neighbours = nil
   end
 

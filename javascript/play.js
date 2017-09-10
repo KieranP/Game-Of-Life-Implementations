@@ -1,9 +1,12 @@
+World_Width  = 150
+World_Height = 40
+
 function render(world) {
   var rendering = '';
-  for (var y = world.boundaries()['y']['min']; y <= world.boundaries()['y']['max']; y++) {
-    for (var x = world.boundaries()['x']['min']; x <= world.boundaries()['x']['max']; x++) {
+  for (var y = 0; y <= World_Height; y++) {
+    for (var x = 0; x <= World_Width; x++) {
       var cell = world.cell_at(x, y);
-      rendering += (cell ? cell.to_char() : ' ').replace(' ', '&nbsp;');
+      rendering += cell.to_char().replace(' ', '&nbsp;');
     }
     rendering += "<br />"
   }
@@ -15,16 +18,18 @@ $(document).ready(function() {
   var world = new World;
 
   // Prepopulate the cells
-  for (var x = 0; x <= 150; x++) {
-    for (var y = 0; y <= 40; y++) {
-      world.add_cell(x, y, (Math.random() <= 0.2));
+  for (var y = 0; y <= World_Height; y++) {
+    for (var x = 0; x <= World_Width; x++) {
+      var alive = (Math.random() <= 0.2);
+      world.add_cell(x, y, alive);
     }
   }
 
   // Prepopulate the neighbours
-  for (var x = 0; x <= 150; x++) {
-    for (var y = 0; y <= 40; y++) {
-      world.neighbours_around(world.cell_at(x, y));
+  for (var y = 0; y <= World_Height; y++) {
+    for (var x = 0; x <= World_Width; x++) {
+      var cell = world.cell_at(x, y);
+      world.neighbours_around(cell);
     }
   }
 

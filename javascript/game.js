@@ -1,5 +1,11 @@
 function World() {
-  this._reset();
+  this.tick = 0;
+  this.cells = {};
+  this.cached_directions = [
+    [-1, 1],  [0, 1],  [1, 1], // above
+    [-1, 0],           [1, 0], // sides
+    [-1, -1], [0, -1], [1, -1] // below
+  ];
 }
 
 World.LocationOccupied = function() {};
@@ -9,8 +15,8 @@ World.prototype.add_cell = function(x, y, alive) {
   if (this.cell_at(x, y)) {
     throw new World.LocationOccupied;
   }
+
   this.cells[x+'-'+y] = new Cell(x, y, alive);
-  this.cached_boundaries = null; // so it recomputes
   return this.cells[x+'-'+y];
 }
 
@@ -21,7 +27,7 @@ World.prototype.cell_at = function(x, y) {
 World.prototype.neighbours_around = function(cell) {
   if (!cell.neighbours) {
     cell.neighbours = new Array;
-    $.each(this.directions, function(i, set) {
+    $.each(this.cached_directions, function(i, set) {
       var neighbour = this.cell_at((cell.x + set[0]), (cell.y + set[1]));
       if (neighbour) { cell.neighbours.push(neighbour); }
     }.bind(this));
@@ -36,7 +42,7 @@ World.prototype.alive_neighbours_around = function(cell) {
   }).length;
 }
 
-World.prototype._tick = function(x, y) {
+World.prototype._tick = function() {
   var cells = $.map(this.cells, function(cell) { return cell; });
 
   // First determine the action for all cells
@@ -59,40 +65,6 @@ World.prototype._tick = function(x, y) {
   });
 
   this.tick += 1;
-}
-
-World.prototype._reset = function(x, y) {
-  this.tick = 0;
-  this.cells = {};
-  this.cached_boundaries = null;
-  this.directions = [
-    [-1, 1], [0, 1], [1, 1],   // above
-    [-1, 0], [1, 0],           // sides
-    [-1, -1], [0, -1], [1, -1] // below
-  ];
-}
-
-World.prototype.boundaries = function() {
-  if (!this.cached_boundaries) {
-    var x_vals = new Array, y_vals = new Array;
-    $.each(this.cells, function(position, cell) {
-      x_vals.push(cell.x);
-      y_vals.push(cell.y);
-    });
-
-    this.cached_boundaries = {
-      x: {
-        min: Math.min.apply(null, y_vals),
-        max: Math.max.apply(null, x_vals)
-      },
-      y: {
-        min: Math.min.apply(null, y_vals),
-        max: Math.max.apply(null, y_vals)
-      }
-    }
-  }
-
-  return this.cached_boundaries;
 }
 
 function Cell(x, y, alive) {

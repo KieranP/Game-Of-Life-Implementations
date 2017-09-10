@@ -2,11 +2,13 @@ $:.push(File.dirname(__FILE__))
 
 require 'game'
 
+World_Width  = 150
+World_Height = 40
+
 def render(world)
-  ((world.boundaries[:y][:min])..(world.boundaries[:y][:max])).collect { |y|
-    ((world.boundaries[:x][:min])..(world.boundaries[:x][:max])).collect { |x|
-      cell = world.cell_at(x, y)
-      (cell ? cell.to_char : ' ')
+  World_Height.times.collect { |y|
+    World_Width.times.collect { |x|
+      world.cell_at(x, y).to_char
     }.join
   }.join("\n")
 end
@@ -14,16 +16,18 @@ end
 world = World.new
 
 # Prepopulate the cells
-150.times do |x|
-  40.times do |y|
-    world.add_cell(x, y, (rand <= 0.2))
+World_Height.times do |y|
+  World_Width.times do |x|
+    alive = (rand <= 0.2)
+    world.add_cell(x, y, alive)
   end
 end
 
 # Prepopulate the neighbours
-150.times do |x|
-  40.times do |y|
-    world.neighbours_around(world.cell_at(x, y))
+World_Height.times do |y|
+  World_Width.times do |x|
+    cell = world.cell_at(x, y)
+    world.neighbours_around(cell)
   end
 end
 

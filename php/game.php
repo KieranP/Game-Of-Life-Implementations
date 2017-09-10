@@ -9,14 +9,22 @@ class World {
   var $tick, $cells;
 
   function __construct() {
-    $this->reset();
+    $this->tick = 0;
+    $this->cells = array();
+    $this->cached_directions = array(
+      array(-1, 1),  array(0, 1),  array(1, 1), // above
+      array(-1, 0),                array(1, 0), // sides
+      array(-1, -1), array(0, -1), array(1, -1) // below
+    );
   }
 
   function add_cell($x, $y, $alive = false) {
     if ($this->cell_at($x, $y)) {
       throw new LocationOccupied;
     }
-    return $this->cells["$x-$y"] = new Cell($x, $y, $alive);
+
+    $this->cells["$x-$y"] = new Cell($x, $y, $alive);
+    return $this->cells["$x-$y"];
   }
 
   function cell_at($x, $y) {
@@ -28,7 +36,7 @@ class World {
   function neighbours_around($cell) {
     if (!$cell->neighbours) {
       $cell->neighbours = array();
-      foreach ($this->directions as $set) {
+      foreach ($this->cached_directions as $set) {
         $neighbour = $this->cell_at(($cell->x + $set[0]), ($cell->y + $set[1]));
         if ($neighbour) { $cell->neighbours[] = $neighbour; }
       }
@@ -69,40 +77,6 @@ class World {
     $this->tick += 1;
   }
 
-  function reset() {
-    $this->tick = 0;
-    $this->cells = array();
-    $this->boundaries = null;
-    $this->directions = array(
-      array(-1, 1), array(0, 1), array(1, 1),   // above
-      array(-1, 0), array(1, 0),                // sides
-      array(-1, -1), array(0, -1), array(1, -1) // below
-    );
-  }
-
-  function boundaries() {
-    if (!isset($this->boundaries)) {
-      $x_vals = $y_vals = array();
-      foreach ($this->cells as $cell) {
-        $x_vals[] = $cell->x;
-        $y_vals[] = $cell->y;
-      }
-
-      $this->boundaries = array(
-        'x' => array(
-          'min' => min($x_vals),
-          'max' => max($x_vals)
-        ),
-        'y' => array(
-          'min' => min($y_vals),
-          'max' => max($y_vals)
-        )
-      );
-    }
-
-    return $this->boundaries;
-  }
-
 }
 
 class Cell {
@@ -114,6 +88,7 @@ class Cell {
     $this->y = $y;
     $this->key = "$x-$y";
     $this->alive = $alive;
+    $this->next_state = null;
     $this->neighbours = null;
   }
 

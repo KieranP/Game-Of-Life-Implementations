@@ -4,13 +4,17 @@ error_reporting(E_ALL);
 
 require_once('game.php');
 
+$World_Width = 150;
+$World_Height = 40;
+
 function render($world) {
+  global $World_Width, $World_Height;
+
   $rendering = '';
-  $boundaries = $world->boundaries();
-  for ($y = $boundaries['y']['min']; $y <= $boundaries['y']['max']; $y++) {
-    for ($x = $boundaries['x']['min']; $x <= $boundaries['x']['max']; $x++) {
+  for ($y = 0; $y <= $World_Height; $y++) {
+    for ($x = 0; $x <= $World_Width; $x++) {
       $cell = $world->cell_at($x, $y);
-      $rendering .= ($cell ? $cell->to_char() : ' ');
+      $rendering .= $cell->to_char();
     }
     $rendering .= "\n";
   }
@@ -20,16 +24,18 @@ function render($world) {
 $world = new World();
 
 // Prepopulate the cells
-for ($x = 0; $x <= 150; $x++) {
-  for ($y = 0; $y <= 40; $y++) {
-    $world->add_cell($x, $y, (rand(0, 100) <= 20));
+for ($y = 0; $y <= $World_Height; $y++) {
+  for ($x = 0; $x <= $World_Width; $x++) {
+    $alive = (rand(0, 100) <= 20);
+    $world->add_cell($x, $y, $alive);
   }
 }
 
 // Prepopulate the neighbours
-for ($x = 0; $x <= 150; $x++) {
-  for ($y = 0; $y <= 40; $y++) {
-    $world->neighbours_around($world->cell_at($x, $y));
+for ($y = 0; $y <= $World_Height; $y++) {
+  for ($x = 0; $x <= $World_Width; $x++) {
+    $cell = $world->cell_at($x, $y);
+    $world->neighbours_around($cell);
   }
 }
 
