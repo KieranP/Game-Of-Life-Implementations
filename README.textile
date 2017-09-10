@@ -1,17 +1,18 @@
 h1. Multi-language implementations of Conway's Game of Life
 
-The goal is to provide near identical implementations of "Conway's Game of Life":http://en.wikipedia.org/wiki/Conway's_Game_of_Life in multiple languages to measure not only the speed of the language, but for each person to assess the syntax of each, and the ease and availability of unit testing tools.
+The goal of this project is to provide near identical implementations of "Conway's Game of Life":http://en.wikipedia.org/wiki/Conway's_Game_of_Life in an effort to learn and add new languages, and get a rough idea of the syntax and runtime speed of each language.
 
-I started with the Ruby implementation, optimised it as much as I could, and then ported it to the other languages. Therefore, some languages may not be running as fast as they possibly could. Any suggestions for optimisations that can be translated to each implementation are greatly appreciated (minimal language specific optimisations please).
+I started with the Ruby implementation, optimized it as much as I could, and then ported it to the other languages. Therefore, some languages may not run as fast as they possibly could. Any suggestions for general optimizations that can be applied to all implementations are greatly appreciated.
 
 h2. Speed Results (by tick time)
 
-*Note 1:* These speed results are taken on a 15" Retina, Mid 2014 Macbook Pro, 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM.
+*Note 1:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2014), 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM.
 
-*Note 2:* The times were calculated by playing each simulation for a few thousand ticks until the average stabilises.
+*Note 2:* The times were calculated by playing each simulation for a few thousand ticks until the tick average stabilized.
 
-=. |_. Place|_. Language  |_. Tick Time|_. Render Time|_. Notes                             |
-=. |1st.    |Javascript   |0.00149s    |0.00125s      |SpiderMonkey 45 (Firefox 55.0.3)     |
-=. |2nd.    |Javascript   |0.00181s    |0.00195s      |V8 6.0.286.56 (Chrome 60.0.3112.113) |
-=. |3rd.    |Ruby         |0.00470s    |0.00518s      |Ruby 2.3.3                           |
-=. |4th.    |PHP          |0.01139s    |0.00499s      |PHP 5.6.30                           |
+=. |_. Place|_. Language|_. Tick Avg|_. Render Avg|_. Notes                             |
+=. |1st.    |Javascript |0.00149s   |0.00125s     |SpiderMonkey 45 (Firefox 55.0.3)     |
+=. |2nd.    |Javascript |0.00181s   |0.00195s     |V8 6.0.286.56 (Chrome 60.0.3112.113) |
+=. |3rd.    |Ruby       |0.00470s   |0.00518s     |Ruby 2.3.3                           |
+=. |4th.    |PHP        |0.01139s   |0.00499s     |PHP 5.6.30                           |
+=. |5th     |Python     |0.01514s   |0.00753s     |Python 3.6.2                         |
