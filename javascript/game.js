@@ -108,7 +108,6 @@ World.prototype.alive_neighbours_around = function(cell) {
 function Cell(x, y, alive) {
   this.x = x;
   this.y = y;
-  this.key = (x+'-'+y);
   this.alive = (alive || false);
   this.next_state = null;
   this.neighbours = null;

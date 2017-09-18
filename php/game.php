@@ -115,12 +115,11 @@ class World {
 
 class Cell {
 
-  var $x, $y, $key, $alive, $next_state, $neighbours;
+  var $x, $y, $alive, $next_state, $neighbours;
 
   function __construct($x, $y, $alive = false) {
     $this->x = $x;
     $this->y = $y;
-    $this->key = "$x-$y";
     $this->alive = $alive;
     $this->next_state = null;
     $this->neighbours = null;

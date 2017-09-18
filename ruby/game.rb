@@ -92,12 +92,11 @@ end
 
 class Cell
 
-  attr_accessor :x, :y, :key, :alive, :next_state, :neighbours
+  attr_accessor :x, :y, :alive, :next_state, :neighbours
 
   def initialize(x, y, alive = false)
     @x = x
     @y = y
-    @key = "#{x}-#{y}"
     @alive = alive
     @next_state = nil
     @neighbours = nil
