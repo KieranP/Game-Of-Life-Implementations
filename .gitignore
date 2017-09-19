@@ -1,2 +1,3 @@
 .DS_Store
+java/*.class
 python/__pycache__

@@ -100,8 +100,8 @@ World.prototype.neighbours_around = function(cell) {
 }
 
 World.prototype.alive_neighbours_around = function(cell) {
-  return $.grep(this.neighbours_around(cell), function(cell) {
-    return cell.alive;
+  return $.grep(this.neighbours_around(cell), function(neighbour) {
+    return neighbour.alive;
   }).length;
 }
 

@@ -81,7 +81,7 @@ class World:
 
     def alive_neighbours_around(self, cell):
         neighbours = self.neighbours_around(cell)
-        filter_alive = lambda cell: cell.alive
+        filter_alive = lambda neighbour: neighbour.alive
         return len(list(filter(filter_alive, neighbours)))
 
 class Cell:

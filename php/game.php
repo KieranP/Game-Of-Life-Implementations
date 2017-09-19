@@ -103,8 +103,8 @@ class World {
 
   private function alive_neighbours_around($cell) {
     $alive_neighbours = 0;
-    foreach ($this->neighbours_around($cell) as $cell) {
-      if ($cell->alive) {
+    foreach ($this->neighbours_around($cell) as $neighbour) {
+      if ($neighbour->alive) {
         $alive_neighbours++;
       }
     }
