@@ -2,7 +2,7 @@ h1. Multi-language implementations of Conway's Game of Life
 
 The goal of this project is to provide near identical implementations of "Conway's Game of Life":http://en.wikipedia.org/wiki/Conway's_Game_of_Life (GOL) in multiple languages. I'm doing this in an effort to learn new programming languages, and get a rough idea of the syntax differences and runtime speed of each language.
 
-In order to give a fair comparison, all implementations are coded as similarly as possible. Each introduces concepts like class definitions (top level and nested), class variables (public and private), class initializers/constructors, class method definition (public and private) with default/named arguments, generic variables and scoping, arrays/lists, array/list filtering, hashes/dictionaries, looping over arrays/hashes (while/for), conditionals (if/case), custom exceptions and raising, requiring/including files, simple rendering, benchmarking, and testing.
+In order to give a fair comparison, all implementations are coded as similarly as possible. Each introduces concepts like class definitions (top level and nested), class & instance variables (public and private), class initializers/constructors, class & instance method definition (public and private) with default/named arguments, generic variables and scoping, arrays/lists, array/list filtering, hashes/dictionaries, looping over arrays/hashes (while/for), conditionals (if/case), custom exceptions and raising, requiring/including files, simple rendering, benchmarking, and testing.
 
 Because I've kept all implementations as similar as possible, the runtime of some language implementations may not run as fast as they possibly could if I had used native patterns/optimized functions available only in that language. There may be general optimizations that can be applied to all implementations which could speed things up. If anyone notices any, please open a Github pull request.
 
@@ -19,3 +19,4 @@ h2. Speed Results (by tick time)
 =. |4th.    |Ruby       |0.00470s   |0.00518s     |Ruby 2.3.3                          |
 =. |5th.    |PHP        |0.01139s   |0.00499s     |PHP 5.6.30                          |
 =. |6th.    |Python     |0.01514s   |0.00753s     |Python 3.6.2                        |
+=. |7th.    |Swift      |0.02273s   |0.00776s     |Swift 4.0                           |
