@@ -63,8 +63,9 @@ class World:
         if self.cell_at(x, y):
             raise World.LocationOccupied
 
-        self.cells[str(x)+'-'+str(y)] = Cell(x, y, alive);
-        return self.cells[str(x)+'-'+str(y)]
+        cell = Cell(x, y, alive)
+        self.cells[str(x)+'-'+str(y)] = cell
+        return self.cell_at(x, y)
 
     def cell_at(self, x, y):
         return self.cells.get(str(x)+'-'+str(y))
@@ -73,7 +74,10 @@ class World:
         if cell.neighbours is None:
             cell.neighbours = []
             for rel_x,rel_y in self.cached_directions:
-                neighbour = self.cell_at((cell.x + rel_x), (cell.y + rel_y))
+                neighbour = self.cell_at(
+                    (cell.x + rel_x),
+                    (cell.y + rel_y)
+                )
                 if neighbour is not None:
                     cell.neighbours.append(neighbour)
 

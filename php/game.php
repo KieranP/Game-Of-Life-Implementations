@@ -79,8 +79,9 @@ class World {
       throw new LocationOccupied;
     }
 
-    $this->cells["$x-$y"] = new Cell($x, $y, $alive);
-    return $this->cells["$x-$y"];
+    $cell = new Cell($x, $y, $alive);
+    $this->cells["$x-$y"] = $cell;
+    return $this->cell_at($x, $y);
   }
 
   private function cell_at($x, $y) {
@@ -93,8 +94,13 @@ class World {
     if (!$cell->neighbours) {
       $cell->neighbours = array();
       foreach ($this->cached_directions as $set) {
-        $neighbour = $this->cell_at(($cell->x + $set[0]), ($cell->y + $set[1]));
-        if ($neighbour) { $cell->neighbours[] = $neighbour; }
+        $neighbour = $this->cell_at(
+          ($cell->x + $set[0]),
+          ($cell->y + $set[1])
+        );
+        if ($neighbour) {
+          $cell->neighbours[] = $neighbour;
+        }
       }
     }
 

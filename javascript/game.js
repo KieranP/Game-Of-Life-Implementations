@@ -77,8 +77,9 @@ World.prototype.add_cell = function(x, y, alive) {
     throw new World.LocationOccupied;
   }
 
-  this.cells[x+'-'+y] = new Cell(x, y, alive);
-  return this.cells[x+'-'+y];
+  let cell = new Cell(x, y, alive);
+  this.cells[x+'-'+y] = cell;
+  return this.cell_at(x, y);
 }
 
 World.prototype.cell_at = function(x, y) {
@@ -89,8 +90,13 @@ World.prototype.neighbours_around = function(cell) {
   if (!cell.neighbours) {
     cell.neighbours = new Array;
     for (let set of this.cached_directions) {
-      let neighbour = this.cell_at((cell.x + set[0]), (cell.y + set[1]));
-      if (neighbour) { cell.neighbours.push(neighbour); }
+      let neighbour = this.cell_at(
+        (cell.x + set[0]),
+        (cell.y + set[1])
+      );
+      if (neighbour) {
+        cell.neighbours.push(neighbour);
+      }
     }
   }
 

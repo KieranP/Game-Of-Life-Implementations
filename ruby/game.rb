@@ -69,7 +69,9 @@ class World
 
   def add_cell(x, y, alive = false)
     raise LocationOccupied if cell_at(x, y)
-    @cells["#{x}-#{y}"] = Cell.new(x, y, alive)
+    cell = Cell.new(x, y, alive)
+    @cells["#{x}-#{y}"] = cell
+    cell_at(x, y)
   end
 
   def cell_at(x, y)
@@ -79,7 +81,10 @@ class World
   def neighbours_around(cell)
     cell.neighbours ||= begin
       @cached_directions.collect { |rel_x, rel_y|
-        cell_at((cell.x + rel_x), (cell.y + rel_y))
+        cell_at(
+          (cell.x + rel_x),
+          (cell.y + rel_y)
+        )
       }.compact
     end
   end

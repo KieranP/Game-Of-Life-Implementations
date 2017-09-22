@@ -89,14 +89,14 @@ public class World {
       try {
         throw new LocationOccupied();
       } catch(LocationOccupied m) {
-        System.out.println("Error: LocationOccupied "+x+"-"+y+"");
+        System.out.println("Error: World.LocationOccupied "+x+"-"+y+"");
         System.exit(0);
       }
     }
 
     Cell cell = new Cell(x, y, args[0]);
     cells.put(x+"-"+y, cell);
-    return cells.get(x+"-"+y);
+    return cell_at(x, y);
   }
 
   private Cell cell_at(int x, int y) {
@@ -107,8 +107,13 @@ public class World {
     if (cell.neighbours == null) { // Must return a boolean
       cell.neighbours = new ArrayList<Cell>();
       for (int[] set : cached_directions) {
-        Cell neighbour = cell_at((cell.x + set[0]), (cell.y + set[1]));
-        if (neighbour != null) { cell.neighbours.add(neighbour); }
+        Cell neighbour = cell_at(
+          (cell.x + set[0]),
+          (cell.y + set[1])
+        );
+        if (neighbour != null) {
+          cell.neighbours.add(neighbour);
+        }
       }
     }
 
