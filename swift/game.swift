@@ -80,7 +80,7 @@ public class World {
     }
   }
 
-  private func add_cell(x: Int, y: Int, alive: Bool) -> Cell {
+  private func add_cell(x: Int, y: Int, alive: Bool = false) -> Cell {
     if cell_at(x: x, y: y) != nil { // Must return a boolean
       // Swift won't let us throw an error without catching it
       // so emulate a runtime abort by catching and exiting
