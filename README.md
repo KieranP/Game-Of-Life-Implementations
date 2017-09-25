@@ -15,10 +15,10 @@ In order to give a fair comparison, all implementations are coded as similarly a
 | 1st.  | Java       | 0.00054s | 0.00487s   | Java 1.8.0_101                      |
 | 2nd.  | Javascript | 0.00078s | 0.00121s   | SpiderMonkey 45 (Firefox 55.0.3)    |
 | 3rd.  | Javascript | 0.00221s | 0.00154s   | V8 6.1.534.37 (Chrome 61.0.3163.91) |
-| 4th.  | Ruby       | 0.00585s | 0.00504s   | Ruby 2.3.3                          |
-| 5th.  | Python     | 0.00695s | 0.00726s   | Python 3.6.2                        |
-| 6th.  | Swift      | 0.01104s | 0.00742s   | Swift 4.0                           |
-| 7th.  | PHP        | 0.01139s | 0.00499s   | PHP 5.6.30                          |
+| 4th.  | PHP        | 0.00244s | 0.00232s   | PHP 7.1.8                           |
+| 5th.  | Ruby       | 0.00459s | 0.00426s   | Ruby 2.4.1                          |
+| 6th.  | Python     | 0.00682s | 0.00709s   | Python 3.6.2                        |
+| 7th.  | Swift      | 0.01104s | 0.00742s   | Swift 4.0                           |
 
 ## Feature Comparison
 
