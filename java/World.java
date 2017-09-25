@@ -120,9 +120,22 @@ public class World {
     return cell.neighbours;
   }
 
+  // Implement first using filter/lambda if available. Then implement
+  // foreach and for. Retain whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
+    // The following works but is slower
+    // int alive_neighbours = 0;
+    // for (Cell neighbour : neighbours_around(cell)) {
+    //   if (neighbour.alive) {
+    //     alive_neighbours++;
+    //   }
+    // }
+    // return alive_neighbours;
+
     int alive_neighbours = 0;
-    for (Cell neighbour : neighbours_around(cell)) {
+    ArrayList<Cell> neighbours = neighbours_around(cell);
+    for (int i = 0; i < neighbours.size(); i++) {
+      Cell neighbour = neighbours.get(i);
       if (neighbour.alive) {
         alive_neighbours++;
       }

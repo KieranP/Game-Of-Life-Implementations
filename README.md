@@ -8,17 +8,17 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 ## Speed Results (by tick time)
 
-*Note:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2014), 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM. The times were calculated by playing each simulation for a few thousand ticks until the tick average stabilized.
+*Note:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2014), 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM. The times were calculated by playing each simulation for 2000 ticks, and then grabbing the averages.
 
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:---------|:-----------|:------------------------------------|
-| 1st.  | Java       | 0.00061s | 0.00470s   | Java 1.8.0_101                      |
-| 2nd.  | Javascript | 0.00096s | 0.00128s   | SpiderMonkey 45 (Firefox 55.0.3)    |
-| 3rd.  | Javascript | 0.00359s | 0.00161s   | V8 6.1.534.37 (Chrome 61.0.3163.91) |
-| 4th.  | Ruby       | 0.00470s | 0.00518s   | Ruby 2.3.3                          |
-| 5th.  | PHP        | 0.01139s | 0.00499s   | PHP 5.6.30                          |
-| 6th.  | Python     | 0.01514s | 0.00753s   | Python 3.6.2                        |
-| 7th.  | Swift      | 0.02273s | 0.00776s   | Swift 4.0                           |
+| 1st.  | Java       | 0.00054s | 0.00487s   | Java 1.8.0_101                      |
+| 2nd.  | Javascript | 0.00078s | 0.00121s   | SpiderMonkey 45 (Firefox 55.0.3)    |
+| 3rd.  | Javascript | 0.00221s | 0.00154s   | V8 6.1.534.37 (Chrome 61.0.3163.91) |
+| 4th.  | Ruby       | 0.00585s | 0.00504s   | Ruby 2.3.3                          |
+| 5th.  | Python     | 0.00695s | 0.00726s   | Python 3.6.2                        |
+| 6th.  | Swift      | 0.01104s | 0.00742s   | Swift 4.0                           |
+| 7th.  | PHP        | 0.01139s | 0.00499s   | PHP 5.6.30                          |
 
 ## Feature Comparison
 

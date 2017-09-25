@@ -124,9 +124,31 @@ public class World {
     return cell.neighbours!
   }
 
+  // Implement first using filter/lambda if available. Then implement
+  // foreach and for. Retain whatever implementation runs the fastest
   private func alive_neighbours_around(cell: Cell) -> Int {
+    // The following works but is slower
+    // let neighbours = neighbours_around(cell: cell)
+    // return neighbours.filter { $0.alive }.count
+
+    // The following also works but is slower
+    // var alive_neighbours = 0;
+    // for neighbour in neighbours_around(cell: cell) {
+    //   if neighbour.alive {
+    //     alive_neighbours = alive_neighbours + 1;
+    //   }
+    // }
+    // return alive_neighbours
+
+    var alive_neighbours = 0
     let neighbours = neighbours_around(cell: cell)
-    return neighbours.filter { $0.alive }.count
+    for i in 0 ..< neighbours.count {
+      let neighbour = neighbours[i]
+      if neighbour.alive {
+        alive_neighbours = alive_neighbours + 1
+      }
+    }
+    return alive_neighbours
   }
 
 }

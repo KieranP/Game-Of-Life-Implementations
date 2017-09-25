@@ -89,6 +89,8 @@ class World
     end
   end
 
+  # Implement first using filter/lambda if available. Then implement
+  # foreach and for. Retain whatever implementation runs the fastest
   def alive_neighbours_around(cell)
     neighbours_around(cell).count(&:alive)
   end

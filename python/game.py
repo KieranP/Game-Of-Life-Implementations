@@ -83,10 +83,18 @@ class World:
 
         return cell.neighbours
 
+    # Implement first using filter/lambda if available. Then implement
+    # foreach and for. Retain whatever implementation runs the fastest
     def alive_neighbours_around(self, cell):
-        neighbours = self.neighbours_around(cell)
-        filter_alive = lambda neighbour: neighbour.alive
-        return len(list(filter(filter_alive, neighbours)))
+        # The following works but is slower
+        # filter_alive = lambda neighbour: neighbour.alive
+        # return len(list(filter(filter_alive, neighbours)))
+
+        alive_neighbours = 0
+        for neighbour in self.neighbours_around(cell):
+            if neighbour.alive:
+                alive_neighbours = alive_neighbours + 1
+        return alive_neighbours
 
 class Cell:
 

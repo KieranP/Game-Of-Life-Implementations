@@ -103,11 +103,33 @@ World.prototype.neighbours_around = function(cell) {
   return cell.neighbours;
 }
 
+// Implement first using filter/lambda if available. Then implement
+// foreach and for. Retain whatever implementation runs the fastest
 World.prototype.alive_neighbours_around = function(cell) {
-  let neighbours = this.neighbours_around(cell);
-  return neighbours.filter(function(neighbour) {
-    return neighbour.alive;
-  }).length;
+  // The following works but is slower
+  // let neighbours = this.neighbours_around(cell);
+  // return neighbours.filter(function(neighbour) {
+  //   return neighbour.alive;
+  // }).length;
+
+  // The following also works but is slower
+  // var alive_neighbours = 0;
+  // for (let neighbour of this.neighbours_around(cell)) {
+  //   if (neighbour.alive) {
+  //     alive_neighbours = alive_neighbours + 1;
+  //   }
+  // }
+  // return alive_neighbours;
+
+  var alive_neighbours = 0;
+  var neighbours = this.neighbours_around(cell);
+  for (let i = 0; i < neighbours.length; i++) {
+    let neighbour = neighbours[i];
+    if (neighbour.alive) {
+      alive_neighbours = alive_neighbours + 1;
+    }
+  }
+  return alive_neighbours;
 }
 
 function Cell(x, y, alive) {

@@ -107,6 +107,8 @@ class World {
     return $cell->neighbours;
   }
 
+  // Implement first using filter/lambda if available. Then implement
+  // foreach and for. Retain whatever implementation runs the fastest
   private function alive_neighbours_around($cell) {
     $alive_neighbours = 0;
     foreach ($this->neighbours_around($cell) as $neighbour) {
