@@ -24,24 +24,28 @@ class Play {
       $tick_start = microtime(true);
       $world->_tick();
       $tick_finish = microtime(true);
-      $tick_time = round($tick_finish - $tick_start, 5);
+      $tick_time = ($tick_finish - $tick_start);
       $total_tick += $tick_time;
-      $avg_tick = round($total_tick / $world->tick, 5);
+      $avg_tick = ($total_tick / $world->tick);
 
       $render_start = microtime(true);
       $rendered = $world->render();
       $render_finish = microtime(true);
-      $render_time = round($render_finish - $render_start, 5);
+      $render_time = ($render_finish - $render_start);
       $total_render += $render_time;
-      $avg_render = round($total_render / $world->tick, 5);
+      $avg_render = ($total_render / $world->tick);
 
       $output = "#$world->tick";
-      $output .= " - World tick took $tick_time ($avg_tick)";
-      $output .= " - Rendering took $render_time ($avg_render)";
+      $output .= " - World tick took ".self::_f($tick_time)." (".self::_f($avg_tick).")";
+      $output .= " - Rendering took ".self::_f($render_time)." (".self::_f($avg_render).")";
       $output .= "\n".$rendered;
       system('clear');
       echo $output;
     }
+  }
+
+  private static function _f($value) {
+    return sprintf("%.5f", round($value, 5));
   }
 
 }

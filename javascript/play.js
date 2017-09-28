@@ -24,24 +24,28 @@ Play.run = function() {
     let tick_start = new Date();
     world._tick();
     let tick_finish = new Date();
-    let tick_time = parseFloat(((tick_finish-tick_start)/1000).toFixed(5));
+    let tick_time = (tick_finish - tick_start) / 1000;
     total_tick += tick_time;
-    let avg_tick = parseFloat((total_tick / world.tick).toFixed(5));
+    let avg_tick = (total_tick / world.tick);
 
     let render_start = new Date();
     let rendered = world.render();
     let render_finish = new Date();
-    let render_time = parseFloat(((render_finish-render_start)/1000).toFixed(5));
+    let render_time = (render_finish - render_start) / 1000;
     total_render += render_time;
-    let avg_render = parseFloat((total_render / world.tick).toFixed(5));
+    let avg_render = (total_render / world.tick);
 
     let output = "#"+world.tick;
-    output += " - World tick took "+tick_time+" ("+avg_tick+")";
-    output += " - Rendering took "+render_time+" ("+avg_render+")";
+    output += " - World tick took "+Play._f(tick_time)+" ("+Play._f(avg_tick)+")";
+    output += " - Rendering took "+Play._f(render_time)+" ("+Play._f(avg_render)+")";
     output += "<br />"+rendered;
     body.innerHTML = output;
   }, 0);
 
+}
+
+Play._f = function(value) {
+  return value.toFixed(5);
 }
 
 Play.run();
