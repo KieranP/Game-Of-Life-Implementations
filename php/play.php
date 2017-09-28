@@ -6,8 +6,8 @@ require_once('game.php');
 
 class Play {
 
-  public static $World_Width = 150;
-  public static $World_Height = 40;
+  private static $World_Width = 150;
+  private static $World_Height = 40;
 
   public static function run() {
     $world = new World(

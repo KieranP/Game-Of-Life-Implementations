@@ -3,8 +3,8 @@
 
 public class Play {
 
-  public static int World_Width  = 150;
-  public static int World_Height = 40;
+  private static int World_Width  = 150;
+  private static int World_Height = 40;
 
   public static void main(String[] args) {
     World world = new World(
@@ -41,7 +41,7 @@ public class Play {
     }
   }
 
-  public static String _f(double value) {
+  private static String _f(double value) {
     return String.format("%.5f", value);
   }
 

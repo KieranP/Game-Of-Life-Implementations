@@ -9,7 +9,7 @@ let World_Height: Int = 40
 
 public class Play {
 
-  class func run() -> Void {
+  public class func run() -> Void {
     let world: World = World(
       width: World_Width,
       height: World_Height
@@ -44,7 +44,7 @@ public class Play {
     }
   }
 
-  class func _f(value: Double) -> String {
+  private class func _f(value: Double) -> String {
     return String(format: "%.5f", value)
   }
 
