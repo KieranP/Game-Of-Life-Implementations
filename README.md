@@ -12,9 +12,9 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
-| 1st.  | Java       | 0.00054s |  0.00487s  | Java 1.8.0_101                      |
+| 1st.  | Java       | 0.00037s |  0.00034s  | Java 1.8.0_101                      |
 | 2nd.  | Javascript | 0.00078s |  0.00121s  | SpiderMonkey 45 (Firefox 55.0.3)    |
-| 3rd.  | Scala      | 0.00094s |  0.01413s  | Scala 2.12.3                        |
+| 3rd.  | Scala      | 0.00084s |  0.00139s  | Scala 2.12.3                        |
 | 4th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
 | 5th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
 | 6th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |

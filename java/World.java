@@ -53,16 +53,29 @@ public class World {
     tick++;
   }
 
+  // Implement first using string concatination. Then implement any
+  // special string builders, and use whatever runs the fastest
   public String render() {
-    String rendering = "";
+    // The following works but is slower
+    // String rendering = "";
+    // for (int y = 0; y <= height; y++) {
+    //   for (int x = 0; x <= width; x++) {
+    //     Cell cell = cell_at(x, y);
+    //     rendering += cell.to_char();
+    //   }
+    //   rendering += "\n";
+    // }
+    // return rendering;
+
+    StringBuilder rendering = new StringBuilder();
     for (int y = 0; y <= height; y++) {
       for (int x = 0; x <= width; x++) {
         Cell cell = cell_at(x, y);
-        rendering += cell.to_char();
+        rendering.append(cell.to_char());
       }
-      rendering += "\n";
+      rendering.append("\n");
     }
-    return rendering;
+    return rendering.toString();
   }
 
   private void populate_cells() {

@@ -42,6 +42,8 @@ World.prototype._tick = function() {
   this.tick += 1;
 }
 
+// Implement first using string concatination. Then implement any
+// special string builders, and use whatever runs the fastest
 World.prototype.render = function() {
   let rendering = '';
   for (let y = 0; y <= this.height; y++) {
@@ -52,6 +54,17 @@ World.prototype.render = function() {
     rendering += "<br />"
   }
   return rendering;
+
+  // The following works but is slower
+  // let rendering = [];
+  // for (let y = 0; y <= this.height; y++) {
+  //   for (let x = 0; x <= this.width; x++) {
+  //     let cell = this.cell_at(x, y);
+  //     rendering.push(cell.to_char().replace(' ', '&nbsp;'));
+  //   }
+  //   rendering.push("<br />");
+  // }
+  // return rendering.join("");
 }
 
 // Javascript doesn't have a concept of public/private methods

@@ -50,6 +50,8 @@ public class World {
     tick += 1
   }
 
+  // Implement first using string concatination. Then implement any
+  // special string builders, and use whatever runs the fastest
   public func render() -> String {
     var rendering = ""
     for y in 0...height {
@@ -61,6 +63,18 @@ public class World {
       rendering += "\n"
     }
     return rendering
+
+    // The following works but is slower
+    // var rendering: Array<String> = []
+    // for y in 0...height {
+    //   for x in 0...width {
+    //     // The ! tells Swift to unwrap it from an Optional
+    //     let cell: Cell = cell_at(x: x, y: y)!
+    //     rendering.append(cell.to_char())
+    //   }
+    //   rendering.append("\n")
+    // }
+    // return rendering.joined()
   }
 
   private func populate_cells() -> Void {

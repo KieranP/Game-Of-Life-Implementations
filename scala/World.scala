@@ -45,18 +45,33 @@ class World(
     tick += 1
   }
 
+  // Implement first using string concatination. Then implement any
+  // special string builders, and use whatever runs the fastest
   def render: String = {
-    var rendering = ""
+    // The following works but is slower
+    // var rendering = ""
+    // var (x, y) = (0, 0)
+    // for (y <- 0 to height) {
+    //   for (x <- 0 to width) {
+    //     // get pulls the Cell out of an Option[]
+    //     val cell = cell_at(x, y).get
+    //     rendering += cell.to_char
+    //   }
+    //   rendering += "\n"
+    // }
+    // rendering
+
+    val rendering = new StringBuilder()
     var (x, y) = (0, 0)
     for (y <- 0 to height) {
       for (x <- 0 to width) {
         // get pulls the Cell out of an Option[]
         val cell = cell_at(x, y).get
-        rendering += cell.to_char
+        rendering.append(cell.to_char)
       }
-      rendering += "\n"
+      rendering.append("\n")
     }
-    rendering
+    rendering.toString
   }
 
   private def populate_cells = {

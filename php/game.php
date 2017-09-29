@@ -47,6 +47,8 @@ class World {
     $this->tick += 1;
   }
 
+  // Implement first using string concatination. Then implement any
+  // special string builders, and use whatever runs the fastest
   public function render() {
     $rendering = '';
     for ($y = 0; $y <= $this->height; $y++) {
@@ -57,6 +59,17 @@ class World {
       $rendering .= "\n";
     }
     return $rendering;
+
+    // The following works but performs no faster than above
+    // $rendering = array();
+    // for ($y = 0; $y <= $this->height; $y++) {
+    //   for ($x = 0; $x <= $this->width; $x++) {
+    //     $cell = $this->cell_at($x, $y);
+    //     $rendering[] = $cell->to_char();
+    //   }
+    //   $rendering[] = "\n";
+    // }
+    // return join($rendering);
   }
 
   private function populate_cells() {

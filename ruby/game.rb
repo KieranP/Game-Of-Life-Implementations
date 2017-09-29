@@ -42,7 +42,19 @@ class World
     @tick += 1
   end
 
+  # Implement first using string concatination. Then implement any
+  # special string builders, and use whatever runs the fastest
   def render
+    # The following works but it slower
+    # rendering = ""
+    # @height.times.each { |y|
+    #   @width.times.each { |x|
+    #     rendering << cell_at(x, y).to_char
+    #   }
+    #   rendering << "\n"
+    # }
+    # rendering
+
     @height.times.collect { |y|
       @width.times.collect { |x|
         cell_at(x, y).to_char
