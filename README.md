@@ -13,8 +13,8 @@ In order to give a fair comparison, all implementations are coded as similarly a
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
 | 1st.  | Java       | 0.00037s |  0.00034s  | Java 1.8.0_101                      |
-| 2nd.  | Javascript | 0.00078s |  0.00121s  | SpiderMonkey 45 (Firefox 55.0.3)    |
-| 3rd.  | Scala      | 0.00084s |  0.00139s  | Scala 2.12.3                        |
+| 2nd.  | Scala      | 0.00081s |  0.00136s  | Scala 2.12.3                        |
+| 3rd.  | Javascript | 0.00091s |  0.00153s  | SpiderMonkey 45 (Firefox 55.0.3)    |
 | 4th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
 | 5th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
 | 6th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
@@ -25,7 +25,7 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 *Note:* Below is a table of functionality that differs between the various languages. This list is not exhaustive, but includes some of the primary things that I cam across while implementing each one.
 
-| Feature                       | Java | JavaScript | PHP | Python | Ruby | Scala | Swift |
+| Feature                       | Java | Javascript | PHP | Python | Ruby | Scala | Swift |
 |:------------------------------|:----:|:----------:|:---:|:------:|:----:|:-----:|:-----:|
 | Static Typed                  |  ✔   |     ✖      |  ✖  |   ✖    |  ✖   |   ✔   |   ✔   |
 | Classes (Top Level)           |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
@@ -40,7 +40,7 @@ In order to give a fair comparison, all implementations are coded as similarly a
 | Instance Variables            |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
 | Instance Variable Visibility  |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
 | Named Parameters/Arguments    |  ✖   |     ✖      |  ✖  |   ✖    |  ✔   |   ✔   |   ✔   |
-| Default Parameters/Arguments  |  ✖   |     ✖      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Default Parameters/Arguments  |  ✖   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
 | semicolon optional            |  ✖   |     ✔      |  ✖  |   ✔    |  ✔   |   ✔   |   ✔   |
 | return keyword optional       |  ✖   |     ✖      |  ✖  |   ✖    |  ✔   |   ✔   |   ✖   |
 | Looping over Array (value)    |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
