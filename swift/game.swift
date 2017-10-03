@@ -149,7 +149,7 @@ public class World {
     // var alive_neighbours = 0;
     // for neighbour in neighbours_around(cell: cell) {
     //   if neighbour.alive {
-    //     alive_neighbours = alive_neighbours + 1;
+    //     alive_neighbours += 1
     //   }
     // }
     // return alive_neighbours
@@ -159,7 +159,7 @@ public class World {
     for i in 0 ..< neighbours.count {
       let neighbour = neighbours[i]
       if neighbour.alive {
-        alive_neighbours = alive_neighbours + 1
+        alive_neighbours += 1
       }
     }
     return alive_neighbours

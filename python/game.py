@@ -104,7 +104,7 @@ class World:
         alive_neighbours = 0
         for neighbour in self.neighbours_around(cell):
             if neighbour.alive:
-                alive_neighbours = alive_neighbours + 1
+                alive_neighbours += 1
         return alive_neighbours
 
 class Cell:
