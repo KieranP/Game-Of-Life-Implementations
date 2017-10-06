@@ -9,7 +9,7 @@ class Play {
   static const World_Height = 40;
 
   static void run() {
-    var world = new World(
+    final world = new World(
       World_Width,
       World_Height,
     );
@@ -20,21 +20,21 @@ class Play {
     var total_render = 0.0;
 
     while(true) {
-      var tick_stopwatch = new Stopwatch()..start();
-      var tick_start = tick_stopwatch.elapsedMilliseconds;
+      final tick_stopwatch = new Stopwatch()..start();
+      final tick_start = tick_stopwatch.elapsedMilliseconds;
       world.tick_();
-      var tick_finish = tick_stopwatch.elapsedMilliseconds;
-      var tick_time = (tick_finish - tick_start) / 1000.0;
+      final tick_finish = tick_stopwatch.elapsedMilliseconds;
+      final tick_time = (tick_finish - tick_start) / 1000.0;
       total_tick += tick_time;
-      var avg_tick = (total_tick / world.tick);
+      final avg_tick = (total_tick / world.tick);
 
-      var render_stopwatch = new Stopwatch()..start();
-      var render_start = render_stopwatch.elapsedMilliseconds;
-      var rendered = world.render();
-      var render_finish = render_stopwatch.elapsedMilliseconds;
-      var render_time = (render_finish - render_start) / 1000.0;
+      final render_stopwatch = new Stopwatch()..start();
+      final render_start = render_stopwatch.elapsedMilliseconds;
+      final rendered = world.render();
+      final render_finish = render_stopwatch.elapsedMilliseconds;
+      final render_time = (render_finish - render_start) / 1000.0;
       total_render += render_time;
-      var avg_render = (total_render / world.tick);
+      final avg_render = (total_render / world.tick);
 
       var output = "#${world.tick}";
       output += " - World tick took ${_f(tick_time)} (${_f(avg_tick)})";

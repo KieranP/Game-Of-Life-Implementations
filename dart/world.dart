@@ -26,7 +26,7 @@ class World {
   void tick_() {
     // First determine the action for all cells
     this._cells.forEach((key, cell) {
-      var alive_neighbours = this._alive_neighbours_around(cell);
+      final alive_neighbours = this._alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = 1;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -53,7 +53,7 @@ class World {
     // var rendering = '';
     // for (var y = 0; y <= this._height; y++) {
     //   for (var x = 0; x <= this._width; x++) {
-    //     var cell = this._cell_at(x, y);
+    //     final cell = this._cell_at(x, y);
     //     rendering += cell.to_char();
     //   }
     //   rendering += "\n";
@@ -64,7 +64,7 @@ class World {
     var rendering = [];
     for (var y = 0; y <= this._height; y++) {
       for (var x = 0; x <= this._width; x++) {
-        var cell = this._cell_at(x, y);
+        final cell = this._cell_at(x, y);
         rendering.add(cell.to_char());
       }
       rendering.add("\n");
@@ -75,7 +75,7 @@ class World {
     // var rendering = new StringBuffer();
     // for (var y = 0; y <= this._height; y++) {
     //   for (var x = 0; x <= this._width; x++) {
-    //     var cell = this._cell_at(x, y);
+    //     final cell = this._cell_at(x, y);
     //     rendering.write(cell.to_char());
     //   }
     //   rendering.write("\n");
@@ -84,10 +84,10 @@ class World {
   }
 
   void _populate_cells() {
-    var rng = new Random();
+    final rng = new Random();
     for (var y = 0; y <= this._height; y++) {
       for (var x = 0; x <= this._width; x++) {
-        var alive = (rng.nextDouble() <= 0.2);
+        final alive = (rng.nextDouble() <= 0.2);
         this._add_cell(x, y, alive);
       }
     }
@@ -104,7 +104,7 @@ class World {
       throw new LocationOccupied();
     }
 
-    var cell = new Cell(x, y, alive);
+    final cell = new Cell(x, y, alive);
     this._cells["$x-$y"] = cell;
     return this._cell_at(x, y);
   }
@@ -116,8 +116,8 @@ class World {
   List<Cell> _neighbours_around(Cell cell) {
     if (!cell.neighbours) {
       cell.neighbours = [];
-      for (var set in this._cached_directions) {
-        var neighbour = this._cell_at(
+      for (final set in this._cached_directions) {
+        final neighbour = this._cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
         );
@@ -134,14 +134,14 @@ class World {
   // foreach and for. Retain whatever implementation runs the fastest
   int _alive_neighbours_around(Cell cell) {
     // The following works but is slower
-    // var neighbours = this._neighbours_around(cell);
+    // final neighbours = this._neighbours_around(cell);
     // return neighbours.where(
     //   (neighbour) => neighbour.alive
     // ).length;
 
     // The following also works but is slower
     // var alive_neighbours = 0;
-    // var neighbours = this._neighbours_around(cell);
+    // final neighbours = this._neighbours_around(cell);
     // neighbours.forEach((neighbour) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1;
@@ -151,9 +151,9 @@ class World {
 
     // The following was the fastest method
     var alive_neighbours = 0;
-    var neighbours = this._neighbours_around(cell);
+    final neighbours = this._neighbours_around(cell);
     for (var i = 0; i < neighbours.length; i++) {
-      var neighbour = neighbours[i];
+      final neighbour = neighbours[i];
       if (neighbour.alive) {
         alive_neighbours += 1;
       }
