@@ -85,7 +85,7 @@ class World {
   }
 
   add_cell(x, y, alive = false) {
-    if (this.cell_at(x, y)) {
+    if (this.cell_at(x, y) != null) {
       throw new World.LocationOccupied
     }
 
@@ -99,14 +99,14 @@ class World {
   }
 
   neighbours_around(cell) {
-    if (!cell.neighbours) {
+    if (cell.neighbours == null) {
       cell.neighbours = new Array
       for (const set of this.cached_directions) {
         const neighbour = this.cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
         )
-        if (neighbour) {
+        if (neighbour != null) {
           cell.neighbours.push(neighbour)
         }
       }

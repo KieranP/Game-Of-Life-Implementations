@@ -88,7 +88,7 @@ class World {
   }
 
   private function add_cell($x, $y, $alive = false) {
-    if ($this->cell_at($x, $y)) {
+    if ($this->cell_at($x, $y) != null) {
       throw new LocationOccupied;
     }
 
@@ -104,14 +104,14 @@ class World {
   }
 
   private function neighbours_around($cell) {
-    if (!$cell->neighbours) {
+    if ($cell->neighbours == null) {
       $cell->neighbours = array();
       foreach ($this->cached_directions as $set) {
         $neighbour = $this->cell_at(
           ($cell->x + $set[0]),
           ($cell->y + $set[1])
         );
-        if ($neighbour) {
+        if ($neighbour != null) {
           $cell->neighbours[] = $neighbour;
         }
       }

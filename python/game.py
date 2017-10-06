@@ -71,7 +71,7 @@ class World:
             self.neighbours_around(cell)
 
     def add_cell(self, x, y, alive = False):
-        if self.cell_at(x, y):
+        if self.cell_at(x, y) != None:
             raise World.LocationOccupied
 
         cell = Cell(x, y, alive)

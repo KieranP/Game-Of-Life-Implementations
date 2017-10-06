@@ -12,10 +12,10 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
-| 1st.  | Dart       | 0.00032s |  0.00075s  | Dart 1.24.2                         |
+| 1st.  | Dart       | 0.00027s |  0.00062s  | Dart 1.24.2                         |
 | 2nd.  | Java       | 0.00036s |  0.00032s  | Java 1.8.0_101                      |
-| 3rd.  | Scala      | 0.00081s |  0.00136s  | Scala 2.12.3                        |
-| 4th.  | Javascript | 0.00091s |  0.00153s  | SpiderMonkey 45 (Firefox 55.0.3)    |
+| 3rd.  | Scala      | 0.00074s |  0.00125s  | Scala 2.12.3                        |
+| 4th.  | Javascript | 0.00083s |  0.00133s  | SpiderMonkey 45 (Firefox 55.0.3)    |
 | 5th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
 | 6th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
 | 7th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
