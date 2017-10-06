@@ -38,7 +38,7 @@ class World:
 
         self.tick += 1
 
-    # Implement first using string concatination. Then implement any
+    # Implement first using string concatenation. Then implement any
     # special string builders, and use whatever runs the fastest
     def render(self):
         rendering = ''

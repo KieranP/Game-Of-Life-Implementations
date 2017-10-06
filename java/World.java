@@ -53,7 +53,7 @@ public class World {
     tick++;
   }
 
-  // Implement first using string concatination. Then implement any
+  // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
   public String render() {
     // The following works but is slower

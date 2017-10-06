@@ -46,7 +46,7 @@ class World {
     this.tick += 1;
   }
 
-  // Implement first using string concatination. Then implement any
+  // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
   String render() {
     // The following works but is slower
