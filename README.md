@@ -18,32 +18,33 @@ In order to give a fair comparison, all implementations are coded as similarly a
 | 4th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
 | 5th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
 | 6th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
-| 7th.  | Python     | 0.00682s |  0.00709s  | Python 3.6.2                        |
-| 8th.  | Swift      | 0.01104s |  0.00742s  | Swift 4.0                           |
+| 7th.  | Dart       | 0.00510s |  0.00004s  | Dart 1.24.2                         |
+| 8th.  | Python     | 0.00682s |  0.00709s  | Python 3.6.2                        |
+| 9th.  | Swift      | 0.01104s |  0.00742s  | Swift 4.0                           |
 
 ## Feature Comparison
 
-*Note:* Below is a table of functionality that differs between the various languages. This list is not exhaustive, but includes some of the primary things that I cam across while implementing each one.
+*Note:* Below is a table of functionality that differs between the various languages. This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
 
-| Feature                       | Java | Javascript | PHP | Python | Ruby | Scala | Swift |
-|:------------------------------|:----:|:----------:|:---:|:------:|:----:|:-----:|:-----:|
-| Static Typed                  |  ✔   |     ✖      |  ✖  |   ✖    |  ✖   |   ✔   |   ✔   |
-| Classes (Top Level)           |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Classes (Nested)              |  ✔   |     ✔      |  ✖  |   ✔    |  ✔   |   ✔   |   ✖   |
-| Class Initializer             |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Class Methods                 |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Class Method Visibility       |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
-| Class Variables               |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✖   |
-| Class Variable Visibility     |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✖   |
-| Instance Methods              |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Instance Method Visibility    |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
-| Instance Variables            |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Instance Variable Visibility  |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
-| Named Parameters/Arguments    |  ✖   |     ✖      |  ✖  |   ✖    |  ✔   |   ✔   |   ✔   |
-| Default Parameters/Arguments  |  ✖   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| semicolon optional            |  ✖   |     ✔      |  ✖  |   ✔    |  ✔   |   ✔   |   ✔   |
-| return keyword optional       |  ✖   |     ✖      |  ✖  |   ✖    |  ✔   |   ✔   |   ✖   |
-| Looping over Array (value)    |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Looping over Hash (key/value) |  ✖   |     ✖      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Custom Exceptions             |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
-| Exceptions Must Be Caught     |  ✔   |     ✖      |  ✖  |   ✖    |  ✖   |   ✖   |   ✔   |
+| Feature                       | Dart | Java | Javascript | PHP | Python | Ruby | Scala | Swift |
+|:------------------------------|:----:|:----:|:----------:|:---:|:------:|:----:|:-----:|:-----:|
+| Static Typed                  |  ✔   |  ✔   |     ✖      |  ✖  |   ✖    |  ✖   |   ✔   |   ✔   |
+| Classes (Top Level)           |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Classes (Nested)              |  ✖   |  ✔   |     ✔      |  ✖  |   ✔    |  ✔   |   ✔   |   ✖   |
+| Class Initializer             |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Class Methods                 |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Class Method Visibility       |  ✔   |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
+| Class Variables               |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✖   |
+| Class Variable Visibility     |  ✔   |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✖   |
+| Instance Methods              |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Instance Method Visibility    |  ✔   |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
+| Instance Variables            |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Instance Variable Visibility  |  ✔   |  ✔   |     ✖      |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |
+| Named Parameters/Arguments    |  ✔   |  ✖   |     ✖      |  ✖  |   ✖    |  ✔   |   ✔   |   ✔   |
+| Default Parameters/Arguments  |  ✔   |  ✖   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| semicolon optional            |  ✖   |  ✖   |     ✔      |  ✖  |   ✔    |  ✔   |   ✔   |   ✔   |
+| return keyword optional       |  ✖   |  ✖   |     ✖      |  ✖  |   ✖    |  ✔   |   ✔   |   ✖   |
+| Looping over Array (value)    |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Looping over Hash (key/value) |  ✔   |  ✖   |     ✖      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Custom Exceptions             |  ✔   |  ✔   |     ✔      |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |
+| Exceptions Must Be Caught     |  ✖   |  ✔   |     ✖      |  ✖  |   ✖    |  ✖   |   ✖   |   ✔   |
