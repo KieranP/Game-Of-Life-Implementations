@@ -18,11 +18,11 @@ class World {
   }
 
   _tick() {
-    let cells = Object.values(this.cells)
+    const cells = Object.values(this.cells)
 
     // First determine the action for all cells
-    for (let cell of cells) {
-      let alive_neighbours = this.alive_neighbours_around(cell)
+    for (const cell of cells) {
+      const alive_neighbours = this.alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = 1
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -31,7 +31,7 @@ class World {
     }
 
     // Then execute the determined action for all cells
-    for (let cell of cells) {
+    for (const cell of cells) {
       if (cell.next_state == 1) {
         cell.alive = true
       } else if (cell.next_state == 0) {
@@ -48,7 +48,7 @@ class World {
     let rendering = ''
     for (let y = 0; y <= this.height; y++) {
       for (let x = 0; x <= this.width; x++) {
-        let cell = this.cell_at(x, y)
+        const cell = this.cell_at(x, y)
         rendering += cell.to_char().replace(' ', '&nbsp;')
       }
       rendering += "<br />"
@@ -59,7 +59,7 @@ class World {
     // let rendering = []
     // for (let y = 0; y <= this.height; y++) {
     //   for (let x = 0; x <= this.width; x++) {
-    //     let cell = this.cell_at(x, y)
+    //     const cell = this.cell_at(x, y)
     //     rendering.push(cell.to_char().replace(' ', '&nbsp;'))
     //   }
     //   rendering.push("<br />")
@@ -72,14 +72,14 @@ class World {
   populate_cells() {
     for (let y = 0; y <= this.height; y++) {
       for (let x = 0; x <= this.width; x++) {
-        let alive = (Math.random() <= 0.2)
+        const alive = (Math.random() <= 0.2)
         this.add_cell(x, y, alive)
       }
     }
   }
 
   prepopulate_neighbours() {
-    for (let cell of Object.values(this.cells)) {
+    for (const cell of Object.values(this.cells)) {
       this.neighbours_around(cell)
     }
   }
@@ -89,7 +89,7 @@ class World {
       throw new World.LocationOccupied
     }
 
-    let cell = new Cell(x, y, alive)
+    const cell = new Cell(x, y, alive)
     this.cells[`${x}-${y}`] = cell
     return this.cell_at(x, y)
   }
@@ -101,8 +101,8 @@ class World {
   neighbours_around(cell) {
     if (!cell.neighbours) {
       cell.neighbours = new Array
-      for (let set of this.cached_directions) {
-        let neighbour = this.cell_at(
+      for (const set of this.cached_directions) {
+        const neighbour = this.cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
         )
@@ -119,24 +119,24 @@ class World {
   // foreach and for. Retain whatever implementation runs the fastest
   alive_neighbours_around(cell) {
     // The following works but is slower
-    // let neighbours = this.neighbours_around(cell)
+    // const neighbours = this.neighbours_around(cell)
     // return neighbours.filter(function(neighbour) {
     //   return neighbour.alive
     // }).length
 
     // The following also works but is slower
-    // var alive_neighbours = 0
-    // for (let neighbour of this.neighbours_around(cell)) {
+    // let alive_neighbours = 0
+    // for (const neighbour of this.neighbours_around(cell)) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
     //   }
     // }
     // return alive_neighbours
 
-    var alive_neighbours = 0
-    var neighbours = this.neighbours_around(cell)
+    let alive_neighbours = 0
+    const neighbours = this.neighbours_around(cell)
     for (let i = 0; i < neighbours.length; i++) {
-      let neighbour = neighbours[i]
+      const neighbour = neighbours[i]
       if (neighbour.alive) {
         alive_neighbours += 1
       }

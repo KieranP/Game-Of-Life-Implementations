@@ -1,12 +1,12 @@
 class Play {
 
   static run() {
-    let world = new World(
+    const world = new World(
       Play.World_Width,
       Play.World_Height,
     )
 
-    let body = document.getElementsByTagName('body')[0]
+    const body = document.getElementsByTagName('body')[0]
     body.innerHTML = world.render()
 
     let total_tick = 0
@@ -14,19 +14,19 @@ class Play {
 
     // Can't use while(true) because it locks the page
     setInterval(() => {
-      let tick_start = new Date()
+      const tick_start = new Date()
       world._tick()
-      let tick_finish = new Date()
-      let tick_time = (tick_finish - tick_start) / 1000
+      const tick_finish = new Date()
+      const tick_time = (tick_finish - tick_start) / 1000
       total_tick += tick_time
-      let avg_tick = (total_tick / world.tick)
+      const avg_tick = (total_tick / world.tick)
 
-      let render_start = new Date()
-      let rendered = world.render()
-      let render_finish = new Date()
-      let render_time = (render_finish - render_start) / 1000
+      const render_start = new Date()
+      const rendered = world.render()
+      const render_finish = new Date()
+      const render_time = (render_finish - render_start) / 1000
       total_render += render_time
-      let avg_render = (total_render / world.tick)
+      const avg_render = (total_render / world.tick)
 
       let output = `#${world.tick}`
       output += ` - World tick took ${Play._f(tick_time)} (${Play._f(avg_tick)})`
