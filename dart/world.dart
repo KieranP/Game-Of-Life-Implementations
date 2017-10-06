@@ -100,7 +100,7 @@ class World {
   }
 
   Cell _add_cell(int x, int y, [bool alive = false]) {
-    if (this._cell_at(x, y) != null) {
+    if (this._cell_at(x, y) != null) { // Must return a boolean
       throw new LocationOccupied();
     }
 
@@ -114,7 +114,7 @@ class World {
   }
 
   List<Cell> _neighbours_around(Cell cell) {
-    if (!cell.neighbours) {
+    if (cell.neighbours == null) { // Must return a boolean
       cell.neighbours = [];
       for (final set in this._cached_directions) {
         final neighbour = this._cell_at(

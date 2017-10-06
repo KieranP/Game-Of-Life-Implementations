@@ -20,18 +20,16 @@ class Play {
     var total_render = 0.0;
 
     while(true) {
-      final tick_stopwatch = new Stopwatch()..start();
-      final tick_start = tick_stopwatch.elapsedMilliseconds;
+      final tick_start = new DateTime.now().millisecondsSinceEpoch;
       world.tick_();
-      final tick_finish = tick_stopwatch.elapsedMilliseconds;
+      final tick_finish = new DateTime.now().millisecondsSinceEpoch;
       final tick_time = (tick_finish - tick_start) / 1000.0;
       total_tick += tick_time;
       final avg_tick = (total_tick / world.tick);
 
-      final render_stopwatch = new Stopwatch()..start();
-      final render_start = render_stopwatch.elapsedMilliseconds;
+      final render_start = new DateTime.now().millisecondsSinceEpoch;
       final rendered = world.render();
-      final render_finish = render_stopwatch.elapsedMilliseconds;
+      final render_finish = new DateTime.now().millisecondsSinceEpoch;
       final render_time = (render_finish - render_start) / 1000.0;
       total_render += render_time;
       final avg_render = (total_render / world.tick);
@@ -45,7 +43,7 @@ class Play {
     }
   }
 
-  static String _f(int value) {
+  static String _f(double value) {
     return value.toStringAsFixed(5);
   }
 

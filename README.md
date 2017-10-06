@@ -8,17 +8,17 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 ## Speed Results (by tick time)
 
-*Note:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2014), 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM. The times were calculated by playing each simulation for 2000 ticks, and then grabbing the averages.
+*Note:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2014), 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM. The times were calculated by playing each simulation for long enough that the average tick time becomes stable, and then grabbing the averages.
 
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
-| 1st.  | Java       | 0.00037s |  0.00034s  | Java 1.8.0_101                      |
-| 2nd.  | Scala      | 0.00081s |  0.00136s  | Scala 2.12.3                        |
-| 3rd.  | Javascript | 0.00091s |  0.00153s  | SpiderMonkey 45 (Firefox 55.0.3)    |
-| 4th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
-| 5th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
-| 6th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
-| 7th.  | Dart       | 0.00510s |  0.00004s  | Dart 1.24.2                         |
+| 1st.  | Dart       | 0.00032s |  0.00075s  | Dart 1.24.2                         |
+| 2nd.  | Java       | 0.00036s |  0.00032s  | Java 1.8.0_101                      |
+| 3rd.  | Scala      | 0.00081s |  0.00136s  | Scala 2.12.3                        |
+| 4th.  | Javascript | 0.00091s |  0.00153s  | SpiderMonkey 45 (Firefox 55.0.3)    |
+| 5th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
+| 6th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
+| 7th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
 | 8th.  | Python     | 0.00682s |  0.00709s  | Python 3.6.2                        |
 | 9th.  | Swift      | 0.01104s |  0.00742s  | Swift 4.0                           |
 
