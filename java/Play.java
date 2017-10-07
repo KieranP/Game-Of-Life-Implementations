@@ -7,6 +7,10 @@ public class Play {
   private static int World_Height = 40;
 
   public static void main(String[] args) {
+    run();
+  }
+
+  public static void run() {
     World world = new World(
       World_Width,
       World_Height
@@ -14,8 +18,8 @@ public class Play {
 
     System.out.println(world.render());
 
-    double total_tick = 0;
-    double total_render = 0;
+    double total_tick = 0.0;
+    double total_render = 0.0;
 
     while (true) {
       double tick_start = System.currentTimeMillis();

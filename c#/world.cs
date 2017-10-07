@@ -1,29 +1,27 @@
-// Files must be named the same as the class they contain
-// Files can have multiple classes, but only one public class
-
-import java.util.HashMap;
-import java.lang.Math;
-import java.util.ArrayList;
+using System;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 
 public class World {
 
-  class LocationOccupied extends Exception { }
+  private class LocationOccupied : Exception {}
 
   public int tick;
   private int width;
   private int height;
-  private HashMap<String, Cell> cells;
+  private Dictionary<string, Cell> cells;
   private int[][] cached_directions;
 
   public World(int width, int height) {
     this.width = width;
     this.height = height;
     this.tick = 0;
-    this.cells = new HashMap<String, Cell>();
+    this.cells = new Dictionary<string, Cell>();
     this.cached_directions = new int[][]{
-      {-1, 1},  {0, 1},  {1, 1},  // above
-      {-1, 0},           {1, 0},  // sides
-      {-1, -1}, {0, -1}, {1, -1}, // below
+      new int[] {-1, 1},  new int[] {0, 1},  new int[] {1, 1},  // above
+      new int[] {-1, 0},                     new int[] {1, 0},  // sides
+      new int[] {-1, -1}, new int[] {0, -1}, new int[] {1, -1}, // below
     };
 
     populate_cells();
@@ -32,7 +30,7 @@ public class World {
 
   public void _tick() {
     // First determine the action for all cells
-    for (Cell cell : cells.values()) {
+    foreach (Cell cell in cells.Values) {
       int alive_neighbours = alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = 1;
@@ -42,10 +40,10 @@ public class World {
     }
 
     // Then execute the determined action for all cells
-    for (Cell cell : cells.values()) {
-      if (cell.next_state != null && cell.next_state == 1) {
+    foreach (Cell cell in cells.Values) {
+      if (cell.next_state == 1) {
         cell.alive = true;
-      } else if (cell.next_state != null && cell.next_state == 0) {
+      } else if (cell.next_state == 0) {
         cell.alive = false;
       }
     }
@@ -55,7 +53,7 @@ public class World {
 
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
-  public String render() {
+  public string render() {
     // The following works but is slower
     // String rendering = "";
     // for (int y = 0; y <= height; y++) {
@@ -67,66 +65,74 @@ public class World {
     // }
     // return rendering;
 
+    // The following works but is slower
+    // List<String> rendering = new List<String>();
+    // for (int y = 0; y <= height; y++) {
+    //   for (int x = 0; x <= width; x++) {
+    //     Cell cell = cell_at(x, y);
+    //     rendering.Add(cell.to_char().ToString());
+    //   }
+    //   rendering.Add("\n");
+    // }
+    // return String.Join("", rendering.ToArray());
+
     // The following was the fastest method
     StringBuilder rendering = new StringBuilder();
     for (int y = 0; y <= height; y++) {
       for (int x = 0; x <= width; x++) {
         Cell cell = cell_at(x, y);
-        rendering.append(cell.to_char());
+        rendering.Append(cell.to_char());
       }
-      rendering.append("\n");
+      rendering.Append("\n");
     }
-    return rendering.toString();
+    return rendering.ToString();
   }
 
   private void populate_cells() {
+    Random random = new Random();
     for (int y = 0; y <= height; y++) {
       for (int x = 0; x <= width; x++) {
-        boolean alive = (Math.random() <= 0.2);
+        bool alive = (random.NextDouble() <= 0.2);
         add_cell(x, y, alive);
       }
     }
   }
 
   private void prepopulate_neighbours() {
-    for (Cell cell : cells.values()) {
+    foreach (Cell cell in cells.Values) {
       neighbours_around(cell);
     }
   }
 
-  // Java doesn't have the concept of optional or default values
-  // The workaround is catch all args as an array and disect it
-  private Cell add_cell(int x, int y, boolean... args) {
+  private Cell add_cell(int x, int y, bool alive = false) {
     if (cell_at(x, y) != null) { // Must return a boolean
-      // Java won't let us throw an error without catching it
-      // so emulate a runtime abort by catching and exiting
-      try {
-        throw new LocationOccupied();
-      } catch(LocationOccupied m) {
-        System.out.println("Error: World.LocationOccupied "+x+"-"+y+"");
-        System.exit(0);
-      }
+      throw new LocationOccupied();
     }
 
-    Cell cell = new Cell(x, y, args[0]);
-    cells.put(x+"-"+y, cell);
+    Cell cell = new Cell(x, y, alive);
+    cells.Add($"{x}-{y}", cell);
     return cell_at(x, y);
   }
 
   private Cell cell_at(int x, int y) {
-    return cells.get(x+"-"+y);
+    string key = $"{x}-{y}";
+    if (cells.ContainsKey(key)) {
+      return cells[key];
+    } else {
+      return null;
+    }
   }
 
-  private ArrayList<Cell> neighbours_around(Cell cell) {
-    if (cell.neighbours == null) { // Must return a boolean
-      cell.neighbours = new ArrayList<Cell>();
-      for (int[] set : cached_directions) {
+  private List<Cell> neighbours_around(Cell cell) {
+    if (cell.neighbours == null) {
+      cell.neighbours = new List<Cell>();
+      foreach (int[] set in cached_directions) {
         Cell neighbour = cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
         );
         if (neighbour != null) {
-          cell.neighbours.add(neighbour);
+          cell.neighbours.Add(neighbour);
         }
       }
     }
@@ -138,9 +144,15 @@ public class World {
   // foreach and for. Retain whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
     // The following works but is slower
+    // List<Cell> neighbours = neighbours_around(cell);
+    // return neighbours.Where(
+    //   (neighbour) => neighbour.alive
+    // ).ToList().Count;
+
+    // The following works but is slower
     // int alive_neighbours = 0;
-    // ArrayList<Cell> neighbours = neighbours_around(cell);
-    // for (Cell neighbour : neighbours) {
+    // List<Cell> neighbours = neighbours_around(cell);
+    // foreach (Cell neighbour in neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
     //   }
@@ -148,9 +160,9 @@ public class World {
     // return alive_neighbours;
 
     int alive_neighbours = 0;
-    ArrayList<Cell> neighbours = neighbours_around(cell);
-    for (int i = 0; i < neighbours.size(); i++) {
-      Cell neighbour = neighbours.get(i);
+    List<Cell> neighbours = neighbours_around(cell);
+    for (int i = 0; i < neighbours.Count; i++) {
+      Cell neighbour = neighbours[i];
       if (neighbour.alive) {
         alive_neighbours++;
       }
@@ -160,20 +172,18 @@ public class World {
 
 }
 
-class Cell {
+public class Cell {
 
   public int x;
   public int y;
-  public boolean alive;
-  public Integer next_state; // int doesn't allow null values
-  public ArrayList<Cell> neighbours;
+  public bool alive;
+  public int? next_state;
+  public List<Cell> neighbours;
 
-  // Java doesn't have the concept of optional or default values
-  // The workaround is catch all args as an array and disect it
-  public Cell(int x, int y, boolean... args) {
+  public Cell(int x, int y, bool alive = false) {
     this.x = x;
     this.y = y;
-    this.alive = args[0];
+    this.alive = alive;
     this.next_state = null;
     this.neighbours = null;
   }

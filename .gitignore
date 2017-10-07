@@ -1,4 +1,5 @@
 .DS_Store
+c#/*.exe
 java/*.class
 python/__pycache__
 scala/*.class
