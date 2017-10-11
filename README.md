@@ -18,10 +18,10 @@ In order to give a fair comparison, all implementations are coded as similarly a
 | 4th.  | Scala      | 0.00074s |  0.00125s  | Scala 2.12.3                        |
 | 5th.  | Javascript | 0.00083s |  0.00133s  | SpiderMonkey 45 (Firefox 55.0.3)    |
 | 6th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
-| 7th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
-| 8th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
-| 9th.  | Python     | 0.00682s |  0.00709s  | Python 3.6.2                        |
-| 10th. | Swift      | 0.01104s |  0.00742s  | Swift 4.0                           |
+| 7th.  | Swift      | 0.00237s |  0.00543s  | Swift 4.0                           |
+| 8th.  | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
+| 9th.  | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
+| 10th. | Python     | 0.00682s |  0.00709s  | Python 3.6.2                        |
 
 ## Feature Comparison
 
