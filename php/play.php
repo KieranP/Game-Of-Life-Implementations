@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 
-require_once('game.php');
+require_once('world.php');
 
 class Play {
 

@@ -1,6 +1,6 @@
 from time import time
 from os import system
-from game import *
+from world import *
 
 class Play:
 

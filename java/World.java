@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class World {
 
-  class LocationOccupied extends Exception { }
+  private class LocationOccupied extends Exception { }
 
   public int tick;
   private int width;

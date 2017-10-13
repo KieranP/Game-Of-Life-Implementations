@@ -1,6 +1,6 @@
 $:.push(File.dirname(__FILE__))
 
-require 'game'
+require 'world'
 
 class Play
 

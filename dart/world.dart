@@ -6,8 +6,8 @@ class LocationOccupied implements Exception {}
 
 class World {
 
-  int _width;
-  int _height;
+  int width;
+  int height;
   int tick;
   Map<String, Cell> _cells = {};
   List<List<int, int>> _cached_directions = [
@@ -16,7 +16,7 @@ class World {
     [-1, -1], [0, -1], [1, -1] // below
   ];
 
-  World(this._width, this._height) {
+  World(this.width, this.height) {
     this.tick = 0;
 
     _populate_cells();
@@ -51,8 +51,8 @@ class World {
   String render() {
     // The following works but is slower
     // var rendering = '';
-    // for (var y = 0; y <= this._height; y++) {
-    //   for (var x = 0; x <= this._width; x++) {
+    // for (var y = 0; y <= this.height; y++) {
+    //   for (var x = 0; x <= this.width; x++) {
     //     final cell = this._cell_at(x, y);
     //     rendering += cell.to_char();
     //   }
@@ -62,8 +62,8 @@ class World {
 
     // The following was the fastest method
     var rendering = [];
-    for (var y = 0; y <= this._height; y++) {
-      for (var x = 0; x <= this._width; x++) {
+    for (var y = 0; y <= this.height; y++) {
+      for (var x = 0; x <= this.width; x++) {
         final cell = this._cell_at(x, y);
         rendering.add(cell.to_char());
       }
@@ -73,8 +73,8 @@ class World {
 
     // The following works but is slower
     // var rendering = new StringBuffer();
-    // for (var y = 0; y <= this._height; y++) {
-    //   for (var x = 0; x <= this._width; x++) {
+    // for (var y = 0; y <= this.height; y++) {
+    //   for (var x = 0; x <= this.width; x++) {
     //     final cell = this._cell_at(x, y);
     //     rendering.write(cell.to_char());
     //   }
@@ -85,8 +85,8 @@ class World {
 
   void _populate_cells() {
     final rng = new Random();
-    for (var y = 0; y <= this._height; y++) {
-      for (var x = 0; x <= this._width; x++) {
+    for (var y = 0; y <= this.height; y++) {
+      for (var x = 0; x <= this.width; x++) {
         final alive = (rng.nextDouble() <= 0.2);
         this._add_cell(x, y, alive);
       }
