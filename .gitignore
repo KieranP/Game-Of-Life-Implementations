@@ -1,6 +1,8 @@
 .DS_Store
 c#/*.exe
 java/*.class
+kotlin/*.class
+kotlin/META-INF
 python/__pycache__
 scala/*.class
 swift/main
