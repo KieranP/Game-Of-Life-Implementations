@@ -35,9 +35,9 @@ class World(
 
     // Then execute the determined action for all cells
     for ((key, cell) <- cells) {
-      if (cell.next_state != None && cell.next_state.get == 1) {
+      if (cell.next_state == Some(1)) {
         cell.alive = true
-      } else if (cell.next_state != None && cell.next_state.get == 0) {
+      } else if (cell.next_state == Some(0)) {
         cell.alive = false
       }
     }
