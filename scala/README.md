@@ -2,5 +2,5 @@
 
 ## Usage
 
-* `scalac *.scala`
+* `scalac *.scala -opt:_`
 * `scala Play`

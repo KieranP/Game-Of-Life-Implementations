@@ -12,18 +12,18 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
-| 1st.  | Dart       | 0.00027s |  0.00062s  | Dart 1.24.2                         |
-| 2nd.  | Crystal    | 0.00031s |  0.00212s  | Crystal 0.25.0                      |
-| 3rd.  | Java       | 0.00036s |  0.00032s  | Java 1.8.0_101                      |
-| 4th.  | Kotlin     | 0.00036s |  0.00034s  | Kotlin 1.1.51                       |
-| 5th.  | C#         | 0.00036s |  0.00438s  | Mono 5.0.1.1                        |
-| 6th.  | Scala      | 0.00074s |  0.00125s  | Scala 2.12.3                        |
-| 7th.  | Javascript | 0.00083s |  0.00133s  | SpiderMonkey 45 (Firefox 55.0.3)    |
-| 8th.  | Javascript | 0.00221s |  0.00154s  | V8 6.1.534.37 (Chrome 61.0.3163.91) |
-| 9th.  | Swift      | 0.00237s |  0.00543s  | Swift 4.0                           |
-| 10th. | PHP        | 0.00244s |  0.00232s  | PHP 7.1.8                           |
-| 11th. | Ruby       | 0.00459s |  0.00426s  | Ruby 2.4.1                          |
-| 12th. | Python     | 0.00682s |  0.00709s  | Python 3.6.2                        |
+| 1st.  | Dart       | 0.00027s |  0.00062s  | Dart 1.24.3                         |
+| 2nd.  | C#         | 0.00029s |  0.00448s  | Mono 5.12.0.226                     |
+| 3rd.  | Crystal    | 0.00031s |  0.00212s  | Crystal 0.25.0                      |
+| 4th.  | Java       | 0.00036s |  0.00032s  | Java 1.8.0_101                      |
+| 5th.  | Kotlin     | 0.00036s |  0.00034s  | Kotlin 1.2.50                       |
+| 6th.  | Scala      | 0.00075s |  0.00050s  | Scala 2.12.6                        |
+| 7th.  | Javascript | 0.00113s |  0.00245s  | SpiderMonkey 60 (Firefox 60.0.2)    |
+| 8th.  | Swift      | 0.00238s |  0.00553s  | Swift 4.0.3                         |
+| 9th.  | PHP        | 0.00270s |  0.00249s  | PHP 7.2.6                           |
+| 10th. | Javascript | 0.00274s |  0.00129s  | V8 6.7.288.46 (Chrome 67.0.3396.87) |
+| 11th. | Ruby       | 0.00595s |  0.00519s  | Ruby 2.5.1                          |
+| 12th. | Python     | 0.00699s |  0.00770s  | Python 3.6.2                        |
 
 ## Feature Comparison
 

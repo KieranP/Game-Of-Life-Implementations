@@ -2,4 +2,4 @@
 
 ## Usage
 
-* `python3 play.py`
+* `python3 -OO play.py`

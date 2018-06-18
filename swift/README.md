@@ -2,5 +2,5 @@
 
 ## Usage
 
-* `swiftc -O *.swift`
-* `./main`
+* `swiftc -O *.swift -o play`
+* `./play`

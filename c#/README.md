@@ -2,5 +2,5 @@
 
 ## Usage
 
-* `mcs *.cs`
+* `mcs *.cs -optimize+`
 * `mono play.exe`
