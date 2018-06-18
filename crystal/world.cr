@@ -12,10 +12,7 @@ class World
              [-1, -1], [0, -1], [1, -1] # below
            ]
 
-  def initialize(width : Int32, height : Int32) : Nil
-    @width = width
-    @height = height
-
+  def initialize(@width : Int32, @height : Int32) : Nil
     populate_cells
     prepopulate_neighbours
   end
@@ -149,10 +146,7 @@ class Cell
            next_state : (Int32 | Nil) = nil,
            neighbours : (Array(Cell) | Nil) = nil
 
-  def initialize(x : Int32, y : Int32, alive : Bool = false) : Nil
-    @x = x
-    @y = y
-    @alive = alive
+  def initialize(@x : Int32, @y : Int32, @alive : Bool = false) : Nil
   end
 
   def to_char : String

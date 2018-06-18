@@ -14,7 +14,7 @@ In order to give a fair comparison, all implementations are coded as similarly a
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
 | 1st.  | Dart       | 0.00027s |  0.00062s  | Dart 1.24.3                         |
 | 2nd.  | C#         | 0.00029s |  0.00448s  | Mono 5.12.0.226                     |
-| 3rd.  | Crystal    | 0.00031s |  0.00212s  | Crystal 0.25.0                      |
+| 3rd.  | Crystal    | 0.00030s |  0.00209s  | Crystal 0.25.0                      |
 | 4th.  | Java       | 0.00036s |  0.00032s  | Java 1.8.0_101                      |
 | 5th.  | Kotlin     | 0.00036s |  0.00034s  | Kotlin 1.2.50                       |
 | 6th.  | Scala      | 0.00075s |  0.00050s  | Scala 2.12.6                        |
