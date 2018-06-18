@@ -1,5 +1,8 @@
 .DS_Store
 c#/*.exe
+crystal/play
+crystal/world
+crystal/*.dwarf
 java/*.class
 kotlin/*.class
 kotlin/META-INF
