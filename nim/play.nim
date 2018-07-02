@@ -17,7 +17,7 @@ proc run(self: Play)
 proc f(self: Play, value: float): string
 
 proc run(self: Play) =
-  var world = World(
+  let world = World(
     width: World_Width,
     height: World_Height,
   ).initialize()
@@ -28,19 +28,19 @@ proc run(self: Play) =
   var total_render = 0.0
 
   while true:
-    var tick_start = epochTime()
+    let tick_start = epochTime()
     world.tick()
-    var tick_finish = epochTime()
-    var tick_time = (tick_finish - tick_start)
+    let tick_finish = epochTime()
+    let tick_time = (tick_finish - tick_start)
     total_tick += tick_time
-    var avg_tick = (total_tick / world.tick_num.float)
+    let avg_tick = (total_tick / world.tick_num.float)
 
-    var render_start = epochTime()
-    var rendered = world.render()
-    var render_finish = epochTime()
-    var render_time = (render_finish - render_start)
+    let render_start = epochTime()
+    let rendered = world.render()
+    let render_finish = epochTime()
+    let render_time = (render_finish - render_start)
     total_render += render_time
-    var avg_render = (total_render / world.tick_num.float)
+    let avg_render = (total_render / world.tick_num.float)
 
     var output = "#" & intToStr(world.tick_num)
     output = output & " - World tick took " & self.f(tick_time) & " (" & self.f(avg_tick) & ")"

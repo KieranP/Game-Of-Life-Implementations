@@ -58,7 +58,7 @@ proc initialize(self: World): World =
 proc tick(self: World) =
   # First determine the action for all cells
   for key,cell in self.cells:
-    var alive_neighbours = self.alive_neighbours_around(cell)
+    let alive_neighbours = self.alive_neighbours_around(cell)
     if not cell.alive and alive_neighbours == 3:
       cell.next_state = some(1)
     elif alive_neighbours < 2 or alive_neighbours > 3:
@@ -80,7 +80,7 @@ proc render(self: World): string =
   var rendering = ""
   for y in 0..self.height:
     for x in 0..self.width:
-      var cell = self.cell_at(x, y)
+      let cell = self.cell_at(x, y)
       rendering = rendering & cell.to_char()
     rendering = rendering & "\n"
   rendering
@@ -89,7 +89,7 @@ proc render(self: World): string =
   # var rendering: seq[string] = @[]
   # for y in 0..self.height:
   #   for x in 0..self.width:
-  #     var cell = self.cell_at(x, y)
+  #     let cell = self.cell_at(x, y)
   #     rendering.add(cell.to_char())
   #   rendering.add("\n")
   # join(rendering, "")
@@ -97,7 +97,7 @@ proc render(self: World): string =
 proc populate_cells(self: World) =
   for y in 0..self.height:
     for x in 0..self.width:
-      var alive = (rand(100) <= 20)
+      let alive = (rand(100) <= 20)
       discard self.add_cell(x, y, alive)
 
 proc prepopulate_neighbours(self: World) =
@@ -108,13 +108,13 @@ proc add_cell(self: World, x: int, y: int, alive: bool = false): Cell =
   if self.cell_at(x, y) != nil:
     raise newException(LocationOccupied, "")
 
-  var cell = Cell(x: x, y: y, alive: alive)
-  var key = intToStr(x) & "-" & intToStr(y)
+  let cell = Cell(x: x, y: y, alive: alive)
+  let key = intToStr(x) & "-" & intToStr(y)
   self.cells[key] = cell
   self.cell_at(x, y)
 
 proc cell_at(self: World, x: int, y: int): Cell =
-  var key = intToStr(x) & "-" & intToStr(y)
+  let key = intToStr(x) & "-" & intToStr(y)
   if self.cells.hasKey(key):
     return self.cells[key]
   else:
@@ -125,7 +125,7 @@ proc neighbours_around(self: World, cell: Cell): seq[Cell] =
     var neighbours: seq[Cell] = @[]
 
     for coords in self.cached_directions:
-      var neighbour = self.cell_at(
+      let neighbour = self.cell_at(
         (cell.x + coords[0]),
         (cell.y + coords[1]),
       )
@@ -155,9 +155,9 @@ proc alive_neighbours_around(self: World, cell: Cell): int =
 
   # The following works but is slower
   # var alive_neighbours = 0
-  # var neighbours = self.neighbours_around(cell)
+  # let neighbours = self.neighbours_around(cell)
   # for i in 0..<neighbours.len:
-  #   var neighbour = neighbours[i]
+  #   let neighbour = neighbours[i]
   #   if neighbour.alive:
   #     alive_neighbours += 1
   # alive_neighbours
