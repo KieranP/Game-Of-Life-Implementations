@@ -11,3 +11,4 @@ nim/play
 python/__pycache__
 scala/*.class
 swift/play
+typescript/*.js
