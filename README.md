@@ -12,11 +12,11 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 | Place | Language   | Tick Avg | Render Avg | Notes                               |
 |:------|:-----------|:--------:|:----------:|:------------------------------------|
-| 1st.  | Dart       | 0.00027s |  0.00062s  | Dart 1.24.3                         |
-| 2nd.  | C#         | 0.00029s |  0.00448s  | Mono 5.12.0.226                     |
-| 3rd.  | Crystal    | 0.00030s |  0.00209s  | Crystal 0.25.0                      |
-| 4th.  | Java       | 0.00036s |  0.00032s  | Java 1.8.0_101                      |
-| 5th.  | Kotlin     | 0.00036s |  0.00034s  | Kotlin 1.2.50                       |
+| 1st.  | Crystal    | 0.00030s |  0.00209s  | Crystal 0.25.1                      |
+| 2nd.  | C#         | 0.00030s |  0.00455s  | Mono 5.12.0.226                     |
+| 3rd.  | Java       | 0.00035s |  0.00032s  | Java 1.8.0_101                      |
+| 4th.  | Kotlin     | 0.00035s |  0.00034s  | Kotlin 1.2.60                       |
+| 5th.  | Dart       | 0.00038s |  0.00072s  | Dart 2.0.0                          |
 | 6th.  | Scala      | 0.00075s |  0.00050s  | Scala 2.12.6                        |
 | 7th.  | Javascript | 0.00113s |  0.00245s  | SpiderMonkey 60 (Firefox 60.0.2)    |
 | 8th.  | Nim        | 0.00144s |  0.00339s  | Nim 0.18.0                          |
