@@ -82,8 +82,6 @@ public class World(
     }
   }
 
-  // Java doesn't have the concept of optional or default values
-  // The workaround is catch all args as an array and disect it
   private fun add_cell(x: Int, y: Int, alive: Boolean = false): Cell {
     if (cell_at(x, y) != null) { // Must return a boolean
       throw LocationOccupied()
