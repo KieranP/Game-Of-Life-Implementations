@@ -9,7 +9,7 @@ class Play {
   static const World_Height = 40;
 
   static void run() {
-    final world = new World(
+    final world = World(
       World_Width,
       World_Height,
     );
@@ -20,16 +20,16 @@ class Play {
     var total_render = 0.0;
 
     while(true) {
-      final tick_start = new DateTime.now().millisecondsSinceEpoch;
+      final tick_start = DateTime.now().millisecondsSinceEpoch;
       world.tick_();
-      final tick_finish = new DateTime.now().millisecondsSinceEpoch;
+      final tick_finish = DateTime.now().millisecondsSinceEpoch;
       final tick_time = (tick_finish - tick_start) / 1000.0;
       total_tick += tick_time;
       final avg_tick = (total_tick / world.tick);
 
-      final render_start = new DateTime.now().millisecondsSinceEpoch;
+      final render_start = DateTime.now().millisecondsSinceEpoch;
       final rendered = world.render();
-      final render_finish = new DateTime.now().millisecondsSinceEpoch;
+      final render_finish = DateTime.now().millisecondsSinceEpoch;
       final render_time = (render_finish - render_start) / 1000.0;
       total_render += render_time;
       final avg_render = (total_render / world.tick);

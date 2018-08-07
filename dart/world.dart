@@ -10,7 +10,7 @@ class World {
   int height;
   int tick;
   Map<String, Cell> _cells = {};
-  List<List<int, int>> _cached_directions = [
+  List<List<int>> _cached_directions = const [
     [-1, 1],  [0, 1],  [1, 1], // above
     [-1, 0],           [1, 0], // sides
     [-1, -1], [0, -1], [1, -1] // below
@@ -72,7 +72,7 @@ class World {
     return rendering.join("");
 
     // The following works but is slower
-    // var rendering = new StringBuffer();
+    // var rendering = StringBuffer();
     // for (var y = 0; y <= this.height; y++) {
     //   for (var x = 0; x <= this.width; x++) {
     //     final cell = this._cell_at(x, y);
@@ -84,7 +84,7 @@ class World {
   }
 
   void _populate_cells() {
-    final rng = new Random();
+    final rng = Random();
     for (var y = 0; y <= this.height; y++) {
       for (var x = 0; x <= this.width; x++) {
         final alive = (rng.nextDouble() <= 0.2);
@@ -101,10 +101,10 @@ class World {
 
   Cell _add_cell(int x, int y, [bool alive = false]) {
     if (this._cell_at(x, y) != null) { // Must return a boolean
-      throw new LocationOccupied();
+      throw LocationOccupied();
     }
 
-    final cell = new Cell(x, y, alive);
+    final cell = Cell(x, y, alive);
     this._cells["$x-$y"] = cell;
     return this._cell_at(x, y);
   }
