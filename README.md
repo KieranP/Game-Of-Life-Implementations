@@ -10,48 +10,78 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 *Note:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2014), 2.5 GHz Intel Core i7, with 16 GB of 1600 MHz DDR3 RAM. The times were calculated by playing each simulation for long enough that the average tick time becomes stable, and then grabbing the averages.
 
-| Place | Language   | Tick Avg | Render Avg | Notes                               |
-|:------|:-----------|:--------:|:----------:|:------------------------------------|
-| 1st.  | Crystal    | 0.00030s |  0.00209s  | Crystal 0.25.1                      |
-| 2nd.  | C#         | 0.00030s |  0.00455s  | Mono 5.12.0.226                     |
-| 3rd.  | Java       | 0.00035s |  0.00032s  | Java 1.8.0_101                      |
-| 4th.  | Kotlin     | 0.00035s |  0.00034s  | Kotlin 1.2.60                       |
-| 5th.  | Dart       | 0.00038s |  0.00072s  | Dart 2.0.0                          |
-| 6th.  | Scala      | 0.00075s |  0.00050s  | Scala 2.12.6                        |
-| 7th.  | Javascript | 0.00113s |  0.00245s  | SpiderMonkey 60 (Firefox 60.0.2)    |
-| 8th.  | Groovy     | 0.00139s |  0.00324s  | Groovy 2.5.1                        |
-| 9th.  | Nim        | 0.00144s |  0.00339s  | Nim 0.18.0                          |
-| 10th. | Swift      | 0.00197s |  0.00530s  | Swift 4.0.3                         |
-| 11th. | Javascript | 0.00260s |  0.00134s  | Typescript 3.0.1 / Node 8.9.4       |
-| 12th. | PHP        | 0.00270s |  0.00249s  | PHP 7.2.6                           |
-| 13th. | Javascript | 0.00274s |  0.00129s  | V8 6.7.288.46 (Chrome 67.0.3396.87) |
-| 14th. | Ruby       | 0.00595s |  0.00519s  | Ruby 2.5.1                          |
-| 15th. | Python     | 0.00699s |  0.00770s  | Python 3.6.2                        |
+| Place | Language   | Tick Avg | Render Avg |  Typed  | Notes                               |
+|:------|:-----------|:--------:|:----------:|:-------:|:------------------------------------|
+| 1st.  | Crystal    | 0.00030s |  0.00209s  | Static  | Crystal 0.25.1                      |
+| 2nd.  | C#         | 0.00030s |  0.00455s  | Static  | Mono 5.12.0.226                     |
+| 3rd.  | Java       | 0.00035s |  0.00032s  | Static  | Java 1.8.0_101                      |
+| 4th.  | Kotlin     | 0.00035s |  0.00034s  | Static  | Kotlin 1.2.60                       |
+| 5th.  | Dart       | 0.00038s |  0.00072s  | Static  | Dart 2.0.0                          |
+| 6th.  | Scala      | 0.00075s |  0.00050s  | Static  | Scala 2.12.6                        |
+| 7th.  | Javascript | 0.00113s |  0.00245s  | Dynamic | SpiderMonkey 60 (Firefox 60.0.2)    |
+| 8th.  | Groovy     | 0.00139s |  0.00324s  | Static  | Groovy 2.5.1                        |
+| 9th.  | Nim        | 0.00144s |  0.00339s  | Static  | Nim 0.18.0                          |
+| 10th. | Swift      | 0.00197s |  0.00530s  | Static  | Swift 4.0.3                         |
+| 11th. | Javascript | 0.00260s |  0.00134s  | Static  | Typescript 3.0.1 / Node 8.9.4       |
+| 12th. | PHP        | 0.00270s |  0.00249s  | Dynamic | PHP 7.2.6                           |
+| 13th. | Javascript | 0.00274s |  0.00129s  | Dynamic | V8 6.7.288.46 (Chrome 67.0.3396.87) |
+| 14th. | Ruby       | 0.00595s |  0.00519s  | Dynamic | Ruby 2.5.1                          |
+| 15th. | Python     | 0.00699s |  0.00770s  | Dynamic | Python 3.6.2                        |
 
 ## Feature Comparison
 
-*Note:* Below is a table of functionality that differs between the various languages. This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
+### Static Typed Languages
 
-| Feature                          | C# | Crystal | Dart | Groovy | Java | Javascript | Kotlin | Nim | PHP | Python | Ruby | Scala | Swift | TypeScript |
-|:---------------------------------|:--:|:-------:|:----:|:------:|:----:|:----------:|:------:|:---:|:---:|:------:|:----:|:-----:|:-----:|:----------:|
-| Runs Without Compiling           | ✖  |    ✖    |  ✔   |        |  ✖   |     ✔      |   ✖    |  ✖  |  ✔  |   ✔    |  ✔   |   ✖   |   ✖   |     ✖      |
-| Static Typed                     | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✖      |   ✔    |  ✖  |  ✖  |   ✖    |  ✖   |   ✔   |   ✔   |     ✔      |
-| Classes/Objects (Top Level)      | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Classes/Objects (Nested)         | ✔  |    ✔    |  ✖   |   ✔    |  ✔   |     ✔      |   ✔    |  ✖  |  ✖  |   ✔    |  ✔   |   ✔   |   ✖   |     ✔      |
-| Class/Object Initializer         | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✖  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Class/Object Methods             | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✖  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Class/Object Method Visibility   | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✖      |   ✔    |  ✖  |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Class/Object Variables           | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✖  |  ✔  |   ✔    |  ✔   |   ✔   |   ✖   |     ✔      |
-| Class/Object Variable Visibility | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✖      |   ✔    |  ✖  |  ✔  |   ✖    |  ✔   |   ✔   |   ✖   |     ✔      |
-| Instance Methods                 | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Instance Method Visibility       | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✖      |   ✔    |  ✔  |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Instance Variables               | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Instance Variable Visibility     | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✖      |   ✔    |  ✔  |  ✔  |   ✖    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Named Parameters/Arguments       | ✔  |    ✔    |  ✔   |   ✔    |  ✖   |     ✖      |   ✔    |  ✖  |  ✖  |   ✖    |  ✔   |   ✔   |   ✔   |     ✖      |
-| Default Parameters/Arguments     | ✔  |    ✔    |  ✔   |   ✔    |  ✖   |     ✔      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| semicolon optional               | ✖  |    ✔    |  ✖   |   ✔    |  ✖   |     ✔      |   ✔    |  ✔  |  ✖  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| return keyword optional          | ✖  |    ✔    |  ✖   |   ✔    |  ✖   |     ✖      |   ✖    |  ✔  |  ✖  |   ✖    |  ✔   |   ✔   |   ✖   |     ✖      |
-| Looping over Array (value)       | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Looping over Hash (key/value)    | ✔  |    ✔    |  ✔   |   ✖    |  ✖   |     ✖      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Custom Exceptions                | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |     ✔      |   ✔    |  ✔  |  ✔  |   ✔    |  ✔   |   ✔   |   ✔   |     ✔      |
-| Exceptions Must Be Caught        | ✖  |    ✖    |  ✖   |   ✖    |  ✔   |     ✖      |   ✖    |  ✖  |  ✖  |   ✖    |  ✖   |   ✖   |   ✔   |     ✖      |
+*Note:* Below is a table of functionality that differs between the various static typed languages.
+This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
+
+| Feature                          | C# | Crystal | Dart | Groovy | Java | Kotlin | Nim | Scala | Swift | TypeScript |
+|:---------------------------------|:--:|:-------:|:----:|:------:|:----:|:------:|:---:|:-----:|:-----:|:----------:|
+| Runs Without Compiling           | ✖  |    ✖    |  ✔   |   ✔    |  ✖   |   ✖    |  ✖  |   ✖   |   ✖   |     ✖      |
+| Classes/Objects (Top Level)      | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Classes/Objects (Nested)         | ✔  |    ✔    |  ✖   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
+| Class/Object Initializer         | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
+| Class/Object Methods             | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
+| Class/Object Method Visibility   | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
+| Class/Object Variables           | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
+| Class/Object Variable Visibility | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
+| Instance Methods                 | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Instance Method Visibility       | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Instance Variables               | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Instance Variable Visibility     | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Named Parameters/Arguments       | ✔  |    ✔    |  ✔   |   ✔    |  ✖   |   ✔    |  ✖  |   ✔   |   ✔   |     ✖      |
+| Default Parameters/Arguments     | ✔  |    ✔    |  ✔   |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| semicolon optional               | ✖  |    ✔    |  ✖   |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| return keyword optional          | ✖  |    ✔    |  ✖   |   ✔    |  ✖   |   ✖    |  ✔  |   ✔   |   ✖   |     ✖      |
+| Looping over Array (value)       | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Looping over Hash (key/value)    | ✔  |    ✔    |  ✔   |   ✖    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Custom Exceptions                | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Exceptions Must Be Caught        | ✖  |    ✖    |  ✖   |   ✖    |  ✔   |   ✖    |  ✖  |   ✖   |   ✔   |     ✖      |
+
+### Dynamic Typed Languages
+
+*Note:* Below is a table of functionality that differs between the various dynamic typed languages.
+This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
+
+| Feature                          | Javascript | PHP | Python | Ruby |
+|:---------------------------------|:----------:|:---:|:------:|:----:|
+| Runs Without Compiling           |     ✔      |  ✔  |   ✔    |  ✔   |
+| Classes/Objects (Top Level)      |     ✔      |  ✔  |   ✔    |  ✔   |
+| Classes/Objects (Nested)         |     ✔      |  ✖  |   ✔    |  ✔   |
+| Class/Object Initializer         |     ✔      |  ✔  |   ✔    |  ✔   |
+| Class/Object Methods             |     ✔      |  ✔  |   ✔    |  ✔   |
+| Class/Object Method Visibility   |     ✖      |  ✔  |   ✖    |  ✔   |
+| Class/Object Variables           |     ✔      |  ✔  |   ✔    |  ✔   |
+| Class/Object Variable Visibility |     ✖      |  ✔  |   ✖    |  ✔   |
+| Instance Methods                 |     ✔      |  ✔  |   ✔    |  ✔   |
+| Instance Method Visibility       |     ✖      |  ✔  |   ✖    |  ✔   |
+| Instance Variables               |     ✔      |  ✔  |   ✔    |  ✔   |
+| Instance Variable Visibility     |     ✖      |  ✔  |   ✖    |  ✔   |
+| Named Parameters/Arguments       |     ✖      |  ✖  |   ✖    |  ✔   |
+| Default Parameters/Arguments     |     ✔      |  ✔  |   ✔    |  ✔   |
+| semicolon optional               |     ✔      |  ✖  |   ✔    |  ✔   |
+| return keyword optional          |     ✖      |  ✖  |   ✖    |  ✔   |
+| Looping over Array (value)       |     ✔      |  ✔  |   ✔    |  ✔   |
+| Looping over Hash (key/value)    |     ✖      |  ✔  |   ✔    |  ✔   |
+| Custom Exceptions                |     ✔      |  ✔  |   ✔    |  ✔   |
+| Exceptions Must Be Caught        |     ✖      |  ✖  |   ✖    |  ✖   |
