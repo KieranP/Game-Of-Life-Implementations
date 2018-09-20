@@ -1,0 +1,7 @@
+[package]
+name = "game-of-life"
+version = "0.1.0"
+authors = ["Kieran Pilkington <kieran776@gmail.com>"]
+
+[dependencies]
+rand = "*"
