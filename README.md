@@ -35,28 +35,31 @@ In order to give a fair comparison, all implementations are coded as similarly a
 *Note:* Below is a table of functionality that differs between the various static typed languages.
 This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
 
-| Feature                          | C# | Crystal | Dart | Groovy | Java | Kotlin | Nim | Scala | Swift | TypeScript |
-|:---------------------------------|:--:|:-------:|:----:|:------:|:----:|:------:|:---:|:-----:|:-----:|:----------:|
-| Runs Without Compiling           | ✖  |    ✖    |  ✔   |   ✔    |  ✖   |   ✖    |  ✖  |   ✖   |   ✖   |     ✖      |
-| Classes/Objects (Top Level)      | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Classes/Objects (Nested)         | ✔  |    ✔    |  ✖   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
-| Class/Object Initializer         | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
-| Class/Object Methods             | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
-| Class/Object Method Visibility   | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
-| Class/Object Variables           | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
-| Class/Object Variable Visibility | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
-| Instance Methods                 | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Instance Method Visibility       | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Instance Variables               | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Instance Variable Visibility     | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Named Parameters/Arguments       | ✔  |    ✔    |  ✔   |   ✔    |  ✖   |   ✔    |  ✖  |   ✔   |   ✔   |     ✖      |
-| Default Parameters/Arguments     | ✔  |    ✔    |  ✔   |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| semicolon optional               | ✖  |    ✔    |  ✖   |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| return keyword optional          | ✖  |    ✔    |  ✖   |   ✔    |  ✖   |   ✖    |  ✔  |   ✔   |   ✖   |     ✖      |
-| Looping over Array (value)       | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Looping over Hash (key/value)    | ✔  |    ✔    |  ✔   |   ✖    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Custom Exceptions                | ✔  |    ✔    |  ✔   |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Exceptions Must Be Caught        | ✖  |    ✖    |  ✖   |   ✖    |  ✔   |   ✖    |  ✖  |   ✖   |   ✔   |     ✖      |
+| Feature                          | C# | Crystal | Dart | Go | Groovy | Java | Kotlin | Nim | Scala | Swift | TypeScript |
+|:---------------------------------|:--:|:-------:|:----:|:--:|:------:|:----:|:------:|:---:|:-----:|:-----:|:----------:|
+| Runs Without Compiling           | ✖  |    ✖    |  ✔   |  ✔ |   ✔    |  ✖   |   ✖    |  ✖  |   ✖   |   ✖   |     ✖      |
+| Classes/Objects (Top Level)      | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Classes/Objects (Nested)         | ✔  |    ✔    |  ✖   |  ✖ |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
+| Class/Object Initializer         | ✔  |    ✔    |  ✔   |  ✖ |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
+| Class/Object Methods             | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
+| Class/Object Method Visibility   | ✔  |    ✔    |  ✔   |  ▵ |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
+| Class/Object Variables           | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
+| Class/Object Variable Visibility | ✔  |    ✔    |  ✔   |  ▵ |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
+| Instance Methods                 | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Instance Method Visibility       | ✔  |    ✔    |  ✔   |  ▵ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Instance Variables               | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Instance Variable Visibility     | ✔  |    ✔    |  ✔   |  ▵ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Named Parameters/Arguments       | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✖   |   ✔    |  ✖  |   ✔   |   ✔   |     ✖      |
+| Default Parameters/Arguments     | ✔  |    ✔    |  ✔   |  ✖ |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| semicolon optional               | ✖  |    ✔    |  ✖   |  ✔ |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| return keyword optional          | ✖  |    ✔    |  ✖   |  ✖ |   ✔    |  ✖   |   ✖    |  ✔  |   ✔   |   ✖   |     ✖      |
+| Looping over Array (value)       | ✔  |    ✔    |  ✔   |  ✔ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Looping over Hash (key/value)    | ✔  |    ✔    |  ✔   |  ✔ |   ✖    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Custom Exceptions                | ✔  |    ✔    |  ✔   |  ✖ |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
+| Exceptions Must Be Caught        | ✖  |    ✖    |  ✖   |  ✖ |   ✖    |  ✔   |   ✖    |  ✖  |   ✖   |   ✔   |     ✖      |
+
+ ▵ visibility for package, not for object scope.
+
 
 ### Dynamic Typed Languages
 
