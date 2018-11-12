@@ -81,7 +81,7 @@ func (w *World) render() string {
 	// for y := 0; y <= w.height; y++ {
 	// 	for x := 0; x <= w.width; x++ {
 	// 		cell, _ := w.cell_at(x, y)
-	//		rendering += cell.to_char()
+	//		rendering += string(cell.to_char())
 	//	}
 	//	rendering += "\n"
 	// }
