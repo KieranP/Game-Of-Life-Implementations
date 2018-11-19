@@ -18,16 +18,16 @@ class Play
     total_render = 0
 
     while true
-      tick_start = Time.now.epoch_f
+      tick_start = Time.now.to_unix_f
       world._tick
-      tick_finish = Time.now.epoch_f
+      tick_finish = Time.now.to_unix_f
       tick_time = (tick_finish - tick_start)
       total_tick += tick_time
       avg_tick = (total_tick / world.tick)
 
-      render_start = Time.now.epoch_f
+      render_start = Time.now.to_unix_f
       rendered = world.render
-      render_finish = Time.now.epoch_f
+      render_finish = Time.now.to_unix_f
       render_time = (render_finish - render_start)
       total_render += render_time
       avg_render = (total_render / world.tick)
