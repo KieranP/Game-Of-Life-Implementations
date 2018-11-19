@@ -3,6 +3,7 @@ c#/*.exe
 crystal/play
 crystal/world
 crystal/*.dwarf
+go/go
 java/*.class
 kotlin/*.class
 kotlin/META-INF
