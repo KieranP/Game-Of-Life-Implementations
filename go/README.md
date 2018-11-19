@@ -2,5 +2,5 @@
 
 ## Usage
 
-* `go build`
+* `go build -ldflags="-s -w"`
 * `./go`

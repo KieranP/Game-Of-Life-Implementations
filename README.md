@@ -14,9 +14,9 @@ In order to give a fair comparison, all implementations are coded as similarly a
 |:------|:-----------|:--------:|:----------:|:-------:|:------------------------------------|
 | 1st.  | Crystal    | 0.00030s |  0.00209s  | Static  | Crystal 0.25.1                      |
 | 2nd.  | C#         | 0.00030s |  0.00455s  | Static  | Mono 5.12.0.226                     |
-| 3rd.  | Java       | 0.00035s |  0.00032s  | Static  | Java 1.8.0_101                      |
-| 4th.  | Kotlin     | 0.00035s |  0.00034s  | Static  | Kotlin 1.2.60                       |
-| 5th.  | Go         | 0.00036s |  0.00061s  | Static  | Golang 1.11.2                       |
+| 3rd.  | Go         | 0.00032s |  0.00055s  | Static  | Golang 1.11.2                       |
+| 4th.  | Java       | 0.00035s |  0.00032s  | Static  | Java 1.8.0_101                      |
+| 5th.  | Kotlin     | 0.00035s |  0.00034s  | Static  | Kotlin 1.2.60                       |
 | 6th.  | Dart       | 0.00038s |  0.00072s  | Static  | Dart 2.0.0                          |
 | 7th.  | Scala      | 0.00075s |  0.00050s  | Static  | Scala 2.12.6                        |
 | 8th.  | Javascript | 0.00113s |  0.00245s  | Dynamic | SpiderMonkey 60 (Firefox 60.0.2)    |
