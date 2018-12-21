@@ -1,5 +1,9 @@
 # Javascript (ES6)
 
+## Installation
+
+* Install both Google Chrome and Firefox browsers
+
 ## Usage
 
 * `open play.html`
