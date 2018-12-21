@@ -14,22 +14,22 @@ The times were calculated by playing each simulation for long enough that the av
 
 | Place | Language   | Tick Avg | Render Avg |  Typed  | Notes                               |
 |:------|:-----------|:--------:|:----------:|:-------:|:------------------------------------|
-| 1st.  | Dart       | 0.00028s |  0.00053s  | Static  | Dart 2.1.0                          |
-| 2nd.  | C#         | 0.00028s |  0.00344s  | Static  | Mono 5.14.0.177                     |
-| 3rd.  | Kotlin     | 0.00029s |  0.00025s  | Static  | Kotlin 1.3.11 (OpenJDK 11.0.1)      |
-| 4th.  | Java       | 0.00030s |  0.00023s  | Static  | OpenJDK 11.0.1                      |
-| 5th.  | Go         | 0.00030s |  0.00053s  | Static  | Golang 1.11.4                       |
-| 6th.  | Crystal    | 0.00030s |  0.00183s  | Static  | Crystal 0.27.0                      |
-| 7th.  | Scala      | 0.00056s |  0.00041s  | Static  | Scala 2.12.8 (OpenJDK 11.0.1)       |
-| 8th.  | Javascript | 0.00092s |  0.00133s  | Dynamic | SpiderMonkey 60 (Firefox 64.0)      |
-| 9th.  | Swift      | 0.00127s |  0.00211s  | Static  | Swift 4.2.1                         |
-| 10th. | Groovy     | 0.00134s |  0.00290s  | Static  | Groovy 2.5.4 (OpenJDK 11.0.1)       |
-| 11th. | Nim        | 0.00143s |  0.00375s  | Static  | Nim 0.19.0                          |
-| 12th. | Javascript | 0.00185s |  0.00089s  | Static  | Typescript 3.2.2 (Node 11.5.0)      |
-| 13th. | Javascript | 0.00196s |  0.00100s  | Dynamic | V8 7.1.302.31 (Chrome 71.0.3578.98) |
-| 14th. | PHP        | 0.00232s |  0.00193s  | Dynamic | PHP 7.3.0                           |
-| 15th. | Ruby       | 0.00486s |  0.00475s  | Dynamic | Ruby 2.5.3                          |
-| 16th. | Python     | 0.00549s |  0.00554s  | Dynamic | Python 3.7.1                        |
+| 1st.  | C#         | 0.271ms  |  3.487ms   | Static  | Mono 5.14.0.177                     |
+| 2nd.  | Dart       | 0.281ms  |  0.522ms   | Static  | Dart 2.1.0                          |
+| 3rd.  | Kotlin     | 0.297ms  |  0.256ms   | Static  | Kotlin 1.3.11 (OpenJDK 11.0.1)      |
+| 4th.  | Go         | 0.306ms  |  0.530ms   | Static  | Golang 1.11.4                       |
+| 5th.  | Java       | 0.307ms  |  0.246ms   | Static  | OpenJDK 11.0.1                      |
+| 6th.  | Crystal    | 0.314ms  |  1.989ms   | Static  | Crystal 0.27.0                      |
+| 7th.  | Scala      | 0.537ms  |  0.393ms   | Static  | Scala 2.12.8 (OpenJDK 11.0.1)       |
+| 8th.  | Javascript | 0.963ms  |  1.321ms   | Dynamic | SpiderMonkey 60 (Firefox 64.0)      |
+| 9th.  | Swift      | 1.279ms  |  2.119ms   | Static  | Swift 4.2.1                         |
+| 10th. | Nim        | 1.413ms  |  3.654ms   | Static  | Nim 0.19.0                          |
+| 11th. | Groovy     | 1.435ms  |  2.926ms   | Static  | Groovy 2.5.4 (OpenJDK 11.0.1)       |
+| 12th. | Javascript | 1.858ms  |  0.874ms   | Static  | Typescript 3.2.2 (Node 11.5.0)      |
+| 13th. | Javascript | 1.963ms  |  1.001ms   | Dynamic | V8 7.1.302.31 (Chrome 71.0.3578.98) |
+| 14th. | PHP        | 2.289ms  |  1.910ms   | Dynamic | PHP 7.3.0                           |
+| 15th. | Ruby       | 4.751ms  |  4.600ms   | Dynamic | Ruby 2.5.3                          |
+| 16th. | Python     | 5.325ms  |  5.360ms   | Dynamic | Python 3.7.1                        |
 
 ## Feature Comparison
 

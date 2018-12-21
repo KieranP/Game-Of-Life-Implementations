@@ -31,14 +31,14 @@ proc run(self: Play) =
     let tick_start = epochTime()
     world.tick()
     let tick_finish = epochTime()
-    let tick_time = (tick_finish - tick_start)
+    let tick_time = (tick_finish - tick_start) * 1000
     total_tick += tick_time
     let avg_tick = (total_tick / world.tick_num.float)
 
     let render_start = epochTime()
     let rendered = world.render()
     let render_finish = epochTime()
-    let render_time = (render_finish - render_start)
+    let render_time = (render_finish - render_start) * 1000
     total_render += render_time
     let avg_render = (total_render / world.tick_num.float)
 
@@ -50,6 +50,6 @@ proc run(self: Play) =
     echo output
 
 proc f(self: Play, value: float): string =
-  fmt"{value:.5f}"
+  fmt"{value:.3f}"
 
 Play().run()

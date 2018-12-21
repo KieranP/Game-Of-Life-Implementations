@@ -20,14 +20,14 @@ class Play {
       const tick_start: number = new Date().valueOf()
       world._tick()
       const tick_finish: number = new Date().valueOf()
-      const tick_time = (tick_finish - tick_start) / 1000
+      const tick_time = (tick_finish - tick_start)
       total_tick += tick_time
       const avg_tick = (total_tick / world.tick)
 
       const render_start: number = new Date().valueOf()
       const rendered = world.render()
       const render_finish: number = new Date().valueOf()
-      const render_time = (render_finish - render_start) / 1000
+      const render_time = (render_finish - render_start)
       total_render += render_time
       const avg_render = (total_render / world.tick)
 
@@ -41,7 +41,7 @@ class Play {
   }
 
   private static _f(value: number): string {
-    return value.toFixed(5)
+    return value.toFixed(3)
   }
 
 }

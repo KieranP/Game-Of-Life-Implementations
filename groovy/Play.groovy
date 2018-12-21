@@ -22,14 +22,14 @@ class Play {
       def tick_start = System.currentTimeMillis()
       world._tick()
       def tick_finish = System.currentTimeMillis()
-      def tick_time = (tick_finish - tick_start) / 1000d
+      def tick_time = (tick_finish - tick_start) / 1d
       total_tick += tick_time
       def avg_tick = (total_tick / world.tick)
 
       def render_start = System.currentTimeMillis()
       def rendered = world.render()
       def render_finish = System.currentTimeMillis()
-      def render_time = (render_finish - render_start) / 1000d
+      def render_time = (render_finish - render_start) / 1d
       total_render += render_time
       def avg_render = (total_render / world.tick)
 
@@ -43,7 +43,7 @@ class Play {
   }
 
   private static String _f(double value) {
-    String.format("%.5f", value)
+    String.format("%.3f", value)
   }
 
 }

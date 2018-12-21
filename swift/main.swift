@@ -24,14 +24,14 @@ public class Play {
       let tick_start = CFAbsoluteTimeGetCurrent()
       world._tick()
       let tick_finish = CFAbsoluteTimeGetCurrent()
-      let tick_time = (tick_finish - tick_start)
+      let tick_time = (tick_finish - tick_start) * 1000
       total_tick += tick_time
       let avg_tick = (total_tick / Double(world.tick))
 
       let render_start = CFAbsoluteTimeGetCurrent()
       let rendered = world.render()
       let render_finish = CFAbsoluteTimeGetCurrent()
-      let render_time = (render_finish - render_start)
+      let render_time = (render_finish - render_start) * 1000
       total_render += render_time
       let avg_render = (total_render / Double(world.tick))
 
@@ -45,7 +45,7 @@ public class Play {
   }
 
   private class func _f(value: Double) -> String {
-    return String(format: "%.5f", value)
+    return String(format: "%.3f", value)
   }
 
 }

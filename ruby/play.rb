@@ -23,14 +23,14 @@ class Play
       tick_start = Time.now
       world._tick
       tick_finish = Time.now
-      tick_time = (tick_finish - tick_start)
+      tick_time = (tick_finish - tick_start) * 1000
       total_tick += tick_time
       avg_tick = (total_tick / world.tick)
 
       render_start = Time.now
       rendered = world.render
       render_finish = Time.now
-      render_time = (render_finish - render_start)
+      render_time = (render_finish - render_start) * 1000
       total_render += render_time
       avg_render = (total_render / world.tick)
 
@@ -44,7 +44,7 @@ class Play
   end
 
   def self._f(value)
-    "%.5f" % value.round(5)
+    "%.3f" % value
   end
   private_class_method :_f
 

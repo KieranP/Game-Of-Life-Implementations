@@ -23,14 +23,14 @@ class Play:
             tick_start = time()
             world._tick()
             tick_finish = time()
-            tick_time = (tick_finish - tick_start)
+            tick_time = (tick_finish - tick_start) * 1000
             total_tick += tick_time
             avg_tick = (total_tick / world.tick)
 
             render_start = time()
             rendered = world.render()
             render_finish = time()
-            render_time = (render_finish - render_start)
+            render_time = (render_finish - render_start) * 1000
             total_render += render_time
             avg_render = (total_render / world.tick)
 
@@ -43,6 +43,6 @@ class Play:
 
     @classmethod
     def _f(cls, value):
-        return "%.5f" % (round(value, 5))
+        return "%.3f" % value
 
 Play.run()

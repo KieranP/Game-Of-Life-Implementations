@@ -19,14 +19,14 @@ public class Play {
         val tick_start = System.currentTimeMillis()
         world._tick()
         val tick_finish = System.currentTimeMillis()
-        val tick_time = (tick_finish - tick_start) / 1000.0
+        val tick_time = (tick_finish - tick_start) / 1.0
         total_tick += tick_time
         val avg_tick = (total_tick / world.tick)
 
         val render_start = System.currentTimeMillis()
         val rendered = world.render()
         val render_finish = System.currentTimeMillis()
-        val render_time = (render_finish - render_start) / 1000.0
+        val render_time = (render_finish - render_start) / 1.0
         total_render += render_time
         val avg_render = (total_render / world.tick)
 
@@ -40,7 +40,7 @@ public class Play {
     }
 
     private fun _f(value: Double): String {
-      return String.format("%.5f", value)
+      return String.format("%.3f", value)
     }
   }
 

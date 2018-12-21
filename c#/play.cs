@@ -24,14 +24,14 @@ public class Play {
       DateTime tick_start = DateTime.Now;
       world._tick();
       DateTime tick_finish = DateTime.Now;
-      double tick_time = (tick_finish - tick_start).TotalMilliseconds / 1000;
+      double tick_time = (tick_finish - tick_start).TotalMilliseconds;
       total_tick += tick_time;
       double avg_tick = (total_tick / world.tick);
 
       DateTime render_start = DateTime.Now;
       string rendered = world.render();
       DateTime render_finish = DateTime.Now;
-      double render_time = (render_finish - render_start).TotalMilliseconds / 1000;
+      double render_time = (render_finish - render_start).TotalMilliseconds;
       total_render += render_time;
       double avg_render = (total_render / world.tick);
 
@@ -46,7 +46,7 @@ public class Play {
   }
 
   private static string _f(double value) {
-    return value.ToString("0.#####");
+    return value.ToString("0.###");
   }
 
 }

@@ -25,14 +25,14 @@ public class Play {
       double tick_start = System.currentTimeMillis();
       world._tick();
       double tick_finish = System.currentTimeMillis();
-      double tick_time = (tick_finish - tick_start) / 1000d;
+      double tick_time = (tick_finish - tick_start) / 1d;
       total_tick += tick_time;
       double avg_tick = (total_tick / world.tick);
 
       double render_start = System.currentTimeMillis();
       String rendered = world.render();
       double render_finish = System.currentTimeMillis();
-      double render_time = (render_finish - render_start) / 1000d;
+      double render_time = (render_finish - render_start) / 1d;
       total_render += render_time;
       double avg_render = (total_render / world.tick);
 
@@ -46,7 +46,7 @@ public class Play {
   }
 
   private static String _f(double value) {
-    return String.format("%.5f", value);
+    return String.format("%.3f", value);
   }
 
 }
