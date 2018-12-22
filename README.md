@@ -30,6 +30,7 @@ The times were calculated by playing each simulation for long enough that the av
 | 14th. | PHP        | 2.289ms  |  1.910ms   | Dynamic | PHP 7.3.0                           |
 | 15th. | Ruby       | 4.751ms  |  4.600ms   | Dynamic | Ruby 2.5.3                          |
 | 16th. | Python     | 5.325ms  |  5.360ms   | Dynamic | Python 3.7.1                        |
+| 17th. | Lua        | 6.860ms  |  3.945ms   | Dynamic | Lua 5.3.5                           |
 
 ## Feature Comparison
 
@@ -69,25 +70,25 @@ This list is not exhaustive, but includes some of the primary things that I came
 *Note:* Below is a table of functionality that differs between the various dynamic typed languages.
 This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
 
-| Feature                          | Javascript | PHP | Python | Ruby |
-|:---------------------------------|:----------:|:---:|:------:|:----:|
-| Runs Without Compiling           |     ✔      |  ✔  |   ✔    |  ✔   |
-| Classes/Objects (Top Level)      |     ✔      |  ✔  |   ✔    |  ✔   |
-| Classes/Objects (Nested)         |     ✔      |  ✖  |   ✔    |  ✔   |
-| Class/Object Initializer         |     ✔      |  ✔  |   ✔    |  ✔   |
-| Class/Object Methods             |     ✔      |  ✔  |   ✔    |  ✔   |
-| Class/Object Method Visibility   |     ✖      |  ✔  |   ✖    |  ✔   |
-| Class/Object Variables           |     ✔      |  ✔  |   ✔    |  ✔   |
-| Class/Object Variable Visibility |     ✖      |  ✔  |   ✖    |  ✔   |
-| Instance Methods                 |     ✔      |  ✔  |   ✔    |  ✔   |
-| Instance Method Visibility       |     ✖      |  ✔  |   ✖    |  ✔   |
-| Instance Variables               |     ✔      |  ✔  |   ✔    |  ✔   |
-| Instance Variable Visibility     |     ✖      |  ✔  |   ✖    |  ✔   |
-| Named Parameters/Arguments       |     ✖      |  ✖  |   ✖    |  ✔   |
-| Default Parameters/Arguments     |     ✔      |  ✔  |   ✔    |  ✔   |
-| semicolon optional               |     ✔      |  ✖  |   ✔    |  ✔   |
-| return keyword optional          |     ✖      |  ✖  |   ✖    |  ✔   |
-| Looping over Array (value)       |     ✔      |  ✔  |   ✔    |  ✔   |
-| Looping over Hash (key/value)    |     ✖      |  ✔  |   ✔    |  ✔   |
-| Custom Exceptions                |     ✔      |  ✔  |   ✔    |  ✔   |
-| Exceptions Must Be Caught        |     ✖      |  ✖  |   ✖    |  ✖   |
+| Feature                          | Javascript | Lua | PHP | Python | Ruby |
+|:---------------------------------|:----------:|:---:|:---:|:------:|:----:|
+| Runs Without Compiling           |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Classes/Objects (Top Level)      |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Classes/Objects (Nested)         |     ✔      |  ✔  |  ✖  |   ✔    |  ✔   |
+| Class/Object Initializer         |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Class/Object Methods             |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Class/Object Method Visibility   |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
+| Class/Object Variables           |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Class/Object Variable Visibility |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
+| Instance Methods                 |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Instance Method Visibility       |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
+| Instance Variables               |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Instance Variable Visibility     |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
+| Named Parameters/Arguments       |     ✖      |  ✖  |  ✖  |   ✖    |  ✔   |
+| Default Parameters/Arguments     |     ✔      |  ✖  |  ✔  |   ✔    |  ✔   |
+| semicolon optional               |     ✔      |  ✔  |  ✖  |   ✔    |  ✔   |
+| return keyword optional          |     ✖      |  ✖  |  ✖  |   ✖    |  ✔   |
+| Looping over Array (value)       |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Looping over Hash (key/value)    |     ✖      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Custom Exceptions                |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
+| Exceptions Must Be Caught        |     ✖      |  ✖  |  ✖  |   ✖    |  ✖   |

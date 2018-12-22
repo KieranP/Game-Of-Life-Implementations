@@ -36,7 +36,7 @@ class Play
 
       output = "##{world.tick}"
       output += " - World tick took #{_f(tick_time)} (#{_f(avg_tick)})"
-      output += " - Rendering took #{_f(render_time)} (#{_f(avg_render)})";
+      output += " - Rendering took #{_f(render_time)} (#{_f(avg_render)})"
       output += "\n#{rendered}"
       system('clear')
       puts output
