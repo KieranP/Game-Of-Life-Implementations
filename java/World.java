@@ -4,6 +4,7 @@
 import java.util.HashMap;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class World {
 
@@ -137,6 +138,12 @@ public class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Retain whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
+    // The following works but is slower
+    // return neighbours_around(cell).stream().
+    //   filter(neighbour -> neighbour.alive).
+    //   collect(Collectors.toList()).
+    //   size();
+
     // The following works but is slower
     // int alive_neighbours = 0;
     // ArrayList<Cell> neighbours = neighbours_around(cell);
