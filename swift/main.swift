@@ -39,7 +39,7 @@ public class Play {
       output += " - World tick took \(_f(value: tick_time)) (\(_f(value: avg_tick)))"
       output += " - Rendering took \(_f(value: render_time)) (\(_f(value: avg_render)))"
       output += "\n"+rendered
-      print("\u{001B}[2J")
+      print("\u{001B}[H\u{001B}[2J")
       print(output)
     }
   }

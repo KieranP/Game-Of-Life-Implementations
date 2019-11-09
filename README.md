@@ -10,27 +10,27 @@ In order to give a fair comparison, all implementations are coded as similarly a
 
 *Note:* These speed results are taken on a Macbook Pro 15" Retina (Mid 2018), 2.6 GHz Intel Core i7, with 32 GB of 2400 MHz DDR4 RAM.
 
-The times were calculated by playing each simulation for long enough that the average tick time becomes stable (normally around 10k ticks), and then grabbing the averages.
+The times were calculated by playing each simulation for long enough that the average tick time becomes stable (normally around 20s), and then grabbing the averages.
 
-| Place | Language   | Tick Avg | Render Avg |  Typed  | Notes                               |
-|:------|:-----------|:--------:|:----------:|:-------:|:------------------------------------|
-| 1st.  | C#         | 0.271ms  |  3.487ms   | Static  | Mono 5.14.0.177                     |
-| 2nd.  | Dart       | 0.281ms  |  0.522ms   | Static  | Dart 2.1.0                          |
-| 3rd.  | Kotlin     | 0.297ms  |  0.256ms   | Static  | Kotlin 1.3.11 (OpenJDK 11.0.1)      |
-| 4th.  | Go         | 0.306ms  |  0.530ms   | Static  | Golang 1.11.4                       |
-| 5th.  | Java       | 0.307ms  |  0.246ms   | Static  | OpenJDK 11.0.1                      |
-| 6th.  | Crystal    | 0.314ms  |  1.989ms   | Static  | Crystal 0.27.0                      |
-| 7th.  | Scala      | 0.537ms  |  0.393ms   | Static  | Scala 2.12.8 (OpenJDK 11.0.1)       |
-| 8th.  | Javascript | 0.963ms  |  1.321ms   | Dynamic | SpiderMonkey 60 (Firefox 64.0)      |
-| 9th.  | Swift      | 1.279ms  |  2.119ms   | Static  | Swift 4.2.1                         |
-| 10th. | Nim        | 1.413ms  |  3.654ms   | Static  | Nim 0.19.0                          |
-| 11th. | Groovy     | 1.435ms  |  2.926ms   | Static  | Groovy 2.5.4 (OpenJDK 11.0.1)       |
-| 12th. | Javascript | 1.858ms  |  0.874ms   | Static  | Typescript 3.2.2 (Node 11.5.0)      |
-| 13th. | Javascript | 1.963ms  |  1.001ms   | Dynamic | V8 7.1.302.31 (Chrome 71.0.3578.98) |
-| 14th. | PHP        | 2.289ms  |  1.910ms   | Dynamic | PHP 7.3.0                           |
-| 15th. | Ruby       | 4.751ms  |  4.600ms   | Dynamic | Ruby 2.5.3                          |
-| 16th. | Python     | 5.325ms  |  5.360ms   | Dynamic | Python 3.7.1                        |
-| 17th. | Lua        | 6.860ms  |  3.945ms   | Dynamic | Lua 5.3.5                           |
+| Place | Language   | Tick Avg | Render Avg |  Typed  | Notes                            |
+|:------|:-----------|:--------:|:----------:|:-------:|:---------------------------------|
+| 1st.  | Crystal    | 0.252ms  |  1.784ms   | Static  | Crystal 0.31.1                   |
+| 2nd.  | Dart       | 0.279ms  |  0.610ms   | Static  | Dart 2.6.0                       |
+| 3rd.  | Go         | 0.332ms  |  0.590ms   | Static  | Golang 1.13.4                    |
+| 4th.  | Java       | 0.333ms  |  0.311ms   | Static  | OpenJDK 13+33                    |
+| 5th.  | Kotlin     | 0.337ms  |  0.313ms   | Static  | Kotlin 1.3.50 (OpenJDK 13+33)    |
+| 6th.  | C#         | 0.360ms  |  2.994ms   | Static  | Mono 6.4.0.198                   |
+| 7th.  | Javascript | 0.610ms  |  1.312ms   | Dynamic | SpiderMonkey 60 (Firefox 70.0.1) |
+| 8th.  | Scala      | 1.024ms  |  0.444ms   | Static  | Scala 2.13.1 (OpenJDK 13+33)     |
+| 9th.  | Nim        | 1.553ms  |  4.168ms   | Static  | Nim 1.0.2                        |
+| 10th. | Swift      | 1.578ms  |  1.994ms   | Static  | Swift 5.0.1                      |
+| 11th. | Groovy     | 1.994ms  |  3.604ms   | Static  | Groovy 2.5.8 (OpenJDK 13+33)     |
+| 12th. | Javascript | 2.109ms  |  1.370ms   | Dynamic | V8 7.8.279.19                    |
+| 13th. | Javascript | 2.224ms  |  1.260ms   | Static  | Typescript 3.2.2 (Node 11.5.0)   |
+| 14th. | PHP        | 2.376ms  |  2.081ms   | Dynamic | PHP 7.3.11                       |
+| 15th. | Ruby       | 5.301ms  |  4.704ms   | Dynamic | Ruby 2.6.5                       |
+| 16th. | Python     | 6.687ms  |  6.220ms   | Dynamic | Python 3.7.5                     |
+| 17th. | Lua        | 8.260ms  |  4.539ms   | Dynamic | Lua 5.3.5                        |
 
 ## Feature Comparison
 

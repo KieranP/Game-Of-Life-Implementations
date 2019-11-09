@@ -1,7 +1,7 @@
 from times import epochTime
 from strutils import intToStr
 from osproc import execCmd
-from strformat import fmt,format
+from strformat import fmt
 include world
 
 const World_Width  = 150
