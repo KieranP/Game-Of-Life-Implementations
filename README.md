@@ -92,3 +92,11 @@ This list is not exhaustive, but includes some of the primary things that I came
 | Looping over Hash (key/value)    |     ✖      |  ✔  |  ✔  |   ✔    |  ✔   |
 | Custom Exceptions                |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
 | Exceptions Must Be Caught        |     ✖      |  ✖  |  ✖  |   ✖    |  ✖   |
+
+## Wishlist
+* Rust (mostly complete - see branch)
+* Elixir
+* Haskell
+* Erlang
+* C++
+* Perl
