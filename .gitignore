@@ -1,15 +1,1 @@
 .DS_Store
-c#/*.exe
-crystal/play
-crystal/world
-crystal/*.dwarf
-go/go
-java/*.class
-kotlin/*.class
-kotlin/META-INF
-nim/nimcache
-nim/play
-python/__pycache__
-scala/*.class
-swift/play
-typescript/*.js
