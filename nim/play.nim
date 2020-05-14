@@ -1,6 +1,5 @@
 from times import epochTime
 from strutils import intToStr
-from osproc import execCmd
 from strformat import fmt
 include world
 
@@ -46,7 +45,7 @@ proc run(self: Play) =
     output = output & " - World tick took " & self.f(tick_time) & " (" & self.f(avg_tick) & ")"
     output = output & " - Rendering took " & self.f(render_time) & " (" & self.f(avg_render) & ")"
     output = output & "\n" & rendered
-    discard execCmd("clear")
+    echo "\u001b[H\u001b[2J"
     echo output
 
 proc f(self: Play, value: float): string =

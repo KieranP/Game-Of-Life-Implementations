@@ -39,7 +39,7 @@ class Play {
       $output .= " - World tick took ".self::_f($tick_time)." (".self::_f($avg_tick).")";
       $output .= " - Rendering took ".self::_f($render_time)." (".self::_f($avg_render).")";
       $output .= "\n".$rendered;
-      system('clear');
+      echo "\u{001b}[H\u{001b}[2J";
       echo $output;
     }
   }

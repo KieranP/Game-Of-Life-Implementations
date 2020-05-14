@@ -33,7 +33,7 @@ func run() {
     total_render += render_time.Nanoseconds()
     avg_render := float64(total_render) / float64(world.tick) / 1000000
 
-    fmt.Print("\033[H\033[2J")
+    fmt.Print("\u001b[H\u001b[2J")
     fmt.Printf("#%d - World tick took %.3f (%.3f) - Rendering took %.3f (%.3f)\n",
       world.tick,
       float64(tick_time.Nanoseconds())/1000000, avg_tick,

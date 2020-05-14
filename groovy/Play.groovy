@@ -37,7 +37,7 @@ class Play {
       output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")"
       output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")"
       output += "\n"+rendered
-      System.out.print("\033[H\033[2J")
+      System.out.print("\u001b[H\u001b[2J")
       System.out.println(output)
     }
   }

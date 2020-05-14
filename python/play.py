@@ -1,5 +1,4 @@
 from time import time
-from os import system
 from world import *
 
 class Play:
@@ -38,7 +37,7 @@ class Play:
             output += " - World tick took "+cls._f(tick_time)+" ("+cls._f(avg_tick)+")"
             output += " - Rendering took "+cls._f(render_time)+" ("+cls._f(avg_render)+")"
             output += "\n"+rendered
-            system('clear')
+            print("\u001b[H\u001b[2J")
             print(output)
 
     @classmethod

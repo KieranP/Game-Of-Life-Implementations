@@ -36,7 +36,7 @@ class Play
       output += " - World tick took #{_f(tick_time)} (#{_f(avg_tick)})"
       output += " - Rendering took #{_f(render_time)} (#{_f(avg_render)})";
       output += "\n#{rendered}"
-      system("clear")
+      puts "\u001b[H\u001b[2J"
       puts output
     end
   end

@@ -35,7 +35,7 @@ function Play:run()
     output = output.." - World tick took "..self:_f(tick_time).." ("..self:_f(avg_tick)..")"
     output = output.." - Rendering took "..self:_f(render_time).." ("..self:_f(avg_render)..")"
     output = output.."\n"..rendered
-    os.execute("clear")
+    print("\u{001b}[H\u{001b}[2J")
     print(output)
   end
 end
