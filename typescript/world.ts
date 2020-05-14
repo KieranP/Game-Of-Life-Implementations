@@ -1,11 +1,11 @@
-export class World {
+class LocationOccupied extends Error {}
 
-  private static LocationOccupied() {}
+export class World {
 
   public tick: number
   private width: number
   private height: number
-  private cells: object
+  private cells: {[key: string]: Cell}
   private cached_directions: number[][]
 
   public constructor(width: number, height: number) {
@@ -90,7 +90,7 @@ export class World {
 
   private add_cell(x: number, y: number, alive: boolean = false): Cell {
     if (this.cell_at(x, y) != null) {
-      throw new World.LocationOccupied
+      throw new LocationOccupied
     }
 
     const cell = new Cell(x, y, alive)

@@ -20,17 +20,18 @@ The times were calculated by playing each simulation for long enough that the av
 | 4th.  | Java       | 0.333ms  |  0.311ms   | Static  | OpenJDK 13+33                    |
 | 5th.  | Kotlin     | 0.337ms  |  0.313ms   | Static  | Kotlin 1.3.50 (OpenJDK 13+33)    |
 | 6th.  | C#         | 0.360ms  |  2.994ms   | Static  | Mono 6.4.0.198                   |
-| 7th.  | Javascript | 0.610ms  |  1.312ms   | Dynamic | SpiderMonkey 60 (Firefox 70.0.1) |
+| 7th.  | Javascript | 0.602ms  |  1.358ms   | Dynamic | Firefox 76.0.1                   |
 | 8th.  | Scala      | 1.024ms  |  0.444ms   | Static  | Scala 2.13.1 (OpenJDK 13+33)     |
 | 9th.  | Nim        | 1.553ms  |  4.168ms   | Static  | Nim 1.0.2                        |
 | 10th. | Swift      | 1.578ms  |  1.994ms   | Static  | Swift 5.0.1                      |
-| 11th. | Groovy     | 1.994ms  |  3.604ms   | Static  | Groovy 2.5.8 (OpenJDK 13+33)     |
-| 12th. | Javascript | 2.109ms  |  1.370ms   | Dynamic | V8 7.8.279.19                    |
-| 13th. | Javascript | 2.224ms  |  1.260ms   | Static  | Typescript 3.2.2 (Node 11.5.0)   |
-| 14th. | PHP        | 2.376ms  |  2.081ms   | Dynamic | PHP 7.3.11                       |
-| 15th. | Ruby       | 5.301ms  |  4.704ms   | Dynamic | Ruby 2.6.5                       |
-| 16th. | Python     | 6.687ms  |  6.220ms   | Dynamic | Python 3.7.5                     |
-| 17th. | Lua        | 8.260ms  |  4.539ms   | Dynamic | Lua 5.3.5                        |
+| 11th. | Javascript | 1.579ms  |  0.646ms   | Static  | Deno 1.0.0 / Typescript 3.9.2    |
+| 12th. | Javascript | 1.823ms  |  1.363ms   | Dynamic | Chromium 81.0.4044.138           |
+| 13th. | Groovy     | 1.994ms  |  3.604ms   | Static  | Groovy 2.5.8 (OpenJDK 13+33)     |
+| 14th. | Javascript | 2.298ms  |  0.919ms   | Static  | Node 14.2.0 / Typescript 3.9.2   |
+| 15th. | PHP        | 2.376ms  |  2.081ms   | Dynamic | PHP 7.3.11                       |
+| 16th. | Ruby       | 5.301ms  |  4.704ms   | Dynamic | Ruby 2.6.5                       |
+| 17th. | Python     | 6.687ms  |  6.220ms   | Dynamic | Python 3.7.5                     |
+| 18th. | Lua        | 8.260ms  |  4.539ms   | Dynamic | Lua 5.3.5                        |
 
 ## Feature Comparison
 

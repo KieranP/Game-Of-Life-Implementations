@@ -4,7 +4,13 @@
 
 * `brew install typescript`
 
-## Usage
+## Usage (Deno)
+
+* `brew install deno`
+* `deno run play.ts`
+
+## Usage (Node)
 
 * `tsc`
+* `brew install node`
 * `node play.js`
