@@ -1,54 +1,52 @@
-from times import epochTime
-from strutils import intToStr
-from strformat import fmt
-include world
+import std/[times, strutils], world
 
-const World_Width  = 150
-const World_Height = 40
+const
+  world_Width  = 150
+  world_Height = 40
 
-type
-  Play = ref object
+template f(value: float): string =
+  formatFloat value, ffDecimal, 3
 
-# By default, Nim requires methods be declared before they are used elsewhere
-# and will error out if I dont. To to order the methods as I like, I need to
-# declare them ahead of time, known as "forward declaration".
-proc run(self: Play)
-proc f(self: Play, value: float): string
-
-proc run(self: Play) =
-  let world = World(
-    width: World_Width,
-    height: World_Height,
-  ).initialize()
+proc run() =
+  var world = initWorld(
+    width  = world_Width,
+    height = world_Height,
+  )
 
   echo world.render()
 
-  var total_tick = 0.0
-  var total_render = 0.0
+  var total_tick, total_render: float
 
   while true:
     let tick_start = epochTime()
     world.tick()
     let tick_finish = epochTime()
-    let tick_time = (tick_finish - tick_start) * 1000
+    let tick_time = (tick_finish - tick_start) * 1_000
     total_tick += tick_time
     let avg_tick = (total_tick / world.tick_num.float)
 
-    let render_start = epochTime()
-    let rendered = world.render()
-    let render_finish = epochTime()
-    let render_time = (render_finish - render_start) * 1000
+    let
+      render_start = epochTime()
+      rendered = world.render()
+      render_finish = epochTime()
+      render_time = (render_finish - render_start) * 1_000
     total_render += render_time
     let avg_render = (total_render / world.tick_num.float)
 
-    var output = "#" & intToStr(world.tick_num)
-    output = output & " - World tick took " & self.f(tick_time) & " (" & self.f(avg_tick) & ")"
-    output = output & " - Rendering took " & self.f(render_time) & " (" & self.f(avg_render) & ")"
-    output = output & "\n" & rendered
-    echo "\u001b[H\u001b[2J"
-    echo output
+    var output = "#"
+    output.addInt world.tick_num
+    output.add " - World tick took "
+    output.add f tick_time
+    output.add " ("
+    output.add f avg_tick
+    output.add ") - Rendering took "
+    output.add f render_time
+    output.add " ("
+    output.add f avg_render
+    output.add ")\n"
+    output.add rendered
+    echo "\u001b[H\u001b[2J\n", output
 
-proc f(self: Play, value: float): string =
-  fmt"{value:.3f}"
 
-Play().run()
+when isMainModule:
+  run()
