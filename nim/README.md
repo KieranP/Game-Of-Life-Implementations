@@ -2,8 +2,8 @@
 
 ## Installation
 
-* `brew install nim`
+* `brew install nim` (Needs Nim `1.4.8` or newer)
 
 ## Usage
 
-* `nim c -r -d:release --opt:speed play.nim`
+* `nim r -d:danger play.nim`
