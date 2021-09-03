@@ -1,89 +1,71 @@
-from strutils import intToStr,join
-from random import rand
-from sequtils import filter
-import options
-import tables
-import ropes
+import std/[options, tables, random]
 
+# Nim typically declares all Types near the top of the file, after imports.
 type
-  Cell = ref object
-    x: int
-    y: int
-    alive: bool
-    next_state: Option[int]
-    neighbours: Option[seq[Cell]]
+  Cell* = ref object
+    x*, y*: int
+    alive*: bool
+    next_state*: Option[bool]
+    neighbours*: Option[seq[Cell]]
 
-proc to_char(self: Cell): string =
-  if self.alive:
-    "o"
-  else:
-    " "
+  World* = object
+    width*, height*, tick_num*: int
+    cells*: Table[array[2, int], Cell]
+    cached_directions*: array[8, array[2, int]]
 
-type
-  LocationOccupied = object of Exception
+  LocationOccupied* = object of ValueError
 
-type
-  World = ref object of RootObj
-    width: int
-    height: int
-    tick_num: int
-    cells: Table[string, Cell]
-    cached_directions: array[8, array[2, int]]
+# By default, Nim requires functions be declared before they are used elsewhere
+# and will error out if I dont. To to order the functions as I like, I need to
+# declare them ahead of time, known as "forward declaration",
+# or alternatively use the "code reordering" feature,
+# by default it is this way to speed up compilation time.
+proc add_cell*(self: var World, x: int, y: int, alive: bool = false)
+proc cell_at*(self: World, x: int, y: int): Cell
+proc neighbours_around*(self: World, cell: Cell): seq[Cell]
+proc alive_neighbours_around*(self: World, cell: Cell): int
 
-# By default, Nim requires methods be declared before they are used elsewhere
-# and will error out if I dont. To to order the methods as I like, I need to
-# declare them ahead of time, known as "forward declaration".
-proc initialize(self: World): World
-proc tick(self: World)
-proc render(self: World): string
-proc populate_cells(self: World)
-proc prepopulate_neighbours(self: World)
-proc add_cell(self: World, x: int, y: int, alive: bool = false): Cell
-proc cell_at(self: World, x: int, y: int): Cell
-proc neighbours_around(self: World, cell: Cell): seq[Cell]
-proc alive_neighbours_around(self: World, cell: Cell): int
+func to_char*(self: Cell): char {.inline.} =
+  if self.alive: 'o' else: ' '
 
-proc initialize(self: World): World =
-  self.cells = initTable[string, Cell]()
-  self.cached_directions = [
-    [-1, 1],  [0, 1],  [1, 1], # above
-    [-1, 0],           [1, 0], # sides
+proc initWorld*(width, height: static[int]): World =
+  ## World Constructor.
+  result.width = width
+  result.height = height
+  result.cached_directions = [
+    [-1, 1],  [0, 1],  [1, 1],  # above
+    [-1, 0],           [1, 0],  # sides
     [-1, -1], [0, -1], [1, -1], # below
   ]
+  result.populate_cells()
+  result.prepopulate_neighbours()
 
-  self.populate_cells()
-  self.prepopulate_neighbours()
-  self
-
-proc tick(self: World) =
+proc tick*(self: var World) =
   # First determine the action for all cells
-  for key,cell in self.cells:
+  for cell in self.cells.values:
     let alive_neighbours = self.alive_neighbours_around(cell)
     if not cell.alive and alive_neighbours == 3:
-      cell.next_state = some(1)
+      cell.next_state = some true
     elif alive_neighbours < 2 or alive_neighbours > 3:
-      cell.next_state = some(0)
+      cell.next_state = some false
 
   # Then execute the determined action for all cells
-  for key,cell in self.cells:
-    if cell.next_state == some(1):
+  for cell in self.cells.values:
+    if cell.next_state == some true:
       cell.alive = true
-    elif cell.next_state == some(0):
+    elif cell.next_state == some false:
       cell.alive = false
 
-  self.tick_num += 1
+  self.tick_num.inc
 
 # Implement first using string concatenation. Then implement any
 # special string builders, and use whatever runs the fastest
-proc render(self: World): string =
+proc render*(self: World): string =
   # The following was the fastest method
-  var rendering = ""
   for y in 0..self.height:
     for x in 0..self.width:
-      let cell = self.cell_at(x, y)
-      rendering = rendering & cell.to_char()
-    rendering = rendering & "\n"
-  rendering
+      result.add self.cell_at(x, y).to_char
+    result.add '\n'
 
   # The following works but it slower
   # var rendering: seq[string] = @[]
@@ -94,35 +76,27 @@ proc render(self: World): string =
   #   rendering.add("\n")
   # join(rendering, "")
 
-proc populate_cells(self: World) =
+proc populate_cells*(self: var World) =
   for y in 0..self.height:
     for x in 0..self.width:
-      let alive = (rand(100) <= 20)
-      discard self.add_cell(x, y, alive)
+      self.add_cell(x, y, rand(100) <= 20)
 
-proc prepopulate_neighbours(self: World) =
-  for key,cell in self.cells:
+proc prepopulate_neighbours*(self: World) =
+  for cell in self.cells.values:
     discard self.neighbours_around(cell)
 
-proc add_cell(self: World, x: int, y: int, alive: bool = false): Cell =
+proc add_cell*(self: var World; x, y: int; alive = false) =
   if self.cell_at(x, y) != nil:
-    raise newException(LocationOccupied, "")
+    raise newException(LocationOccupied, "Location occupied")
+  self.cells[[x, y]] = Cell(x: x, y: y, alive: alive)
 
-  let cell = Cell(x: x, y: y, alive: alive)
-  let key = intToStr(x) & "-" & intToStr(y)
-  self.cells[key] = cell
-  self.cell_at(x, y)
+proc cell_at*(self: World; x, y: int): Cell =
+  if self.cells.hasKey([x, y]):
+    result = self.cells[[x, y]]
 
-proc cell_at(self: World, x: int, y: int): Cell =
-  let key = intToStr(x) & "-" & intToStr(y)
-  if self.cells.hasKey(key):
-    return self.cells[key]
-  else:
-    discard
-
-proc neighbours_around(self: World, cell: Cell): seq[Cell] =
+proc neighbours_around*(self: World, cell: Cell): seq[Cell] =
   if cell.neighbours.isNone:
-    var neighbours: seq[Cell] = @[]
+    var neighbours: seq[Cell]
 
     for coords in self.cached_directions:
       let neighbour = self.cell_at(
@@ -135,11 +109,11 @@ proc neighbours_around(self: World, cell: Cell): seq[Cell] =
 
     cell.neighbours = some(neighbours)
 
-  cell.neighbours.get
+  result = cell.neighbours.get
 
 # Implement first using filter/lambda if available. Then implement
 # foreach and for. Retain whatever implementation runs the fastest
-proc alive_neighbours_around(self: World, cell: Cell): int =
+proc alive_neighbours_around*(self: World, cell: Cell): int =
   # The following works but is slower
   # filter(
   #   self.neighbours_around(cell),
@@ -147,17 +121,12 @@ proc alive_neighbours_around(self: World, cell: Cell): int =
   # ).len
 
   # The following was the fastest method
-  var alive_neighbours = 0
   for neighbour in self.neighbours_around(cell):
-    if neighbour.alive:
-      alive_neighbours += 1
-  alive_neighbours
+    if neighbour.alive: inc result
 
   # The following works but is slower
-  # var alive_neighbours = 0
   # let neighbours = self.neighbours_around(cell)
   # for i in 0..<neighbours.len:
   #   let neighbour = neighbours[i]
   #   if neighbour.alive:
-  #     alive_neighbours += 1
-  # alive_neighbours
+  #     inc result
