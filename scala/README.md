@@ -2,7 +2,7 @@
 
 ## Installation
 
-* `brew cask install java`
+* `brew install java`
 * `brew install scala`
 
 ## Usage

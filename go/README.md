@@ -6,5 +6,5 @@
 
 ## Usage
 
-* `go build -ldflags="-s -w"`
-* `./go`
+* `go build -ldflags="-s -w" *.go`
+* `./play`

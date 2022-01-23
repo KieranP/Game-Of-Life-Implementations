@@ -6,5 +6,5 @@
 
 ## Usage
 
-* `crystal build *.cr --release`
+* `crystal build play.cr --release`
 * `./play`
