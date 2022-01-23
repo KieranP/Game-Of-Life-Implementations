@@ -8,7 +8,7 @@ class World
     @width = width
     @height = height
     @tick = 0
-    @cells = Hash.new
+    @cells = {}
     @cached_directions = [
       [-1, 1],  [0, 1],  [1, 1], # above
       [-1, 0],           [1, 0], # sides

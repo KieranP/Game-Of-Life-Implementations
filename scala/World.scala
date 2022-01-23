@@ -78,7 +78,7 @@ class World(
     var (x, y) = (0, 0)
     for (y <- 0 to height) {
       for (x <- 0 to width) {
-        val alive = (Random.nextFloat <= 0.2)
+        val alive = (Random.nextFloat() <= 0.2)
         add_cell(x, y, alive)
       }
     }

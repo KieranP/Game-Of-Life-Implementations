@@ -8,7 +8,7 @@ class World {
 
   int width;
   int height;
-  int tick;
+  int tick = 0;
   Map<String, Cell> _cells = {};
   List<List<int>> _cached_directions = const [
     [-1, 1],  [0, 1],  [1, 1], // above
@@ -17,8 +17,6 @@ class World {
   ];
 
   World(this.width, this.height) {
-    this.tick = 0;
-
     _populate_cells();
     _prepopulate_neighbours();
   }
@@ -54,7 +52,9 @@ class World {
     // for (var y = 0; y <= this.height; y++) {
     //   for (var x = 0; x <= this.width; x++) {
     //     final cell = this._cell_at(x, y);
-    //     rendering += cell.to_char();
+    //     if (cell != null) {
+    //       rendering += cell.to_char();
+    //     }
     //   }
     //   rendering += "\n";
     // }
@@ -65,7 +65,9 @@ class World {
     for (var y = 0; y <= this.height; y++) {
       for (var x = 0; x <= this.width; x++) {
         final cell = this._cell_at(x, y);
-        rendering.add(cell.to_char());
+        if (cell != null) {
+          rendering.add(cell.to_char());
+        }
       }
       rendering.add("\n");
     }
@@ -76,7 +78,9 @@ class World {
     // for (var y = 0; y <= this.height; y++) {
     //   for (var x = 0; x <= this.width; x++) {
     //     final cell = this._cell_at(x, y);
-    //     rendering.write(cell.to_char());
+    //     if (cell != null) {
+    //       rendering.write(cell.to_char());
+    //     }
     //   }
     //   rendering.write("\n");
     // }
@@ -99,7 +103,7 @@ class World {
     });
   }
 
-  Cell _add_cell(int x, int y, [bool alive = false]) {
+  Cell? _add_cell(int x, int y, [bool alive = false]) {
     if (this._cell_at(x, y) != null) { // Must return a boolean
       throw LocationOccupied();
     }
@@ -109,11 +113,11 @@ class World {
     return this._cell_at(x, y);
   }
 
-  Cell _cell_at(int x, int y) {
+  Cell? _cell_at(int x, int y) {
     return this._cells["$x-$y"];
   }
 
-  List<Cell> _neighbours_around(Cell cell) {
+  List<Cell>? _neighbours_around(Cell cell) {
     if (cell.neighbours == null) { // Must return a boolean
       cell.neighbours = [];
       for (final set in this._cached_directions) {
@@ -122,7 +126,7 @@ class World {
           (cell.y + set[1])
         );
         if (neighbour != null) {
-          cell.neighbours.add(neighbour);
+          cell.neighbours?.add(neighbour);
         }
       }
     }
@@ -135,30 +139,30 @@ class World {
   int _alive_neighbours_around(Cell cell) {
     // The following works but is slower
     // final neighbours = this._neighbours_around(cell);
-    // return neighbours.where(
+    // return neighbours!.where(
     //   (neighbour) => neighbour.alive
     // ).length;
-
-    // The following also works but is slower
-    // var alive_neighbours = 0;
-    // final neighbours = this._neighbours_around(cell);
-    // neighbours.forEach((neighbour) {
-    //   if (neighbour.alive) {
-    //     alive_neighbours += 1;
-    //   }
-    // });
-    // return alive_neighbours;
 
     // The following was the fastest method
     var alive_neighbours = 0;
     final neighbours = this._neighbours_around(cell);
-    for (var i = 0; i < neighbours.length; i++) {
-      final neighbour = neighbours[i];
+    neighbours!.forEach((neighbour) {
       if (neighbour.alive) {
         alive_neighbours += 1;
       }
-    }
+    });
     return alive_neighbours;
+
+    // The following also works but is slower
+    // var alive_neighbours = 0;
+    // final neighbours = this._neighbours_around(cell);
+    // for (var i = 0; i < neighbours!.length; i++) {
+    //   final neighbour = neighbours[i];
+    //   if (neighbour.alive) {
+    //     alive_neighbours += 1;
+    //   }
+    // }
+    // return alive_neighbours;
   }
 
 }
@@ -168,8 +172,8 @@ class Cell {
   int x;
   int y;
   bool alive;
-  int next_state = null;
-  List<Cell> neighbours = null;
+  int? next_state = null;
+  List<Cell>? neighbours = null;
 
   Cell(this.x, this.y, [this.alive = false]) {}
 
