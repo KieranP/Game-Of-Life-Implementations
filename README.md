@@ -34,6 +34,7 @@ The times were calculated by playing each simulation for long enough that the av
 | 18th. | Ruby       | 4.559ms  |  3.265ms   | Dynamic | CRuby 3.1.0                    |
 | 19th. | Python     | 4.971ms  |  4.693ms   | Dynamic | Python 3.9.10                  |
 | 20th. | Lua        | 5.008ms  |  3.236ms   | Dynamic | Lua 5.4.3                      |
+| 21st. | Perl       | 13.369ms |  4.887ms   | Dynamic | Perl 5.34.0                    |
 
 ## Feature Comparison
 
@@ -71,27 +72,27 @@ This list is not exhaustive, but includes some of the primary things that I came
 **Note:** Below is a table of functionality that differs between the various dynamic typed languages.
 This list is not exhaustive, but includes some of the primary things that I came across while implementing each one.
 
-| Feature                          | Javascript | Lua | PHP | Python | Ruby |
-| :------------------------------- | :--------: | :-: | :-: | :----: | :--: |
-| Classes/Objects (Top Level)      |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Classes/Objects (Nested)         |     ✔      |  ✔  |  ✖  |   ✔    |  ✔   |
-| Class/Object Initializer         |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Class/Object Methods             |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Class/Object Method Visibility   |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
-| Class/Object Variables           |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Class/Object Variable Visibility |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
-| Instance Methods                 |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Instance Method Visibility       |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
-| Instance Variables               |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Instance Variable Visibility     |     ✖      |  ✖  |  ✔  |   ✖    |  ✔   |
-| Named Parameters/Arguments       |     ✖      |  ✖  |  ✖  |   ✖    |  ✔   |
-| Default Parameters/Arguments     |     ✔      |  ✖  |  ✔  |   ✔    |  ✔   |
-| semicolon optional               |     ✔      |  ✔  |  ✖  |   ✔    |  ✔   |
-| return keyword optional          |     ✖      |  ✖  |  ✖  |   ✖    |  ✔   |
-| Looping over Array (value)       |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Looping over Hash (key/value)    |     ✖      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Custom Exceptions                |     ✔      |  ✔  |  ✔  |   ✔    |  ✔   |
-| Exceptions Must Be Caught        |     ✖      |  ✖  |  ✖  |   ✖    |  ✖   |
+| Feature                          | Javascript | Lua | Perl | PHP | Python | Ruby |
+| :------------------------------- | :--------: | :-: | :--: | :-: | :----: | :--: |
+| Classes/Objects (Top Level)      |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Classes/Objects (Nested)         |     ✔      |  ✔  |  ✖   |  ✖  |   ✔    |  ✔   |
+| Class/Object Initializer         |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Object Methods             |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Object Method Visibility   |     ✖      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Class/Object Variables           |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Object Variable Visibility |     ✖      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Instance Methods                 |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Instance Method Visibility       |     ✖      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Instance Variables               |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Instance Variable Visibility     |     ✖      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Named Parameters/Arguments       |     ✖      |  ✖  |  ✖   |  ✖  |   ✖    |  ✔   |
+| Default Parameters/Arguments     |     ✔      |  ✖  |  ✔   |  ✔  |   ✔    |  ✔   |
+| semicolon optional               |     ✔      |  ✔  |  ✖   |  ✖  |   ✔    |  ✔   |
+| return keyword optional          |     ✖      |  ✖  |  ✔   |  ✖  |   ✖    |  ✔   |
+| Looping over Array (value)       |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Looping over Hash (key/value)    |     ✖      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Custom Exceptions                |     ✔      |  ✔  |  ✖   |  ✔  |   ✔    |  ✔   |
+| Exceptions Must Be Caught        |     ✖      |  ✖  |  ✖   |  ✖  |   ✖    |  ✖   |
 
 ## Wishlist
 
@@ -100,4 +101,3 @@ This list is not exhaustive, but includes some of the primary things that I came
 - Haskell
 - Erlang
 - C++
-- Perl
