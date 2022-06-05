@@ -24,19 +24,17 @@ class World {
     for (const cell of cells) {
       const alive_neighbours = this.alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = 1
+        cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = 0
+        cell.next_state = false
+      } else {
+        cell.next_state = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
     for (const cell of cells) {
-      if (cell.next_state == 1) {
-        cell.alive = true
-      } else if (cell.next_state == 0) {
-        cell.alive = false
-      }
+      cell.alive = cell.next_state
     }
 
     this.tick += 1
@@ -45,6 +43,7 @@ class World {
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
   render() {
+    // The following was the fastest method
     let rendering = ''
     for (let y = 0; y <= this.height; y++) {
       for (let x = 0; x <= this.width; x++) {
@@ -116,7 +115,7 @@ class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   alive_neighbours_around(cell) {
     // The following works but is slower
     // const neighbours = this.neighbours_around(cell)
@@ -133,6 +132,7 @@ class World {
     // }
     // return alive_neighbours
 
+    // The following was the fastest method
     let alive_neighbours = 0
     const neighbours = this.neighbours_around(cell)
     for (let i = 0; i < neighbours.length; i++) {

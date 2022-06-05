@@ -26,19 +26,17 @@ class World {
     this._cells.forEach((key, cell) {
       final alive_neighbours = this._alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = 1;
+        cell.next_state = true;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = 0;
+        cell.next_state = false;
+      } else {
+        cell.next_state = cell.alive;
       }
     });
 
     // Then execute the determined action for all cells
     this._cells.forEach((key, cell) {
-      if (cell.next_state == 1) {
-        cell.alive = true;
-      } else if (cell.next_state == 0) {
-        cell.alive = false;
-      }
+      cell.alive = cell.next_state ?? false;
     });
 
     this.tick += 1;
@@ -135,7 +133,7 @@ class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   int _alive_neighbours_around(Cell cell) {
     // The following works but is slower
     // final neighbours = this._neighbours_around(cell);
@@ -172,7 +170,7 @@ class Cell {
   int x;
   int y;
   bool alive;
-  int? next_state = null;
+  bool? next_state = null;
   List<Cell>? neighbours = null;
 
   Cell(this.x, this.y, [this.alive = false]) {}

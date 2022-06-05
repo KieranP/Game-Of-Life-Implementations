@@ -156,6 +156,17 @@ sub alive_neighbours_around {
   #   }
   # }
   # $alive_neighbours;
+
+  # The following also works but is slower
+  # my $alive_neighbours = 0;
+  # my $neighbours = $self->neighbours_around($cell);
+  # for (my $i = 0; $i < @$neighbours; $i++) {
+  #   my $neighbour = @$neighbours[$i];
+  #   if ($neighbour->{alive}) {
+  #     $alive_neighbours += 1;
+  #   }
+  # }
+  # $alive_neighbours;
 }
 
 1;

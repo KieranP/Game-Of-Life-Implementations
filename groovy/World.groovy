@@ -28,19 +28,17 @@ public class World {
     for (cell in cells.values()) {
       def alive_neighbours = alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = 1
+        cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = 0
+        cell.next_state = false
+      } else {
+        cell.next_state = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
     for (cell in cells.values()) {
-      if (cell.next_state != null && cell.next_state == 1) {
-        cell.alive = true
-      } else if (cell.next_state != null && cell.next_state == 0) {
-        cell.alive = false
-      }
+      cell.alive = cell.next_state
     }
 
     tick++
@@ -130,7 +128,7 @@ public class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   private Integer alive_neighbours_around(Cell cell) {
     // The following works but is slower
     // def neighbours = neighbours_around(cell)
@@ -149,7 +147,7 @@ public class World {
     // The following works but is slower
     // def alive_neighbours = 0
     // def neighbours = neighbours_around(cell)
-    // for (i in 0..neighbours.size()) {
+    // for (i in 0..neighbours.size()-1) {
     //   def neighbour = neighbours.get(i)
     //   if (neighbour.alive) {
     //     alive_neighbours++
@@ -165,7 +163,7 @@ class Cell {
   public Integer x
   public Integer y
   public Boolean alive
-  public Integer next_state
+  public Boolean next_state
   public ArrayList<Cell> neighbours
 
   public Cell(int x, int y, boolean alive = false) {

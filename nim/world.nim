@@ -10,7 +10,7 @@ type
     x: int
     y: int
     alive: bool
-    next_state: Option[int]
+    next_state: Option[bool]
     neighbours: Option[seq[Cell]]
 
 proc to_char(self: Cell): string =
@@ -20,7 +20,7 @@ proc to_char(self: Cell): string =
     " "
 
 type
-  LocationOccupied = object of Exception
+  LocationOccupied = object of ValueError
 
 type
   World = ref object of RootObj
@@ -60,16 +60,15 @@ proc tick(self: World) =
   for key,cell in self.cells:
     let alive_neighbours = self.alive_neighbours_around(cell)
     if not cell.alive and alive_neighbours == 3:
-      cell.next_state = some(1)
+      cell.next_state = some(true)
     elif alive_neighbours < 2 or alive_neighbours > 3:
-      cell.next_state = some(0)
+      cell.next_state = some(false)
+    else:
+      cell.next_state = some(cell.alive)
 
   # Then execute the determined action for all cells
   for key,cell in self.cells:
-    if cell.next_state == some(1):
-      cell.alive = true
-    elif cell.next_state == some(0):
-      cell.alive = false
+    cell.alive = cell.next_state == some(true)
 
   self.tick_num += 1
 
@@ -81,8 +80,8 @@ proc render(self: World): string =
   for y in 0..self.height:
     for x in 0..self.width:
       let cell = self.cell_at(x, y)
-      rendering = rendering & cell.to_char()
-    rendering = rendering & "\n"
+      rendering &= cell.to_char()
+    rendering &= "\n"
   rendering
 
   # The following works but it slower
@@ -138,7 +137,7 @@ proc neighbours_around(self: World, cell: Cell): seq[Cell] =
   cell.neighbours.get
 
 # Implement first using filter/lambda if available. Then implement
-# foreach and for. Retain whatever implementation runs the fastest
+# foreach and for. Use whatever implementation runs the fastest
 proc alive_neighbours_around(self: World, cell: Cell): int =
   # The following works but is slower
   # filter(

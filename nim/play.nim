@@ -30,20 +30,20 @@ proc run(self: Play) =
     let tick_start = epochTime()
     world.tick()
     let tick_finish = epochTime()
-    let tick_time = (tick_finish - tick_start) * 1000
+    let tick_time = (tick_finish - tick_start)
     total_tick += tick_time
     let avg_tick = (total_tick / world.tick_num.float)
 
     let render_start = epochTime()
     let rendered = world.render()
     let render_finish = epochTime()
-    let render_time = (render_finish - render_start) * 1000
+    let render_time = (render_finish - render_start)
     total_render += render_time
     let avg_render = (total_render / world.tick_num.float)
 
     var output = "#" & intToStr(world.tick_num)
-    output = output & " - World tick took " & self.f(tick_time) & " (" & self.f(avg_tick) & ")"
-    output = output & " - Rendering took " & self.f(render_time) & " (" & self.f(avg_render) & ")"
+    output = output & " - World tick took " & self.f(tick_time * 1000) & " (" & self.f(avg_tick * 1000) & ")"
+    output = output & " - Rendering took " & self.f(render_time * 1000) & " (" & self.f(avg_render * 1000) & ")"
     output = output & "\n" & rendered
     echo "\u001b[H\u001b[2J"
     echo output

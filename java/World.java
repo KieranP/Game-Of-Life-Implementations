@@ -36,19 +36,17 @@ public class World {
     for (Cell cell : cells.values()) {
       int alive_neighbours = alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = 1;
+        cell.next_state = true;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = 0;
+        cell.next_state = false;
+      } else {
+        cell.next_state = cell.alive;
       }
     }
 
     // Then execute the determined action for all cells
     for (Cell cell : cells.values()) {
-      if (cell.next_state != null && cell.next_state == 1) {
-        cell.alive = true;
-      } else if (cell.next_state != null && cell.next_state == 0) {
-        cell.alive = false;
-      }
+      cell.alive = cell.next_state;
     }
 
     tick++;
@@ -67,6 +65,17 @@ public class World {
     //   rendering += "\n";
     // }
     // return rendering;
+
+    // The following works but is slower
+    // ArrayList<String> rendering = new ArrayList<String>();
+    // for (int y = 0; y <= height; y++) {
+    //   for (int x = 0; x <= width; x++) {
+    //     Cell cell = cell_at(x, y);
+    //     rendering.add(String.valueOf(cell.to_char()));
+    //   }
+    //   rendering.add("\n");
+    // }
+    // return String.join("", rendering);
 
     // The following was the fastest method
     StringBuilder rendering = new StringBuilder();
@@ -136,7 +145,7 @@ public class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
     // The following works but is slower
     // return neighbours_around(cell).stream().
@@ -154,6 +163,7 @@ public class World {
     // }
     // return alive_neighbours;
 
+    // The following was the fastest method
     int alive_neighbours = 0;
     ArrayList<Cell> neighbours = neighbours_around(cell);
     for (int i = 0; i < neighbours.size(); i++) {
@@ -172,7 +182,7 @@ class Cell {
   public int x;
   public int y;
   public boolean alive;
-  public Integer next_state; // int doesn't allow null values
+  public Boolean next_state;
   public ArrayList<Cell> neighbours;
 
   // Java doesn't have the concept of optional or default values

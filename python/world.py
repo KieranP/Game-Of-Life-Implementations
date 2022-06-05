@@ -25,38 +25,38 @@ class World:
         for key,cell in self.cells.items():
             alive_neighbours = self.alive_neighbours_around(cell)
             if cell.alive is False and alive_neighbours == 3:
-                cell.next_state = 1
+                cell.next_state = True
             elif alive_neighbours < 2 or alive_neighbours > 3:
-                cell.next_state = 0
+                cell.next_state = False
+            else:
+                cell.next_state = cell.alive
 
         # Then execute the determined action for all cells
         for key,cell in self.cells.items():
-            if cell.next_state == 1:
-                cell.alive = True
-            elif cell.next_state == 0:
-                cell.alive = False
+            cell.alive = cell.next_state
 
         self.tick += 1
 
     # Implement first using string concatenation. Then implement any
     # special string builders, and use whatever runs the fastest
     def render(self):
-        rendering = ''
-        for y in list(range(self.height)):
-            for x in list(range(self.width)):
-                cell = self.cell_at(x, y)
-                rendering += cell.to_char()
-            rendering += "\n"
-        return rendering
-
-        # The following works but performs no faster than above
-        # rendering = []
+        # The following works but is slower
+        # rendering = ''
         # for y in list(range(self.height)):
         #     for x in list(range(self.width)):
         #         cell = self.cell_at(x, y)
-        #         rendering.append(cell.to_char())
-        #     rendering.append("\n")
-        # return ''.join(rendering)
+        #         rendering += cell.to_char()
+        #     rendering += "\n"
+        # return rendering
+
+        # The following was the fastest method
+        rendering = []
+        for y in list(range(self.height)):
+            for x in list(range(self.width)):
+                cell = self.cell_at(x, y)
+                rendering.append(cell.to_char())
+            rendering.append("\n")
+        return ''.join(rendering)
 
     # Python doesn't have a concept of public/private methods
 
@@ -95,17 +95,29 @@ class World:
         return cell.neighbours
 
     # Implement first using filter/lambda if available. Then implement
-    # foreach and for. Retain whatever implementation runs the fastest
+    # foreach and for. Use whatever implementation runs the fastest
     def alive_neighbours_around(self, cell):
         # The following works but is slower
+        # neighbours = self.neighbours_around(cell)
         # filter_alive = lambda neighbour: neighbour.alive
         # return len(list(filter(filter_alive, neighbours)))
 
+        # The following was the fastest method
         alive_neighbours = 0
-        for neighbour in self.neighbours_around(cell):
+        neighbours = self.neighbours_around(cell)
+        for neighbour in neighbours:
             if neighbour.alive:
                 alive_neighbours += 1
         return alive_neighbours
+
+        # The following works but is slower
+        # alive_neighbours = 0
+        # neighbours = self.neighbours_around(cell)
+        # for i in range(len(neighbours)):
+        #     neighbour = neighbours[i]
+        #     if neighbour.alive:
+        #         alive_neighbours += 1
+        # return alive_neighbours
 
 class Cell:
 

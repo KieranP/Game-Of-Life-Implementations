@@ -19,23 +19,23 @@ class Play {
     def total_render = 0.0
 
     while (true) {
-      def tick_start = System.currentTimeMillis()
+      def tick_start = System.nanoTime()
       world._tick()
-      def tick_finish = System.currentTimeMillis()
+      def tick_finish = System.nanoTime()
       def tick_time = (tick_finish - tick_start) / 1d
       total_tick += tick_time
       def avg_tick = (total_tick / world.tick)
 
-      def render_start = System.currentTimeMillis()
+      def render_start = System.nanoTime()
       def rendered = world.render()
-      def render_finish = System.currentTimeMillis()
+      def render_finish = System.nanoTime()
       def render_time = (render_finish - render_start) / 1d
       total_render += render_time
       def avg_render = (total_render / world.tick)
 
       def output = "#"+world.tick
-      output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")"
-      output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")"
+      output += " - World tick took "+_f(tick_time / 1000000)+" ("+_f(avg_tick / 1000000)+")"
+      output += " - Rendering took "+_f(render_time / 1000000)+" ("+_f(avg_render / 1000000)+")"
       output += "\n"+rendered
       System.out.print("\u001b[H\u001b[2J")
       System.out.println(output)

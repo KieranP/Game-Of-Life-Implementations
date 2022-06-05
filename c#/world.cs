@@ -33,19 +33,17 @@ public class World {
     foreach (Cell cell in cells.Values) {
       int alive_neighbours = alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = 1;
+        cell.next_state = true;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = 0;
+        cell.next_state = false;
+      } else {
+        cell.next_state = cell.alive;
       }
     }
 
     // Then execute the determined action for all cells
     foreach (Cell cell in cells.Values) {
-      if (cell.next_state == 1) {
-        cell.alive = true;
-      } else if (cell.next_state == 0) {
-        cell.alive = false;
-      }
+      cell.alive = cell.next_state ?? false;
     }
 
     tick++;
@@ -141,7 +139,7 @@ public class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
     // The following works but is slower
     // List<Cell> neighbours = neighbours_around(cell);
@@ -159,6 +157,7 @@ public class World {
     // }
     // return alive_neighbours;
 
+    // The following was the fastest method
     int alive_neighbours = 0;
     List<Cell> neighbours = neighbours_around(cell);
     for (int i = 0; i < neighbours.Count; i++) {
@@ -177,7 +176,7 @@ public class Cell {
   public int x;
   public int y;
   public bool alive;
-  public int? next_state;
+  public bool? next_state;
   public List<Cell> neighbours;
 
   public Cell(int x, int y, bool alive = false) {

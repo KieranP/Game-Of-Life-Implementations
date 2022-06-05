@@ -24,20 +24,20 @@ public class Play {
       let tick_start = CFAbsoluteTimeGetCurrent()
       world._tick()
       let tick_finish = CFAbsoluteTimeGetCurrent()
-      let tick_time = (tick_finish - tick_start) * 1000
+      let tick_time = (tick_finish - tick_start)
       total_tick += tick_time
       let avg_tick = (total_tick / Double(world.tick))
 
       let render_start = CFAbsoluteTimeGetCurrent()
       let rendered = world.render()
       let render_finish = CFAbsoluteTimeGetCurrent()
-      let render_time = (render_finish - render_start) * 1000
+      let render_time = (render_finish - render_start)
       total_render += render_time
       let avg_render = (total_render / Double(world.tick))
 
       var output = "#\(world.tick)"
-      output += " - World tick took \(_f(value: tick_time)) (\(_f(value: avg_tick)))"
-      output += " - Rendering took \(_f(value: render_time)) (\(_f(value: avg_render)))"
+      output += " - World tick took \(_f(value: tick_time * 1000)) (\(_f(value: avg_tick * 1000)))"
+      output += " - Rendering took \(_f(value: render_time * 1000)) (\(_f(value: avg_render * 1000)))"
       output += "\n"+rendered
       print("\u{001b}[H\u{001b}[2J")
       print(output)

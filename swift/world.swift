@@ -32,19 +32,17 @@ public class World {
     for (_, cell) in cells {
       let alive_neighbours: Int = alive_neighbours_around(cell: cell)
       if !cell.alive && alive_neighbours == 3 {
-        cell.next_state = 1
+        cell.next_state = true
       } else if alive_neighbours < 2 || alive_neighbours > 3 {
-        cell.next_state = 0
+        cell.next_state = false
+      } else {
+        cell.next_state = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
     for (_, cell) in cells {
-      if cell.next_state == 1 {
-        cell.alive = true
-      } else if cell.next_state == 0 {
-        cell.alive = false
-      }
+      cell.alive = cell.next_state ?? false
     }
 
     tick += 1
@@ -53,6 +51,7 @@ public class World {
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
   public func render() -> String {
+    // The following was the fastest method
     var rendering = ""
     for y in 0...height {
       for x in 0...width {
@@ -139,13 +138,13 @@ public class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   private func alive_neighbours_around(cell: Cell) -> Int {
     // The following works but is slower
     // let neighbours = neighbours_around(cell: cell)
     // return neighbours.filter { $0.alive }.count
 
-    // The following also works but is slower
+    // The following works but is slower
     // var alive_neighbours = 0;
     // for neighbour in neighbours_around(cell: cell) {
     //   if neighbour.alive {
@@ -154,6 +153,7 @@ public class World {
     // }
     // return alive_neighbours
 
+    // The following was the fastest method
     var alive_neighbours = 0
     let neighbours = neighbours_around(cell: cell)
     for i in 0 ..< neighbours.count {
@@ -172,7 +172,7 @@ public class Cell {
   public var x: Int
   public var y: Int
   public var alive: Bool
-  public var next_state: Int?         // ? allows value to be nil
+  public var next_state: Bool?        // ? allows value to be nil
   public var neighbours: Array<Cell>? // ? allows value to be nil
 
   public init(x: Int, y: Int, alive: Bool = false) {

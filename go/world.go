@@ -39,19 +39,17 @@ func (w *World) _tick() {
   for _, cell := range w.cells {
     alive_neighbours := w.alive_neighbours_around(cell)
     if !cell.alive && alive_neighbours == 3 {
-      cell.next_state = 1
+      cell.next_state = true
     } else if alive_neighbours < 2 || alive_neighbours > 3 {
-      cell.next_state = 0
+      cell.next_state = false
+    } else {
+      cell.next_state = cell.alive
     }
   }
 
   // Then execute the determined action for all cells
   for _, cell := range w.cells {
-    if cell.next_state == 1 {
-      cell.alive = true
-    } else if cell.next_state == 0 {
-      cell.alive = false
-    }
+    cell.alive = cell.next_state
   }
 
   w.tick++
@@ -71,6 +69,18 @@ func (w *World) render() string {
   // }
   // return rendering
 
+  // The following works but is slower
+  // rendering := []string{}
+  // for y := 0; y <= w.height; y++ {
+  //   for x := 0; x <= w.width; x++ {
+  //     cell, _ := w.cell_at(x, y)
+  //     rendering = append(rendering, string(cell.to_char()))
+  //   }
+  //   rendering = append(rendering, "\n")
+  // }
+  // return strings.Join(rendering, "")
+
+  // The following was the fastest method
   var rendering = strings.Builder{}
   for y := 0; y <= w.height; y++ {
     for x := 0; x <= w.width; x++ {
@@ -132,7 +142,7 @@ func (w *World) neighbours_around(cell *Cell) []*Cell {
 }
 
 // Implement first using filter/lambda if available. Then implement
-// foreach and for. Retain whatever implementation runs the fastest
+// foreach and for. Use whatever implementation runs the fastest
 func (w *World) alive_neighbours_around(cell *Cell) int {
   alive_neighbours := 0
   for _, neighbour := range w.neighbours_around(cell) {
@@ -146,7 +156,7 @@ func (w *World) alive_neighbours_around(cell *Cell) int {
 type Cell struct {
   x, y       int
   alive      bool
-  next_state int
+  next_state bool
   neighbours []*Cell
 }
 

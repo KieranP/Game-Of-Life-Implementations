@@ -16,23 +16,23 @@ public class Play {
       var total_render = 0.0
 
       while (true) {
-        val tick_start = System.currentTimeMillis()
+        val tick_start = System.nanoTime()
         world._tick()
-        val tick_finish = System.currentTimeMillis()
+        val tick_finish = System.nanoTime()
         val tick_time = (tick_finish - tick_start) / 1.0
         total_tick += tick_time
         val avg_tick = (total_tick / world.tick)
 
-        val render_start = System.currentTimeMillis()
+        val render_start = System.nanoTime()
         val rendered = world.render()
-        val render_finish = System.currentTimeMillis()
+        val render_finish = System.nanoTime()
         val render_time = (render_finish - render_start) / 1.0
         total_render += render_time
         val avg_render = (total_render / world.tick)
 
         var output = "#${world.tick}"
-        output += " - World tick took ${_f(tick_time)} (${_f(avg_tick)})"
-        output += " - Rendering took ${_f(render_time)} (${_f(avg_render)})"
+        output += " - World tick took ${_f(tick_time / 1000000)} (${_f(avg_tick / 1000000)})"
+        output += " - Rendering took ${_f(render_time / 1000000)} (${_f(avg_render / 1000000)})"
         output += "\n$rendered"
         print("\u001b[H\u001b[2J")
         println(output)
@@ -46,6 +46,6 @@ public class Play {
 
 }
 
-fun main(args: Array<String>) {
+fun main() {
   Play.run()
 }

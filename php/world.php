@@ -29,19 +29,17 @@ class World {
     foreach ($this->cells as $cell) {
       $alive_neighbours = $this->alive_neighbours_around($cell);
       if (!$cell->alive && $alive_neighbours == 3) {
-        $cell->next_state = 1;
+        $cell->next_state = true;
       } else if ($alive_neighbours < 2 || $alive_neighbours > 3) {
-        $cell->next_state = 0;
+        $cell->next_state = false;
+      } else {
+        $cell->next_state = $cell->alive;
       }
     }
 
     // Then execute the determined action for all cells
     foreach ($this->cells as $cell) {
-      if ($cell->next_state == 1) {
-        $cell->alive = true;
-      } else if ($cell->next_state == 0) {
-        $cell->alive = false;
-      }
+      $cell->alive = $cell->next_state;
     }
 
     $this->tick += 1;
@@ -50,6 +48,7 @@ class World {
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
   public function render() {
+    // The following was the fastest method
     $rendering = '';
     for ($y = 0; $y <= $this->height; $y++) {
       for ($x = 0; $x <= $this->width; $x++) {
@@ -60,7 +59,7 @@ class World {
     }
     return $rendering;
 
-    // The following works but performs no faster than above
+    // The following also works but is slower
     // $rendering = array();
     // for ($y = 0; $y <= $this->height; $y++) {
     //   for ($x = 0; $x <= $this->width; $x++) {
@@ -121,15 +120,32 @@ class World {
   }
 
   // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Retain whatever implementation runs the fastest
+  // foreach and for. Use whatever implementation runs the fastest
   private function alive_neighbours_around($cell) {
+    // The following works but is slower
+    // $neighbours = $this->neighbours_around($cell);
+    // return count(array_filter($neighbours, function($n) { return $n->alive; }));
+
+    // The following was the fastest method
     $alive_neighbours = 0;
-    foreach ($this->neighbours_around($cell) as $neighbour) {
+    $neighbours = $this->neighbours_around($cell);
+    foreach ($neighbours as $neighbour) {
       if ($neighbour->alive) {
         $alive_neighbours++;
       }
     }
     return $alive_neighbours;
+
+    // The following works but is slower
+    // $alive_neighbours = 0;
+    // $neighbours = $this->neighbours_around($cell);
+    // for ($i = 0; $i < count($neighbours); $i++) {
+    //   $neighbour = $neighbours[$i];
+    //   if ($neighbour->alive) {
+    //     $alive_neighbours++;
+    //   }
+    // }
+    // return $alive_neighbours;
   }
 
 }

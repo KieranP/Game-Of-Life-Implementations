@@ -22,19 +22,17 @@ class World
     @cells.each do |(key, cell)|
       alive_neighbours = alive_neighbours_around(cell)
       if !cell.alive && alive_neighbours == 3
-        cell.next_state = 1
+        cell.next_state = true
       elsif alive_neighbours < 2 || alive_neighbours > 3
-        cell.next_state = 0
+        cell.next_state = false
+      else
+        cell.next_state = cell.alive
       end
     end
 
     # Then execute the determined action for all cells
     @cells.each do |(key, cell)|
-      if cell.next_state == 1
-        cell.alive = true
-      elsif cell.next_state == 0
-        cell.alive = false
-      end
+      cell.alive = !!cell.next_state
     end
 
     @tick += 1
@@ -48,33 +46,14 @@ class World
     # @height.times.each { |y|
     #   @width.times.each { |x|
     #     cell = cell_at(x, y).not_nil!
-    #     rendering = "#{rendering}#{cell.to_char}"
+    #     rendering += cell.to_char
     #   }
-    #   rendering = "#{rendering}\n"
+    #   rendering += "\n"
     # }
     # rendering
 
-    # The following works but it slower
-    # rendering = [] of String
-    # @height.times.each { |y|
-    #   @width.times.each { |x|
-    #     cell = cell_at(x, y).not_nil!
-    #     rendering << cell.to_char
-    #   }
-    #   rendering << "\n"
-    # }
-    # rendering.join("")
-
-    # The following works but it slower
-    # @height.times.map { |y|
-    #   @width.times.map { |x|
-    #     cell = cell_at(x, y).not_nil!
-    #     cell.to_char
-    #   }.join
-    # }.join("\n")
-
     # The following was the fastest method
-    rendering = String::Builder.new
+    rendering = [] of String
     @height.times.each { |y|
       @width.times.each { |x|
         cell = cell_at(x, y).not_nil!
@@ -82,7 +61,18 @@ class World
       }
       rendering << "\n"
     }
-    rendering.to_s
+    rendering.join("")
+
+    # The following works but it slower
+    # String.build do |io|
+    #   @height.times.each { |y|
+    #     @width.times.each { |x|
+    #       cell = cell_at(x, y).not_nil!
+    #       io << cell.to_char
+    #     }
+    #     io << "\n"
+    #   }
+    # end
   end
 
   private def populate_cells : Nil
@@ -123,7 +113,7 @@ class World
   end
 
   # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Retain whatever implementation runs the fastest
+  # foreach and for. Use whatever implementation runs the fastest
   private def alive_neighbours_around(cell) : Int32
     # The following was the fastest method
     neighbours_around(cell).count { |cell| cell.alive }
@@ -143,7 +133,7 @@ class Cell
   property x : Int32,
            y : Int32,
            alive : Bool,
-           next_state : (Int32 | Nil) = nil,
+           next_state : (Bool | Nil) = nil,
            neighbours : (Array(Cell) | Nil) = nil
 
   def initialize(@x : Int32, @y : Int32, @alive : Bool = false) : Nil

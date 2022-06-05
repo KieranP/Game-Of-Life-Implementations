@@ -22,23 +22,23 @@ public class Play {
     double total_render = 0.0;
 
     while (true) {
-      double tick_start = System.currentTimeMillis();
+      double tick_start = System.nanoTime();
       world._tick();
-      double tick_finish = System.currentTimeMillis();
+      double tick_finish = System.nanoTime();
       double tick_time = (tick_finish - tick_start) / 1d;
       total_tick += tick_time;
       double avg_tick = (total_tick / world.tick);
 
-      double render_start = System.currentTimeMillis();
+      double render_start = System.nanoTime();
       String rendered = world.render();
-      double render_finish = System.currentTimeMillis();
+      double render_finish = System.nanoTime();
       double render_time = (render_finish - render_start) / 1d;
       total_render += render_time;
       double avg_render = (total_render / world.tick);
 
       String output = "#"+world.tick;
-      output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")";
-      output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")";
+      output += " - World tick took "+_f(tick_time / 1000000)+" ("+_f(avg_tick / 1000000)+")";
+      output += " - Rendering took "+_f(render_time / 1000000)+" ("+_f(avg_render / 1000000)+")";
       output += "\n"+rendered;
       System.out.print("\u001b[H\u001b[2J");
       System.out.println(output);

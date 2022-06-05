@@ -14,16 +14,16 @@ class Play {
 
     // Can't use while(true) because it locks the page
     setInterval(() => {
-      const tick_start = new Date()
+      const tick_start = performance.now()
       world._tick()
-      const tick_finish = new Date()
+      const tick_finish = performance.now()
       const tick_time = (tick_finish - tick_start)
       total_tick += tick_time
       const avg_tick = (total_tick / world.tick)
 
-      const render_start = new Date()
+      const render_start = performance.now()
       const rendered = world.render()
-      const render_finish = new Date()
+      const render_finish = performance.now()
       const render_time = (render_finish - render_start)
       total_render += render_time
       const avg_render = (total_render / world.tick)

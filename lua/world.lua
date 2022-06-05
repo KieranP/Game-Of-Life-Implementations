@@ -25,19 +25,17 @@ function World:_tick()
   for key,cell in pairs(self.cells) do
     alive_neighbours = self:alive_neighbours_around(cell)
     if not cell.alive and alive_neighbours == 3 then
-      cell.next_state = 1
+      cell.next_state = true
     elseif alive_neighbours < 2 or alive_neighbours > 3 then
-      cell.next_state = 0
+      cell.next_state = false
+    else
+      cell.next_state = cell.alive
     end
   end
 
   -- Then execute the determined action for all cells
   for key,cell in pairs(self.cells) do
-    if cell.next_state == 1 then
-      cell.alive = true
-    elseif cell.next_state == 0 then
-      cell.alive = false
-    end
+    cell.alive = cell.next_state
   end
 
   self.tick = (self.tick + 1)
@@ -116,7 +114,7 @@ function World:neighbours_around(cell)
 end
 
 -- Implement first using filter/lambda if available. Then implement
--- foreach and for. Retain whatever implementation runs the fastest
+-- foreach and for. Use whatever implementation runs the fastest
 function World:alive_neighbours_around(cell)
   -- The following works but is slower
   -- alive_neighbours = 0

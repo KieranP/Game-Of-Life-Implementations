@@ -23,19 +23,17 @@ public class World(
     for ((_, cell) in cells) {
       val alive_neighbours = alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = 1
+        cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = 0
+        cell.next_state = false
+      } else {
+        cell.next_state = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
     for ((_, cell) in cells) {
-      if (cell.next_state == 1) {
-        cell.alive = true
-      } else if (cell.next_state == 0) {
-        cell.alive = false
-      }
+      cell.alive = cell.next_state!!
     }
 
     tick++
@@ -45,16 +43,28 @@ public class World(
   // special string builders, and use whatever runs the fastest
   public fun render(): String {
     // The following works but is slower
-    /*var rendering = ""
-    for (y in 0 until height) {
-      for (x in 0 until width) {
-        val cell = cell_at(x, y)!!
-        rendering += cell.to_char()
-      }
-      rendering += "\n"
-    }
-    return rendering*/
+    // var rendering = ""
+    // for (y in 0 until height) {
+    //   for (x in 0 until width) {
+    //     val cell = cell_at(x, y)!!
+    //     rendering += cell.to_char()
+    //   }
+    //   rendering += "\n"
+    // }
+    // return rendering
 
+    // The following works but is slower
+    // val rendering = ArrayList<String>();
+    // for (y in 0 until height) {
+    //   for (x in 0 until width) {
+    //     val cell = cell_at(x, y)!!
+    //     rendering.add(cell.to_char().toString())
+    //   }
+    //   rendering.add("\n")
+    // }
+    // return rendering.joinToString(separator = "");
+
+    // The following was the fastest method
     val rendering = StringBuilder()
     for (y in 0 until height) {
       for (x in 0 until width) {
@@ -118,19 +128,20 @@ public class World(
 
   private fun alive_neighbours_around(cell: Cell): Int {
     // The following works but is slower
-    /*val neighbours = neighbours_around(cell)
-    return neighbours.filter { it.alive }.size*/
+    // val neighbours = neighbours_around(cell)
+    // return neighbours.filter { it.alive }.size
 
     // The following works but is slower
-    /*var alive_neighbours = 0
-    val neighbours = neighbours_around(cell)
-    for (neighbour in neighbours) {
-      if (neighbour.alive) {
-        alive_neighbours += 1
-      }
-    }
-    return alive_neighbours*/
+    // var alive_neighbours = 0
+    // val neighbours = neighbours_around(cell)
+    // for (neighbour in neighbours) {
+    //   if (neighbour.alive) {
+    //     alive_neighbours += 1
+    //   }
+    // }
+    // return alive_neighbours
 
+    // The following was the fastest method
     var alive_neighbours = 0
     val neighbours = neighbours_around(cell)
     for (i in 0 until neighbours.size) {
@@ -150,7 +161,7 @@ public class Cell(
   public var alive: Boolean = false
 ) {
 
-  public var next_state: Int? = null
+  public var next_state: Boolean? = null
   public var neighbours: ArrayList<Cell>? = null
 
   fun to_char(): Char {

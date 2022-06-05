@@ -1,3 +1,5 @@
+require 'stringio'
+
 class World
 
   class LocationOccupied < Exception; end
@@ -24,19 +26,17 @@ class World
     @cells.each do |key, cell|
       alive_neighbours = alive_neighbours_around(cell)
       if !cell.alive && alive_neighbours == 3
-        cell.next_state = 1
+        cell.next_state = true
       elsif alive_neighbours < 2 || alive_neighbours > 3
-        cell.next_state = 0
+        cell.next_state = false
+      else
+        cell.next_state = cell.alive
       end
     end
 
     # Then execute the determined action for all cells
     @cells.each do |key, cell|
-      if cell.next_state == 1
-        cell.alive = true
-      elsif cell.next_state == 0
-        cell.alive = false
-      end
+      cell.alive = cell.next_state
     end
 
     @tick += 1
@@ -55,11 +55,22 @@ class World
     # }
     # rendering
 
+    # The following was the fastest method
     @height.times.collect { |y|
       @width.times.collect { |x|
         cell_at(x, y).to_char
       }.join
     }.join("\n")
+
+    # The following works but it slower
+    # rendering = StringIO.new
+    # @height.times.each { |y|
+    #   @width.times.each { |x|
+    #     rendering << cell_at(x, y).to_char
+    #   }
+    #   rendering << "\n"
+    # }
+    # rendering.string
   end
 
   private
@@ -102,9 +113,27 @@ class World
   end
 
   # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Retain whatever implementation runs the fastest
+  # foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours_around(cell)
+    # The following was the fastest method
     neighbours_around(cell).count(&:alive)
+
+    # The following works but is slower
+    # alive_neighbours = 0
+    # neighbours = neighbours_around(cell)
+    # neighbours.each do |neighbour|
+    #   alive_neighbours += 1 if neighbour.alive
+    # end
+    # alive_neighbours
+
+    # The following works but is slower
+    # alive_neighbours = 0
+    # neighbours = neighbours_around(cell)
+    # for i in 0...neighbours.size do
+    #   neighbour = neighbours[i]
+    #   alive_neighbours += 1 if neighbour.alive
+    # end
+    # alive_neighbours
   end
 
 end
