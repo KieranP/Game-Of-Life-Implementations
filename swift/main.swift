@@ -21,23 +21,23 @@ public class Play {
     var total_render: Double = 0
 
     while true {
-      let tick_start = CFAbsoluteTimeGetCurrent()
+      let tick_start = ProcessInfo.processInfo.systemUptime
       world._tick()
-      let tick_finish = CFAbsoluteTimeGetCurrent()
+      let tick_finish = ProcessInfo.processInfo.systemUptime
       let tick_time = (tick_finish - tick_start)
       total_tick += tick_time
       let avg_tick = (total_tick / Double(world.tick))
 
-      let render_start = CFAbsoluteTimeGetCurrent()
+      let render_start = ProcessInfo.processInfo.systemUptime
       let rendered = world.render()
-      let render_finish = CFAbsoluteTimeGetCurrent()
+      let render_finish = ProcessInfo.processInfo.systemUptime
       let render_time = (render_finish - render_start)
       total_render += render_time
       let avg_render = (total_render / Double(world.tick))
 
       var output = "#\(world.tick)"
-      output += " - World tick took \(_f(value: tick_time * 1000)) (\(_f(value: avg_tick * 1000)))"
-      output += " - Rendering took \(_f(value: render_time * 1000)) (\(_f(value: avg_render * 1000)))"
+      output += " - World tick took \(_f(value: tick_time)) (\(_f(value: avg_tick)))"
+      output += " - Rendering took \(_f(value: render_time)) (\(_f(value: avg_render)))"
       output += "\n"+rendered
       print("\u{001b}[H\u{001b}[2J")
       print(output)
@@ -45,7 +45,8 @@ public class Play {
   }
 
   private class func _f(value: Double) -> String {
-    return String(format: "%.3f", value)
+    // value is in seconds, convert to milliseconds
+    return String(format: "%.3f", value * 1000)
   }
 
 }

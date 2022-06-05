@@ -35,8 +35,8 @@ sub run {
     my $avg_render = $total_render / $world->{tick};
 
     my $output = "#$world->{tick}";
-    $output .= " - World tick took ${\_f($tick_time * 1000)} (${\_f($avg_tick * 1000)})";
-    $output .= " - Rendering took ${\_f($render_time * 1000)} (${\_f($avg_render * 1000)})";
+    $output .= " - World tick took ${\_f($tick_time)} (${\_f($avg_tick)})";
+    $output .= " - Rendering took ${\_f($render_time)} (${\_f($avg_render)})";
     $output .= "\n$rendered";
     print "\033[0;0H\033[2J";
     print $output;
@@ -45,7 +45,8 @@ sub run {
 
 sub _f {
   my $value = shift;
-  sprintf("%.3f", $value);
+  # value is in seconds, convert to milliseconds
+  sprintf("%.3f", $value * 1000);
 }
 
 run();

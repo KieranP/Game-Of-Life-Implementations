@@ -41,6 +41,7 @@ class Play {
   }
 
   private static _f(value: number): string {
+    // value is in milliseconds, no conversion needed
     return value.toFixed(3)
   }
 

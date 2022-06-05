@@ -20,7 +20,7 @@ var cachedDirections = [8][2]int{
 
 type World struct {
   width, height int
-  tick          int
+  tick          int64
 
 	cells map[string]*Cell
 }

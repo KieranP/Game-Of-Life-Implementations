@@ -20,26 +20,25 @@ func run() {
     tick_start := time.Now()
     world._tick()
     tick_finish := time.Now()
-
-    tick_time := tick_finish.Sub(tick_start)
-    total_tick += tick_time.Nanoseconds()
-    avg_tick := float64(total_tick) / float64(world.tick)
+    tick_time := tick_finish.Sub(tick_start).Nanoseconds()
+    total_tick += tick_time
+    avg_tick := total_tick / world.tick
 
     render_start := time.Now()
     rendered := world.render()
     render_finish := time.Now()
-
-    render_time := render_finish.Sub(render_start)
-    total_render += render_time.Nanoseconds()
-    avg_render := float64(total_render) / float64(world.tick)
+    render_time := render_finish.Sub(render_start).Nanoseconds()
+    total_render += render_time
+    avg_render := total_render / world.tick
 
     fmt.Print("\u001b[H\u001b[2J")
+    // value is in nanoseconds, convert to milliseconds
     fmt.Printf("#%d - World tick took %.3f (%.3f) - Rendering took %.3f (%.3f)\n",
       world.tick,
-      float64(tick_time.Nanoseconds()) / 1000000,
-      avg_tick / 1000000,
-      float64(render_time.Nanoseconds()) / 1000000,
-      avg_render / 1000000,
+      float64(tick_time) / 1000000,
+      float64(avg_tick) / 1000000,
+      float64(render_time) / 1000000,
+      float64(avg_render) / 1000000,
     )
     fmt.Println(rendered)
   }

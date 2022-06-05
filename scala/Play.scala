@@ -32,8 +32,8 @@ object Play {
       val avg_render = (total_render / world.tick)
 
       var output = "#"+world.tick
-      output += " - World tick took "+_f(tick_time / 1000000)+" ("+_f(avg_tick / 1000000)+")"
-      output += " - Rendering took "+_f(render_time / 1000000)+" ("+_f(avg_render / 1000000)+")"
+      output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")"
+      output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")"
       output += "\n"+rendered
       print("\u001b[H\u001b[2J")
       println(output)
@@ -41,7 +41,8 @@ object Play {
   }
 
   private def _f(value: Double) = {
-    "%.3f".format(value)
+    // value is in nanoseconds, convert to milliseconds
+    "%.3f".format(value / 1000000)
   }
 
 }

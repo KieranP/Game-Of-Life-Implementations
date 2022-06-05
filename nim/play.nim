@@ -1,4 +1,4 @@
-from times import epochTime
+from times import cpuTime
 from strutils import intToStr
 from strformat import fmt
 include world
@@ -27,28 +27,29 @@ proc run(self: Play) =
   var total_render = 0.0
 
   while true:
-    let tick_start = epochTime()
+    let tick_start = cpuTime()
     world.tick()
-    let tick_finish = epochTime()
+    let tick_finish = cpuTime()
     let tick_time = (tick_finish - tick_start)
     total_tick += tick_time
     let avg_tick = (total_tick / world.tick_num.float)
 
-    let render_start = epochTime()
+    let render_start = cpuTime()
     let rendered = world.render()
-    let render_finish = epochTime()
+    let render_finish = cpuTime()
     let render_time = (render_finish - render_start)
     total_render += render_time
     let avg_render = (total_render / world.tick_num.float)
 
     var output = "#" & intToStr(world.tick_num)
-    output = output & " - World tick took " & self.f(tick_time * 1000) & " (" & self.f(avg_tick * 1000) & ")"
-    output = output & " - Rendering took " & self.f(render_time * 1000) & " (" & self.f(avg_render * 1000) & ")"
+    output = output & " - World tick took " & self.f(tick_time) & " (" & self.f(avg_tick) & ")"
+    output = output & " - Rendering took " & self.f(render_time) & " (" & self.f(avg_render) & ")"
     output = output & "\n" & rendered
     echo "\u001b[H\u001b[2J"
     echo output
 
 proc f(self: Play, value: float): string =
-  fmt"{value:.3f}"
+  # value is in seconds, convert to milliseconds
+  fmt"{value*1000:.3f}"
 
 Play().run()

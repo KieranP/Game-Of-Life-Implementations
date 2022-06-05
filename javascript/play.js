@@ -37,6 +37,7 @@ class Play {
   }
 
   static _f(value) {
+    // value is in milliseconds, no conversion needed
     return value.toFixed(3)
   }
 

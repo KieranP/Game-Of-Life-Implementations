@@ -35,8 +35,8 @@ class Play
       avg_render = (total_render / world.tick)
 
       output = "##{world.tick}"
-      output += " - World tick took #{_f(tick_time * 1000)} (#{_f(avg_tick * 1000)})"
-      output += " - Rendering took #{_f(render_time * 1000)} (#{_f(avg_render * 1000)})"
+      output += " - World tick took #{_f(tick_time)} (#{_f(avg_tick)})"
+      output += " - Rendering took #{_f(render_time)} (#{_f(avg_render)})"
       output += "\n#{rendered}"
       puts "\u001b[H\u001b[2J"
       puts output
@@ -44,7 +44,8 @@ class Play
   end
 
   def self._f(value)
-    "%.3f" % value
+    # value is in seconds, convert to milliseconds
+    "%.3f" % (value * 1000)
   end
   private_class_method :_f
 

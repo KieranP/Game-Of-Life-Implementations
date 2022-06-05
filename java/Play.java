@@ -37,8 +37,8 @@ public class Play {
       double avg_render = (total_render / world.tick);
 
       String output = "#"+world.tick;
-      output += " - World tick took "+_f(tick_time / 1000000)+" ("+_f(avg_tick / 1000000)+")";
-      output += " - Rendering took "+_f(render_time / 1000000)+" ("+_f(avg_render / 1000000)+")";
+      output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")";
+      output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")";
       output += "\n"+rendered;
       System.out.print("\u001b[H\u001b[2J");
       System.out.println(output);
@@ -46,7 +46,8 @@ public class Play {
   }
 
   private static String _f(double value) {
-    return String.format("%.3f", value);
+    // value is in nanoseconds, convert to milliseconds
+    return String.format("%.3f", value / 1000000);
   }
 
 }

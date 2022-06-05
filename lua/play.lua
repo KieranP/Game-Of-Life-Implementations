@@ -32,8 +32,8 @@ function Play:run()
     avg_render = (total_render / world.tick)
 
     output = "#"..world.tick
-    output = output.." - World tick took "..self:_f(tick_time * 1000).." ("..self:_f(avg_tick * 1000)..")"
-    output = output.." - Rendering took "..self:_f(render_time * 1000).." ("..self:_f(avg_render * 1000)..")"
+    output = output.." - World tick took "..self:_f(tick_time).." ("..self:_f(avg_tick)..")"
+    output = output.." - Rendering took "..self:_f(render_time).." ("..self:_f(avg_render)..")"
     output = output.."\n"..rendered
     print("\u{001b}[H\u{001b}[2J")
     print(output)
@@ -41,7 +41,8 @@ function Play:run()
 end
 
 function Play:_f(value)
-  return string.format("%.3f", value)
+  -- value is in seconds, convert to milliseconds
+  return string.format("%.3f", value * 1000)
 end
 
 Play:run()

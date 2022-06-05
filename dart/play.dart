@@ -35,8 +35,8 @@ class Play {
       final avg_render = (total_render / world.tick);
 
       var output = "#${world.tick}";
-      output += " - World tick took ${_f(tick_time / 1000)} (${_f(avg_tick / 1000)})";
-      output += " - Rendering took ${_f(render_time / 1000)} (${_f(avg_render / 1000)})";
+      output += " - World tick took ${_f(tick_time)} (${_f(avg_tick)})";
+      output += " - Rendering took ${_f(render_time)} (${_f(avg_render)})";
       output += "\n${rendered}";
       stdout.write("\u001b[H\u001b[2J");
       stdout.write(output);
@@ -44,7 +44,8 @@ class Play {
   }
 
   static String _f(double value) {
-    return value.toStringAsFixed(3);
+    // value is in microseconds, convert to milliseconds
+    return (value / 1000).toStringAsFixed(3);
   }
 
 }

@@ -46,6 +46,7 @@ public class Play {
   }
 
   private static string _f(double value) {
+    // value is in milliseconds, no conversion needed
     return value.ToString("0.###");
   }
 
