@@ -6,7 +6,7 @@ class World {
     this.width = width
     this.height = height
     this.tick = 0
-    this.cells = {}
+    this.cells = new Map()
     this.cached_directions = [
       [-1, 1],  [0, 1],  [1, 1], // above
       [-1, 0],           [1, 0], // sides
@@ -18,10 +18,8 @@ class World {
   }
 
   _tick() {
-    const cells = Object.values(this.cells)
-
     // First determine the action for all cells
-    for (const cell of cells) {
+    for (const cell of this.cells.values()) {
       const alive_neighbours = this.alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
@@ -33,7 +31,7 @@ class World {
     }
 
     // Then execute the determined action for all cells
-    for (const cell of cells) {
+    for (const cell of this.cells.values()) {
       cell.alive = cell.next_state
     }
 
@@ -78,7 +76,7 @@ class World {
   }
 
   prepopulate_neighbours() {
-    for (const cell of Object.values(this.cells)) {
+    for (const cell of this.cells.values()) {
       this.neighbours_around(cell)
     }
   }
@@ -89,12 +87,12 @@ class World {
     }
 
     const cell = new Cell(x, y, alive)
-    this.cells[`${x}-${y}`] = cell
+    this.cells.set(`${x}-${y}`, cell)
     return this.cell_at(x, y)
   }
 
   cell_at(x, y) {
-    return this.cells[`${x}-${y}`]
+    return this.cells.get(`${x}-${y}`)
   }
 
   neighbours_around(cell) {

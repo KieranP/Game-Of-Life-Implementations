@@ -5,14 +5,14 @@ export class World {
   public tick: number
   private width: number
   private height: number
-  private cells: {[key: string]: Cell}
+  private cells: Map<string, Cell>
   private cached_directions: number[][]
 
   public constructor(width: number, height: number) {
     this.width = width
     this.height = height
     this.tick = 0
-    this.cells = {}
+    this.cells = new Map()
     this.cached_directions = [
       [-1, 1],  [0, 1],  [1, 1], // above
       [-1, 0],           [1, 0], // sides
@@ -24,10 +24,8 @@ export class World {
   }
 
   public _tick(): void {
-    const cells = Object.values(this.cells)
-
     // First determine the action for all cells
-    for (const cell of cells) {
+    for (const cell of this.cells.values()) {
       const alive_neighbours = this.alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
@@ -39,7 +37,7 @@ export class World {
     }
 
     // Then execute the determined action for all cells
-    for (const cell of cells) {
+    for (const cell of this.cells.values()) {
       cell.alive = !!cell.next_state
     }
 
@@ -61,7 +59,7 @@ export class World {
     return rendering
 
     // The following works but is slower
-    // let rendering = []
+    // let rendering: Array<string> = []
     // for (let y = 0; y <= this.height; y++) {
     //   for (let x = 0; x <= this.width; x++) {
     //     const cell = this.cell_at(x, y)
@@ -82,7 +80,7 @@ export class World {
   }
 
   private prepopulate_neighbours(): void {
-    for (const cell of Object.values(this.cells)) {
+    for (const cell of this.cells.values()) {
       this.neighbours_around(cell)
     }
   }
@@ -93,12 +91,12 @@ export class World {
     }
 
     const cell = new Cell(x, y, alive)
-    this.cells[`${x}-${y}`] = cell
+    this.cells.set(`${x}-${y}`, cell)
     return this.cell_at(x, y)
   }
 
   private cell_at(x: number, y: number): Cell {
-    return this.cells[`${x}-${y}`]
+    return this.cells.get(`${x}-${y}`)!
   }
 
   private neighbours_around(cell: Cell): Cell[] {
@@ -127,25 +125,25 @@ export class World {
     //   return neighbour.alive
     // }).length
 
-    // The following was the fastest method
-    let alive_neighbours = 0
-    for (const neighbour of this.neighbours_around(cell)) {
-      if (neighbour.alive) {
-        alive_neighbours += 1
-      }
-    }
-    return alive_neighbours
-
     // The following works but is slower
     // let alive_neighbours = 0
-    // const neighbours = this.neighbours_around(cell)
-    // for (let i = 0; i < neighbours.length; i++) {
-    //   const neighbour = neighbours[i]
+    // for (const neighbour of this.neighbours_around(cell)) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
     //   }
     // }
     // return alive_neighbours
+
+    // The following was the fastest method
+    let alive_neighbours = 0
+    const neighbours = this.neighbours_around(cell)
+    for (let i = 0; i < neighbours.length; i++) {
+      const neighbour = neighbours[i]
+      if (neighbour.alive) {
+        alive_neighbours += 1
+      }
+    }
+    return alive_neighbours
   }
 
 }
