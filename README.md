@@ -64,27 +64,27 @@ All implementations are coded as similarly as possible using features available 
 
 **Note:** These speed results are taken on a Macbook Pro 15" Retina (Mid 2018), 2.6 GHz Intel Core i7, with 32 GB of 2400 MHz DDR4 RAM. The times were calculated by playing each simulation for long enough that the average tick time becomes stable (normally around 30s), and then grabbing the averages.
 
-| Place | Language   | Tick Avg | Render Avg |  Typed  | Notes                            |
-| :---- | :--------- | :------: | :--------: | :-----: | :------------------------------- |
-| 1st.  | Crystal    | 0.102ms  |  0.857ms   | Static  | Crystal 1.4.1                    |
-| 2nd.  | Dart       | 0.169ms  |  0.564ms   | Static  | Dart 2.17.3                      |
-| 3rd.  | Go         | 0.233ms  |  0.486ms   | Static  | Golang 1.18.3                    |
-| 4th.  | Kotlin     | 0.292ms  |  0.267ms   | Static  | Kotlin 1.6.21 (OpenJDK 18.0.1.1) |
-| 5th.  | C#         | 0.299ms  |  1.878ms   | Static  | Mono 6.12.0.122                  |
-| 6th.  | Java       | 0.305ms  |  0.271ms   | Static  | OpenJDK 18.0.1.1                 |
-| 6th.  | Typescript | 0.345ms  |  0.765ms   | Static  | Bun 0.4.0                        |
-| 7th.  | Scala      | 0.536ms  |  0.334ms   | Static  | Scala 2.13.8 (OpenJDK 18.0.1.1)  |
-| 8th.  | Javascript | 0.678ms  |  1.343ms   | Dynamic | Firefox 101.0                    |
-| 9th.  | Groovy     | 0.781ms  |  2.934ms   | Static  | Groovy 4.0.2 (OpenJDK 18.0.1.1)  |
-| 10th. | Nim        | 1.062ms  |  1.318ms   | Static  | Nim 1.6.6                        |
-| 11th. | Ruby       | 1.082ms  |  5.206ms   | Dynamic | TruffleRuby 22.1.0               |
-| 12th. | Javascript | 1.402ms  |  1.242ms   | Dynamic | Chromium 102                     |
-| 13th. | Swift      | 1.410ms  |  1.605ms   | Static  | Swift 5.6.1                      |
-| 14th. | Typescript | 1.591ms  |  0.664ms   | Static  | Deno 1.22.0                      |
-| 15th. | PHP        | 1.872ms  |  1.663ms   | Dynamic | PHP 8.1.6                        |
-| 16th. | Javascript | 2.151ms  |  0.881ms   | Static  | Node 18.2.0                      |
-| 17th. | Ruby       | 3.953ms  |  2.242ms   | Dynamic | JRuby 9.3.4.0                    |
-| 18th. | Ruby       | 4.016ms  |  3.045ms   | Dynamic | CRuby 3.1.2                      |
-| 19th. | Python     | 4.086ms  |  3.980ms   | Dynamic | Python 3.9.13                    |
-| 20th. | Lua        | 4.191ms  |  2.724ms   | Dynamic | Lua 5.4.4                        |
-| 21st. | Perl       | 10.689ms |  4.349ms   | Dynamic | Perl 5.34.0                      |
+| Place | Language   | Tick Avg | Render Avg |  Typed  | Interpreter/Runtime        |
+| :---- | :--------- | :------: | :--------: | :-----: | :------------------------- |
+| 1st.  | Crystal    | 0.102ms  |  0.956ms   | Static  | Crystal 1.7.2              |
+| 2nd.  | Typescript | 0.159ms  |  0.699ms   | Static  | Bun 0.5.6                  |
+| 3rd.  | Typescript | 0.172ms  |  0.526ms   | Static  | Node 19.6.1                |
+| 4th.  | Typescript | 0.177ms  |  0.491ms   | Static  | Deno 1.30.3                |
+| 5th.  | Dart       | 0.181ms  |  0.562ms   | Static  | Dart 2.19.0                |
+| 6th.  | Javascript | 0.226ms  |  1.082ms   | Dynamic | Chromium 110               |
+| 7th.  | Go         | 0.236ms  |  0.479ms   | Static  | Golang 1.19.6              |
+| 8th.  | Kotlin     | 0.293ms  |  0.256ms   | Static  | Kotlin 1.8.10 (JRE 19.0.2) |
+| 9th.  | Java       | 0.321ms  |  0.287ms   | Static  | JRE 19.0.2                 |
+| 10th. | C#         | 0.322ms  |  1.923ms   | Static  | Mono 6.12.0.182            |
+| 11th. | Scala      | 0.522ms  |  0.330ms   | Static  | Scala 3.2.2 (JRE 19.0.2)   |
+| 12th. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | TruffleRuby 22.3.1         |
+| 13th. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Firefox 110.0              |
+| 14th. | Nim        | 1.027ms  |  1.350ms   | Static  | Nim 1.6.10                 |
+| 15th. | Groovy     | 1.198ms  |  3.040ms   | Static  | Groovy 4.0.9 (JRE 19.0.2)  |
+| 16th. | Swift      | 1.406ms  |  1.591ms   | Static  | Swift 5.7.2                |
+| 17th. | PHP        | 1.817ms  |  1.626ms   | Dynamic | PHP 8.2.3                  |
+| 18th. | Python     | 2.261ms  |  2.813ms   | Dynamic | Python 3.11.2              |
+| 19th. | Ruby       | 3.430ms  |  2.586ms   | Dynamic | CRuby 3.2.1 (w/JIT)        |
+| 20th. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Lua 5.4.4                  |
+| 21st. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | JRuby 9.4.1.0 (JRE 19.0.2) |
+| 22nd. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Perl 5.36.0                |

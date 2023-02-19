@@ -7,5 +7,5 @@
 
 ## Usage
 
-* `scalac *.scala -opt:_`
+* `scalac *.scala`
 * `scala Play`
