@@ -1,9 +1,9 @@
 class World {
 
-  #width;
-  #height;
-  #cells;
-  #cached_directions;
+  #width
+  #height
+  #cells
+  #cached_directions
 
   constructor(width, height) {
     this.tick = 0
@@ -57,9 +57,9 @@ class World {
 
     // The following works but is slower
     // let rendering = []
-    // for (let y = 0; y <= this.height; y++) {
-    //   for (let x = 0; x <= this.width; x++) {
-    //     const cell = this.cell_at(x, y)
+    // for (let y = 0; y <= this.#height; y++) {
+    //   for (let x = 0; x <= this.#width; x++) {
+    //     const cell = this.#cell_at(x, y)
     //     rendering.push(cell.to_char().replace(' ', '&nbsp;'))
     //   }
     //   rendering.push("<br />")

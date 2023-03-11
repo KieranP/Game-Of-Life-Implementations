@@ -68,8 +68,8 @@ All implementations are coded as similarly as possible using features available 
 | :---- | :--------- | :------: | :--------: | :-----: | :------------------------- |
 | 1st.  | Crystal    | 0.102ms  |  0.956ms   | Static  | Crystal 1.7.2              |
 | 2nd.  | Typescript | 0.159ms  |  0.699ms   | Static  | Bun 0.5.6                  |
-| 3rd.  | Typescript | 0.172ms  |  0.526ms   | Static  | Node 19.6.1                |
-| 4th.  | Typescript | 0.177ms  |  0.491ms   | Static  | Deno 1.30.3                |
+| 3rd.  | Typescript | 0.161ms  |  0.514ms   | Static  | Deno 1.31.1                |
+| 4th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Node 19.6.1                |
 | 5th.  | Dart       | 0.181ms  |  0.562ms   | Static  | Dart 2.19.0                |
 | 6th.  | Javascript | 0.226ms  |  1.082ms   | Dynamic | Chromium 110               |
 | 7th.  | Go         | 0.236ms  |  0.479ms   | Static  | Golang 1.19.6              |

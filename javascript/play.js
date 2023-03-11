@@ -1,7 +1,7 @@
 class Play {
 
-  static #World_Width = 150;
-  static #World_Height = 40;
+  static #World_Width = 150
+  static #World_Height = 40
 
   static run() {
     const world = new World(

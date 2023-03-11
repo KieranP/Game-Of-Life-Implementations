@@ -7,7 +7,7 @@
 ## Usage (Deno)
 
 * `brew install deno`
-* `deno run play.ts`
+* `deno run --allow-hrtime play.ts`
 
 ## Usage (Bun)
 
