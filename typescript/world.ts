@@ -38,7 +38,7 @@ export class World {
 
     // Then execute the determined action for all cells
     for (const cell of this.cells.values()) {
-      cell.alive = !!cell.next_state
+      cell.alive = cell.next_state as boolean
     }
 
     this.tick += 1

@@ -1,9 +1,12 @@
 class Play {
 
+  static #World_Width = 150;
+  static #World_Height = 40;
+
   static run() {
     const world = new World(
-      Play.World_Width,
-      Play.World_Height,
+      Play.#World_Width,
+      Play.#World_Height,
     )
 
     const body = document.getElementsByTagName('body')[0]
@@ -29,21 +32,18 @@ class Play {
       const avg_render = (total_render / world.tick)
 
       let output = `#${world.tick}`
-      output += ` - World tick took ${Play._f(tick_time)} (${Play._f(avg_tick)})`
-      output += ` - Rendering took ${Play._f(render_time)} (${Play._f(avg_render)})`
+      output += ` - World tick took ${Play.#_f(tick_time)} (${Play.#_f(avg_tick)})`
+      output += ` - Rendering took ${Play.#_f(render_time)} (${Play.#_f(avg_render)})`
       output += `<br />${rendered}`
       body.innerHTML = output
     }, 0)
   }
 
-  static _f(value) {
+  static #_f(value) {
     // value is in milliseconds, no conversion needed
     return value.toFixed(3)
   }
 
 }
-
-Play.World_Width  = 150
-Play.World_Height = 40
 
 Play.run()
