@@ -10,53 +10,53 @@ All implementations are coded as similarly as possible using features available 
 
 ### Static Typed Languages
 
-| Feature                          | C#  | Crystal | Dart | Go  | Groovy | Java | Kotlin | Nim | Scala | Swift | TypeScript |
-| :------------------------------- | :-: | :-----: | :--: | :-: | :----: | :--: | :----: | :-: | :---: | :---: | :--------: |
-| Classes/Objects (Top Level)      |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Classes/Objects (Nested)         |  ✔  |    ✔    |  ✖   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
-| Class/Object Initializer         |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
-| Class/Object Methods             |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
-| Class/Object Method Visibility   |  ✔  |    ✔    |  ✔   |  ▵  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |
-| Class/Object Variables           |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
-| Class/Object Variable Visibility |  ✔  |    ✔    |  ✔   |  ▵  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |
-| Instance Methods                 |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Instance Method Visibility       |  ✔  |    ✔    |  ✔   |  ▵  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Instance Variables               |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Instance Variable Visibility     |  ✔  |    ✔    |  ✔   |  ▵  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Named Parameters/Arguments       |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✖   |   ✔    |  ✖  |   ✔   |   ✔   |     ✖      |
-| Default Parameters/Arguments     |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| semicolon optional               |  ✖  |    ✔    |  ✖   |  ✔  |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| return keyword optional          |  ✖  |    ✔    |  ✖   |  ✖  |   ✔    |  ✖   |   ✖    |  ✔  |   ✔   |   ✖   |     ✖      |
-| Looping over Array (value)       |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Looping over Hash (key/value)    |  ✔  |    ✔    |  ✔   |  ✔  |   ✖    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Custom Exceptions                |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |
-| Exceptions Must Be Caught        |  ✖  |    ✖    |  ✖   |  ✖  |   ✖    |  ✔   |   ✖    |  ✖  |   ✖   |   ✔   |     ✖      |
+| Feature                                   | C#  | Crystal | Dart | Go  | Groovy | Java | Kotlin | Nim | Scala | Swift | TypeScript |  V  |
+| :---------------------------------------- | :-: | :-----: | :--: | :-: | :----: | :--: | :----: | :-: | :---: | :---: | :--------: | :-: |
+| Classes/Structs (Top Level)               |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| Classes/Structs (Nested)                  |  ✔  |    ✔    |  ✖   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |  ✖  |
+| Class/Struct Methods                      |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |  ✖  |
+| Class/Struct Method Visibility            |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |  ✖  |
+| Class/Struct Variables                    |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |  ✖  |
+| Class/Struct Variable Visibility          |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✖   |     ✔      |  ✖  |
+| Class/Struct Instance Initializer         |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✖  |   ✔   |   ✔   |     ✔      |  ✖  |
+| Class/Struct Instance Methods             |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| Class/Struct Instance Method Visibility   |  ✔  |    ✔    |  ✔   |  ▵  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ▵  |
+| Class/Struct Instance Variables           |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| Class/Struct Instance Variable Visibility |  ✔  |    ✔    |  ✔   |  ▵  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ▵  |
+| Named Parameters/Arguments                |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✖   |   ✔    |  ✖  |   ✔   |   ✔   |     ✖      |  ✖  |
+| Default Parameters/Arguments              |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✖  |
+| semicolon optional                        |  ✖  |    ✔    |  ✖   |  ✔  |   ✔    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| return keyword optional                   |  ✖  |    ✔    |  ✖   |  ✖  |   ✔    |  ✖   |   ✖    |  ✔  |   ✔   |   ✖   |     ✖      |  ✖  |
+| Looping over Array (value)                |  ✔  |    ✔    |  ✔   |  ✔  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| Looping over Hash (key/value)             |  ✔  |    ✔    |  ✔   |  ✔  |   ✖    |  ✖   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| Custom Exceptions                         |  ✔  |    ✔    |  ✔   |  ✖  |   ✔    |  ✔   |   ✔    |  ✔  |   ✔   |   ✔   |     ✔      |  ✔  |
+| Exceptions Must Be Caught                 |  ✖  |    ✖    |  ✖   |  ✖  |   ✖    |  ✔   |   ✖    |  ✖  |   ✖   |   ✔   |     ✖      |  ✖  |
 
 ▵ visibility for package, not for object scope.
 
 ### Dynamic Typed Languages
 
-| Feature                          | Javascript | Lua | Perl | PHP | Python | Ruby |
-| :------------------------------- | :--------: | :-: | :--: | :-: | :----: | :--: |
-| Classes/Objects (Top Level)      |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Classes/Objects (Nested)         |     ✔      |  ✔  |  ✖   |  ✖  |   ✔    |  ✔   |
-| Class/Object Initializer         |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Class/Object Methods             |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Class/Object Method Visibility   |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
-| Class/Object Variables           |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Class/Object Variable Visibility |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
-| Instance Methods                 |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Instance Method Visibility       |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
-| Instance Variables               |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Instance Variable Visibility     |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
-| Named Parameters/Arguments       |     ✖      |  ✖  |  ✖   |  ✖  |   ✖    |  ✔   |
-| Default Parameters/Arguments     |     ✔      |  ✖  |  ✔   |  ✔  |   ✔    |  ✔   |
-| semicolon optional               |     ✔      |  ✔  |  ✖   |  ✖  |   ✔    |  ✔   |
-| return keyword optional          |     ✖      |  ✖  |  ✔   |  ✖  |   ✖    |  ✔   |
-| Looping over Array (value)       |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Looping over Hash (key/value)    |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
-| Custom Exceptions                |     ✔      |  ✔  |  ✖   |  ✔  |   ✔    |  ✔   |
-| Exceptions Must Be Caught        |     ✖      |  ✖  |  ✖   |  ✖  |   ✖    |  ✖   |
+| Feature                                   | Javascript | Lua | Perl | PHP | Python | Ruby |
+| :---------------------------------------- | :--------: | :-: | :--: | :-: | :----: | :--: |
+| Classes/Structs (Top Level)               |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Classes/Structs (Nested)                  |     ✔      |  ✔  |  ✖   |  ✖  |   ✔    |  ✔   |
+| Class/Struct Methods                      |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Struct Method Visibility            |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Class/Struct Variables                    |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Struct Variable Visibility          |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Class/Struct Instance Initializer         |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Struct Instance Methods             |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Struct Instance Method Visibility   |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Class/Struct Instance Variables           |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Class/Struct Instance Variable Visibility |     ✔      |  ✖  |  ✖   |  ✔  |   ✖    |  ✔   |
+| Named Parameters/Arguments                |     ✖      |  ✖  |  ✖   |  ✖  |   ✖    |  ✔   |
+| Default Parameters/Arguments              |     ✔      |  ✖  |  ✔   |  ✔  |   ✔    |  ✔   |
+| semicolon optional                        |     ✔      |  ✔  |  ✖   |  ✖  |   ✔    |  ✔   |
+| return keyword optional                   |     ✖      |  ✖  |  ✔   |  ✖  |   ✖    |  ✔   |
+| Looping over Array (value)                |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Looping over Hash (key/value)             |     ✔      |  ✔  |  ✔   |  ✔  |   ✔    |  ✔   |
+| Custom Exceptions                         |     ✔      |  ✔  |  ✖   |  ✔  |   ✔    |  ✔   |
+| Exceptions Must Be Caught                 |     ✖      |  ✖  |  ✖   |  ✖  |   ✖    |  ✖   |
 
 ## Speed Results (by tick time)
 
@@ -69,22 +69,23 @@ All implementations are coded as similarly as possible using features available 
 | 1st.  | Crystal    | 0.102ms  |  0.956ms   | Static  | Crystal 1.7.2              |
 | 2nd.  | Typescript | 0.159ms  |  0.699ms   | Static  | Bun 0.5.6                  |
 | 3rd.  | Typescript | 0.161ms  |  0.514ms   | Static  | Deno 1.31.1                |
-| 4th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Node 19.6.1                |
-| 5th.  | Dart       | 0.181ms  |  0.562ms   | Static  | Dart 2.19.0                |
-| 6th.  | Javascript | 0.226ms  |  1.082ms   | Dynamic | Chromium 110               |
-| 7th.  | Go         | 0.236ms  |  0.479ms   | Static  | Golang 1.19.6              |
-| 8th.  | Kotlin     | 0.293ms  |  0.256ms   | Static  | Kotlin 1.8.10 (JRE 19.0.2) |
-| 9th.  | Java       | 0.321ms  |  0.287ms   | Static  | JRE 19.0.2                 |
-| 10th. | C#         | 0.322ms  |  1.923ms   | Static  | Mono 6.12.0.182            |
-| 11th. | Scala      | 0.522ms  |  0.330ms   | Static  | Scala 3.2.2 (JRE 19.0.2)   |
-| 12th. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | TruffleRuby 22.3.1         |
-| 13th. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Firefox 110.0              |
-| 14th. | Nim        | 1.027ms  |  1.350ms   | Static  | Nim 1.6.10                 |
-| 15th. | Groovy     | 1.198ms  |  3.040ms   | Static  | Groovy 4.0.9 (JRE 19.0.2)  |
-| 16th. | Swift      | 1.406ms  |  1.591ms   | Static  | Swift 5.7.2                |
-| 17th. | PHP        | 1.817ms  |  1.626ms   | Dynamic | PHP 8.2.3                  |
-| 18th. | Python     | 2.261ms  |  2.813ms   | Dynamic | Python 3.11.2              |
-| 19th. | Ruby       | 3.430ms  |  2.586ms   | Dynamic | CRuby 3.2.1 (w/JIT)        |
-| 20th. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Lua 5.4.4                  |
-| 21st. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | JRuby 9.4.1.0 (JRE 19.0.2) |
-| 22nd. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Perl 5.36.0                |
+| 4th.  | V          | 0.166ms  |  1.554ms   | Static  | Vlang 0.3.3                |
+| 5th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Node 19.6.1                |
+| 6th.  | Dart       | 0.181ms  |  0.562ms   | Static  | Dart 2.19.0                |
+| 7th.  | Javascript | 0.226ms  |  1.082ms   | Dynamic | Chromium 110               |
+| 8th.  | Go         | 0.236ms  |  0.479ms   | Static  | Golang 1.19.6              |
+| 9th.  | Kotlin     | 0.293ms  |  0.256ms   | Static  | Kotlin 1.8.10 (JRE 19.0.2) |
+| 10th. | Java       | 0.321ms  |  0.287ms   | Static  | JRE 19.0.2                 |
+| 11th. | C#         | 0.322ms  |  1.923ms   | Static  | Mono 6.12.0.182            |
+| 12th. | Scala      | 0.522ms  |  0.330ms   | Static  | Scala 3.2.2 (JRE 19.0.2)   |
+| 13th. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | TruffleRuby 22.3.1         |
+| 14th. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Firefox 110.0              |
+| 15th. | Nim        | 1.027ms  |  1.350ms   | Static  | Nim 1.6.10                 |
+| 16th. | Groovy     | 1.198ms  |  3.040ms   | Static  | Groovy 4.0.9 (JRE 19.0.2)  |
+| 17th. | Swift      | 1.406ms  |  1.591ms   | Static  | Swift 5.7.2                |
+| 18th. | PHP        | 1.817ms  |  1.626ms   | Dynamic | PHP 8.2.3                  |
+| 19th. | Python     | 2.261ms  |  2.813ms   | Dynamic | Python 3.11.2              |
+| 20th. | Ruby       | 3.430ms  |  2.586ms   | Dynamic | CRuby 3.2.1 (w/JIT)        |
+| 21st. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Lua 5.4.4                  |
+| 22nd. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | JRuby 9.4.1.0 (JRE 19.0.2) |
+| 23rd. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Perl 5.36.0                |
