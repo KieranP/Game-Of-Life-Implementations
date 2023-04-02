@@ -85,7 +85,7 @@ class World
   end
 
   private def prepopulate_neighbours : Nil
-    @cells.each do |key, cell|
+    @cells.each do |(key, cell)|
       neighbours_around(cell)
     end
   end
@@ -115,12 +115,22 @@ class World
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   private def alive_neighbours_around(cell) : Int32
+    neighbours = neighbours_around(cell)
+
     # The following was the fastest method
-    neighbours_around(cell).count { |cell| cell.alive }
+    neighbours.count(&.alive)
 
     # The following works but is slower
     # alive_neighbours = 0
-    # neighbours_around(cell).each do |neighbour|
+    # neighbours.each do |neighbour|
+    #   alive_neighbours += 1 if neighbour.alive
+    # end
+    # alive_neighbours
+
+    # The following works but is slower
+    # alive_neighbours = 0
+    # 0.upto(neighbours.size-1) do |i|
+    #   neighbour = neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours

@@ -6,4 +6,4 @@
 
 ## Usage
 
-* `ruby play.rb`
+* `ruby --jit play.rb`

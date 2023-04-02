@@ -56,11 +56,14 @@ class World
     # rendering
 
     # The following was the fastest method
-    @height.times.collect { |y|
-      @width.times.collect { |x|
-        cell_at(x, y).to_char
-      }.join
-    }.join("\n")
+    rendering = []
+    @height.times.each { |y|
+      @width.times.each { |x|
+        rendering << cell_at(x, y).to_char
+      }
+      rendering << "\n"
+    }
+    rendering.join
 
     # The following works but it slower
     # rendering = StringIO.new
@@ -103,24 +106,25 @@ class World
 
   def neighbours_around(cell)
     cell.neighbours ||= begin
-      @cached_directions.collect { |rel_x, rel_y|
+      @cached_directions.filter_map { |rel_x, rel_y|
         cell_at(
           (cell.x + rel_x),
           (cell.y + rel_y)
         )
-      }.compact
+      }
     end
   end
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours_around(cell)
+    neighbours = neighbours_around(cell)
+
     # The following was the fastest method
-    neighbours_around(cell).count(&:alive)
+    neighbours.count(&:alive)
 
     # The following works but is slower
     # alive_neighbours = 0
-    # neighbours = neighbours_around(cell)
     # neighbours.each do |neighbour|
     #   alive_neighbours += 1 if neighbour.alive
     # end
@@ -128,7 +132,6 @@ class World
 
     # The following works but is slower
     # alive_neighbours = 0
-    # neighbours = neighbours_around(cell)
     # for i in 0...neighbours.size do
     #   neighbour = neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
