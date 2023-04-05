@@ -32,7 +32,7 @@ pub fn new_world(width int, height int) World {
 
 pub fn (mut w World) tick() {
   // First determine the action for all cells
-  for _, mut cell in mut w.cells {
+  for _, mut cell in w.cells {
     alive_neighbours := w.alive_neighbours_around(mut *cell)
     if !cell.alive && alive_neighbours == 3 {
       cell.next_state = true
@@ -44,7 +44,7 @@ pub fn (mut w World) tick() {
   }
 
   // Then execute the determined action for all cells
-  for _, mut cell in mut w.cells {
+  for _, mut cell in w.cells {
     cell.alive = cell.next_state
   }
 
