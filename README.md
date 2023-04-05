@@ -73,7 +73,7 @@ All implementations are coded as similarly as possible using features available 
 | 5th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Node 19.6.1                |
 | 6th.  | Dart       | 0.181ms  |  0.562ms   | Static  | Dart 2.19.0                |
 | 7th.  | Javascript | 0.226ms  |  1.082ms   | Dynamic | Chromium 110               |
-| 8th.  | Go         | 0.236ms  |  0.479ms   | Static  | Golang 1.19.6              |
+| 8th.  | Go         | 0.230ms  |  0.464ms   | Static  | Golang 1.20.3              |
 | 9th.  | Kotlin     | 0.293ms  |  0.256ms   | Static  | Kotlin 1.8.10 (JRE 19.0.2) |
 | 10th. | Java       | 0.321ms  |  0.287ms   | Static  | JRE 19.0.2                 |
 | 11th. | C#         | 0.322ms  |  1.923ms   | Static  | Mono 6.12.0.182            |

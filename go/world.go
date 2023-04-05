@@ -60,8 +60,8 @@ func (w *World) _tick() {
 func (w *World) render() string {
   // The following works but is slower
   // rendering := ""
-  // for y := 0; y <= w.height; y++ {
-  //   for x := 0; x <= w.width; x++ {
+  // for y := 0; y < w.height; y++ {
+  //   for x := 0; x < w.width; x++ {
   //     cell, _ := w.cell_at(x, y)
   //     rendering += string(cell.to_char())
   //   }
@@ -71,8 +71,8 @@ func (w *World) render() string {
 
   // The following works but is slower
   // rendering := []string{}
-  // for y := 0; y <= w.height; y++ {
-  //   for x := 0; x <= w.width; x++ {
+  // for y := 0; y < w.height; y++ {
+  //   for x := 0; x < w.width; x++ {
   //     cell, _ := w.cell_at(x, y)
   //     rendering = append(rendering, string(cell.to_char()))
   //   }
@@ -82,8 +82,9 @@ func (w *World) render() string {
 
   // The following was the fastest method
   var rendering = strings.Builder{}
-  for y := 0; y <= w.height; y++ {
-    for x := 0; x <= w.width; x++ {
+  rendering.Grow(w.width * w.height)
+  for y := 0; y < w.height; y++ {
+    for x := 0; x < w.width; x++ {
       cell, _ := w.cell_at(x, y)
       rendering.WriteRune(cell.to_char())
     }
@@ -95,8 +96,8 @@ func (w *World) render() string {
 func (w *World) populate_cells() {
   rand.Seed(time.Now().UnixNano())
 
-  for y := 0; y <= w.height; y++ {
-    for x := 0; x <= w.width; x++ {
+  for y := 0; y < w.height; y++ {
+    for x := 0; x < w.width; x++ {
       alive := rand.Intn(100) <= 20
       w.add_cell(x, y, alive)
     }
@@ -144,13 +145,26 @@ func (w *World) neighbours_around(cell *Cell) []*Cell {
 // Implement first using filter/lambda if available. Then implement
 // foreach and for. Use whatever implementation runs the fastest
 func (w *World) alive_neighbours_around(cell *Cell) int {
+  neighbours := w.neighbours_around(cell)
+
+  // The following was the fastest method
   alive_neighbours := 0
-  for _, neighbour := range w.neighbours_around(cell) {
+  for _, neighbour := range neighbours {
     if neighbour.alive {
       alive_neighbours++
     }
   }
   return alive_neighbours
+
+  // The following also works but is slower
+  // alive_neighbours := 0
+  // for i := 0; i < len(neighbours); i++ {
+  //   neighbour := neighbours[i]
+  //   if neighbour.alive {
+  //     alive_neighbours++
+  //   }
+  // }
+  // return alive_neighbours
 }
 
 type Cell struct {
