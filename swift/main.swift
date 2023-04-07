@@ -7,7 +7,7 @@ import Foundation
 let World_Width: Int  = 150
 let World_Height: Int = 40
 
-public class Play {
+private class Play {
 
   public class func run() -> Void {
     let world: World = World(

@@ -53,8 +53,8 @@ public class World {
   public func render() -> String {
     // The following was the fastest method
     var rendering = ""
-    for y in 0...height {
-      for x in 0...width {
+    for y in 0..<height {
+      for x in 0..<width {
         // The ! tells Swift to unwrap it from an Optional
         let cell: Cell = cell_at(x: x, y: y)!
         rendering += cell.to_char()
@@ -65,8 +65,8 @@ public class World {
 
     // The following works but is slower
     // var rendering: Array<String> = []
-    // for y in 0...height {
-    //   for x in 0...width {
+    // for y in 0..<height {
+    //   for x in 0..<width {
     //     // The ! tells Swift to unwrap it from an Optional
     //     let cell: Cell = cell_at(x: x, y: y)!
     //     rendering.append(cell.to_char())
@@ -77,8 +77,8 @@ public class World {
   }
 
   private func populate_cells() -> Void {
-    for y in 0...height {
-      for x in 0...width {
+    for y in 0..<height {
+      for x in 0..<width {
         let alive: Bool = (Int(arc4random_uniform(100)) <= 20)
         // without the _ =, Swift warns that the result is unused
         _ = add_cell(x: x, y: y, alive: alive)
@@ -140,13 +140,14 @@ public class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private func alive_neighbours_around(cell: Cell) -> Int {
+    let neighbours = neighbours_around(cell: cell)
+
     // The following works but is slower
-    // let neighbours = neighbours_around(cell: cell)
     // return neighbours.filter { $0.alive }.count
 
     // The following works but is slower
     // var alive_neighbours = 0;
-    // for neighbour in neighbours_around(cell: cell) {
+    // for neighbour in neighbours {
     //   if neighbour.alive {
     //     alive_neighbours += 1
     //   }
@@ -155,7 +156,6 @@ public class World {
 
     // The following was the fastest method
     var alive_neighbours = 0
-    let neighbours = neighbours_around(cell: cell)
     for i in 0 ..< neighbours.count {
       let neighbour = neighbours[i]
       if neighbour.alive {
@@ -167,7 +167,7 @@ public class World {
 
 }
 
-public class Cell {
+private class Cell {
 
   public var x: Int
   public var y: Int
