@@ -49,8 +49,8 @@ export class World {
   render(): string {
     // The following was the fastest method
     let rendering = ''
-    for (let y = 0; y <= this.#height; y++) {
-      for (let x = 0; x <= this.#width; x++) {
+    for (let y = 0; y < this.#height; y++) {
+      for (let x = 0; x < this.#width; x++) {
         const cell = this.#cell_at(x, y)
         rendering += cell.to_char()
       }
@@ -60,8 +60,8 @@ export class World {
 
     // The following works but is slower
     // let rendering: Array<string> = []
-    // for (let y = 0; y <= this.#height; y++) {
-    //   for (let x = 0; x <= this.#width; x++) {
+    // for (let y = 0; y < this.#height; y++) {
+    //   for (let x = 0; x < this.#width; x++) {
     //     const cell = this.#cell_at(x, y)
     //     rendering.push(cell.to_char())
     //   }
@@ -71,8 +71,8 @@ export class World {
   }
 
   #populate_cells(): void {
-    for (let y = 0; y <= this.#height; y++) {
-      for (let x = 0; x <= this.#width; x++) {
+    for (let y = 0; y < this.#height; y++) {
+      for (let x = 0; x < this.#width; x++) {
         const alive = (Math.random() <= 0.2)
         this.#add_cell(x, y, alive)
       }
@@ -119,15 +119,16 @@ export class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   #alive_neighbours_around(cell: Cell): number {
+    const neighbours = this.#neighbours_around(cell)
+
     // The following works but is slower
-    // const neighbours = this.#neighbours_around(cell)
     // return neighbours.filter(function(neighbour) {
     //   return neighbour.alive
     // }).length
 
     // The following works but is slower
     // let alive_neighbours = 0
-    // for (const neighbour of this.#neighbours_around(cell)) {
+    // for (const neighbour of neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
     //   }
@@ -136,7 +137,6 @@ export class World {
 
     // The following was the fastest method
     let alive_neighbours = 0
-    const neighbours = this.#neighbours_around(cell)
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i]
       if (neighbour.alive) {

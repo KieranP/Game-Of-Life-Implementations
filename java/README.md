@@ -6,6 +6,5 @@
 
 ## Usage
 
-* `export PATH="/usr/local/opt/openjdk/bin:$PATH"`
 * `javac *.java`
 * `java Play`

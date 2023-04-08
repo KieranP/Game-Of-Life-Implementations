@@ -50,8 +50,8 @@ class World {
   public function render() {
     // The following was the fastest method
     $rendering = '';
-    for ($y = 0; $y <= $this->height; $y++) {
-      for ($x = 0; $x <= $this->width; $x++) {
+    for ($y = 0; $y < $this->height; $y++) {
+      for ($x = 0; $x < $this->width; $x++) {
         $cell = $this->cell_at($x, $y);
         $rendering .= $cell->to_char();
       }
@@ -61,8 +61,8 @@ class World {
 
     // The following also works but is slower
     // $rendering = array();
-    // for ($y = 0; $y <= $this->height; $y++) {
-    //   for ($x = 0; $x <= $this->width; $x++) {
+    // for ($y = 0; $y < $this->height; $y++) {
+    //   for ($x = 0; $x < $this->width; $x++) {
     //     $cell = $this->cell_at($x, $y);
     //     $rendering[] = $cell->to_char();
     //   }
@@ -72,8 +72,8 @@ class World {
   }
 
   private function populate_cells() {
-    for ($y = 0; $y <= $this->height; $y++) {
-      for ($x = 0; $x <= $this->width; $x++) {
+    for ($y = 0; $y < $this->height; $y++) {
+      for ($x = 0; $x < $this->width; $x++) {
         $alive = (rand(0, 100) <= 20);
         $this->add_cell($x, $y, $alive);
       }
@@ -122,13 +122,13 @@ class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private function alive_neighbours_around($cell) {
+    $neighbours = $this->neighbours_around($cell);
+
     // The following works but is slower
-    // $neighbours = $this->neighbours_around($cell);
     // return count(array_filter($neighbours, function($n) { return $n->alive; }));
 
     // The following was the fastest method
     $alive_neighbours = 0;
-    $neighbours = $this->neighbours_around($cell);
     foreach ($neighbours as $neighbour) {
       if ($neighbour->alive) {
         $alive_neighbours++;
@@ -138,7 +138,6 @@ class World {
 
     // The following works but is slower
     // $alive_neighbours = 0;
-    // $neighbours = $this->neighbours_around($cell);
     // for ($i = 0; $i < count($neighbours); $i++) {
     //   $neighbour = $neighbours[$i];
     //   if ($neighbour->alive) {

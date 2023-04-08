@@ -77,8 +77,8 @@ proc tick(self: World) =
 proc render(self: World): string =
   # The following was the fastest method
   var rendering = ""
-  for y in 0..self.height:
-    for x in 0..self.width:
+  for y in 0..<self.height:
+    for x in 0..<self.width:
       let cell = self.cell_at(x, y)
       rendering &= cell.to_char()
     rendering &= "\n"
@@ -86,16 +86,16 @@ proc render(self: World): string =
 
   # The following works but it slower
   # var rendering: seq[string] = @[]
-  # for y in 0..self.height:
-  #   for x in 0..self.width:
+  # for y in 0..<self.height:
+  #   for x in 0..<self.width:
   #     let cell = self.cell_at(x, y)
   #     rendering.add(cell.to_char())
   #   rendering.add("\n")
   # join(rendering, "")
 
 proc populate_cells(self: World) =
-  for y in 0..self.height:
-    for x in 0..self.width:
+  for y in 0..<self.height:
+    for x in 0..<self.width:
       let alive = (rand(100) <= 20)
       discard self.add_cell(x, y, alive)
 
@@ -139,22 +139,23 @@ proc neighbours_around(self: World, cell: Cell): seq[Cell] =
 # Implement first using filter/lambda if available. Then implement
 # foreach and for. Use whatever implementation runs the fastest
 proc alive_neighbours_around(self: World, cell: Cell): int =
+  let neighbours = self.neighbours_around(cell)
+
   # The following works but is slower
   # filter(
-  #   self.neighbours_around(cell),
+  #   neighbours,
   #   proc(cell: Cell): bool = cell.alive
   # ).len
 
   # The following was the fastest method
   var alive_neighbours = 0
-  for neighbour in self.neighbours_around(cell):
+  for neighbour in neighbours:
     if neighbour.alive:
       alive_neighbours += 1
   alive_neighbours
 
   # The following works but is slower
   # var alive_neighbours = 0
-  # let neighbours = self.neighbours_around(cell)
   # for i in 0..<neighbours.len:
   #   let neighbour = neighbours[i]
   #   if neighbour.alive:

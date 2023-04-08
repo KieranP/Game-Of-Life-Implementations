@@ -47,8 +47,8 @@ class World {
   String render() {
     // The following works but is slower
     // var rendering = '';
-    // for (var y = 0; y <= this.height; y++) {
-    //   for (var x = 0; x <= this.width; x++) {
+    // for (var y = 0; y < this.height; y++) {
+    //   for (var x = 0; x < this.width; x++) {
     //     final cell = this._cell_at(x, y);
     //     if (cell != null) {
     //       rendering += cell.to_char();
@@ -60,8 +60,8 @@ class World {
 
     // The following was the fastest method
     var rendering = [];
-    for (var y = 0; y <= this.height; y++) {
-      for (var x = 0; x <= this.width; x++) {
+    for (var y = 0; y < this.height; y++) {
+      for (var x = 0; x < this.width; x++) {
         final cell = this._cell_at(x, y);
         if (cell != null) {
           rendering.add(cell.to_char());
@@ -73,8 +73,8 @@ class World {
 
     // The following works but is slower
     // var rendering = StringBuffer();
-    // for (var y = 0; y <= this.height; y++) {
-    //   for (var x = 0; x <= this.width; x++) {
+    // for (var y = 0; y < this.height; y++) {
+    //   for (var x = 0; x < this.width; x++) {
     //     final cell = this._cell_at(x, y);
     //     if (cell != null) {
     //       rendering.write(cell.to_char());
@@ -87,8 +87,8 @@ class World {
 
   void _populate_cells() {
     final rng = Random();
-    for (var y = 0; y <= this.height; y++) {
-      for (var x = 0; x <= this.width; x++) {
+    for (var y = 0; y < this.height; y++) {
+      for (var x = 0; x < this.width; x++) {
         final alive = (rng.nextDouble() <= 0.2);
         this._add_cell(x, y, alive);
       }
@@ -135,15 +135,15 @@ class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   int _alive_neighbours_around(Cell cell) {
+    final neighbours = this._neighbours_around(cell);
+
     // The following works but is slower
-    // final neighbours = this._neighbours_around(cell);
     // return neighbours!.where(
     //   (neighbour) => neighbour.alive
     // ).length;
 
     // The following was the fastest method
     var alive_neighbours = 0;
-    final neighbours = this._neighbours_around(cell);
     neighbours!.forEach((neighbour) {
       if (neighbour.alive) {
         alive_neighbours += 1;
@@ -153,7 +153,6 @@ class World {
 
     // The following also works but is slower
     // var alive_neighbours = 0;
-    // final neighbours = this._neighbours_around(cell);
     // for (var i = 0; i < neighbours!.length; i++) {
     //   final neighbour = neighbours[i];
     //   if (neighbour.alive) {

@@ -127,13 +127,13 @@ public class World(
   }
 
   private fun alive_neighbours_around(cell: Cell): Int {
+    val neighbours = neighbours_around(cell)
+
     // The following works but is slower
-    // val neighbours = neighbours_around(cell)
     // return neighbours.filter { it.alive }.size
 
     // The following works but is slower
     // var alive_neighbours = 0
-    // val neighbours = neighbours_around(cell)
     // for (neighbour in neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
@@ -143,7 +143,6 @@ public class World(
 
     // The following was the fastest method
     var alive_neighbours = 0
-    val neighbours = neighbours_around(cell)
     for (i in 0 until neighbours.size) {
       val neighbour = neighbours.get(i)
       if (neighbour.alive) {

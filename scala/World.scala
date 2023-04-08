@@ -49,8 +49,8 @@ class World(
     // The following works but is slower
     // var rendering = ""
     // var (x, y) = (0, 0)
-    // for (y <- 0 to height) {
-    //   for (x <- 0 to width) {
+    // for (y <- 0 until height) {
+    //   for (x <- 0 until width) {
     //     // get pulls the Cell out of an Option[]
     //     val cell = cell_at(x, y).get
     //     rendering += cell.to_char
@@ -62,8 +62,8 @@ class World(
     // The following works but is slower
     // var rendering = ArrayBuffer[String]()
     // var (x, y) = (0, 0)
-    // for (y <- 0 to height) {
-    //   for (x <- 0 to width) {
+    // for (y <- 0 until height) {
+    //   for (x <- 0 until width) {
     //     // get pulls the Cell out of an Option[]
     //     val cell = cell_at(x, y).get
     //     rendering += cell.to_char
@@ -75,8 +75,8 @@ class World(
     // The following was the fastest method
     val rendering = new StringBuilder()
     var (x, y) = (0, 0)
-    for (y <- 0 to height) {
-      for (x <- 0 to width) {
+    for (y <- 0 until height) {
+      for (x <- 0 until width) {
         // get pulls the Cell out of an Option[]
         val cell = cell_at(x, y).get
         rendering.append(cell.to_char)
@@ -88,8 +88,8 @@ class World(
 
   private def populate_cells = {
     var (x, y) = (0, 0)
-    for (y <- 0 to height) {
-      for (x <- 0 to width) {
+    for (y <- 0 until height) {
+      for (x <- 0 until width) {
         val alive = (Random.nextFloat() <= 0.2)
         add_cell(x, y, alive)
       }
@@ -138,12 +138,14 @@ class World(
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private def alive_neighbours_around(cell: Cell): Int = {
+    val neighbours = neighbours_around(cell)
+
     // The following works but is slower
-    // neighbours_around(cell).filter(_.alive).length
+    // neighbours.filter(_.alive).length
 
     // The following works but is slower
     // var alive_neighbours = 0
-    // for (neighbour <- neighbours_around(cell)) {
+    // for (neighbour <- neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
     //   }
@@ -152,7 +154,6 @@ class World(
 
     // The following was the fastest method
     var alive_neighbours = 0
-    val neighbours = neighbours_around(cell)
     for (i <- 0 until neighbours.length) {
       val neighbour = neighbours(i)
       if (neighbour.alive) {

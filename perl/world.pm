@@ -61,8 +61,8 @@ sub render {
 
   # The following was the fastest method
   my $rendering = "";
-  for my $y ((0..$self->{height})) {
-    for my $x ((0..$self->{width})) {
+  for my $y ((0..$self->{height}-1)) {
+    for my $x ((0..$self->{width}-1)) {
       my $cell = $self->cell_at($x, $y);
       $rendering .= $cell->to_char();
     }
@@ -72,8 +72,8 @@ sub render {
 
   # The following works but is slower
   # my @rendering = ();
-  # for my $y ((0..$self->{height})) {
-  #   for my $x ((0..$self->{width})) {
+  # for my $y ((0..$self->{height}-1)) {
+  #   for my $x ((0..$self->{width}-1)) {
   #     my $cell = $self->cell_at($x, $y);
   #     push(@rendering, $cell->to_char());
   #   }
@@ -85,8 +85,8 @@ sub render {
 sub populate_cells {
   my $self = shift;
 
-  for my $y ((0..$self->{height})) {
-    for my $x ((0..$self->{width})) {
+  for my $y ((0..$self->{height}-1)) {
+    for my $x ((0..$self->{width}-1)) {
       my $alive = rand() <= 0.2;
       $self->add_cell($x, $y, $alive);
     }
@@ -143,13 +143,13 @@ sub neighbours_around {
 sub alive_neighbours_around {
   my ($self, $cell) = @_;
 
-  # The following was the fastest method
   my $neighbours = $self->neighbours_around($cell);
+
+  # The following was the fastest method
   grep { $_->{alive} } @$neighbours;
 
   # The following also works but is slower
   # my $alive_neighbours = 0;
-  # my $neighbours = $self->neighbours_around($cell);
   # foreach my $neighbour (@$neighbours) {
   #   if ($neighbour->{alive}) {
   #     $alive_neighbours += 1;
@@ -159,7 +159,6 @@ sub alive_neighbours_around {
 
   # The following also works but is slower
   # my $alive_neighbours = 0;
-  # my $neighbours = $self->neighbours_around($cell);
   # for (my $i = 0; $i < @$neighbours; $i++) {
   #   my $neighbour = @$neighbours[$i];
   #   if ($neighbour->{alive}) {

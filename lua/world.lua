@@ -46,8 +46,8 @@ end
 function World:render()
   -- The following works but is slower
   -- rendering = ""
-  -- for y = 0, self.height do
-  --   for x = 0, self.width do
+  -- for y = 0, self.height-1 do
+  --   for x = 0, self.width-1 do
   --     cell = self:cell_at(x, y)
   --     rendering = rendering..cell:to_char()
   --   end
@@ -57,8 +57,8 @@ function World:render()
 
   -- The following was the fastest method
   rendering = {}
-  for y = 0, self.height do
-    for x = 0, self.width do
+  for y = 0, self.height-1 do
+    for x = 0, self.width-1 do
       cell = self:cell_at(x, y)
       table.insert(rendering, cell:to_char())
     end
@@ -70,8 +70,8 @@ end
 function World:populate_cells()
   math.randomseed(os.time())
 
-  for y = 0, self.height do
-    for x = 0, self.width do
+  for y = 0, self.height-1 do
+    for x = 0, self.width-1 do
       alive = (math.random() <= 0.2)
       self:add_cell(x, y, alive)
     end
@@ -116,9 +116,10 @@ end
 -- Implement first using filter/lambda if available. Then implement
 -- foreach and for. Use whatever implementation runs the fastest
 function World:alive_neighbours_around(cell)
+  neighbours = self:neighbours_around(cell)
+
   -- The following works but is slower
   -- alive_neighbours = 0
-  -- neighbours = self:neighbours_around(cell)
   -- for index,neighbour in pairs(neighbours) do
   --   if neighbour.alive then
   --     alive_neighbours = (alive_neighbours + 1)
@@ -128,7 +129,6 @@ function World:alive_neighbours_around(cell)
 
   -- The following was the fastest method
   alive_neighbours = 0
-  neighbours = self:neighbours_around(cell)
   for i = 1, #neighbours do
     neighbour = neighbours[i]
     if neighbour.alive then

@@ -57,8 +57,8 @@ public class World {
   public String render() {
     // The following works but is slower
     // String rendering = "";
-    // for (int y = 0; y <= height; y++) {
-    //   for (int x = 0; x <= width; x++) {
+    // for (int y = 0; y < height; y++) {
+    //   for (int x = 0; x < width; x++) {
     //     Cell cell = cell_at(x, y);
     //     rendering += cell.to_char();
     //   }
@@ -68,8 +68,8 @@ public class World {
 
     // The following works but is slower
     // ArrayList<String> rendering = new ArrayList<String>();
-    // for (int y = 0; y <= height; y++) {
-    //   for (int x = 0; x <= width; x++) {
+    // for (int y = 0; y < height; y++) {
+    //   for (int x = 0; x < width; x++) {
     //     Cell cell = cell_at(x, y);
     //     rendering.add(String.valueOf(cell.to_char()));
     //   }
@@ -79,8 +79,8 @@ public class World {
 
     // The following was the fastest method
     StringBuilder rendering = new StringBuilder();
-    for (int y = 0; y <= height; y++) {
-      for (int x = 0; x <= width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
         Cell cell = cell_at(x, y);
         rendering.append(cell.to_char());
       }
@@ -90,8 +90,8 @@ public class World {
   }
 
   private void populate_cells() {
-    for (int y = 0; y <= height; y++) {
-      for (int x = 0; x <= width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
         boolean alive = (Math.random() <= 0.2);
         add_cell(x, y, alive);
       }
@@ -147,15 +147,16 @@ public class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
+    ArrayList<Cell> neighbours = neighbours_around(cell);
+
     // The following works but is slower
-    // return neighbours_around(cell).stream().
+    // return neighbours.stream().
     //   filter(neighbour -> neighbour.alive).
     //   collect(Collectors.toList()).
     //   size();
 
     // The following works but is slower
     // int alive_neighbours = 0;
-    // ArrayList<Cell> neighbours = neighbours_around(cell);
     // for (Cell neighbour : neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
@@ -165,7 +166,6 @@ public class World {
 
     // The following was the fastest method
     int alive_neighbours = 0;
-    ArrayList<Cell> neighbours = neighbours_around(cell);
     for (int i = 0; i < neighbours.size(); i++) {
       Cell neighbour = neighbours.get(i);
       if (neighbour.alive) {

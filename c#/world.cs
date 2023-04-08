@@ -54,8 +54,8 @@ public class World {
   public string render() {
     // The following works but is slower
     // String rendering = "";
-    // for (int y = 0; y <= height; y++) {
-    //   for (int x = 0; x <= width; x++) {
+    // for (int y = 0; y < height; y++) {
+    //   for (int x = 0; x < width; x++) {
     //     Cell cell = cell_at(x, y);
     //     rendering += cell.to_char();
     //   }
@@ -65,8 +65,8 @@ public class World {
 
     // The following works but is slower
     // List<String> rendering = new List<String>();
-    // for (int y = 0; y <= height; y++) {
-    //   for (int x = 0; x <= width; x++) {
+    // for (int y = 0; y < height; y++) {
+    //   for (int x = 0; x < width; x++) {
     //     Cell cell = cell_at(x, y);
     //     rendering.Add(cell.to_char().ToString());
     //   }
@@ -76,8 +76,8 @@ public class World {
 
     // The following was the fastest method
     StringBuilder rendering = new StringBuilder();
-    for (int y = 0; y <= height; y++) {
-      for (int x = 0; x <= width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
         Cell cell = cell_at(x, y);
         rendering.Append(cell.to_char());
       }
@@ -88,8 +88,8 @@ public class World {
 
   private void populate_cells() {
     Random random = new Random();
-    for (int y = 0; y <= height; y++) {
-      for (int x = 0; x <= width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
         bool alive = (random.NextDouble() <= 0.2);
         add_cell(x, y, alive);
       }
@@ -141,15 +141,15 @@ public class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
+    List<Cell> neighbours = neighbours_around(cell);
+
     // The following works but is slower
-    // List<Cell> neighbours = neighbours_around(cell);
     // return neighbours.Where(
     //   (neighbour) => neighbour.alive
     // ).ToList().Count;
 
     // The following works but is slower
     // int alive_neighbours = 0;
-    // List<Cell> neighbours = neighbours_around(cell);
     // foreach (Cell neighbour in neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
@@ -159,7 +159,6 @@ public class World {
 
     // The following was the fastest method
     int alive_neighbours = 0;
-    List<Cell> neighbours = neighbours_around(cell);
     for (int i = 0; i < neighbours.Count; i++) {
       Cell neighbour = neighbours[i];
       if (neighbour.alive) {

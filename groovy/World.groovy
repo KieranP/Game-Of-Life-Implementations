@@ -49,8 +49,8 @@ public class World {
   public String render() {
     // The following works but is slower
     // String rendering = ""
-    // for (y in 0..height) {
-    //   for (x in 0..width) {
+    // for (y in 0..<height) {
+    //   for (x in 0..<width) {
     //     def cell = cell_at(x, y)
     //     rendering += cell.to_char()
     //   }
@@ -60,8 +60,8 @@ public class World {
 
     // The following works but is slower
     // def rendering = []
-    // for (y in 0..height) {
-    //   for (x in 0..width) {
+    // for (y in 0..<height) {
+    //   for (x in 0..<width) {
     //     def cell = cell_at(x, y)
     //     rendering.add(cell.to_char())
     //   }
@@ -71,8 +71,8 @@ public class World {
 
     // The following was the fastest method
     def rendering = new StringBuilder()
-    for (y in 0..height) {
-      for (x in 0..width) {
+    for (y in 0..<height) {
+      for (x in 0..<width) {
         def cell = cell_at(x, y)
         rendering.append(cell.to_char())
       }
@@ -82,8 +82,8 @@ public class World {
   }
 
   private void populate_cells() {
-    for (y in 0..height) {
-      for (x in 0..width) {
+    for (y in 0..<height) {
+      for (x in 0..<width) {
         def alive = (Math.random() <= 0.2)
         add_cell(x, y, alive)
       }
@@ -130,13 +130,13 @@ public class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private Integer alive_neighbours_around(Cell cell) {
+    def neighbours = neighbours_around(cell)
+
     // The following works but is slower
-    // def neighbours = neighbours_around(cell)
     // neighbours.count { it.alive }
 
     // The following was the fastest method
     def alive_neighbours = 0
-    def neighbours = neighbours_around(cell)
     for (neighbour in neighbours) {
       if (neighbour.alive) {
         alive_neighbours++
@@ -146,7 +146,6 @@ public class World {
 
     // The following works but is slower
     // def alive_neighbours = 0
-    // def neighbours = neighbours_around(cell)
     // for (i in 0..neighbours.size()-1) {
     //   def neighbour = neighbours.get(i)
     //   if (neighbour.alive) {
