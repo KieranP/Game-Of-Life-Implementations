@@ -2,6 +2,7 @@ package main
 
 import (
   "fmt"
+  "math/rand"
   "time"
 )
 
@@ -46,5 +47,8 @@ func run() {
 }
 
 func main() {
+  // Initialize the random seed generator
+  rand.Seed(time.Now().UnixNano())
+
   run()
 }

@@ -5,7 +5,6 @@ import (
   "math/rand"
   "strconv"
   "strings"
-  "time"
 )
 
 // GO doesn't have a concept of exception
@@ -94,8 +93,6 @@ func (w *World) render() string {
 }
 
 func (w *World) populate_cells() {
-  rand.Seed(time.Now().UnixNano())
-
   for y := 0; y < w.height; y++ {
     for x := 0; x < w.width; x++ {
       alive := rand.Intn(100) <= 20
