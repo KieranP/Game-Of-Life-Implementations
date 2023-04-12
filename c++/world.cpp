@@ -76,7 +76,7 @@ class World {
 
   private:
     int width, height;
-    map<string, Cell*> cells;
+    unordered_map<string, Cell*> cells;
     int cached_directions[8][2] = {
       {-1, 1},  {0, 1},  {1, 1},  // above
       {-1, 0},           {1, 0},  // sides

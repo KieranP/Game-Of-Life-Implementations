@@ -77,7 +77,7 @@ All implementations are coded as similarly as possible using features available 
 | 9th.  | Kotlin     | 0.293ms  |  0.256ms   | Static  | Kotlin 1.8.10 (JRE 19.0.2) |
 | 10th. | Java       | 0.321ms  |  0.287ms   | Static  | JRE 19.0.2                 |
 | 11th. | C#         | 0.322ms  |  1.923ms   | Static  | Mono 6.12.0.182            |
-| 12th. | C++        | 0.447ms  |  0.981ms   | Static  | Clang 14.0.3               |
+| 12th. | C++        | 0.447ms  |  0.591ms   | Static  | Clang 14.0.3               |
 | 13th. | Scala      | 0.522ms  |  0.330ms   | Static  | Scala 3.2.2 (JRE 19.0.2)   |
 | 14th. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | TruffleRuby 22.3.1         |
 | 15th. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Firefox 110.0              |
