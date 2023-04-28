@@ -50,6 +50,8 @@ class World {
       tick += 1;
     }
 
+    // Implement first using string concatenation. Then implement any
+    // special string builders, and use whatever runs the fastest
     string render() {
       // The following works but it slower
       // string rendering = "";
@@ -93,8 +95,7 @@ class World {
         }
 
       private:
-        int x;
-        int y;
+        int x, y;
     };
 
     void populate_cells() {
@@ -156,6 +157,8 @@ class World {
       return cell->neighbours;
     }
 
+    // Implement first using filter/lambda if available. Then implement
+    // foreach and for. Use whatever implementation runs the fastest
     int alive_neighbours_around(Cell* cell) {
       auto neighbours = neighbours_around(cell);
 
