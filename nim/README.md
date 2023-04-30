@@ -6,4 +6,5 @@
 
 ## Usage
 
-* `nim c -r -d:release --opt:speed play.nim`
+* `nim c -d:release play.nim`
+* `./play`

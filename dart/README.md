@@ -6,4 +6,5 @@
 
 ## Usage
 
-* `dart play.dart`
+* `dart compile exe -o play play.dart`
+* `./play`

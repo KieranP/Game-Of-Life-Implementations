@@ -136,7 +136,7 @@ class World {
     let alive_neighbours = 0
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i]
-      if (neighbour.alive) {
+      if (neighbour?.alive) {
         alive_neighbours += 1
       }
     }

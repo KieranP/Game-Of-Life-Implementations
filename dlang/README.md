@@ -6,10 +6,10 @@
 
 ## Usage (DMD)
 
-* `dmd -O *.d`
+* `dmd -O -release *.d`
 * `./play`
 
 # Usage (LDC)
 
-* `ldc2 -O *.d`
+* `ldc2 -O3 --release *.d`
 * `./play`

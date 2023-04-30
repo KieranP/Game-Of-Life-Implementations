@@ -104,8 +104,8 @@ export class World {
       cell.neighbours = new Array
       for (const set of this.#cached_directions) {
         const neighbour = this.#cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1])
+          (cell.x + set[0]!),
+          (cell.y + set[1]!)
         )
         if (neighbour != null) {
           cell.neighbours.push(neighbour)
@@ -139,7 +139,7 @@ export class World {
     let alive_neighbours = 0
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i]
-      if (neighbour.alive) {
+      if (neighbour?.alive) {
         alive_neighbours += 1
       }
     }

@@ -6,5 +6,5 @@
 
 ## Usage
 
-* `swiftc -O -whole-module-optimization *.swift -o play`
+* `swiftc -O -whole-module-optimization -o play *.swift`
 * `./play`

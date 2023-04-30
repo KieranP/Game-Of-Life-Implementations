@@ -7,5 +7,5 @@
 
 ## Usage
 
-* `v -o play -prod .`
+* `v -prod -o play .`
 * `./play`

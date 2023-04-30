@@ -3,19 +3,19 @@
 ## Installation
 
 * `brew install typescript`
+* `tsc`
 
 ## Usage (Deno)
 
 * `brew install deno`
-* `deno run --allow-hrtime play.ts`
+* `deno run --allow-hrtime play.js`
 
 ## Usage (Bun)
 
 * `curl -fsSL https://bun.sh/install | bash`
-* `bun run play.ts`
+* `bun run play.js`
 
 ## Usage (Node)
 
-* `tsc`
 * `brew install node`
 * `node play.js`

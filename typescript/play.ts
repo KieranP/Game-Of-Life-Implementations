@@ -1,4 +1,4 @@
-import {World} from './world.ts'
+import {World} from './world.js'
 
 class Play {
 

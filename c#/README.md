@@ -6,5 +6,5 @@
 
 ## Usage
 
-* `csc *.cs -optimize+`
+* `mcs -optimize+ *.cs`
 * `mono play.exe`

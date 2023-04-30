@@ -2,8 +2,12 @@
 
 ## Installation
 
-* `brew install python3`
+* `brew install python3 pypy3`
 
-## Usage
+## Usage (CPython)
 
-* `python3 -OO play.py`
+* `python3 play.py`
+
+## Usage (pypy3)
+
+* `pypy3 play.py`
