@@ -15,9 +15,9 @@ class World {
       prepopulate_neighbours();
     }
 
-    void _tick() {
+    auto _tick() {
       // First determine the action for all cells
-      foreach (cell; cells) {
+      foreach (ref cell; cells) {
         auto alive_neighbours = alive_neighbours_around(cell);
         if (!cell.alive && alive_neighbours == 3) {
           cell.next_state = true;
@@ -29,7 +29,7 @@ class World {
       }
 
       // Then execute the determined action for all cells
-      foreach (cell; cells) {
+      foreach (ref cell; cells) {
         cell.alive = cell.next_state;
       }
 
@@ -38,7 +38,7 @@ class World {
 
     // Implement first using string concatenation. Then implement any
     // special string builders, and use whatever runs the fastest
-    string render() {
+    auto render() {
       // The following was the fastest method
       string rendering = "";
       for (auto y = 0; y < height; y++) {
@@ -71,7 +71,7 @@ class World {
       [-1, -1], [0, -1], [1, -1], // below
     ];
 
-    class LocationOccupied: Exception {
+    static class LocationOccupied: Exception {
       public:
         this(uint x, uint y) {
           this.x = x;
@@ -85,7 +85,7 @@ class World {
         uint x, y;
     }
 
-    void populate_cells() {
+    auto populate_cells() {
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
           auto random = uniform01;
@@ -95,13 +95,13 @@ class World {
       }
     }
 
-    void prepopulate_neighbours() {
-      foreach (cell; cells) {
+    auto prepopulate_neighbours() {
+      foreach (ref cell; cells) {
         neighbours_around(cell);
       }
     }
 
-    Cell add_cell(int x, int y, bool alive = false) {
+    auto add_cell(int x, int y, bool alive = false) {
       if (cell_at(x, y)) {
         throw new LocationOccupied(x, y);
       }
@@ -112,14 +112,14 @@ class World {
       return cell;
     }
 
-    Cell cell_at(int x, int y) {
+    auto cell_at(int x, int y) {
       auto key = to!string(x)~"-"~to!string(y);
       return cells.get(key, null);
     }
 
-    Cell[] neighbours_around(Cell cell) {
+    auto neighbours_around(ref Cell cell) {
       if (cell.neighbours.length == 0) {
-        foreach (set; cached_directions) {
+        foreach (ref set; cached_directions) {
           auto neighbour = cell_at(
             (cell.x + set[0]),
             (cell.y + set[1])
@@ -136,7 +136,7 @@ class World {
 
     // Implement first using filter/lambda if available. Then implement
     // foreach and for. Use whatever implementation runs the fastest
-    uint alive_neighbours_around(Cell cell) {
+    auto alive_neighbours_around(ref Cell cell) {
       auto neighbours = neighbours_around(cell);
 
       // The following works but it slower
@@ -146,7 +146,7 @@ class World {
 
       // The following was the fastest method
       auto alive_neighbours = 0;
-      foreach (neighbour; neighbours) {
+      foreach (ref neighbour; neighbours) {
         if (neighbour.alive) {
           alive_neighbours++;
         }
@@ -165,7 +165,7 @@ class World {
     }
 }
 
-class Cell {
+private class Cell {
   public:
     uint x, y;
     bool alive;
@@ -178,7 +178,7 @@ class Cell {
       this.alive = alive;
     }
 
-    char to_char() {
+    auto to_char() {
       return alive ? 'o' : ' ';
     }
 }

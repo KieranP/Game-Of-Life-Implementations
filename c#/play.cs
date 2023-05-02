@@ -10,32 +10,32 @@ public class Play {
   }
 
   public static void run() {
-    World world = new World(
+    var world = new World(
       width: World_Width,
       height: World_Height
     );
 
     Console.WriteLine(world.render());
 
-    double total_tick = 0.0;
-    double total_render = 0.0;
+    var total_tick = 0.0;
+    var total_render = 0.0;
 
     while (true) {
-      DateTime tick_start = DateTime.Now;
+      var tick_start = DateTime.Now;
       world._tick();
-      DateTime tick_finish = DateTime.Now;
-      double tick_time = (tick_finish - tick_start).TotalMilliseconds;
+      var tick_finish = DateTime.Now;
+      var tick_time = (tick_finish - tick_start).TotalMilliseconds;
       total_tick += tick_time;
-      double avg_tick = (total_tick / world.tick);
+      var avg_tick = (total_tick / world.tick);
 
-      DateTime render_start = DateTime.Now;
-      string rendered = world.render();
-      DateTime render_finish = DateTime.Now;
-      double render_time = (render_finish - render_start).TotalMilliseconds;
+      var render_start = DateTime.Now;
+      var rendered = world.render();
+      var render_finish = DateTime.Now;
+      var render_time = (render_finish - render_start).TotalMilliseconds;
       total_render += render_time;
-      double avg_render = (total_render / world.tick);
+      var avg_render = (total_render / world.tick);
 
-      string output = $"#{world.tick}";
+      var output = $"#{world.tick}";
       output += $" - World tick took {_f(tick_time)} ({_f(avg_tick)})";
       output += $" - Rendering took {_f(render_time)} ({_f(avg_render)})";
       output += $"\n{rendered}";

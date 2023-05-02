@@ -30,8 +30,8 @@ public class World {
 
   public void _tick() {
     // First determine the action for all cells
-    foreach (Cell cell in cells.Values) {
-      int alive_neighbours = alive_neighbours_around(cell);
+    foreach (var cell in cells.Values) {
+      var alive_neighbours = alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -42,7 +42,7 @@ public class World {
     }
 
     // Then execute the determined action for all cells
-    foreach (Cell cell in cells.Values) {
+    foreach (var cell in cells.Values) {
       cell.alive = cell.next_state ?? false;
     }
 
@@ -53,10 +53,10 @@ public class World {
   // special string builders, and use whatever runs the fastest
   public string render() {
     // The following works but is slower
-    // String rendering = "";
-    // for (int y = 0; y < height; y++) {
-    //   for (int x = 0; x < width; x++) {
-    //     Cell cell = cell_at(x, y);
+    // var rendering = "";
+    // for (var y = 0; y < height; y++) {
+    //   for (var x = 0; x < width; x++) {
+    //     var cell = cell_at(x, y);
     //     rendering += cell.to_char();
     //   }
     //   rendering += "\n";
@@ -64,10 +64,10 @@ public class World {
     // return rendering;
 
     // The following works but is slower
-    // List<String> rendering = new List<String>();
-    // for (int y = 0; y < height; y++) {
-    //   for (int x = 0; x < width; x++) {
-    //     Cell cell = cell_at(x, y);
+    // var rendering = new List<String>();
+    // for (var y = 0; y < height; y++) {
+    //   for (var x = 0; x < width; x++) {
+    //     var cell = cell_at(x, y);
     //     rendering.Add(cell.to_char().ToString());
     //   }
     //   rendering.Add("\n");
@@ -75,10 +75,10 @@ public class World {
     // return String.Join("", rendering.ToArray());
 
     // The following was the fastest method
-    StringBuilder rendering = new StringBuilder();
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        Cell cell = cell_at(x, y);
+    var rendering = new StringBuilder();
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        var cell = cell_at(x, y);
         rendering.Append(cell.to_char());
       }
       rendering.Append("\n");
@@ -87,17 +87,17 @@ public class World {
   }
 
   private void populate_cells() {
-    Random random = new Random();
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        bool alive = (random.NextDouble() <= 0.2);
+    var random = new Random();
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        var alive = (random.NextDouble() <= 0.2);
         add_cell(x, y, alive);
       }
     }
   }
 
   private void prepopulate_neighbours() {
-    foreach (Cell cell in cells.Values) {
+    foreach (var cell in cells.Values) {
       neighbours_around(cell);
     }
   }
@@ -107,13 +107,13 @@ public class World {
       throw new LocationOccupied();
     }
 
-    Cell cell = new Cell(x, y, alive);
+    var cell = new Cell(x, y, alive);
     cells.Add($"{x}-{y}", cell);
     return cell_at(x, y);
   }
 
   private Cell cell_at(int x, int y) {
-    string key = $"{x}-{y}";
+    var key = $"{x}-{y}";
     if (cells.ContainsKey(key)) {
       return cells[key];
     } else {
@@ -124,11 +124,12 @@ public class World {
   private List<Cell> neighbours_around(Cell cell) {
     if (cell.neighbours == null) {
       cell.neighbours = new List<Cell>();
-      foreach (int[] set in cached_directions) {
-        Cell neighbour = cell_at(
+      foreach (var set in cached_directions) {
+        var neighbour = cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
         );
+
         if (neighbour != null) {
           cell.neighbours.Add(neighbour);
         }
@@ -141,7 +142,7 @@ public class World {
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
-    List<Cell> neighbours = neighbours_around(cell);
+    var neighbours = neighbours_around(cell);
 
     // The following works but is slower
     // return neighbours.Where(
@@ -149,8 +150,8 @@ public class World {
     // ).ToList().Count;
 
     // The following works but is slower
-    // int alive_neighbours = 0;
-    // foreach (Cell neighbour in neighbours) {
+    // var alive_neighbours = 0;
+    // foreach (var neighbour in neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
     //   }
@@ -158,9 +159,9 @@ public class World {
     // return alive_neighbours;
 
     // The following was the fastest method
-    int alive_neighbours = 0;
-    for (int i = 0; i < neighbours.Count; i++) {
-      Cell neighbour = neighbours[i];
+    var alive_neighbours = 0;
+    for (var i = 0; i < neighbours.Count; i++) {
+      var neighbour = neighbours[i];
       if (neighbour.alive) {
         alive_neighbours++;
       }

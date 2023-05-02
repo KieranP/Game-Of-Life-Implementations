@@ -80,7 +80,7 @@ func (w *World) render() string {
   // return strings.Join(rendering, "")
 
   // The following was the fastest method
-  var rendering = strings.Builder{}
+  rendering := strings.Builder{}
   rendering.Grow(w.width * w.height)
   for y := 0; y < w.height; y++ {
     for x := 0; x < w.width; x++ {

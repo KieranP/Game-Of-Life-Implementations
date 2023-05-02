@@ -23,7 +23,7 @@ export class World {
     this.#prepopulate_neighbours()
   }
 
-  _tick(): void {
+  _tick() {
     // First determine the action for all cells
     for (const cell of this.#cells.values()) {
       const alive_neighbours = this.#alive_neighbours_around(cell)
@@ -46,7 +46,7 @@ export class World {
 
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
-  render(): string {
+  render() {
     // The following was the fastest method
     let rendering = ''
     for (let y = 0; y < this.#height; y++) {
@@ -70,7 +70,7 @@ export class World {
     // return rendering.join("")
   }
 
-  #populate_cells(): void {
+  #populate_cells() {
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
         const alive = (Math.random() <= 0.2)
@@ -79,13 +79,13 @@ export class World {
     }
   }
 
-  #prepopulate_neighbours(): void {
+  #prepopulate_neighbours() {
     for (const cell of this.#cells.values()) {
       this.#neighbours_around(cell)
     }
   }
 
-  #add_cell(x: number, y: number, alive: boolean = false): Cell {
+  #add_cell(x: number, y: number, alive: boolean = false) {
     if (this.#cell_at(x, y) != null) {
       throw new LocationOccupied
     }
@@ -95,11 +95,11 @@ export class World {
     return this.#cell_at(x, y)
   }
 
-  #cell_at(x: number, y: number): Cell {
+  #cell_at(x: number, y: number) {
     return this.#cells.get(`${x}-${y}`)!
   }
 
-  #neighbours_around(cell: Cell): Cell[] {
+  #neighbours_around(cell: Cell) {
     if (cell.neighbours == null) {
       cell.neighbours = new Array
       for (const set of this.#cached_directions) {
@@ -118,7 +118,7 @@ export class World {
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
-  #alive_neighbours_around(cell: Cell): number {
+  #alive_neighbours_around(cell: Cell) {
     const neighbours = this.#neighbours_around(cell)
 
     // The following works but is slower
@@ -164,7 +164,7 @@ class Cell {
     this.neighbours = null
   }
 
-  to_char(): string {
+  to_char() {
     return (this.alive ? 'o' : ' ')
   }
 

@@ -2,10 +2,10 @@ import {World} from './world.js'
 
 class Play {
 
-  static #World_Width: number = 150
-  static #World_Height: number = 40
+  static #World_Width = 150
+  static #World_Height = 40
 
-  public static run(): void {
+  public static run() {
     const world = new World(
       Play.#World_Width,
       Play.#World_Height,
@@ -13,20 +13,20 @@ class Play {
 
     console.log(world.render())
 
-    let total_tick: number = 0
-    let total_render: number = 0
+    let total_tick = 0
+    let total_render = 0
 
     while(true) {
-      const tick_start: number = performance.now()
+      const tick_start = performance.now()
       world._tick()
-      const tick_finish: number = performance.now()
+      const tick_finish = performance.now()
       const tick_time = (tick_finish - tick_start)
       total_tick += tick_time
       const avg_tick = (total_tick / world.tick)
 
-      const render_start: number = performance.now()
+      const render_start = performance.now()
       const rendered = world.render()
-      const render_finish: number = performance.now()
+      const render_finish = performance.now()
       const render_time = (render_finish - render_start)
       total_render += render_time
       const avg_render = (total_render / world.tick)
@@ -40,7 +40,7 @@ class Play {
     }
   }
 
-  static #_f(value: number): string {
+  static #_f(value: number) {
     // value is in milliseconds, no conversion needed
     return value.toFixed(3)
   }

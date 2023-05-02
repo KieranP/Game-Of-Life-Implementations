@@ -45,7 +45,7 @@ class World(
 
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
-  def render: String = {
+  def render = {
     // The following works but is slower
     // var rendering = ""
     // var (x, y) = (0, 0)
@@ -102,7 +102,7 @@ class World(
     }
   }
 
-  private def add_cell(x: Int, y: Int, alive: Boolean = false): Cell = {
+  private def add_cell(x: Int, y: Int, alive: Boolean = false) = {
     if (cell_at(x, y) != None) { // Must return a boolean
       throw new LocationOccupied()
     }
@@ -113,11 +113,11 @@ class World(
     cell_at(x, y).get
   }
 
-  private def cell_at(x: Int, y: Int): Option[Cell] = {
+  private def cell_at(x: Int, y: Int) = {
     cells.get(s"$x-$y")
   }
 
-  private def neighbours_around(cell: Cell): ArrayBuffer[Cell] = {
+  private def neighbours_around(cell: Cell) = {
     if (cell.neighbours == null) { // Must return a boolean
       cell.neighbours = ArrayBuffer[Cell]()
       for (set <- cached_directions) {
@@ -137,7 +137,7 @@ class World(
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
-  private def alive_neighbours_around(cell: Cell): Int = {
+  private def alive_neighbours_around(cell: Cell) = {
     val neighbours = neighbours_around(cell)
 
     // The following works but is slower
@@ -174,7 +174,7 @@ class Cell(
   var next_state: Option[Boolean] = None
   var neighbours: ArrayBuffer[Cell] = null
 
-  def to_char: String = {
+  def to_char = {
     if (alive) "o" else " "
   }
 

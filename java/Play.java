@@ -11,32 +11,32 @@ public class Play {
   }
 
   public static void run() {
-    World world = new World(
+    var world = new World(
       World_Width,
       World_Height
     );
 
     System.out.println(world.render());
 
-    double total_tick = 0.0;
-    double total_render = 0.0;
+    var total_tick = 0.0;
+    var total_render = 0.0;
 
     while (true) {
-      double tick_start = System.nanoTime();
+      var tick_start = System.nanoTime();
       world._tick();
-      double tick_finish = System.nanoTime();
-      double tick_time = (tick_finish - tick_start) / 1d;
+      var tick_finish = System.nanoTime();
+      var tick_time = (tick_finish - tick_start) / 1d;
       total_tick += tick_time;
-      double avg_tick = (total_tick / world.tick);
+      var avg_tick = (total_tick / world.tick);
 
-      double render_start = System.nanoTime();
-      String rendered = world.render();
-      double render_finish = System.nanoTime();
-      double render_time = (render_finish - render_start) / 1d;
+      var render_start = System.nanoTime();
+      var rendered = world.render();
+      var render_finish = System.nanoTime();
+      var render_time = (render_finish - render_start) / 1d;
       total_render += render_time;
-      double avg_render = (total_render / world.tick);
+      var avg_render = (total_render / world.tick);
 
-      String output = "#"+world.tick;
+      var output = "#"+world.tick;
       output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")";
       output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")";
       output += "\n"+rendered;

@@ -12,12 +12,12 @@ class World
              [-1, -1], [0, -1], [1, -1] # below
            ]
 
-  def initialize(@width : Int32, @height : Int32) : Nil
+  def initialize(@width : Int32, @height : Int32)
     populate_cells
     prepopulate_neighbours
   end
 
-  def _tick : Nil
+  def _tick
     # First determine the action for all cells
     @cells.each do |(key, cell)|
       alive_neighbours = alive_neighbours_around(cell)
@@ -40,7 +40,7 @@ class World
 
   # Implement first using string concatenation. Then implement any
   # special string builders, and use whatever runs the fastest
-  def render : String
+  def render
     # The following works but it slower
     # rendering = ""
     # @height.times.each { |y|
@@ -75,7 +75,7 @@ class World
     # end
   end
 
-  private def populate_cells : Nil
+  private def populate_cells
     @height.times do |y|
       @width.times do |x|
         alive = (rand <= 0.2)
@@ -84,24 +84,24 @@ class World
     end
   end
 
-  private def prepopulate_neighbours : Nil
+  private def prepopulate_neighbours
     @cells.each do |(key, cell)|
       neighbours_around(cell)
     end
   end
 
-  private def add_cell(x : Int32, y : Int32, alive : Bool = false) : Cell
+  private def add_cell(x : Int32, y : Int32, alive : Bool = false)
     raise LocationOccupied.new if cell_at(x, y)
     cell = Cell.new(x, y, alive)
     @cells["#{x}-#{y}"] = cell
     cell_at(x, y).not_nil!
   end
 
-  private def cell_at(x : Int32, y : Int32) : (Cell | Nil)
+  private def cell_at(x : Int32, y : Int32)
     @cells["#{x}-#{y}"]?
   end
 
-  private def neighbours_around(cell : Cell) : Array(Cell)
+  private def neighbours_around(cell : Cell)
     cell.neighbours ||= begin
       @cached_directions.compact_map { |(rel_x, rel_y)|
         cell_at(
@@ -114,7 +114,7 @@ class World
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
-  private def alive_neighbours_around(cell) : Int32
+  private def alive_neighbours_around(cell)
     neighbours = neighbours_around(cell)
 
     # The following was the fastest method
@@ -146,10 +146,10 @@ class Cell
            next_state : (Bool | Nil) = nil,
            neighbours : (Array(Cell) | Nil) = nil
 
-  def initialize(@x : Int32, @y : Int32, @alive : Bool = false) : Nil
+  def initialize(@x : Int32, @y : Int32, @alive : Bool = false)
   end
 
-  def to_char : String
+  def to_char
     @alive ? "o" : " "
   end
 

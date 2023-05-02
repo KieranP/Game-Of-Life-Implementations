@@ -24,14 +24,14 @@ class Play {
       def tick_finish = System.nanoTime()
       def tick_time = (tick_finish - tick_start) / 1d
       total_tick += tick_time
-      def avg_tick = (total_tick / world.tick)
+      def avg_tick = (total_tick / world.tick).doubleValue()
 
       def render_start = System.nanoTime()
       def rendered = world.render()
       def render_finish = System.nanoTime()
       def render_time = (render_finish - render_start) / 1d
       total_render += render_time
-      def avg_render = (total_render / world.tick)
+      def avg_render = (total_render / world.tick).doubleValue()
 
       def output = "#"+world.tick
       output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")"

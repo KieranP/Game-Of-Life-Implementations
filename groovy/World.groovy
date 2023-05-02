@@ -48,7 +48,7 @@ public class World {
   // special string builders, and use whatever runs the fastest
   public String render() {
     // The following works but is slower
-    // String rendering = ""
+    // def rendering = ""
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
     //     def cell = cell_at(x, y)
@@ -102,12 +102,12 @@ public class World {
     }
 
     def cell = new Cell(x, y, alive)
-    cells["${x}-${y}"] = cell
+    cells["${x}-${y}".toString()] = cell
     cell_at(x, y)
   }
 
   private Cell cell_at(int x, int y) {
-    cells["${x}-${y}"]
+    cells["${x}-${y}".toString()]
   }
 
   private ArrayList<Cell> neighbours_around(Cell cell) {
@@ -118,6 +118,7 @@ public class World {
           (cell.x + set[0]),
           (cell.y + set[1])
         )
+
         if (neighbour != null) {
           cell.neighbours.add(neighbour)
         }
@@ -173,7 +174,7 @@ class Cell {
     this.neighbours = null
   }
 
-  public char to_char() {
+  public String to_char() {
     alive ? 'o' : ' '
   }
 

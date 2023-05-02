@@ -4,13 +4,13 @@
 import Foundation
 
 // Swift doesn't support class constants so declare them here
-let World_Width: Int  = 150
-let World_Height: Int = 40
+let World_Width  = 150
+let World_Height = 40
 
 private class Play {
 
   public class func run() -> Void {
-    let world: World = World(
+    let world = World(
       width: World_Width,
       height: World_Height
     )

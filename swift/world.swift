@@ -30,7 +30,7 @@ public class World {
   public func _tick() -> Void {
     // First determine the action for all cells
     for (_, cell) in cells {
-      let alive_neighbours: Int = alive_neighbours_around(cell: cell)
+      let alive_neighbours = alive_neighbours_around(cell: cell)
       if !cell.alive && alive_neighbours == 3 {
         cell.next_state = true
       } else if alive_neighbours < 2 || alive_neighbours > 3 {
@@ -56,7 +56,7 @@ public class World {
     for y in 0..<height {
       for x in 0..<width {
         // The ! tells Swift to unwrap it from an Optional
-        let cell: Cell = cell_at(x: x, y: y)!
+        let cell = cell_at(x: x, y: y)!
         rendering += cell.to_char()
       }
       rendering += "\n"
@@ -68,7 +68,7 @@ public class World {
     // for y in 0..<height {
     //   for x in 0..<width {
     //     // The ! tells Swift to unwrap it from an Optional
-    //     let cell: Cell = cell_at(x: x, y: y)!
+    //     let cell = cell_at(x: x, y: y)!
     //     rendering.append(cell.to_char())
     //   }
     //   rendering.append("\n")
@@ -79,7 +79,7 @@ public class World {
   private func populate_cells() -> Void {
     for y in 0..<height {
       for x in 0..<width {
-        let alive: Bool = (Int(arc4random_uniform(100)) <= 20)
+        let alive = (Int(arc4random_uniform(100)) <= 20)
         // without the _ =, Swift warns that the result is unused
         _ = add_cell(x: x, y: y, alive: alive)
       }
