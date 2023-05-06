@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <sstream>
 
 using namespace std;
@@ -132,10 +132,9 @@ class World {
 
     optional<Cell*> cell_at(int x, int y) {
       auto key = to_string(x)+"-"+to_string(y);
-      auto cell = cells.find(key);
-      if (cell != cells.end()) {
-        return cell->second;
-      } else {
+      try {
+        return cells.at(key);
+      } catch(const out_of_range &e) {
         return nullopt;
       }
     }
@@ -168,7 +167,7 @@ class World {
 
       // The following was the fastest method
       auto alive_neighbours = 0;
-      for (auto neighbour : neighbours) {
+      for (auto& neighbour : neighbours) {
         if (neighbour->alive) {
           alive_neighbours++;
         }

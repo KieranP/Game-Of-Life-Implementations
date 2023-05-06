@@ -31,7 +31,7 @@ All implementations are coded as similarly as possible using features available 
 | 11th. | Kotlin     | 0.293ms  |  0.270ms   | Static  | Interpreted | Kotlin 1.8.21 (JRE 20)     |
 | 12th. | C#         | 0.298ms  |  1.847ms   | Static  | Interpreted | Mono 6.12.0.182            |
 | 13th. | D          | 0.298ms  |  2.565ms   | Static  | Native      | DLang 2.103.0 (DMD)        |
-| 14th. | C++        | 0.426ms  |  0.591ms   | Static  | Native      | Clang 14.0.3               |
+| 14th. | C++        | 0.420ms  |  0.591ms   | Static  | Native      | Clang 14.0.3               |
 | 15th. | PHP        | 0.463ms  |  1.126ms   | Dynamic | Interpreted | PHP 8.2.5 (w/JIT)          |
 | 16th. | Scala      | 0.503ms  |  0.331ms   | Static  | Interpreted | Scala 3.2.2 (JRE 20)       |
 | 17th. | Python     | 0.578ms  |  0.683ms   | Dynamic | Interpreted | PyPy 7.3.9                 |
