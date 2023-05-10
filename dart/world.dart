@@ -115,7 +115,7 @@ class World {
     return this._cells["$x-$y"];
   }
 
-  List<Cell>? _neighbours_around(Cell cell) {
+  List<Cell> _neighbours_around(Cell cell) {
     if (cell.neighbours == null) { // Must return a boolean
       cell.neighbours = [];
       for (final set in this._cached_directions) {
@@ -123,13 +123,14 @@ class World {
           (cell.x + set[0]),
           (cell.y + set[1])
         );
+
         if (neighbour != null) {
-          cell.neighbours?.add(neighbour);
+          cell.neighbours!.add(neighbour);
         }
       }
     }
 
-    return cell.neighbours;
+    return cell.neighbours!;
   }
 
   // Implement first using filter/lambda if available. Then implement
@@ -138,13 +139,13 @@ class World {
     final neighbours = this._neighbours_around(cell);
 
     // The following works but is slower
-    // return neighbours!.where(
+    // return neighbours.where(
     //   (neighbour) => neighbour.alive
     // ).length;
 
     // The following was the fastest method
     var alive_neighbours = 0;
-    neighbours!.forEach((neighbour) {
+    neighbours.forEach((neighbour) {
       if (neighbour.alive) {
         alive_neighbours += 1;
       }
@@ -153,7 +154,7 @@ class World {
 
     // The following also works but is slower
     // var alive_neighbours = 0;
-    // for (var i = 0; i < neighbours!.length; i++) {
+    // for (var i = 0; i < neighbours.length; i++) {
     //   final neighbour = neighbours[i];
     //   if (neighbour.alive) {
     //     alive_neighbours += 1;
