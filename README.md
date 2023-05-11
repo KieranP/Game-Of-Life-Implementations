@@ -19,9 +19,9 @@ All implementations are coded as similarly as possible using features available 
 | Place | Language   | Tick Avg | Render Avg | Typed   | Execution   | Interpreter/Runtime        |
 | :---- | :--------- | :------: | :--------: | :------ | :---------- | :------------------------- |
 | 1st.  | Crystal    | 0.102ms  |  0.956ms   | Static  | Native      | Crystal 1.7.2              |
-| 2nd.  | Typescript | 0.159ms  |  0.699ms   | Static  | Interpreted | Bun 0.5.6                  |
-| 3rd.  | Typescript | 0.161ms  |  0.514ms   | Static  | Interpreted | Deno 1.31.1                |
-| 4th.  | Dart       | 0.161ms  |  0.627ms   | Static  | Native      | Dart 2.19.0                |
+| 2nd.  | Dart       | 0.154ms  |  0.615ms   | Static  | Native      | Dart 3.0.0                 |
+| 3rd.  | Typescript | 0.159ms  |  0.699ms   | Static  | Interpreted | Bun 0.5.6                  |
+| 4th.  | Typescript | 0.161ms  |  0.514ms   | Static  | Interpreted | Deno 1.31.1                |
 | 5th.  | V          | 0.166ms  |  1.554ms   | Static  | Native      | Vlang 0.3.3                |
 | 6th.  | D          | 0.167ms  |  1.165ms   | Static  | Native      | DLang 2.102.2 (LDC 1.32.0) |
 | 7th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Interpreted | Node 19.6.1                |
