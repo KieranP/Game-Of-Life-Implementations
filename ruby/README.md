@@ -4,10 +4,18 @@
 
 * `brew install ruby`
 
-## Usage (without JIT)
+## Usage (CRuby, without JIT)
 
 * `ruby play.rb`
 
-## Usage (with JIT)
+## Usage (CRuby, with JIT)
 
 * `ruby --jit play.rb`
+
+## Usage (TruffleRuby)
+
+* `ruby play.rb`
+
+# Usage (JRuby)
+
+* `ruby --server play.rb`
