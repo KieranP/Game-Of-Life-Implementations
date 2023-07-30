@@ -49,7 +49,7 @@ class World {
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
         const cell = this.#cell_at(x, y)
-        rendering += cell.to_char().replace(' ', '&nbsp;')
+        rendering += cell.to_char()
       }
       rendering += "<br />"
     }
@@ -60,7 +60,7 @@ class World {
     // for (let y = 0; y < this.#height; y++) {
     //   for (let x = 0; x < this.#width; x++) {
     //     const cell = this.#cell_at(x, y)
-    //     rendering.push(cell.to_char().replace(' ', '&nbsp;'))
+    //     rendering.push(cell.to_char())
     //   }
     //   rendering.push("<br />")
     // }
@@ -158,7 +158,7 @@ class Cell {
   }
 
   to_char() {
-    return (this.alive ? 'o' : ' ')
+    return (this.alive ? 'o' : '&nbsp;')
   }
 
 }
