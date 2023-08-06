@@ -10,33 +10,36 @@ import (
 // GO doesn't have a concept of exception
 var LocationOccupied = fmt.Errorf("LocationOccupied")
 
-// GO doesn't have a concept of nested classes (or even classes)
-var cachedDirections = [8][2]int{
+var cached_directions = [8][2]int{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
 }
 
 type World struct {
-  width, height int
-  tick          int64
-
+  width int
+  height int
+  tick int64
 	cells map[string]*Cell
 }
 
 // Like constructor
-func newWorld(width, height int) *World {
-  w := &World{width: width, height: height, cells: make(map[string]*Cell, width*height)}
+func new_world(width int, height int) *World {
+  world := new(World)
+  world.width = width
+  world.height = height
+  world.cells = make(map[string]*Cell, width*height)
 
-  w.populate_cells()
-  w.prepopulate_neighbours()
-  return w
+  world.populate_cells()
+  world.prepopulate_neighbours()
+
+  return world
 }
 
-func (w *World) _tick() {
+func (world *World) _tick() {
   // First determine the action for all cells
-  for _, cell := range w.cells {
-    alive_neighbours := w.alive_neighbours_around(cell)
+  for _, cell := range world.cells {
+    alive_neighbours := world.alive_neighbours_around(cell)
     if !cell.alive && alive_neighbours == 3 {
       cell.next_state = true
     } else if alive_neighbours < 2 || alive_neighbours > 3 {
@@ -47,21 +50,21 @@ func (w *World) _tick() {
   }
 
   // Then execute the determined action for all cells
-  for _, cell := range w.cells {
+  for _, cell := range world.cells {
     cell.alive = cell.next_state
   }
 
-  w.tick++
+  world.tick++
 }
 
 // Implement first using string concatenation. Then implement any
 // special string builders, and use whatever runs the fastest
-func (w *World) render() string {
+func (world *World) render() string {
   // The following works but is slower
   // rendering := ""
-  // for y := 0; y < w.height; y++ {
-  //   for x := 0; x < w.width; x++ {
-  //     cell, _ := w.cell_at(x, y)
+  // for y := 0; y < world.height; y++ {
+  //   for x := 0; x < world.width; x++ {
+  //     cell, _ := world.cell_at(x, y)
   //     rendering += string(cell.to_char())
   //   }
   //   rendering += "\n"
@@ -70,9 +73,9 @@ func (w *World) render() string {
 
   // The following works but is slower
   // rendering := []string{}
-  // for y := 0; y < w.height; y++ {
-  //   for x := 0; x < w.width; x++ {
-  //     cell, _ := w.cell_at(x, y)
+  // for y := 0; y < world.height; y++ {
+  //   for x := 0; x < world.width; x++ {
+  //     cell, _ := world.cell_at(x, y)
   //     rendering = append(rendering, string(cell.to_char()))
   //   }
   //   rendering = append(rendering, "\n")
@@ -81,10 +84,10 @@ func (w *World) render() string {
 
   // The following was the fastest method
   rendering := strings.Builder{}
-  rendering.Grow(w.width * w.height)
-  for y := 0; y < w.height; y++ {
-    for x := 0; x < w.width; x++ {
-      cell, _ := w.cell_at(x, y)
+  rendering.Grow(world.width * world.height)
+  for y := 0; y < world.height; y++ {
+    for x := 0; x < world.width; x++ {
+      cell, _ := world.cell_at(x, y)
       rendering.WriteRune(cell.to_char())
     }
     rendering.WriteRune('\n')
@@ -92,44 +95,46 @@ func (w *World) render() string {
   return rendering.String()
 }
 
-func (w *World) populate_cells() {
-  for y := 0; y < w.height; y++ {
-    for x := 0; x < w.width; x++ {
+func (world *World) populate_cells() {
+  for y := 0; y < world.height; y++ {
+    for x := 0; x < world.width; x++ {
       alive := rand.Intn(100) <= 20
-      w.add_cell(x, y, alive)
+      world.add_cell(x, y, alive)
     }
   }
 }
 
-func (w *World) prepopulate_neighbours() {
-  for _, cell := range w.cells {
-    w.neighbours_around(cell)
+func (world *World) prepopulate_neighbours() {
+  for _, cell := range world.cells {
+    world.neighbours_around(cell)
   }
 }
 
-func (w *World) add_cell(x, y int, alive bool) *Cell {
-  if _, ok := w.cell_at(x, y); ok {
+func (world *World) add_cell(x int, y int, alive bool) *Cell {
+  if _, ok := world.cell_at(x, y); ok {
     panic(LocationOccupied)
   }
 
-  key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
-  c := &Cell{x: x, y: y, alive: alive}
+  cell := new_cell(x, y, alive)
 
-  w.cells[key] = c
-  return c
+  key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
+  world.cells[key] = cell
+  return cell
 }
 
-func (w *World) cell_at(x, y int) (*Cell, bool) {
+func (world *World) cell_at(x int, y int) (*Cell, bool) {
   key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
-  cell, ok := w.cells[key]
-
+  cell, ok := world.cells[key]
   return cell, ok
 }
 
-func (w *World) neighbours_around(cell *Cell) []*Cell {
+func (world *World) neighbours_around(cell *Cell) []*Cell {
   if cell.neighbours == nil {
-    for _, set := range cachedDirections {
-      neighbour, ok := w.cell_at(cell.x+set[0], cell.y+set[1])
+    for _, set := range cached_directions {
+      neighbour, ok := world.cell_at(
+        cell.x + set[0],
+        cell.y + set[1],
+      )
 
       if ok {
         cell.neighbours = append(cell.neighbours, neighbour)
@@ -141,8 +146,8 @@ func (w *World) neighbours_around(cell *Cell) []*Cell {
 
 // Implement first using filter/lambda if available. Then implement
 // foreach and for. Use whatever implementation runs the fastest
-func (w *World) alive_neighbours_around(cell *Cell) int {
-  neighbours := w.neighbours_around(cell)
+func (world *World) alive_neighbours_around(cell *Cell) int {
+  neighbours := world.neighbours_around(cell)
 
   // The following was the fastest method
   alive_neighbours := 0
@@ -165,14 +170,24 @@ func (w *World) alive_neighbours_around(cell *Cell) int {
 }
 
 type Cell struct {
-  x, y       int
-  alive      bool
+  x int
+  y int
+  alive bool
   next_state bool
   neighbours []*Cell
 }
 
-func (c *Cell) to_char() rune {
-  if c.alive {
+func new_cell(x int, y int, alive bool) *Cell {
+  var cell = new(Cell)
+  cell.x = x
+  cell.y = y
+  cell.alive = alive
+
+  return cell
+}
+
+func (cell *Cell) to_char() rune {
+  if cell.alive {
     return 'o'
   } else {
     return ' '

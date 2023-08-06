@@ -10,7 +10,10 @@ const World_Width = 150
 const World_Height = 40
 
 func run() {
-  world := newWorld(World_Width, World_Height)
+  world := new_world(
+    World_Width,
+    World_Height,
+  )
 
   fmt.Print(world.render())
 
@@ -33,7 +36,6 @@ func run() {
     avg_render := total_render / world.tick
 
     fmt.Print("\u001b[H\u001b[2J")
-    // value is in nanoseconds, convert to milliseconds
     fmt.Printf("#%d - World tick took %.3f (%.3f) - Rendering took %.3f (%.3f)\n",
       world.tick,
       float64(tick_time) / 1000000,
@@ -43,7 +45,6 @@ func run() {
     )
     fmt.Println(rendered)
   }
-
 }
 
 func main() {

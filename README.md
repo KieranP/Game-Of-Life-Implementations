@@ -26,8 +26,8 @@ All implementations are coded as similarly as possible using features available 
 | 6th.  | D          | 0.167ms  |  1.165ms   | Static  | Native      | DLang 2.102.2 (LDC 1.32.0) |
 | 7th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Interpreted | Node 19.6.1                |
 | 8th.  | Odin       | 0.196ms  |  1.364ms   | Static  | Native      | Odin dev-2023-08           |
-| 9th.  | Javascript | 0.226ms  |  1.082ms   | Dynamic | Interpreted | Chromium 110               |
-| 10th. | Go         | 0.230ms  |  0.464ms   | Static  | Native      | Golang 1.20.3              |
+| 9th.  | Go         | 0.224ms  |  0.464ms   | Static  | Native      | Golang 1.20.7              |
+| 10th. | Javascript | 0.226ms  |  1.082ms   | Dynamic | Interpreted | Chromium 110               |
 | 11th. | Java       | 0.276ms  |  0.272ms   | Static  | Interpreted | JRE 20                     |
 | 12th. | Kotlin     | 0.293ms  |  0.270ms   | Static  | Interpreted | Kotlin 1.8.21 (JRE 20)     |
 | 13th. | C#         | 0.298ms  |  1.847ms   | Static  | Interpreted | Mono 6.12.0.182            |
