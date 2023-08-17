@@ -115,9 +115,8 @@ defmodule World do
     if !cell.neighbours do
       neighbours =
         for set <- world.cached_directions, into: [] do
-          cell_at(world, cell.x + Enum.at(set, 0), cell.y + Enum.at(set, 1))
+          "#{cell.x + Enum.at(set, 0)}-#{cell.y + Enum.at(set, 1)}"
         end
-        |> Enum.reject(&is_nil/1)
 
       world = put_in(world.cells["#{cell.x}-#{cell.y}"].neighbours, neighbours)
 
@@ -130,19 +129,17 @@ defmodule World do
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   defp alive_neighbours_around(world, cell) do
-    {world, neighbours} = neighbours_around(world, cell)
+    {world, neighbour_coords} = neighbours_around(world, cell)
+    neighbours = Map.take(world.cells, neighbour_coords)
 
     # The following works but is slower
-    # Enum.count(neighbours, fn neighbour ->
-    #   neighbour = cell_at(world, neighbour.x, neighbour.y)
+    # Enum.count(neighbours, fn {_key, neighbour} ->
     #   neighbour.alive
     # end)
 
     # The following was the fastest method
-    for neighbour <- neighbours, reduce: 0 do
+    for {_key, neighbour} <- neighbours, reduce: 0 do
       count ->
-        neighbour = cell_at(world, neighbour.x, neighbour.y)
-
         if neighbour.alive do
           count + 1
         else

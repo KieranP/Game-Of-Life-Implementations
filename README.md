@@ -49,4 +49,4 @@ All implementations are coded as similarly as possible using features available 
 | 29th. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Interpreted | Lua 5.4.4                  |
 | 30th. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | Interpreted | JRuby 9.4.1.0 (JRE 20)     |
 | 31st. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Interpreted | Perl 5.36.0                |
-| 32nd. | Elixir     | 30.610ms |  3.526ms   | Dynamic | Interpreted | Elixir 1.15.4              |
+| 32nd. | Elixir     | 19.473ms |  3.526ms   | Dynamic | Interpreted | Elixir 1.15.4              |
