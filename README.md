@@ -32,21 +32,22 @@ All implementations are coded as similarly as possible using features available 
 | 12th. | Kotlin     | 0.293ms  |  0.270ms   | Static  | Interpreted | Kotlin 1.8.21 (JRE 20)     |
 | 13th. | C#         | 0.298ms  |  1.847ms   | Static  | Interpreted | Mono 6.12.0.182            |
 | 14th. | D          | 0.298ms  |  2.565ms   | Static  | Native      | DLang 2.103.0 (DMD)        |
-| 15th. | C++        | 0.420ms  |  0.591ms   | Static  | Native      | Clang 14.0.3               |
-| 16th. | PHP        | 0.463ms  |  1.126ms   | Dynamic | Interpreted | PHP 8.2.5 (w/JIT)          |
-| 17th. | Scala      | 0.503ms  |  0.331ms   | Static  | Interpreted | Scala 3.2.2 (JRE 20)       |
-| 18th. | Python     | 0.578ms  |  0.683ms   | Dynamic | Interpreted | PyPy 7.3.9                 |
-| 19th. | Groovy     | 0.586ms  |  2.528ms   | Static  | Interpreted | Groovy 4.0.11 (JRE 20)     |
-| 20th. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | Interpreted | TruffleRuby 22.3.1         |
-| 21st. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Interpreted | Firefox 110.0              |
-| 22nd. | Lua        | 0.927ms  |  1.018ms   | Dynamic | Interpreted | LuaJIT 2.1.0-beta3         |
-| 23rd. | Nim        | 0.980ms  |  1.301ms   | Static  | Native      | Nim 1.6.12                 |
-| 24th. | Swift      | 1.040ms  |  1.543ms   | Static  | Native      | Swift 5.8.0                |
-| 25th. | PHP        | 1.786ms  |  1.583ms   | Dynamic | Interpreted | PHP 8.2.5                  |
-| 26th. | Python     | 2.261ms  |  2.813ms   | Dynamic | Interpreted | Python 3.11.2              |
-| 27th. | Ruby       | 3.430ms  |  2.586ms   | Dynamic | Interpreted | CRuby 3.2.1 (w/JIT)        |
-| 28th. | Ruby       | 3.862ms  |  2.906ms   | Dynamic | Interpreted | CRuby 3.2.1                |
-| 29th. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Interpreted | Lua 5.4.4                  |
-| 30th. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | Interpreted | JRuby 9.4.1.0 (JRE 20)     |
-| 31st. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Interpreted | Perl 5.36.0                |
-| 32nd. | Elixir     | 19.473ms |  3.526ms   | Dynamic | Interpreted | Elixir 1.15.4              |
+| 15th. | Pony       | 0.341ms  |  0.773ms   | Static  | Native      | Pony 0.55.0                |
+| 16th. | C++        | 0.420ms  |  0.591ms   | Static  | Native      | Clang 14.0.3               |
+| 17th. | PHP        | 0.463ms  |  1.126ms   | Dynamic | Interpreted | PHP 8.2.5 (w/JIT)          |
+| 18th. | Scala      | 0.503ms  |  0.331ms   | Static  | Interpreted | Scala 3.2.2 (JRE 20)       |
+| 19th. | Python     | 0.578ms  |  0.683ms   | Dynamic | Interpreted | PyPy 7.3.9                 |
+| 20th. | Groovy     | 0.586ms  |  2.528ms   | Static  | Interpreted | Groovy 4.0.11 (JRE 20)     |
+| 21st. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | Interpreted | TruffleRuby 22.3.1         |
+| 22nd. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Interpreted | Firefox 110.0              |
+| 23rd. | Lua        | 0.927ms  |  1.018ms   | Dynamic | Interpreted | LuaJIT 2.1.0-beta3         |
+| 24th. | Nim        | 0.980ms  |  1.301ms   | Static  | Native      | Nim 1.6.12                 |
+| 25th. | Swift      | 1.040ms  |  1.543ms   | Static  | Native      | Swift 5.8.0                |
+| 26th. | PHP        | 1.786ms  |  1.583ms   | Dynamic | Interpreted | PHP 8.2.5                  |
+| 27th. | Python     | 2.261ms  |  2.813ms   | Dynamic | Interpreted | Python 3.11.2              |
+| 28th. | Ruby       | 3.430ms  |  2.586ms   | Dynamic | Interpreted | CRuby 3.2.1 (w/JIT)        |
+| 29th. | Ruby       | 3.862ms  |  2.906ms   | Dynamic | Interpreted | CRuby 3.2.1                |
+| 30th. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Interpreted | Lua 5.4.4                  |
+| 31st. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | Interpreted | JRuby 9.4.1.0 (JRE 20)     |
+| 32nd. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Interpreted | Perl 5.36.0                |
+| 33rd. | Elixir     | 19.473ms |  3.526ms   | Dynamic | Interpreted | Elixir 1.15.4              |
