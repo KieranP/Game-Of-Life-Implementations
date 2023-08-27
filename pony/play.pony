@@ -8,6 +8,14 @@ actor Main
   var _total_tick: U64 = 0
   var _total_render: U64 = 0
 
+  // Pony is actor/thread based. Limiting threads to 1 and disabling
+  // blocking helps decrease the times between tick operations. This
+  // works because we only need 1 blocking thread. Other applications
+  // requiring parallel threads would not do this
+  fun @runtime_override_defaults(rto: RuntimeOptions) =>
+    rto.ponynoblock = true
+    rto.ponymaxthreads = 1
+
   new create(env: Env) =>
     _env = env
 
