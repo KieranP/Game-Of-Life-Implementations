@@ -23,14 +23,14 @@ class Play {
         auto tick_start = std::chrono::high_resolution_clock::now();
         world->_tick();
         auto tick_finish = std::chrono::high_resolution_clock::now();
-        auto tick_time = std::chrono::duration_cast<std::chrono::microseconds>(tick_finish - tick_start).count();
+        auto tick_time = std::chrono::duration_cast<std::chrono::nanoseconds>(tick_finish - tick_start).count();
         total_tick += tick_time;
         auto avg_tick = total_tick / world->tick;
 
         auto render_start = std::chrono::high_resolution_clock::now();
         auto rendered = world->render();
         auto render_finish = std::chrono::high_resolution_clock::now();
-        auto render_time = std::chrono::duration_cast<std::chrono::microseconds>(render_finish - render_start).count();
+        auto render_time = std::chrono::duration_cast<std::chrono::nanoseconds>(render_finish - render_start).count();
         total_render += render_time;
         auto avg_render = total_render / world->tick;
 
@@ -38,10 +38,10 @@ class Play {
         printf(
           "#%d - World tick took %.3f (%.3f) - Rendering took %.3f (%.3f)\n",
           world->tick,
-          tick_time / 1000.0,
-          avg_tick / 1000.0,
-          render_time / 1000.0,
-          avg_render / 1000.0
+          tick_time / 1000000.0,
+          avg_tick / 1000000.0,
+          render_time / 1000000.0,
+          avg_render / 1000000.0
         );
         cout << rendered;
       }
