@@ -19,18 +19,18 @@ All implementations are coded as similarly as possible using features available 
 | Place | Language   | Tick Avg | Render Avg | Typed   | Execution   | Interpreter/Runtime        |
 | :---- | :--------- | :------: | :--------: | :------ | :---------- | :------------------------- |
 | 1st.  | Crystal    | 0.102ms  |  0.956ms   | Static  | Native      | Crystal 1.7.2              |
-| 2nd.  | Dart       | 0.154ms  |  0.615ms   | Static  | Native      | Dart 3.0.0                 |
-| 3rd.  | Typescript | 0.159ms  |  0.699ms   | Static  | Interpreted | Bun 0.5.6                  |
-| 4th.  | Typescript | 0.161ms  |  0.514ms   | Static  | Interpreted | Deno 1.31.1                |
-| 5th.  | V          | 0.166ms  |  1.554ms   | Static  | Native      | Vlang 0.3.3                |
-| 6th.  | D          | 0.167ms  |  1.165ms   | Static  | Native      | DLang 2.102.2 (LDC 1.32.0) |
-| 7th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Interpreted | Node 19.6.1                |
-| 8th.  | Odin       | 0.196ms  |  1.364ms   | Static  | Native      | Odin dev-2023-08           |
-| 9th.  | Go         | 0.224ms  |  0.464ms   | Static  | Native      | Golang 1.20.7              |
-| 10th. | Javascript | 0.226ms  |  1.082ms   | Dynamic | Interpreted | Chromium 110               |
-| 11th. | Java       | 0.276ms  |  0.272ms   | Static  | Interpreted | JRE 20                     |
-| 12th. | Kotlin     | 0.293ms  |  0.270ms   | Static  | Interpreted | Kotlin 1.8.21 (JRE 20)     |
-| 13th. | C#         | 0.298ms  |  1.847ms   | Static  | Interpreted | Mono 6.12.0.182            |
+| 2nd.  | C#         | 0.139ms  |  0.575ms   | Static  | Native      | DotNet 7.0.400             |
+| 3rd.  | Dart       | 0.154ms  |  0.615ms   | Static  | Native      | Dart 3.0.0                 |
+| 4th.  | Typescript | 0.159ms  |  0.699ms   | Static  | Interpreted | Bun 0.5.6                  |
+| 5th.  | Typescript | 0.161ms  |  0.514ms   | Static  | Interpreted | Deno 1.31.1                |
+| 6th.  | V          | 0.166ms  |  1.554ms   | Static  | Native      | Vlang 0.3.3                |
+| 7th.  | D          | 0.167ms  |  1.165ms   | Static  | Native      | DLang 2.102.2 (LDC 1.32.0) |
+| 8th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Interpreted | Node 19.6.1                |
+| 9th.  | Odin       | 0.196ms  |  1.364ms   | Static  | Native      | Odin dev-2023-08           |
+| 10th. | Go         | 0.224ms  |  0.464ms   | Static  | Native      | Golang 1.20.7              |
+| 11th. | Javascript | 0.226ms  |  1.082ms   | Dynamic | Interpreted | Chromium 110               |
+| 12th. | Java       | 0.276ms  |  0.272ms   | Static  | Interpreted | JRE 20                     |
+| 13th. | Kotlin     | 0.293ms  |  0.270ms   | Static  | Interpreted | Kotlin 1.8.21 (JRE 20)     |
 | 14th. | D          | 0.298ms  |  2.565ms   | Static  | Native      | DLang 2.103.0 (DMD)        |
 | 15th. | Pony       | 0.341ms  |  0.773ms   | Static  | Native      | Pony 0.55.0                |
 | 16th. | C++        | 0.420ms  |  0.591ms   | Static  | Native      | Clang 14.0.3               |

@@ -1,7 +1,6 @@
 using System;
 
 public class Play {
-
   private static int World_Width  = 150;
   private static int World_Height = 40;
 
@@ -24,14 +23,14 @@ public class Play {
       var tick_start = DateTime.Now;
       world._tick();
       var tick_finish = DateTime.Now;
-      var tick_time = (tick_finish - tick_start).TotalMilliseconds;
+      var tick_time = (tick_finish - tick_start).TotalNanoseconds;
       total_tick += tick_time;
       var avg_tick = (total_tick / world.tick);
 
       var render_start = DateTime.Now;
       var rendered = world.render();
       var render_finish = DateTime.Now;
-      var render_time = (render_finish - render_start).TotalMilliseconds;
+      var render_time = (render_finish - render_start).TotalNanoseconds;
       total_render += render_time;
       var avg_render = (total_render / world.tick);
 
@@ -42,12 +41,10 @@ public class Play {
       Console.Write("\u001b[H\u001b[2J");
       Console.WriteLine(output);
     }
-
   }
 
   private static string _f(double value) {
     // value is in milliseconds, no conversion needed
-    return value.ToString("0.###");
+    return (value / 1_000_000.0).ToString("0.###");
   }
-
 }

@@ -2,9 +2,9 @@
 
 ## Installation
 
-* `brew install mono`
+* `brew install --cask dotnet`
 
 ## Usage
 
-* `mcs -optimize+ *.cs`
-* `mono play.exe`
+* `dotnet build`
+* `bin/play`

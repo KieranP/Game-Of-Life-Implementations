@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 public class World {
-
   private class LocationOccupied : Exception {}
 
   public int tick;
@@ -168,11 +167,9 @@ public class World {
     }
     return alive_neighbours;
   }
-
 }
 
 public class Cell {
-
   public int x;
   public int y;
   public bool alive;
@@ -190,5 +187,4 @@ public class Cell {
   public char to_char() {
     return this.alive ? 'o' : ' ';
   }
-
 }
