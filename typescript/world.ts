@@ -1,7 +1,6 @@
 class LocationOccupied extends Error {}
 
 export class World {
-
   tick: number
   #width: number
   #height: number
@@ -145,11 +144,9 @@ export class World {
     }
     return alive_neighbours
   }
-
 }
 
 class Cell {
-
   x: number
   y: number
   alive: boolean
@@ -167,5 +164,4 @@ class Cell {
   to_char() {
     return (this.alive ? 'o' : ' ')
   }
-
 }

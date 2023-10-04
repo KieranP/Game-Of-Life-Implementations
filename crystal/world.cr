@@ -1,5 +1,4 @@
 class World
-
   class LocationOccupied < Exception; end
 
   property width : Int32,
@@ -135,11 +134,9 @@ class World
     # end
     # alive_neighbours
   end
-
 end
 
 class Cell
-
   property x : Int32,
            y : Int32,
            alive : Bool,
@@ -152,5 +149,4 @@ class Cell
   def to_char
     @alive ? "o" : " "
   end
-
 end

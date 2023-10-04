@@ -6,7 +6,6 @@ error_reporting(E_ALL);
 class LocationOccupied extends Exception { }
 
 class World {
-
   public $tick;
 
   function __construct($width, $height) {
@@ -146,11 +145,9 @@ class World {
     // }
     // return $alive_neighbours;
   }
-
 }
 
 class Cell {
-
   var $x, $y, $alive, $next_state, $neighbours;
 
   function __construct($x, $y, $alive = false) {
@@ -164,7 +161,6 @@ class Cell {
   public function to_char() {
     return ($this->alive ? 'o' : ' ');
   }
-
 }
 
 ?>

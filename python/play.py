@@ -1,48 +1,56 @@
-from time import time_ns
+from time import monotonic_ns
 from world import *
 
 class Play:
+  World_Width = 150
+  World_Height = 40
 
-    World_Width = 150
-    World_Height = 40
+  @classmethod
+  def run(cls):
+    world = World(
+      Play.World_Width,
+      Play.World_Height
+    )
 
-    @classmethod
-    def run(cls):
-        world = World(
-          Play.World_Width,
-          Play.World_Height
+    print(world.render())
+
+    total_tick = 0
+    lowest_tick = float('inf')
+    total_render = 0
+    lowest_render = float('inf')
+
+    while True:
+      tick_start = monotonic_ns()
+      world._tick()
+      tick_finish = monotonic_ns()
+      tick_time = (tick_finish - tick_start)
+      total_tick += tick_time
+      lowest_tick = min(lowest_tick, tick_time)
+      avg_tick = (total_tick / world.tick)
+
+      render_start = monotonic_ns()
+      rendered = world.render()
+      render_finish = monotonic_ns()
+      render_time = (render_finish - render_start)
+      total_render += render_time
+      lowest_render = min(lowest_render, render_time)
+      avg_render = (total_render / world.tick)
+
+      print("\u001b[H\u001b[2J")
+      print(
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)" % (
+          world.tick,
+          cls._f(lowest_tick),
+          cls._f(avg_tick),
+          cls._f(lowest_render),
+          cls._f(avg_render)
         )
+      )
+      print(rendered)
 
-        print(world.render())
-
-        total_tick = 0
-        total_render = 0
-
-        while True:
-            tick_start = time_ns()
-            world._tick()
-            tick_finish = time_ns()
-            tick_time = (tick_finish - tick_start)
-            total_tick += tick_time
-            avg_tick = (total_tick / world.tick)
-
-            render_start = time_ns()
-            rendered = world.render()
-            render_finish = time_ns()
-            render_time = (render_finish - render_start)
-            total_render += render_time
-            avg_render = (total_render / world.tick)
-
-            output = "#"+str(world.tick)
-            output += " - World tick took "+cls._f(tick_time)+" ("+cls._f(avg_tick)+")"
-            output += " - Rendering took "+cls._f(render_time)+" ("+cls._f(avg_render)+")"
-            output += "\n"+rendered
-            print("\u001b[H\u001b[2J")
-            print(output)
-
-    @classmethod
-    def _f(cls, value):
-        # value is in nanoseconds, convert to milliseconds
-        return "%.3f" % (value / 1000000)
+  @classmethod
+  def _f(cls, value):
+    # value is in nanoseconds, convert to milliseconds
+    return value / 1_000_000
 
 Play.run()

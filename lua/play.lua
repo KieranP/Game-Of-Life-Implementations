@@ -14,7 +14,9 @@ function Play:run()
   print(world:render())
 
   total_tick = 0
+  lowest_tick = math.huge
   total_render = 0
+  lowest_render = math.huge
 
   while true do
     tick_start = os.clock()
@@ -22,6 +24,7 @@ function Play:run()
     tick_finish = os.clock()
     tick_time = (tick_finish - tick_start)
     total_tick = (total_tick + tick_time)
+    lowest_tick = math.min(lowest_tick, tick_time)
     avg_tick = (total_tick / world.tick)
 
     render_start = os.clock()
@@ -29,20 +32,27 @@ function Play:run()
     render_finish = os.clock()
     render_time = (render_finish - render_start)
     total_render = (total_render + render_time)
+    lowest_render = math.min(lowest_render, render_time)
     avg_render = (total_render / world.tick)
 
-    output = "#"..world.tick
-    output = output.." - World tick took "..self:_f(tick_time).." ("..self:_f(avg_tick)..")"
-    output = output.." - Rendering took "..self:_f(render_time).." ("..self:_f(avg_render)..")"
-    output = output.."\n"..rendered
     print("\u{001b}[H\u{001b}[2J")
-    print(output)
+    print(
+      string.format(
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+        world.tick,
+        self:_f(lowest_tick),
+        self:_f(avg_tick),
+        self:_f(lowest_render),
+        self:_f(avg_render)
+      )
+    )
+    print(rendered)
   end
 end
 
 function Play:_f(value)
   -- value is in seconds, convert to milliseconds
-  return string.format("%.3f", value * 1000)
+  return value * 1000
 end
 
 Play:run()

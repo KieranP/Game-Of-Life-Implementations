@@ -2,7 +2,6 @@ public class World(
   private val width: Int,
   private val height: Int
 ) {
-
   private class LocationOccupied(): Exception()
 
   public var tick = 0
@@ -151,7 +150,6 @@ public class World(
     }
     return alive_neighbours
   }
-
 }
 
 public class Cell(
@@ -159,12 +157,10 @@ public class Cell(
   public val y: Int,
   public var alive: Boolean = false
 ) {
-
   public var next_state: Boolean? = null
   public var neighbours: ArrayList<Cell>? = null
 
   fun to_char(): Char {
     return if (this.alive) 'o' else ' '
   }
-
 }

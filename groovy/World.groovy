@@ -1,5 +1,4 @@
 public class World {
-
   private class LocationOccupied extends Exception { }
 
   public Integer tick
@@ -155,11 +154,9 @@ public class World {
     // }
     // alive_neighbours
   }
-
 }
 
 class Cell {
-
   public Integer x
   public Integer y
   public Boolean alive
@@ -177,5 +174,4 @@ class Cell {
   public String to_char() {
     alive ? 'o' : ' '
   }
-
 }

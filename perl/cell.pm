@@ -1,15 +1,15 @@
+use v5.36;
 use strict;
 use warnings;
+use builtin qw(false);
 
 package Cell;
 
-sub new {
-  my ($class, $x, $y, $alive) = @_;
-
+sub new($class, $x, $y, $alive = false) {
   my $self = {
     x => $x,
     y => $y,
-    alive => $alive || 0,
+    alive => $alive,
     next_state => undef,
     neighbours => undef
   };
@@ -19,8 +19,7 @@ sub new {
   return $self;
 }
 
-sub to_char {
-  my $self = shift;
+sub to_char($self) {
   $self->{alive} ? 'o' : ' '
 }
 

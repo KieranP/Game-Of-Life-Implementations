@@ -7,8 +7,7 @@ import Foundation
 let World_Width  = 150
 let World_Height = 40
 
-private class Play {
-
+final private class Play {
   public class func run() -> Void {
     let world = World(
       width: World_Width,
@@ -17,8 +16,10 @@ private class Play {
 
     print(world.render())
 
-    var total_tick: Double = 0
-    var total_render: Double = 0
+    var total_tick = Double(0)
+    var lowest_tick = Double(Int64.max)
+    var total_render = Double(0)
+    var lowest_render = Double(Int64.max)
 
     while true {
       let tick_start = ProcessInfo.processInfo.systemUptime
@@ -26,6 +27,7 @@ private class Play {
       let tick_finish = ProcessInfo.processInfo.systemUptime
       let tick_time = (tick_finish - tick_start)
       total_tick += tick_time
+      lowest_tick = [lowest_tick, tick_time].min()!
       let avg_tick = (total_tick / Double(world.tick))
 
       let render_start = ProcessInfo.processInfo.systemUptime
@@ -33,22 +35,28 @@ private class Play {
       let render_finish = ProcessInfo.processInfo.systemUptime
       let render_time = (render_finish - render_start)
       total_render += render_time
+      lowest_render = [lowest_render, render_time].min()!
       let avg_render = (total_render / Double(world.tick))
 
-      var output = "#\(world.tick)"
-      output += " - World tick took \(_f(value: tick_time)) (\(_f(value: avg_tick)))"
-      output += " - Rendering took \(_f(value: render_time)) (\(_f(value: avg_render)))"
-      output += "\n"+rendered
       print("\u{001b}[H\u{001b}[2J")
-      print(output)
+      print(
+        String(
+          format: "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+          world.tick,
+          _f(value: lowest_tick),
+          _f(value: avg_tick),
+          _f(value: lowest_render),
+          _f(value: avg_render)
+        )
+      )
+      print(rendered)
     }
   }
 
-  private class func _f(value: Double) -> String {
+  private class func _f(value: Double) -> Double {
     // value is in seconds, convert to milliseconds
-    return String(format: "%.3f", value * 1000)
+    return value * 1_000
   }
-
 }
 
 Play.run()

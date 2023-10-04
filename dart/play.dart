@@ -2,9 +2,9 @@
 
 import 'world.dart';
 import 'dart:io';
+import 'dart:math';
 
 class Play {
-
   static const World_Width  = 150;
   static const World_Height = 40;
 
@@ -17,29 +17,37 @@ class Play {
     print(world.render());
 
     var total_tick = 0.0;
+    var lowest_tick = double.infinity;
     var total_render = 0.0;
+    var lowest_render = double.infinity;
+
+    final stopwatch = Stopwatch();
+    stopwatch.start();
 
     while(true) {
-      final tick_start = DateTime.now().microsecondsSinceEpoch;
+      stopwatch.reset();
       world.tick_();
-      final tick_finish = DateTime.now().microsecondsSinceEpoch;
-      final tick_time = (tick_finish - tick_start) / 1.0;
+      final tick_time = stopwatch.elapsedMicroseconds / 1.0;
       total_tick += tick_time;
+      lowest_tick = [lowest_tick, tick_time].reduce(min);
       final avg_tick = (total_tick / world.tick);
 
-      final render_start = DateTime.now().microsecondsSinceEpoch;
+      stopwatch.reset();
       final rendered = world.render();
-      final render_finish = DateTime.now().microsecondsSinceEpoch;
-      final render_time = (render_finish - render_start) / 1.0;
+      final render_time = stopwatch.elapsedMicroseconds / 1.0;
       total_render += render_time;
+      lowest_render = [lowest_render, render_time].reduce(min);
       final avg_render = (total_render / world.tick);
 
-      var output = "#${world.tick}";
-      output += " - World tick took ${_f(tick_time)} (${_f(avg_tick)})";
-      output += " - Rendering took ${_f(render_time)} (${_f(avg_render)})";
-      output += "\n${rendered}";
       stdout.write("\u001b[H\u001b[2J");
-      stdout.write(output);
+      // Dart does not have native string formatting (i.e. printf),
+      // so falling back to string concatenation
+      stdout.writeln(
+        "#${world.tick}" +
+        " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})" +
+        " - Rendering (L: ${_f(lowest_render)}, A: ${_f(avg_render)})"
+      );
+      stdout.write(rendered);
     }
   }
 
@@ -47,7 +55,6 @@ class Play {
     // value is in microseconds, convert to milliseconds
     return (value / 1000).toStringAsFixed(3);
   }
-
 }
 
 main() {

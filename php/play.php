@@ -5,7 +5,6 @@ error_reporting(E_ALL);
 require_once('world.php');
 
 class Play {
-
   private static $World_Width = 150;
   private static $World_Height = 40;
 
@@ -18,7 +17,9 @@ class Play {
     echo $world->render();
 
     $total_tick = 0;
+    $lowest_tick = INF;
     $total_render = 0;
+    $lowest_render = INF;
 
     while (true) {
       $tick_start = hrtime(true);
@@ -26,6 +27,7 @@ class Play {
       $tick_finish = hrtime(true);
       $tick_time = ($tick_finish - $tick_start);
       $total_tick += $tick_time;
+      $lowest_tick = min($lowest_tick, $tick_time);
       $avg_tick = ($total_tick / $world->tick);
 
       $render_start = hrtime(true);
@@ -33,22 +35,26 @@ class Play {
       $render_finish = hrtime(true);
       $render_time = ($render_finish - $render_start);
       $total_render += $render_time;
+      $lowest_render = min($lowest_render, $render_time);
       $avg_render = ($total_render / $world->tick);
 
-      $output = "#$world->tick";
-      $output .= " - World tick took ".self::_f($tick_time)." (".self::_f($avg_tick).")";
-      $output .= " - Rendering took ".self::_f($render_time)." (".self::_f($avg_render).")";
-      $output .= "\n".$rendered;
       echo "\u{001b}[H\u{001b}[2J";
-      echo $output;
+      echo sprintf(
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+        $world->tick,
+        self::_f($lowest_tick),
+        self::_f($avg_tick),
+        self::_f($lowest_render),
+        self::_f($avg_render)
+      );
+      echo $rendered;
     }
   }
 
   private static function _f($value) {
     # value is in nanoseconds, convert to milliseconds
-    return sprintf("%.3f", $value / 1000000);
+    return $value / 1_000_000;
   }
-
 }
 
 Play::run();

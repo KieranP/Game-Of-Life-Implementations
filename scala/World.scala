@@ -8,7 +8,6 @@ class World(
   private val width: Int,
   private val height: Int,
 ) {
-
   class LocationOccupied extends Exception { }
 
   var tick = 0
@@ -162,7 +161,6 @@ class World(
     }
     alive_neighbours
   }
-
 }
 
 class Cell(
@@ -170,12 +168,10 @@ class Cell(
   val y: Int,
   var alive: Boolean = false,
 ) {
-
   var next_state: Option[Boolean] = None
   var neighbours: ArrayBuffer[Cell] = null
 
   def to_char = {
     if (alive) "o" else " "
   }
-
 }

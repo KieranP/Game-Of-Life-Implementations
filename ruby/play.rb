@@ -3,8 +3,6 @@ $:.push(File.dirname(__FILE__))
 require 'world'
 
 class Play
-
-  # @@ makes this a private class variable
   @@World_Width  = 150
   @@World_Height = 40
 
@@ -17,38 +15,45 @@ class Play
     puts world.render
 
     total_tick = 0
+    lowest_tick = Float::INFINITY
     total_render = 0
+    lowest_render = Float::INFINITY
 
     while true
-      tick_start = Time.now
+      tick_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       world._tick
-      tick_finish = Time.now
+      tick_finish = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       tick_time = (tick_finish - tick_start)
       total_tick += tick_time
+      lowest_tick = [lowest_tick, tick_time].min
       avg_tick = (total_tick / world.tick)
 
-      render_start = Time.now
+      render_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       rendered = world.render
-      render_finish = Time.now
+      render_finish = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       render_time = (render_finish - render_start)
       total_render += render_time
+      lowest_render = [lowest_render, render_time].min
       avg_render = (total_render / world.tick)
 
-      output = "##{world.tick}"
-      output += " - World tick took #{_f(tick_time)} (#{_f(avg_tick)})"
-      output += " - Rendering took #{_f(render_time)} (#{_f(avg_render)})"
-      output += "\n#{rendered}"
       puts "\u001b[H\u001b[2J"
-      puts output
+      puts sprintf(
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+        world.tick,
+        _f(lowest_tick),
+        _f(avg_tick),
+        _f(lowest_render),
+        _f(avg_render)
+      )
+      puts rendered
     end
   end
 
   def self._f(value)
     # value is in seconds, convert to milliseconds
-    "%.3f" % (value * 1000)
+    value * 1_000
   end
   private_class_method :_f
-
 end
 
 Play.run

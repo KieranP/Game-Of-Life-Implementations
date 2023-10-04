@@ -1,7 +1,6 @@
 require 'stringio'
 
 class World
-
   class LocationOccupied < Exception; end
 
   attr_accessor :tick
@@ -138,11 +137,9 @@ class World
     # end
     # alive_neighbours
   end
-
 end
 
 class Cell
-
   attr_accessor :x, :y, :alive, :next_state, :neighbours
 
   def initialize(x, y, alive = false)
@@ -156,5 +153,4 @@ class Cell
   def to_char
     @alive ? 'o' : ' '
   end
-
 end

@@ -17,34 +17,43 @@ class Play {
       cout << world->render();
 
       auto total_tick = 0.0;
+      auto lowest_tick = std::numeric_limits<double>::infinity();
       auto total_render = 0.0;
+      auto lowest_render = std::numeric_limits<double>::infinity();
 
       while(true) {
-        auto tick_start = std::chrono::high_resolution_clock::now();
+        auto tick_start = std::chrono::steady_clock::now();
         world->_tick();
-        auto tick_finish = std::chrono::high_resolution_clock::now();
+        auto tick_finish = std::chrono::steady_clock::now();
         auto tick_time = std::chrono::duration_cast<std::chrono::nanoseconds>(tick_finish - tick_start).count();
         total_tick += tick_time;
+        lowest_tick = min(lowest_tick, (double)tick_time);
         auto avg_tick = total_tick / world->tick;
 
-        auto render_start = std::chrono::high_resolution_clock::now();
+        auto render_start = std::chrono::steady_clock::now();
         auto rendered = world->render();
-        auto render_finish = std::chrono::high_resolution_clock::now();
+        auto render_finish = std::chrono::steady_clock::now();
         auto render_time = std::chrono::duration_cast<std::chrono::nanoseconds>(render_finish - render_start).count();
         total_render += render_time;
+        lowest_render = min(lowest_render, (double)render_time);
         auto avg_render = total_render / world->tick;
 
         cout << "\u001b[H\u001b[2J";
         printf(
-          "#%d - World tick took %.3f (%.3f) - Rendering took %.3f (%.3f)\n",
+          "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
           world->tick,
-          tick_time / 1000000.0,
-          avg_tick / 1000000.0,
-          render_time / 1000000.0,
-          avg_render / 1000000.0
+          _f(lowest_tick),
+          _f(avg_tick),
+          _f(lowest_render),
+          _f(avg_render)
         );
         cout << rendered;
       }
+    }
+
+  private:
+    static double _f(double value) {
+      return value / 1'000'000.0;
     }
 };
 

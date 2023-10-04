@@ -1,5 +1,7 @@
+use v5.36;
 use strict;
 use warnings;
+use builtin qw(false);
 
 use lib './';
 use cell;
@@ -8,9 +10,7 @@ package World;
 
 my $LocationOccupied = "LocationOccupied";
 
-sub new {
-  my ($class, $args) = @_;
-
+sub new($class, $args) {
   my $self = {
     width => $args->{width},
     height => $args->{height},
@@ -31,9 +31,7 @@ sub new {
   return $self;
 }
 
-sub tick {
-  my $self = shift;
-
+sub tick($self) {
   # First determine the next state for all cells
   foreach my $cell (values %{$self->{cells}}) {
     my $alive_neighbours = $self->alive_neighbours_around($cell);
@@ -56,9 +54,7 @@ sub tick {
 
 # Implement first using string concatenation. Then implement any
 # special string builders, and use whatever runs the fastest
-sub render {
-  my $self = shift;
-
+sub render($self) {
   # The following was the fastest method
   my $rendering = "";
   for my $y ((0..$self->{height}-1)) {
@@ -82,9 +78,7 @@ sub render {
   # join("", @rendering);
 }
 
-sub populate_cells {
-  my $self = shift;
-
+sub populate_cells($self) {
   for my $y ((0..$self->{height}-1)) {
     for my $x ((0..$self->{width}-1)) {
       my $alive = rand() <= 0.2;
@@ -93,17 +87,13 @@ sub populate_cells {
   }
 }
 
-sub prepopulate_neighbours {
-  my $self = shift;
-
+sub prepopulate_neighbours($self) {
   foreach my $cell (values %{$self->{cells}}) {
     $self->neighbours_around($cell);
   }
 }
 
-sub add_cell {
-  my ($self, $x, $y, $alive) = @_;
-
+sub add_cell($self, $x, $y, $alive = false) {
   if ($self->cell_at($x, $y)) {
     die $LocationOccupied;
   }
@@ -113,14 +103,11 @@ sub add_cell {
   $self->cell_at($x, $y);
 }
 
-sub cell_at {
-  my ($self, $x, $y) = @_;
+sub cell_at($self, $x, $y) {
   $self->{cells}{"$x-$y"};
 }
 
-sub neighbours_around {
-  my ($self, $cell) = @_;
-
+sub neighbours_around($self, $cell) {
   if (!defined($cell->{neighbours})) {
     $cell->{neighbours} = [];
     foreach my $set (@{$self->{cached_directions}}) {
@@ -140,9 +127,7 @@ sub neighbours_around {
 
 # Implement first using filter/lambda if available. Then implement
 # foreach. Use whatever implementation runs the fastest
-sub alive_neighbours_around {
-  my ($self, $cell) = @_;
-
+sub alive_neighbours_around($self, $cell) {
   my $neighbours = $self->neighbours_around($cell);
 
   # The following was the fastest method

@@ -1,5 +1,6 @@
-import std.stdio : writeln, printf;
+import std.stdio : write, writeln, writefln;
 import std.datetime : MonoTime;
+import std.algorithm.comparison : min;
 import world;
 
 class Play {
@@ -16,34 +17,43 @@ class Play {
       writeln(world.render());
 
       auto total_tick = 0.0;
+      auto lowest_tick = float.infinity;
       auto total_render = 0.0;
+      auto lowest_render = float.infinity;
 
       while (true) {
         auto tick_start = MonoTime.currTime;
         world._tick();
         auto tick_finish = MonoTime.currTime;
-        auto tick_time = (tick_finish - tick_start).total!"usecs";
+        auto tick_time = (tick_finish - tick_start).total!"nsecs";
         total_tick += tick_time;
+        lowest_tick = min(lowest_tick, tick_time);
         auto avg_tick = total_tick / world.tick;
 
         auto render_start = MonoTime.currTime;
         auto rendered = world.render();
         auto render_finish = MonoTime.currTime;
-        auto render_time = (render_finish - render_start).total!"usecs";
+        auto render_time = (render_finish - render_start).total!"nsecs";
         total_render += render_time;
+        lowest_render = min(lowest_render, render_time);
         auto avg_render = total_render / world.tick;
 
-        writeln("\u001b[H\u001b[2J");
-        printf(
-          "#%d - World tick took %.3f (%.3f) - Rendering took %.3f (%.3f)\n",
+        write("\u001b[H\u001b[2J");
+        writefln(
+          "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
           world.tick,
-          tick_time / 1000.0,
-          avg_tick / 1000.0,
-          render_time / 1000.0,
-          avg_render / 1000.0,
+          _f(lowest_tick),
+          _f(avg_tick),
+          _f(lowest_render),
+          _f(avg_render),
         );
-        writeln(rendered);
+        write(rendered);
       }
+    }
+
+    static float _f(float value) {
+      // value is in nanoseconds, convert to milliseconds
+      return value / 1_000_000.0;
     }
 }
 

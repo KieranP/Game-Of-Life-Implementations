@@ -16,37 +16,44 @@ defmodule Play do
     loop(world)
   end
 
-  def loop(world, total_tick \\ 0, total_render \\ 0) do
-    tick_start = System.system_time(:nanosecond)
+  def loop(world, total_tick \\ 0, lowest_tick \\ 9**9**9, total_render \\ 0, lowest_render \\ 9**9**9) do
+    tick_start = System.monotonic_time()
     world = World.tick(world)
-    tick_finish = System.system_time(:nanosecond)
+    tick_finish = System.monotonic_time()
     tick_time = tick_finish - tick_start
     total_tick = total_tick + tick_time
+    lowest_tick = Kernel.min(lowest_tick, tick_time)
     avg_tick = total_tick / world.tick
 
-    render_start = System.system_time(:nanosecond)
+    render_start = System.monotonic_time()
     rendered = World.render(world)
-    render_finish = System.system_time(:nanosecond)
+    render_finish = System.monotonic_time()
     render_time = render_finish - render_start
     total_render = total_render + render_time
+    lowest_render = Kernel.min(lowest_render, render_time)
     avg_render = total_render / world.tick
 
     IO.puts("\u001b[H\u001b[2J")
     IO.puts(
       :io_lib.format(
-        "#~.B - World tick took ~.3f (~.3f) - Rendering took ~.3f (~.3f)\n",
+        "#~.B - World Tick (L: ~.3f; A: ~.3f) - Rendering (L: ~.3f; A: ~.3f)\n",
         [
           world.tick,
-          tick_time / 1_000_000,
-          avg_tick / 1_000_000,
-          render_time / 1_000_000,
-          avg_render / 1_000_000
+          _f(lowest_tick),
+          _f(avg_tick),
+          _f(lowest_render),
+          _f(avg_render)
         ]
       )
     )
     IO.puts(rendered)
 
-    loop(world, total_tick, total_render)
+    loop(world, total_tick, lowest_tick, total_render, lowest_render)
+  end
+
+  def _f(value) do
+    # value is in nanoseconds, convert to milliseconds
+    value / 1_000_000
   end
 end
 

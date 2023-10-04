@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class World {
-
   private class LocationOccupied extends Exception { }
 
   public int tick;
@@ -175,11 +174,9 @@ public class World {
     }
     return alive_neighbours;
   }
-
 }
 
 class Cell {
-
   public int x;
   public int y;
   public boolean alive;
@@ -199,5 +196,4 @@ class Cell {
   public char to_char() {
     return this.alive ? 'o' : ' ';
   }
-
 }

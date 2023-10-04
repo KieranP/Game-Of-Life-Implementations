@@ -5,7 +5,6 @@ import 'dart:math';
 class LocationOccupied implements Exception {}
 
 class World {
-
   int width;
   int height;
   int tick = 0;
@@ -162,11 +161,9 @@ class World {
     // }
     // return alive_neighbours;
   }
-
 }
 
 class Cell {
-
   int x;
   int y;
   bool alive;
@@ -178,5 +175,4 @@ class Cell {
   String to_char() {
     return this.alive ? 'o' : ' ';
   }
-
 }

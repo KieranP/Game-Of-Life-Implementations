@@ -1,5 +1,4 @@
 class Play {
-
   private static int World_Width  = 150
   private static int World_Height = 40
 
@@ -16,7 +15,9 @@ class Play {
     System.out.println(world.render())
 
     def total_tick = 0.0
+    def lowest_tick = Double.MAX_VALUE
     def total_render = 0.0
+    def lowest_render = Double.MAX_VALUE
 
     while (true) {
       def tick_start = System.nanoTime()
@@ -24,6 +25,7 @@ class Play {
       def tick_finish = System.nanoTime()
       def tick_time = (tick_finish - tick_start) / 1d
       total_tick += tick_time
+      lowest_tick = Math.min(lowest_tick, tick_time)
       def avg_tick = (total_tick / world.tick).doubleValue()
 
       def render_start = System.nanoTime()
@@ -31,20 +33,26 @@ class Play {
       def render_finish = System.nanoTime()
       def render_time = (render_finish - render_start) / 1d
       total_render += render_time
+      lowest_render = Math.min(lowest_render, render_time)
       def avg_render = (total_render / world.tick).doubleValue()
 
-      def output = "#"+world.tick
-      output += " - World tick took "+_f(tick_time)+" ("+_f(avg_tick)+")"
-      output += " - Rendering took "+_f(render_time)+" ("+_f(avg_render)+")"
-      output += "\n"+rendered
       System.out.print("\u001b[H\u001b[2J")
-      System.out.println(output)
+      System.out.println(
+        String.format(
+          "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+          world.tick,
+          _f(lowest_tick),
+          _f(avg_tick),
+          _f(lowest_render),
+          _f(avg_render)
+        )
+      )
+      System.out.print(rendered)
     }
   }
 
-  private static String _f(double value) {
+  private static double _f(double value) {
     // value is in nanoseconds, convert to milliseconds
-    String.format("%.3f", value / 1000000)
+    value / 1000000
   }
-
 }

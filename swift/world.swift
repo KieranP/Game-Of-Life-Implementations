@@ -1,7 +1,6 @@
 import Darwin
 
-public class World {
-
+final public class World {
   private enum WorldError: Error {
     case LocationOccupied
   }
@@ -164,11 +163,9 @@ public class World {
     }
     return alive_neighbours
   }
-
 }
 
-private class Cell {
-
+final private class Cell {
   public var x: Int
   public var y: Int
   public var alive: Bool
@@ -186,5 +183,4 @@ private class Cell {
   public func to_char() -> String {
     return alive ? "o" : " "
   }
-
 }
