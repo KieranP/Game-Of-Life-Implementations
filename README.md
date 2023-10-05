@@ -16,38 +16,36 @@ All implementations are coded as similarly as possible using features available 
 
 **Note:** These speed results are taken on a Macbook Pro 15" Retina (Mid 2018), 2.6 GHz Intel Core i7, with 32 GB of 2400 MHz DDR4 RAM. The times were calculated by playing each simulation for long enough that the average tick time becomes stable (normally around 30s), and then grabbing the averages.
 
-| Place | Language   | Tick Avg | Render Avg | Typed   | Execution   | Interpreter/Runtime        |
-| :---- | :--------- | :------: | :--------: | :------ | :---------- | :------------------------- |
-| 1st.  | Crystal    | 0.102ms  |  0.956ms   | Static  | Native      | Crystal 1.7.2              |
-| 2nd.  | C#         | 0.139ms  |  0.575ms   | Static  | Native      | DotNet 7.0.400             |
-| 3rd.  | Dart       | 0.154ms  |  0.615ms   | Static  | Native      | Dart 3.0.0                 |
-| 4th.  | Typescript | 0.159ms  |  0.699ms   | Static  | Interpreted | Bun 0.5.6                  |
-| 5th.  | Typescript | 0.161ms  |  0.514ms   | Static  | Interpreted | Deno 1.31.1                |
-| 6th.  | V          | 0.166ms  |  1.554ms   | Static  | Native      | Vlang 0.3.3                |
-| 7th.  | D          | 0.167ms  |  1.165ms   | Static  | Native      | DLang 2.102.2 (LDC 1.32.0) |
-| 8th.  | Typescript | 0.172ms  |  0.526ms   | Static  | Interpreted | Node 19.6.1                |
-| 9th.  | Odin       | 0.196ms  |  1.364ms   | Static  | Native      | Odin dev-2023-08           |
-| 10th. | Go         | 0.224ms  |  0.464ms   | Static  | Native      | Golang 1.20.7              |
-| 11th. | Javascript | 0.226ms  |  1.082ms   | Dynamic | Interpreted | Chromium 110               |
-| 12th. | Java       | 0.276ms  |  0.272ms   | Static  | Interpreted | JRE 20                     |
-| 13th. | Kotlin     | 0.293ms  |  0.270ms   | Static  | Interpreted | Kotlin 1.8.21 (JRE 20)     |
-| 14th. | D          | 0.298ms  |  2.565ms   | Static  | Native      | DLang 2.103.0 (DMD)        |
-| 15th. | Pony       | 0.341ms  |  0.773ms   | Static  | Native      | Pony 0.55.0                |
-| 16th. | C++        | 0.420ms  |  0.591ms   | Static  | Native      | Clang 14.0.3               |
-| 17th. | PHP        | 0.463ms  |  1.126ms   | Dynamic | Interpreted | PHP 8.2.5 (w/JIT)          |
-| 18th. | Scala      | 0.503ms  |  0.331ms   | Static  | Interpreted | Scala 3.2.2 (JRE 20)       |
-| 19th. | Python     | 0.578ms  |  0.683ms   | Dynamic | Interpreted | PyPy 7.3.9                 |
-| 20th. | Groovy     | 0.586ms  |  2.528ms   | Static  | Interpreted | Groovy 4.0.11 (JRE 20)     |
-| 21st. | Ruby       | 0.694ms  |  1.873ms   | Dynamic | Interpreted | TruffleRuby 22.3.1         |
-| 22nd. | Javascript | 0.775ms  |  1.295ms   | Dynamic | Interpreted | Firefox 110.0              |
-| 23rd. | Lua        | 0.927ms  |  1.018ms   | Dynamic | Interpreted | LuaJIT 2.1.0-beta3         |
-| 24th. | Nim        | 0.980ms  |  1.301ms   | Static  | Native      | Nim 1.6.12                 |
-| 25th. | Swift      | 1.040ms  |  1.543ms   | Static  | Native      | Swift 5.8.0                |
-| 26th. | PHP        | 1.786ms  |  1.583ms   | Dynamic | Interpreted | PHP 8.2.5                  |
-| 27th. | Python     | 2.261ms  |  2.813ms   | Dynamic | Interpreted | Python 3.11.2              |
-| 28th. | Ruby       | 3.430ms  |  2.586ms   | Dynamic | Interpreted | CRuby 3.2.1 (w/JIT)        |
-| 29th. | Ruby       | 3.862ms  |  2.906ms   | Dynamic | Interpreted | CRuby 3.2.1                |
-| 30th. | Lua        | 4.123ms  |  2.665ms   | Dynamic | Interpreted | Lua 5.4.4                  |
-| 31st. | Ruby       | 4.246ms  |  1.938ms   | Dynamic | Interpreted | JRuby 9.4.1.0 (JRE 20)     |
-| 32nd. | Perl       | 8.330ms  |  3.530ms   | Dynamic | Interpreted | Perl 5.36.0                |
-| 33rd. | Elixir     | 19.473ms |  3.526ms   | Dynamic | Interpreted | Elixir 1.15.4              |
+| Place | Language   | Tick Lowest | Tick Avg | Render Lowest | Render Avg | Typed   | Execution   | Interpreter/Runtime        |
+| :---- | :--------- | :---------: | :------: | :-----------: | :--------: | :------ | :---------- | :------------------------- |
+| 1st.  | Crystal    |   0.075ms   | 0.102ms  |    0.690ms    |  0.996ms   | Static  | Native      | Crystal 1.9.2              |
+| 2nd.  | C#         |   0.116ms   | 0.142ms  |    0.559ms    |  0.606ms   | Static  | Native      | DotNet 7.0.401             |
+| 3rd.  | V          |   0.133ms   | 0.153ms  |    1.396ms    |  1.562ms   | Static  | Native      | Vlang 0.4.2                |
+| 4th.  | Dart       |   0.144ms   | 0.168ms  |    0.615ms    |  0.660ms   | Static  | Native      | Dart 3.1.3                 |
+| 5th.  | D          |   0.147ms   | 0.170ms  |    1.252ms    |  1.365ms   | Static  | Native      | DLang 2.104.2 (LDC 1.34.0) |
+| 6th.  | Typescript |   0.159ms   | 0.192ms  |    0.480ms    |  0.526ms   | Static  | Interpreted | Node 20.5.1                |
+| 7th.  | Typescript |   0.162ms   | 0.197ms  |    0.493ms    |  0.532ms   | Static  | Interpreted | Deno 1.37.1                |
+| 8th.  | Odin       |   0.167ms   | 0.192ms  |    1.259ms    |  1.344ms   | Static  | Native      | Odin dev-2023-10           |
+| 9th.  | Typescript |   0.174ms   | 0.190ms  |    0.621ms    |  0.679ms   | Static  | Interpreted | Bun 0.5.9                  |
+| 10th. | Go         |   0.203ms   | 0.229ms  |    0.441ms    |  0.469ms   | Static  | Native      | Golang 1.21.1              |
+| 11th. | Kotlin     |   0.221ms   | 0.262ms  |    0.216ms    |  0.243ms   | Static  | Interpreted | Kotlin 1.9.10 (JRE 21)     |
+| 12th. | Java       |   0.242ms   | 0.275ms  |    0.242ms    |  0.274ms   | Static  | Interpreted | JRE 20                     |
+| 13th. | D          |   0.284ms   | 0.311ms  |    2.176ms    |  2.394ms   | Static  | Native      | DLang 2.105.1 (DMD)        |
+| 14th. | Pony       |   0.306ms   | 0.341ms  |    0.705ms    |  0.773ms   | Static  | Native      | Pony 0.56.2                |
+| 15th. | C++        |   0.380ms   | 0.427ms  |    0.539ms    |  0.587ms   | Static  | Native      | Clang 15.0.0               |
+| 16th. | Ruby       |   0.380ms   | 0.551ms  |    0.868ms    |  1.231ms   | Dynamic | Interpreted | TruffleRuby 23.0.0         |
+| 17th. | Scala      |   0.408ms   | 0.479ms  |    0.293ms    |  0.330ms   | Static  | Interpreted | Scala 3.3.1 (JRE 21)       |
+| 18th. | Python     |   0.408ms   | 0.512ms  |    0.460ms    |  0.605ms   | Dynamic | Interpreted | PyPy 7.3.12                |
+| 19th. | Lua        |   0.418ms   | 0.501ms  |    0.409ms    |  0.468ms   | Dynamic | Interpreted | LuaJIT 2.1.0-beta3         |
+| 20th. | PHP        |   0.421ms   | 0.465ms  |    1.137ms    |  1.188ms   | Dynamic | Interpreted | PHP 8.2.11 (w/JIT)         |
+| 21st. | Groovy     |   0.470ms   | 0.569ms  |    2.494ms    |  2.656ms   | Static  | Interpreted | Groovy 4.0.15 (JRE 21)     |
+| 22nd. | Swift      |   0.900ms   | 0.955ms  |    0.942ms    |  1.005ms   | Static  | Native      | Swift 5.9                  |
+| 23rd. | Nim        |   0.998ms   | 1.067ms  |    0.888ms    |  0.958ms   | Static  | Native      | Nim 2.0.0                  |
+| 24th. | PHP        |   1.688ms   | 1.826ms  |    1.575ms    |  1.679ms   | Dynamic | Interpreted | PHP 8.2.11                 |
+| 25th. | Python     |   2.006ms   | 2.126ms  |    2.484ms    |  2.660ms   | Dynamic | Interpreted | Python 3.11.5              |
+| 26th. | Ruby       |   3.376ms   | 3.612ms  |    2.525ms    |  2.776ms   | Dynamic | Interpreted | CRuby 3.2.2 (w/JIT)        |
+| 27th. | Ruby       |   3.716ms   | 4.083ms  |    2.565ms    |  2.977ms   | Dynamic | Interpreted | CRuby 3.2.2                |
+| 28th. | Ruby       |   3.854ms   | 4.302ms  |    1.740ms    |  1.972ms   | Dynamic | Interpreted | JRuby 9.4.1.0 (JRE 20)     |
+| 29th. | Lua        |   3.958ms   | 4.123ms  |    2.549ms    |  2.665ms   | Dynamic | Interpreted | Lua 5.4.6                  |
+| 30th. | Perl       |   7.985ms   | 8.888ms  |    3.795ms    |  4.018ms   | Dynamic | Interpreted | Perl 5.38.0                |
+| 31st. | Elixir     |  15.844ms   | 19.819ms |    2.788ms    |  3.526ms   | Dynamic | Interpreted | Elixir 1.15.6              |

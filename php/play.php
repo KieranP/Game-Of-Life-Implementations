@@ -40,7 +40,7 @@ class Play {
 
       echo "\u{001b}[H\u{001b}[2J";
       echo sprintf(
-        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
         $world->tick,
         self::_f($lowest_tick),
         self::_f($avg_tick),
