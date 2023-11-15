@@ -6,7 +6,7 @@
 
 ## Usage (DMD)
 
-* `dmd -O -release *.d`
+* `dmd -L-ld_classic -O -release *.d`
 * `./play`
 
 # Usage (LDC)
