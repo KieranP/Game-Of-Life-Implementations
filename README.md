@@ -31,10 +31,10 @@ All implementations are coded as similarly as possible using features available 
 | 11th. | C++        |   19836    |     0.936ms     |   1.013ms    |   0.387ms   | 0.423ms  |    0.549ms    |  0.590ms   | Static  | Native      | Clang 15.0.0               |
 | 12th. | Odin       |   19589    |     0.870ms     |   0.977ms    |   0.134ms   | 0.159ms  |    0.736ms    |  0.818ms   | Static  | Native      | Odin dev-2023-11           |
 | 13th. | Crystal    |   18133    |     0.775ms     |   1.099ms    |   0.079ms   | 0.108ms  |    0.696ms    |  0.991ms   | Static  | Native      | Crystal 1.10.1             |
-| 14th. | Python     |   16525    |     0.882ms     |   1.202ms    |   0.437ms   | 0.587ms  |    0.445ms    |  0.615ms   | Dynamic | Interpreted | PyPy 7.3.13                |
-| 15th. | D          |   14179    |     1.391ms     |   1.569ms    |   0.143ms   | 0.172ms  |    1.248ms    |  1.397ms   | Static  | Native      | DLang 2.105.2 (LDC 1.35.0) |
-| 16th. | V          |   13466    |     1.514ms     |   1.696ms    |   0.130ms   | 0.157ms  |    1.384ms    |  1.539ms   | Static  | Native      | Vlang 0.4.3                |
-| 17th. | Pony       |   12829    |     1.006ms     |   1.163ms    |   0.311ms   | 0.369ms  |    0.695ms    |  0.794ms   | Static  | Native      | Pony 0.57.1                |
+| 14th. | Pony       |   17652    |     0.992ms     |   1.121ms    |   0.304ms   | 0.343ms  |    0.688ms    |  0.778ms   | Static  | Native      | Pony 0.57.1                |
+| 15th. | Python     |   16525    |     0.882ms     |   1.202ms    |   0.437ms   | 0.587ms  |    0.445ms    |  0.615ms   | Dynamic | Interpreted | PyPy 7.3.13                |
+| 16th. | D          |   14179    |     1.391ms     |   1.569ms    |   0.143ms   | 0.172ms  |    1.248ms    |  1.397ms   | Static  | Native      | DLang 2.105.2 (LDC 1.35.0) |
+| 17th. | V          |   13466    |     1.514ms     |   1.696ms    |   0.130ms   | 0.157ms  |    1.384ms    |  1.539ms   | Static  | Native      | Vlang 0.4.3                |
 | 18th. | PHP        |   12809    |     1.599ms     |   1.735ms    |   0.426ms   | 0.502ms  |    1.173ms    |  1.233ms   | Dynamic | Interpreted | PHP 8.2.12 (w/JIT)         |
 | 19th. | Ruby       |   12546    |     1.257ms     |   1.732ms    |   0.385ms   | 0.545ms  |    0.872ms    |  1.187ms   | Dynamic | Interpreted | TruffleRuby 23.0.0         |
 | 20th. | Swift      |   11834    |     1.845ms     |   1.972ms    |   0.900ms   | 0.967ms  |    0.945ms    |  1.005ms   | Static  | Native      | Swift 5.9.0                |
