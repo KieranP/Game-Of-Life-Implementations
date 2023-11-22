@@ -6,22 +6,19 @@ using System.Collections.Generic;
 public class World {
   private class LocationOccupied : Exception {}
 
-  public int tick;
+  public int tick = 0;
   private int width;
   private int height;
-  private Dictionary<string, Cell> cells;
-  private int[][] cached_directions;
+  private Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
+  private readonly int[][] cached_directions = [
+    [-1, 1],  [0, 1],  [1, 1], // above
+    [-1, 0],           [1, 0], // sides
+    [-1, -1], [0, -1], [1, -1] // below
+  ];
 
   public World(int width, int height) {
     this.width = width;
     this.height = height;
-    this.tick = 0;
-    this.cells = new Dictionary<string, Cell>();
-    this.cached_directions = new int[][]{
-      new int[] {-1, 1},  new int[] {0, 1},  new int[] {1, 1},  // above
-      new int[] {-1, 0},                     new int[] {1, 0},  // sides
-      new int[] {-1, -1}, new int[] {0, -1}, new int[] {1, -1}, // below
-    };
 
     populate_cells();
     prepopulate_neighbours();
@@ -89,7 +86,7 @@ public class World {
     var random = new Random();
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-        var alive = (random.NextDouble() <= 0.2);
+        var alive = random.NextDouble() <= 0.2;
         add_cell(x, y, alive);
       }
     }
@@ -113,8 +110,8 @@ public class World {
 
   private Cell cell_at(int x, int y) {
     var key = $"{x}-{y}";
-    if (cells.ContainsKey(key)) {
-      return cells[key];
+    if (cells.TryGetValue(key, out Cell value)) {
+      return value;
     } else {
       return null;
     }
@@ -125,8 +122,8 @@ public class World {
       cell.neighbours = new List<Cell>();
       foreach (var set in cached_directions) {
         var neighbour = cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1])
+          cell.x + set[0],
+          cell.y + set[1]
         );
 
         if (neighbour != null) {
@@ -173,15 +170,13 @@ public class Cell {
   public int x;
   public int y;
   public bool alive;
-  public bool? next_state;
-  public List<Cell> neighbours;
+  public bool? next_state = null;
+  public List<Cell> neighbours = null;
 
   public Cell(int x, int y, bool alive = false) {
     this.x = x;
     this.y = y;
     this.alive = alive;
-    this.next_state = null;
-    this.neighbours = null;
   }
 
   public char to_char() {

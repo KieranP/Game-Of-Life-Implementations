@@ -3,8 +3,8 @@ using System.Linq;
 using System.Diagnostics;
 
 public class Play {
-  private static int World_Width  = 150;
-  private static int World_Height = 40;
+  private static readonly int World_Width  = 150;
+  private static readonly int World_Height = 40;
 
   public static void Main(string[] args) {
     run();
