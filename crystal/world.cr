@@ -51,27 +51,27 @@ class World
     # }
     # rendering
 
-    # The following was the fastest method
-    rendering = [] of String
-    @height.times.each { |y|
-      @width.times.each { |x|
-        cell = cell_at(x, y).not_nil!
-        rendering << cell.to_char
-      }
-      rendering << "\n"
-    }
-    rendering.join("")
-
     # The following works but it slower
-    # String.build do |io|
-    #   @height.times.each { |y|
-    #     @width.times.each { |x|
-    #       cell = cell_at(x, y).not_nil!
-    #       io << cell.to_char
-    #     }
-    #     io << "\n"
+    # rendering = [] of String
+    # @height.times.each { |y|
+    #   @width.times.each { |x|
+    #     cell = cell_at(x, y).not_nil!
+    #     rendering << cell.to_char
     #   }
-    # end
+    #   rendering << "\n"
+    # }
+    # rendering.join("")
+
+    # The following was the fastest method
+    String.build(@height * @width) do |io|
+      @height.times.each { |y|
+        @width.times.each { |x|
+          cell = cell_at(x, y).not_nil!
+          io << cell.to_char
+        }
+        io << "\n"
+      }
+    end
   end
 
   private def populate_cells
