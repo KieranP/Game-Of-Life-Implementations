@@ -1,0 +1,58 @@
+import world.World
+import std.stdio.STDOUT
+import std.time.Instant
+import std.cmp.(min)
+
+class Play {
+  fn static run() {
+    let world = World.new(
+      width: 150,
+      height: 40,
+    )
+
+    STDOUT.new.print(world.render())
+
+    let mut total_tick = 0.0
+    let mut lowest_tick = Float.infinity
+    let mut total_render = 0.0
+    let mut lowest_render = Float.infinity
+
+    loop {
+      let tick_start = Instant.new.to_float
+      world._tick()
+      let tick_finish = Instant.new.to_float
+      let tick_time = tick_finish - tick_start
+      total_tick += tick_time
+      lowest_tick = min(lowest_tick, tick_time)
+      let avg_tick = total_tick / world.tick.to_float
+
+      let render_start = Instant.new.to_float
+      let rendered = world.render()
+      let render_finish = Instant.new.to_float
+      let render_time = render_finish - render_start
+      total_render += render_time
+      lowest_render = min(lowest_render, render_time)
+      let avg_render = total_render / world.tick.to_float
+
+      STDOUT.new.print("\u{001b}[H\u{001b}[2J")
+      STDOUT.new.print(
+        "#" + world.tick.to_string +
+        " - World Tick (L: " + _f(lowest_tick).round(3).to_string +
+        "; A: " + _f(avg_tick).round(3).to_string + ")" +
+        " - Rendering (L: " + _f(lowest_render).round(3).to_string +
+        "; A: " + _f(avg_render).round(3).to_string + ")"
+      )
+      STDOUT.new.print(rendered)
+    }
+  }
+
+  fn static _f(value: Float) -> Float {
+    value / 1_000_000.0
+  }
+}
+
+class async Main {
+  fn async main {
+    Play.run
+  }
+}

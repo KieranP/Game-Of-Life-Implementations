@@ -1,0 +1,218 @@
+import std.rand.Random
+import std.string.StringBuffer
+
+class pub World {
+  let pub @tick: Int
+  let @width: Int
+  let @height: Int
+  let @cells: Map[String, Cell]
+
+  fn pub static new(width: Int, height: Int) -> World {
+    let world = World {
+      @width = width,
+      @height = height,
+      @tick = 0,
+      @cells = Map.new,
+    }
+
+    world.populate_cells
+    world.prepopulate_neighbours
+    world
+  }
+
+  fn pub mut _tick {
+    # First determine the action for all cells
+    @cells.iter_mut.each fn (entry) {
+      let cell = entry.value
+      let alive_neighbours = alive_neighbours_around(cell)
+      if cell.alive == false and alive_neighbours == 3 {
+        cell.next_state = true
+      } else if alive_neighbours < 2 or alive_neighbours > 3 {
+        cell.next_state = false
+      } else {
+        cell.next_state = cell.alive
+      }
+    }
+
+    # Then execute the determined action for all cells
+    @cells.iter_mut.each fn (entry) {
+      let cell = entry.value
+      cell.alive = cell.next_state
+    }
+
+    @tick += 1
+  }
+
+  # Implement first using string concatenation. Then implement any
+  # special string builders, and use whatever runs the fastest
+  fn pub render -> String {
+    # The following works but it slower
+    # let mut rendering = ""
+    # let mut y = 0
+    # while y < @height {
+    #   let mut x = 0
+    #   while x < @width {
+    #     let cell = cell_at(x, y)
+    #     if cell.some? {
+    #       rendering += cell.unwrap.to_char
+    #     }
+    #     x += 1
+    #   }
+    #   rendering += "\n"
+    #   y += 1
+    # }
+    # rendering
+
+    # The following works but it slower
+    # let mut rendering = []
+    # let mut y = 0
+    # while y < @height {
+    #   let mut x = 0
+    #   while x < @width {
+    #     let cell = cell_at(x, y)
+    #     if cell.some? {
+    #       rendering.push(cell.unwrap.to_char)
+    #     }
+    #     x += 1
+    #   }
+    #   rendering.push("\n")
+    #   y += 1
+    # }
+    # String.join(rendering.iter, with: '')
+
+    # The following was the fastest method
+    let rendering = StringBuffer.new
+    let mut y = 0
+    while y < @height {
+      let mut x = 0
+      while x < @width {
+        let cell = cell_at(x, y)
+        if cell.some? {
+          rendering.push(cell.unwrap.to_char)
+        }
+        x += 1
+      }
+      rendering.push("\n")
+      y += 1
+    }
+    rendering.to_string
+  }
+
+  fn mut populate_cells {
+    let rng = Random.new
+    let mut y = 0
+    while y < @height {
+      let mut x = 0
+      while x < @width {
+        let alive = rng.float <= 0.2
+        add_cell(x, y, alive)
+        x += 1
+      }
+      y += 1
+    }
+  }
+
+  fn mut prepopulate_neighbours {
+    @cells.iter_mut.each fn (entry) {
+      neighbours_around(entry.value)
+    }
+  }
+
+  fn mut add_cell(x: Int, y: Int, alive: Bool) -> Option[ref Cell] {
+    let key = "{x}-{y}"
+    if cell_at(x, y).some? {
+      panic("LocationOccupied("+key+")")
+    }
+
+    let cell = Cell.new(x, y, alive)
+    @cells.set(key, cell)
+    cell_at(x, y)
+  }
+
+  fn cell_at(x: Int, y: Int) -> Option[ref Cell] {
+    @cells.opt("{x}-{y}")
+  }
+
+  fn mut neighbours_around(cell: mut Cell) -> ref Array[ref Cell] {
+    if cell.neighbours.size == 0 {
+      let cached_directions = [
+        [-1, 1],  [0, 1],  [1, 1], # above
+        [-1, 0],           [1, 0], # sides
+        [-1, -1], [0, -1], [1, -1] # below
+      ]
+
+      cached_directions.iter.each fn (set) {
+        let neighbour = cell_at(
+          cell.x + set.get(0),
+          cell.y + set.get(1)
+        )
+        if neighbour.some? {
+          cell.neighbours.push(neighbour.unwrap)
+        }
+      }
+    }
+
+    cell.neighbours
+  }
+
+  # Implement first using filter/lambda if available. Then implement
+  # foreach and for. Use whatever implementation runs the fastest
+  fn mut alive_neighbours_around(cell: mut Cell) -> Int {
+    let neighbours = neighbours_around(cell)
+
+    # The following works but it slower
+    # neighbours
+    #   .iter
+    #   .select fn (neighbour) { neighbour.alive }
+    #   .count
+
+    # The following works but it slower
+    # neighbours
+    #   .iter
+    #   .reduce(0) fn (count, neighbour) {
+    #     if neighbour.alive {
+    #       count + 1
+    #     } else {
+    #       count
+    #     }
+    #   }
+
+    # The following was the fastest method
+    let mut alive_neighbours = 0
+    let mut num = 0
+    while num < neighbours.size {
+      let neighbour = neighbours.get(num)
+      if neighbour.alive {
+        alive_neighbours += 1
+      }
+      num += 1
+    }
+    alive_neighbours
+  }
+}
+
+class Cell {
+  let @x: Int
+  let @y: Int
+  let @alive: Bool
+  let @next_state: Bool
+  let @neighbours: Array[ref Cell]
+
+  fn pub static new(x: Int, y: Int, alive: Bool) -> Cell {
+    Cell {
+      @x = x,
+      @y = y,
+      @alive = alive,
+      @next_state = false,
+      @neighbours = [],
+    }
+  }
+
+  fn to_char -> String {
+    if @alive {
+      "o"
+    } else {
+      " "
+    }
+  }
+}
