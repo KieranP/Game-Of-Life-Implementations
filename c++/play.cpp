@@ -14,7 +14,11 @@ class Play {
         World_Height
       );
 
-      cout << world->render();
+      auto minimal = getenv("MINIMAL") != NULL;
+
+      if (!minimal) {
+        cout << world->render();
+      }
 
       auto total_tick = 0.0;
       auto lowest_tick = std::numeric_limits<double>::infinity();
@@ -38,7 +42,9 @@ class Play {
         lowest_render = min(lowest_render, (double)render_time);
         auto avg_render = total_render / world->tick;
 
-        cout << "\u001b[H\u001b[2J";
+        if (!minimal) {
+          cout << "\u001b[H\u001b[2J";
+        }
         printf(
           "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
           world->tick,
@@ -47,7 +53,9 @@ class Play {
           _f(lowest_render),
           _f(avg_render)
         );
-        cout << rendered;
+        if (!minimal) {
+          cout << rendered;
+        }
       }
     }
 

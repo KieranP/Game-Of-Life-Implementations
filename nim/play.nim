@@ -1,4 +1,4 @@
-import std/[monotimes, times]
+import std/[envvars, monotimes, times]
 import strutils
 from strformat import fmt
 include world
@@ -21,7 +21,10 @@ proc run(self: Play) =
     height: World_Height,
   ).initialize()
 
-  echo world.render()
+  let minimal = getEnv("MINIMAL") != ""
+
+  if not minimal:
+    echo world.render()
 
   var total_tick = 0.0
   var lowest_tick = high(float)
@@ -45,13 +48,15 @@ proc run(self: Play) =
     lowest_render = min(lowest_render, render_time)
     let avg_render = (total_render / world.tick_num.float)
 
-    echo "\u001b[H\u001b[2J"
+    if not minimal:
+      echo "\u001b[H\u001b[2J"
     echo fmt"""
       #{world.tick_num} -
       World Tick (L: {self.f(lowest_tick):.3f}; A: {self.f(avg_tick):.3f}) -
       Rendering (L: {self.f(lowest_render):.3f}; A: {self.f(avg_render):.3f})
     """.dedent().replace("\n", " ")
-    echo rendered
+    if not minimal:
+      echo rendered
 
 proc f(self: Play, value: float): float =
   # value is in nanoseconds, convert to milliseconds

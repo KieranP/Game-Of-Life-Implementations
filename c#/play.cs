@@ -16,7 +16,11 @@ public class Play {
       height: World_Height
     );
 
-    Console.WriteLine(world.render());
+    var minimal = Environment.GetEnvironmentVariable("MINIMAL") != null;
+
+    if (!minimal) {
+      Console.WriteLine(world.render());
+    }
 
     var total_tick = 0.0;
     var lowest_tick = double.MaxValue;
@@ -40,7 +44,9 @@ public class Play {
       lowest_render = new double[]{ lowest_render, render_time }.Min();
       var avg_render = (total_render / world.tick);
 
-      Console.Write("\u001b[H\u001b[2J");
+      if (!minimal) {
+        Console.Write("\u001b[H\u001b[2J");
+      }
       Console.WriteLine(
         "#{0} - World Tick (L: {1:f3}; A: {2:f3}) - Rendering (L: {3:f3}; A: {4:f3})",
         world.tick,
@@ -49,7 +55,9 @@ public class Play {
         _f(lowest_render),
         _f(avg_render)
       );
-      Console.WriteLine(rendered);
+      if (!minimal) {
+        Console.WriteLine(rendered);
+      }
     }
   }
 

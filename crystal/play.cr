@@ -10,7 +10,11 @@ class Play
       height: @@World_Height,
     )
 
-    puts world.render
+    minimal = ENV["MINIMAL"]?
+
+    unless minimal
+      puts world.render
+    end
 
     total_tick = 0
     lowest_tick = Float32::INFINITY
@@ -34,7 +38,9 @@ class Play
       lowest_render = [lowest_render, render_time].min
       avg_render = (total_render / world.tick)
 
-      puts "\u001b[H\u001b[2J"
+      unless minimal
+        puts "\u001b[H\u001b[2J"
+      end
       puts sprintf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
         world.tick,
@@ -43,7 +49,9 @@ class Play
         _f(lowest_render),
         _f(avg_render)
       )
-      puts rendered
+      unless minimal
+        puts rendered
+      end
     end
   end
 

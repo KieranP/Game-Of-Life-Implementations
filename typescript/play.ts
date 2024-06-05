@@ -10,7 +10,16 @@ class Play {
       Play.#World_Height,
     )
 
-    console.log(world.render())
+    let minimal: boolean
+    if (typeof Deno === 'object') {
+      minimal = Deno.env.get('MINIMAL') != null
+    } else {
+      minimal = process.env.MINIMAL != null
+    }
+
+    if (!minimal) {
+      console.log(world.render())
+    }
 
     let total_tick = 0
     let lowest_tick = Infinity
@@ -34,7 +43,9 @@ class Play {
       lowest_render = Math.min(lowest_render, render_time)
       const avg_render = (total_render / world.tick)
 
-      console.log("\u001b[H\u001b[2J")
+      if (!minimal) {
+        console.log("\u001b[H\u001b[2J")
+      }
       // JS/TS does not have native string formatting (i.e. printf),
       // so falling back to string concatenation
       console.log(
@@ -42,7 +53,9 @@ class Play {
         ` - World Tick (L: ${Play.#_f(lowest_tick)}; A: ${Play.#_f(avg_tick)})` +
         ` - Rendering (L: ${Play.#_f(lowest_render)}; A: ${Play.#_f(avg_render)})`
       )
-      console.log(rendered)
+      if (!minimal) {
+        console.log(rendered)
+      }
     }
   }
 

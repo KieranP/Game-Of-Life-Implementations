@@ -1,4 +1,5 @@
 import std.stdio : write, writeln, writefln;
+import std.process : environment;
 import std.datetime : MonoTime;
 import std.algorithm.comparison : min;
 import world;
@@ -10,11 +11,15 @@ class Play {
 
     static void run() {
       auto world = new World(
-        World_Width,
-        World_Height
+        width: World_Width,
+        height: World_Height,
       );
 
-      writeln(world.render());
+      auto minimal = environment.get("MINIMAL") != null;
+
+      if (!minimal) {
+        writeln(world.render());
+      }
 
       auto total_tick = 0.0;
       auto lowest_tick = float.infinity;
@@ -38,7 +43,9 @@ class Play {
         lowest_render = min(lowest_render, render_time);
         auto avg_render = total_render / world.tick;
 
-        write("\u001b[H\u001b[2J");
+        if (!minimal) {
+          write("\u001b[H\u001b[2J");
+        }
         writefln(
           "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
           world.tick,
@@ -47,7 +54,9 @@ class Play {
           _f(lowest_render),
           _f(avg_render),
         );
-        write(rendered);
+        if (!minimal) {
+          write(rendered);
+        }
       }
     }
 

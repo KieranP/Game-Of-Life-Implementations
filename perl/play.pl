@@ -13,10 +13,14 @@ use constant World_Height => 40;
 sub run {
   my $world = World->new({
     width => World_Width,
-    height => World_Height
+    height => World_Height,
   });
 
-  print $world->render();
+  my $minimal = $ENV{MINIMAL} != "";
+
+  if (!$minimal) {
+    print $world->render();
+  }
 
   my $total_tick = 0;
   my $lowest_tick = 9**9**9;
@@ -40,7 +44,9 @@ sub run {
     $lowest_render = min($lowest_render, $render_time);
     my $avg_render = $total_render / $world->{tick};
 
-    print "\033[0;0H\033[2J";
+    if (!$minimal) {
+      print "\033[0;0H\033[2J";
+    }
     print sprintf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       $world->{tick},
@@ -49,7 +55,9 @@ sub run {
       _f($lowest_render),
       _f($avg_render)
     );
-    print $rendered;
+    if (!$minimal) {
+      print $rendered;
+    }
   }
 }
 

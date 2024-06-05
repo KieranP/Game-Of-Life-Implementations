@@ -23,7 +23,7 @@ class World:
     # First determine the action for all cells
     for key,cell in self.cells.items():
       alive_neighbours = self.alive_neighbours_around(cell)
-      if cell.alive is False and alive_neighbours == 3:
+      if not cell.alive and alive_neighbours == 3:
         cell.next_state = True
       elif alive_neighbours < 2 or alive_neighbours > 3:
         cell.next_state = False

@@ -62,8 +62,8 @@ func (world *World) _tick() {
 func (world *World) render() string {
   // The following works but is slower
   // rendering := ""
-  // for y := 0; y < world.height; y++ {
-  //   for x := 0; x < world.width; x++ {
+  // for y := range(world.height) {
+  //   for x := range(world.width) {
   //     cell, _ := world.cell_at(x, y)
   //     rendering += string(cell.to_char())
   //   }
@@ -73,8 +73,8 @@ func (world *World) render() string {
 
   // The following works but is slower
   // rendering := []string{}
-  // for y := 0; y < world.height; y++ {
-  //   for x := 0; x < world.width; x++ {
+  // for y := range(world.height) {
+  //   for x := range(world.width) {
   //     cell, _ := world.cell_at(x, y)
   //     rendering = append(rendering, string(cell.to_char()))
   //   }
@@ -85,8 +85,8 @@ func (world *World) render() string {
   // The following was the fastest method
   rendering := strings.Builder{}
   rendering.Grow(world.width * world.height)
-  for y := 0; y < world.height; y++ {
-    for x := 0; x < world.width; x++ {
+  for y := range(world.height) {
+    for x := range(world.width) {
       cell, _ := world.cell_at(x, y)
       rendering.WriteRune(cell.to_char())
     }
@@ -96,8 +96,8 @@ func (world *World) render() string {
 }
 
 func (world *World) populate_cells() {
-  for y := 0; y < world.height; y++ {
-    for x := 0; x < world.width; x++ {
+  for y := range(world.height) {
+    for x := range(world.width) {
       alive := rand.Intn(100) <= 20
       world.add_cell(x, y, alive)
     }
@@ -160,7 +160,7 @@ func (world *World) alive_neighbours_around(cell *Cell) int {
 
   // The following also works but is slower
   // alive_neighbours := 0
-  // for i := 0; i < len(neighbours); i++ {
+  // for i := range(len(neighbours)) {
   //   neighbour := neighbours[i]
   //   if neighbour.alive {
   //     alive_neighbours++

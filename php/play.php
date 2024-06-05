@@ -10,11 +10,15 @@ class Play {
 
   public static function run() {
     $world = new World(
-      self::$World_Width,
-      self::$World_Height
+      width: self::$World_Width,
+      height: self::$World_Height,
     );
 
-    echo $world->render();
+    $minimal = getenv("MINIMAL") != null;
+
+    if (!$minimal) {
+      echo $world->render();
+    }
 
     $total_tick = 0;
     $lowest_tick = INF;
@@ -38,7 +42,9 @@ class Play {
       $lowest_render = min($lowest_render, $render_time);
       $avg_render = ($total_render / $world->tick);
 
-      echo "\u{001b}[H\u{001b}[2J";
+      if (!$minimal) {
+        echo "\u{001b}[H\u{001b}[2J";
+      }
       echo sprintf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
         $world->tick,
@@ -47,7 +53,9 @@ class Play {
         self::_f($lowest_render),
         self::_f($avg_render)
       );
-      echo $rendered;
+      if (!$minimal) {
+        echo $rendered;
+      }
     }
   }
 

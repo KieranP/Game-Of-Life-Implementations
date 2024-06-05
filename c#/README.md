@@ -2,7 +2,7 @@
 
 ## Installation
 
-* `brew install --cask dotnet`
+* `brew install --cask dotnet-sdk`
 
 ## Usage
 

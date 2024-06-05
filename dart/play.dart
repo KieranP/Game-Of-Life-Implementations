@@ -14,7 +14,11 @@ class Play {
       World_Height,
     );
 
-    print(world.render());
+    var minimal = Platform.environment["MINIMAL"] != null;
+
+    if (!minimal) {
+      print(world.render());
+    }
 
     var total_tick = 0.0;
     var lowest_tick = double.infinity;
@@ -39,7 +43,9 @@ class Play {
       lowest_render = [lowest_render, render_time].reduce(min);
       final avg_render = (total_render / world.tick);
 
-      stdout.write("\u001b[H\u001b[2J");
+      if (!minimal) {
+        stdout.write("\u001b[H\u001b[2J");
+      }
       // Dart does not have native string formatting (i.e. printf),
       // so falling back to string concatenation
       stdout.writeln(
@@ -47,7 +53,9 @@ class Play {
         " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})" +
         " - Rendering (L: ${_f(lowest_render)}, A: ${_f(avg_render)})"
       );
-      stdout.write(rendered);
+      if (!minimal) {
+        stdout.write(rendered);
+      }
     }
   }
 

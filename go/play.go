@@ -4,6 +4,7 @@ import (
   "fmt"
   "math"
   "math/rand"
+  "os"
   "time"
 )
 
@@ -16,7 +17,11 @@ func run() {
     World_Height,
   )
 
-  fmt.Print(world.render())
+  minimal := os.Getenv("MINIMAL") != ""
+
+  if !minimal {
+    fmt.Print(world.render())
+  }
 
   var total_tick int64
   var lowest_tick int64 = math.MaxInt64
@@ -40,7 +45,9 @@ func run() {
     lowest_render = min(lowest_render, render_time)
     avg_render := total_render / world.tick
 
-    fmt.Print("\u001b[H\u001b[2J")
+    if !minimal {
+      fmt.Print("\u001b[H\u001b[2J")
+    }
     fmt.Printf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       world.tick,
@@ -49,7 +56,9 @@ func run() {
       _f(lowest_render),
       _f(avg_render),
     )
-    fmt.Print(rendered)
+    if !minimal {
+      fmt.Print(rendered)
+    }
   }
 }
 

@@ -7,4 +7,5 @@
 
 ## Usage
 
-* `groovy --compile-static Play.groovy`
+* `groovyc --compile-static *.groovy`
+* `groovy Play`

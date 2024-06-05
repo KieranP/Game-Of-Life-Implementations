@@ -14,7 +14,11 @@ final private class Play {
       height: World_Height
     )
 
-    print(world.render())
+    let minimal = ProcessInfo.processInfo.environment["MINIMAL"] != nil
+
+    if !minimal {
+      print(world.render())
+    }
 
     var total_tick = Double(0)
     var lowest_tick = Double(Int64.max)
@@ -38,7 +42,9 @@ final private class Play {
       lowest_render = [lowest_render, render_time].min()!
       let avg_render = (total_render / Double(world.tick))
 
-      print("\u{001b}[H\u{001b}[2J")
+      if !minimal {
+        print("\u{001b}[H\u{001b}[2J")
+      }
       print(
         String(
           format: "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -49,7 +55,9 @@ final private class Play {
           _f(value: avg_render)
         )
       )
-      print(rendered)
+      if !minimal {
+        print(rendered)
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 ﻿open World
 
+open System
 open System.Diagnostics
 
 type Play =
@@ -15,7 +16,10 @@ type Play =
     world.populate_cells()
     world.prepopulate_neighbours()
 
-    printfn "%s" (world.render())
+    let minimal = Environment.GetEnvironmentVariable("MINIMAL") <> null
+
+    if not minimal then
+      printfn "%s" (world.render())
 
     let mutable total_tick = 0.0
     let mutable lowest_tick = infinity
@@ -39,14 +43,16 @@ type Play =
       lowest_render <- min lowest_render render_time
       let avg_render = (total_render / float(world.tick))
 
-      printf "\u001b[H\u001b[2J"
+      if not minimal then
+        printf "\u001b[H\u001b[2J"
       printfn "#%i - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)"
         world.tick
         (Play._f(lowest_tick))
         (Play._f(avg_tick))
         (Play._f(lowest_render))
         (Play._f(avg_render))
-      printfn "%s" rendered
+      if not minimal then
+        printfn "%s" rendered
 
   static member private _f(value) =
     // value is in nanoseconds, convert to milliseconds

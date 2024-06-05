@@ -9,10 +9,14 @@ class Play {
   public static void run() {
     def world = new World(
       World_Width,
-      World_Height
+      World_Height,
     )
 
-    System.out.println(world.render())
+    def minimal = System.getenv("MINIMAL") != null
+
+    if (!minimal) {
+      System.out.println(world.render())
+    }
 
     def total_tick = 0.0
     def lowest_tick = Double.MAX_VALUE
@@ -36,7 +40,9 @@ class Play {
       lowest_render = Math.min(lowest_render, render_time)
       def avg_render = (total_render / world.tick).doubleValue()
 
-      System.out.print("\u001b[H\u001b[2J")
+      if (!minimal) {
+        System.out.print("\u001b[H\u001b[2J")
+      }
       System.out.println(
         String.format(
           "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -47,7 +53,9 @@ class Play {
           _f(avg_render)
         )
       )
-      System.out.print(rendered)
+      if (!minimal) {
+        System.out.print(rendered)
+      }
     }
   }
 

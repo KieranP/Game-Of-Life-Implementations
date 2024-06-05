@@ -11,7 +11,11 @@ function Play:run()
     self.World_Height
   )
 
-  print(world:render())
+  minimal = os.getenv("MINIMAL") ~= nil
+
+  if not minimal then
+    print(world:render())
+  end
 
   total_tick = 0
   lowest_tick = math.huge
@@ -35,7 +39,9 @@ function Play:run()
     lowest_render = math.min(lowest_render, render_time)
     avg_render = (total_render / world.tick)
 
-    print("\u{001b}[H\u{001b}[2J")
+    if not minimal then
+      print("\u{001b}[H\u{001b}[2J")
+    end
     print(
       string.format(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -46,7 +52,9 @@ function Play:run()
         self:_f(avg_render)
       )
     )
-    print(rendered)
+    if not minimal then
+      print(rendered)
+    end
   end
 end
 

@@ -1,5 +1,6 @@
 package main
 
+import "core:os"
 import "core:fmt"
 import "core:time"
 import "core:math"
@@ -10,10 +11,14 @@ World_Height := 40
 run :: proc() {
   world := new_world(
     width=World_Width,
-    height=World_Height
+    height=World_Height,
   )
 
-  fmt.println(world_render(world))
+  minimal := os.get_env("MINIMAL") != ""
+
+  if !minimal {
+    fmt.println(world_render(world))
+  }
 
   total_tick: i64
   lowest_tick := math.INF_F64
@@ -37,7 +42,9 @@ run :: proc() {
     lowest_render = min(lowest_render, f64(render_time))
     avg_render := total_render / world.tick
 
-    fmt.print("\u001b[H\u001b[2J")
+    if !minimal {
+      fmt.print("\u001b[H\u001b[2J")
+    }
     fmt.printf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       world.tick,
@@ -46,7 +53,9 @@ run :: proc() {
       _f(lowest_render),
       _f(f64(avg_render)),
     )
-    fmt.print(rendered)
+    if !minimal {
+      fmt.print(rendered)
+    }
   }
 }
 

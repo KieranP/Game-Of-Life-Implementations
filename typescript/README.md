@@ -8,11 +8,11 @@
 ## Usage (Deno)
 
 * `brew install deno`
-* `deno run --allow-hrtime play.js`
+* `deno run --allow-hrtime --allow-env play.js`
 
 ## Usage (Bun)
 
-* `curl -fsSL https://bun.sh/install | bash`
+* `brew install oven-sh/bun/bun`
 * `bun run play.js`
 
 ## Usage (Node)

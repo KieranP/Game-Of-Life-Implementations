@@ -1,3 +1,4 @@
+import os
 import time
 import math
 import arrays
@@ -8,10 +9,14 @@ const world_height = 40
 fn run() {
   mut world := new_world(
     world_width,
-    world_height
+    world_height,
   )
 
-  println(world.render())
+  minimal := os.getenv("MINIMAL") != ""
+
+  if !minimal {
+    println(world.render())
+  }
 
   mut total_tick := f64(0)
   mut lowest_tick := math.max_f64
@@ -35,13 +40,17 @@ fn run() {
     lowest_render = arrays.min([lowest_render, render_time]) or { lowest_render }
     avg_render := (total_render / world.tick)
 
-    print('\u001b[H\u001b[2J')
+    if !minimal {
+      print('\u001b[H\u001b[2J')
+    }
     println(
       "#${world.tick}" +
       " - World Tick (L: ${f(lowest_tick):.3}; A: ${f(avg_tick):.3})" +
       " - Rendering (L: ${f(lowest_render):.3}; A: ${f(avg_render):.3})"
     )
-    print(rendered)
+    if !minimal {
+      print(rendered)
+    }
   }
 }
 

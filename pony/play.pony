@@ -5,6 +5,7 @@ use "format"
 actor Main
   let _env: Env
   let world: World
+  var minimal: Bool = false
   var _total_tick: U64 = 0
   var _lowest_tick: U64 = U64.max_value()
   var _total_render: U64 = 0
@@ -18,6 +19,15 @@ actor Main
       width' = 150,
       height' = 40
     )
+
+    for env_var in env.vars.values() do
+      try
+        if env_var.find("MINIMAL=")? == 0 then
+          minimal = true
+          break
+        end
+      end
+    end
 
     tick()
 
@@ -42,15 +52,20 @@ actor Main
     end
     let avg_render = (_total_render / world.tick)
 
-    _env.out.write("\u001b[H\u001b[2J")
+    if not minimal then
+      _env.out.write("\u001b[H\u001b[2J")
+    end
     // Pony does not have native string formatting (i.e. printf),
     // so falling back to string concatenation
     _env.out.write(
       "#" + world.tick.string() +
       " - World Tick (L: " + _f(_lowest_tick) + "; A: " + _f(avg_tick) + ")" +
       " - Rendering (L: " + _f(_lowest_render) + "; A: " + _f(avg_render) + ")" +
-      "\n" + rendered
+      "\n"
     )
+    if not minimal then
+      _env.out.write("" + rendered)
+    end
 
     tick()
 

@@ -10,7 +10,11 @@ object Play {
       height = World_Height,
     )
 
-    println(world.render)
+    val minimal = System.getenv("MINIMAL") != null
+
+    if (!minimal) {
+      println(world.render)
+    }
 
     var total_tick = 0.0
     var lowest_tick = Double.MaxValue
@@ -34,7 +38,9 @@ object Play {
       lowest_render = Math.min(lowest_render, render_time)
       val avg_render = (total_render / world.tick)
 
-      print("\u001b[H\u001b[2J")
+      if (!minimal) {
+        print("\u001b[H\u001b[2J")
+      }
       println(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)".format(
           world.tick,
@@ -44,7 +50,9 @@ object Play {
           _f(avg_render)
         )
       )
-      print(rendered)
+      if (!minimal) {
+        print(rendered)
+      }
     }
   }
 

@@ -15,7 +15,11 @@ public class Play {
       World_Height
     );
 
-    System.out.println(world.render());
+    var minimal = System.getenv("MINIMAL") != null;
+
+    if (!minimal) {
+      System.out.println(world.render());
+    }
 
     var total_tick = 0.0;
     var lowest_tick = Double.MAX_VALUE;
@@ -39,7 +43,9 @@ public class Play {
       lowest_render = Math.min(lowest_render, render_time);
       var avg_render = (total_render / world.tick);
 
-      System.out.print("\u001b[H\u001b[2J");
+      if (!minimal) {
+        System.out.print("\u001b[H\u001b[2J");
+      }
       System.out.println(
         String.format(
           "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -50,7 +56,9 @@ public class Play {
           _f(avg_render)
         )
       );
-      System.out.print(rendered);
+      if (!minimal) {
+        System.out.print(rendered);
+      }
     }
   }
 

@@ -9,14 +9,18 @@ defmodule Play do
         height: @world_height
       )
 
-    IO.puts(World.render(world))
+    minimal = System.get_env("MINIMAL") != nil
+
+    if !minimal do
+      IO.puts(World.render(world))
+    end
 
     # Elixir doesn't have continuous loops (i.e. while(true) {}),
     # so we need to use recursive function calls instead
-    loop(world)
+    loop(world, minimal)
   end
 
-  def loop(world, total_tick \\ 0, lowest_tick \\ 9**9**9, total_render \\ 0, lowest_render \\ 9**9**9) do
+  def loop(world, minimal \\ false, total_tick \\ 0, lowest_tick \\ 9**9**9, total_render \\ 0, lowest_render \\ 9**9**9) do
     tick_start = System.monotonic_time()
     world = World.tick(world)
     tick_finish = System.monotonic_time()
@@ -33,10 +37,12 @@ defmodule Play do
     lowest_render = Kernel.min(lowest_render, render_time)
     avg_render = total_render / world.tick
 
-    IO.puts("\u001b[H\u001b[2J")
+    if !minimal do
+      IO.puts("\u001b[H\u001b[2J")
+    end
     IO.puts(
       :io_lib.format(
-        "#~.B - World Tick (L: ~.3f; A: ~.3f) - Rendering (L: ~.3f; A: ~.3f)\n",
+        "#~.B - World Tick (L: ~.3f; A: ~.3f) - Rendering (L: ~.3f; A: ~.3f)",
         [
           world.tick,
           _f(lowest_tick),
@@ -46,9 +52,11 @@ defmodule Play do
         ]
       )
     )
-    IO.puts(rendered)
+    if !minimal do
+      IO.puts(rendered)
+    end
 
-    loop(world, total_tick, lowest_tick, total_render, lowest_render)
+    loop(world, minimal, total_tick, lowest_tick, total_render, lowest_render)
   end
 
   def _f(value) do
