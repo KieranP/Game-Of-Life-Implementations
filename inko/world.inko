@@ -1,5 +1,5 @@
-import std.rand.Random
-import std.string.StringBuffer
+import std.rand (Random)
+import std.string (StringBuffer)
 
 class pub World {
   let pub @tick: Int
@@ -8,12 +8,12 @@ class pub World {
   let @cells: Map[String, Cell]
 
   fn pub static new(width: Int, height: Int) -> World {
-    let world = World {
-      @width = width,
-      @height = height,
-      @tick = 0,
-      @cells = Map.new,
-    }
+    let world = World(
+      width: width,
+      height: height,
+      tick: 0,
+      cells: Map.new,
+    )
 
     world.populate_cells
     world.prepopulate_neighbours
@@ -54,7 +54,7 @@ class pub World {
     #   while x < @width {
     #     let cell = cell_at(x, y)
     #     if cell.some? {
-    #       rendering += cell.unwrap.to_char
+    #       rendering += cell.get.to_char
     #     }
     #     x += 1
     #   }
@@ -71,7 +71,7 @@ class pub World {
     #   while x < @width {
     #     let cell = cell_at(x, y)
     #     if cell.some? {
-    #       rendering.push(cell.unwrap.to_char)
+    #       rendering.push(cell.get.to_char)
     #     }
     #     x += 1
     #   }
@@ -88,7 +88,7 @@ class pub World {
       while x < @width {
         let cell = cell_at(x, y)
         if cell.some? {
-          rendering.push(cell.unwrap.to_char)
+          rendering.push(cell.get.to_char)
         }
         x += 1
       }
@@ -119,9 +119,9 @@ class pub World {
   }
 
   fn mut add_cell(x: Int, y: Int, alive: Bool) -> Option[ref Cell] {
-    let key = "{x}-{y}"
+    let key = "${x}-${y}"
     if cell_at(x, y).some? {
-      panic("LocationOccupied("+key+")")
+      panic("LocationOccupied(${key})")
     }
 
     let cell = Cell.new(x, y, alive)
@@ -130,7 +130,7 @@ class pub World {
   }
 
   fn cell_at(x: Int, y: Int) -> Option[ref Cell] {
-    @cells.opt("{x}-{y}")
+    @cells.opt("${x}-${y}")
   }
 
   fn mut neighbours_around(cell: mut Cell) -> ref Array[ref Cell] {
@@ -147,7 +147,7 @@ class pub World {
           cell.y + set.get(1)
         )
         if neighbour.some? {
-          cell.neighbours.push(neighbour.unwrap)
+          cell.neighbours.push(neighbour.get)
         }
       }
     }
@@ -199,13 +199,13 @@ class Cell {
   let @neighbours: Array[ref Cell]
 
   fn pub static new(x: Int, y: Int, alive: Bool) -> Cell {
-    Cell {
-      @x = x,
-      @y = y,
-      @alive = alive,
-      @next_state = false,
-      @neighbours = [],
-    }
+    Cell(
+      x: x,
+      y: y,
+      alive: alive,
+      next_state: false,
+      neighbours: [],
+    )
   }
 
   fn to_char -> String {

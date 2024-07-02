@@ -1,7 +1,7 @@
-import world.World
-import std.stdio.STDOUT
-import std.time.Instant
-import std.cmp.(min)
+import world (World)
+import std.stdio (STDOUT)
+import std.time (Instant)
+import std.cmp (min)
 import std.env
 
 class Play {
