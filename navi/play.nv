@@ -1,0 +1,70 @@
+use std.time.DateTime;
+use std.process;
+use std.env;
+
+const World_Width = 150;
+const World_Height = 40;
+
+struct Play {}
+
+impl Play {
+  fn run() {
+    let world = World.new(
+      World_Width,
+      World_Height,
+    );
+
+    let minimal = env.get("MINIMAL") != nil;
+
+    if (!minimal) {
+      println(world.render());
+    }
+
+    let total_tick = 0;
+    let lowest_tick = 100_000_000.0;
+    let total_render = 0;
+    let lowest_render = 100_000_000.0;
+
+    while(true) {
+      const tick_start = DateTime.now();
+      world.tick();
+      const tick_finish = DateTime.now();
+      const tick_time = tick_finish.sub(tick_start).nanoseconds();
+      total_tick += tick_time;
+      lowest_tick = [lowest_tick, tick_time as float].min()!;
+      const avg_tick = (total_tick as float / world.tick as float);
+
+      const render_start = DateTime.now();
+      const rendered = world.render();
+      const render_finish = DateTime.now();
+      const render_time = render_finish.sub(render_start).nanoseconds();
+      total_render += render_time;
+      lowest_render = [lowest_render, render_time as float].min()!;
+      const avg_render = (total_render as float / world.tick as float);
+
+      if (!minimal) {
+        // print("\u001b[H\u001b[2J");
+        // print("\u{001b}[H\u{001b}[2J");
+        // print("\033[0;0H\033[2J");
+        // try! process.exec("clear");
+      }
+      println(
+        `#${world.tick} - `,
+        `World Tick (L: ${Play._f(lowest_tick)}; A: ${Play._f(avg_tick)}) - `,
+        `Rendering (L: ${Play._f(lowest_render)}; A: ${Play._f(avg_render)})`
+      );
+      if (!minimal) {
+        println(rendered);
+      }
+    }
+  }
+
+  fn _f(value: float): float {
+    // value is in nanoseconds, convert to milliseconds
+    return ((value / 1_000_000.0) * 1_000.0).round() / 1_000.0;
+  }
+}
+
+fn main() throws {
+  Play.run();
+}

@@ -1,0 +1,183 @@
+use std.rand;
+
+struct LocationOccupied {
+  x: int,
+  y: int,
+}
+
+impl Error for LocationOccupied {
+  pub fn error(self): string {
+    return `LocationOccupied(${self.x},${self.y})`;
+  }
+}
+
+struct World {
+  width: int,
+  height: int,
+  tick: int = 0,
+  cells: <string, Cell> = {:},
+  cached_directions: [[int]] = [
+    [-1, 1],  [0, 1],  [1, 1], // above
+    [-1, 0],           [1, 0], // sides
+    [-1, -1], [0, -1], [1, -1] // below
+  ],
+}
+
+impl World {
+  fn new(width: int, height: int): World {
+    const world = World { width, height };
+    world.populate_cells();
+    world.prepopulate_neighbours();
+    return world;
+  }
+
+  fn tick(self) {
+    // First determine the action for all cells
+    for (let key, cell in self.cells) {
+      let alive_neighbours = self.alive_neighbours_around(cell);
+      if (!cell.alive && alive_neighbours == 3) {
+        cell.next_state = true;
+      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
+        cell.next_state = false;
+      } else {
+        cell.next_state = cell.alive;
+      }
+    }
+
+    // Then execute the determined action for all cells
+    for (let key, cell in self.cells) {
+      cell.alive = cell.next_state || false;
+    }
+
+    self.tick += 1;
+  }
+
+  // Implement first using string concatenation. Then implement any
+  // special string builders, and use whatever runs the fastest
+  fn render(self): string {
+    // The following works but it slower
+    // let rendering = "";
+    // for (let y in 0..self.height) {
+    //   for (let x in 0..self.width) {
+    //     let cell = self.cell_at(x, y);
+    //     if (!cell.is_nil()) {
+    //       rendering += cell!.to_char().to_string();
+    //     }
+    //   }
+    //   rendering += "\n";
+    // }
+    // return rendering;
+
+    // The following was the fastest method
+    let rendering: [string] = [];
+    for (let y in 0..self.height) {
+      for (let x in 0..self.width) {
+        let cell = self.cell_at(x, y);
+        if (!cell.is_nil()) {
+          rendering.push(cell!.to_char().to_string());
+        }
+      }
+      rendering.push("\n");
+    }
+    return rendering.join("");
+  }
+
+  fn populate_cells(self) {
+    for (let y in 0..self.height) {
+      for (let x in 0..self.width) {
+        let alive = (rand.float(0.0, 1.0) <= 0.2);
+        try! self.add_cell(x, y, alive);
+      }
+    }
+  }
+
+  fn prepopulate_neighbours(self) {
+    for (let key, cell in self.cells) {
+      self.neighbours_around(cell);
+    }
+  }
+
+  fn add_cell(self, x: int, y: int, alive: bool): Cell? throws LocationOccupied {
+    if (!self.cell_at(x, y).is_nil()) {
+      throw LocationOccupied { x, y };
+    }
+
+    const cell = Cell.new(x, y, alive);
+    self.cells[`${x}-${y}`] = cell;
+    return self.cell_at(x, y);
+  }
+
+  fn cell_at(self, x: int, y: int): Cell? {
+    return self.cells.get(`${x}-${y}`);
+  }
+
+  fn neighbours_around(self, cell: Cell): [Cell] {
+    if (cell.neighbours.is_nil()) {
+      cell.neighbours = [];
+      for (let set in self.cached_directions) {
+        const neighbour = self.cell_at(
+          (cell.x + set[0]),
+          (cell.y + set[1]),
+        );
+
+        if (!neighbour.is_nil()) {
+          cell.neighbours?.push(neighbour!);
+        }
+      }
+    }
+
+    return cell.neighbours!;
+  }
+
+  // Implement first using filter/lambda if available. Then implement
+  // foreach and for. Use whatever implementation runs the fastest
+  fn alive_neighbours_around(self, cell: Cell): int {
+    let neighbours = self.neighbours_around(cell);
+
+    // The following works but is slower
+    // return neighbours.filter(|neighbour| {
+    //   return neighbour.alive;
+    // }).len();
+
+    // The following was the fastest method
+    let alive_neighbours = 0;
+    for (let neighbour in neighbours) {
+      if (neighbour.alive) {
+        alive_neighbours += 1;
+      }
+    }
+    return alive_neighbours;
+
+    // The following works but is slower
+    // let alive_neighbours = 0;
+    // for (let i in 0..neighbours.len()) {
+    //   let neighbour = neighbours[i];
+    //   if (neighbour.alive) {
+    //     alive_neighbours += 1;
+    //   }
+    // }
+    // return alive_neighbours;
+  }
+}
+
+struct Cell {
+  x: int,
+  y: int,
+  alive: bool,
+  next_state: bool? = nil,
+  neighbours: [Cell]? = nil,
+}
+
+impl Cell {
+  fn new(x: int, y: int, alive: bool): Cell {
+    return Cell { x, y, alive };
+  }
+
+  fn to_char(self): char {
+    if (self.alive) {
+      return 'o';
+    } else {
+      return ' ';
+    }
+  }
+}
