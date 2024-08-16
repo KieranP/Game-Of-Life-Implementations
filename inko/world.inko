@@ -22,7 +22,7 @@ class pub World {
 
   fn pub mut _tick {
     # First determine the action for all cells
-    @cells.iter_mut.each fn (entry) {
+    @cells.iter_mut.each(fn (entry) {
       let cell = entry.value
       let alive_neighbours = alive_neighbours_around(cell)
       if cell.alive == false and alive_neighbours == 3 {
@@ -32,13 +32,13 @@ class pub World {
       } else {
         cell.next_state = cell.alive
       }
-    }
+    })
 
     # Then execute the determined action for all cells
-    @cells.iter_mut.each fn (entry) {
+    @cells.iter_mut.each(fn (entry) {
       let cell = entry.value
       cell.alive = cell.next_state
-    }
+    })
 
     @tick += 1
   }
@@ -113,9 +113,9 @@ class pub World {
   }
 
   fn mut prepopulate_neighbours {
-    @cells.iter_mut.each fn (entry) {
+    @cells.iter_mut.each(fn (entry) {
       neighbours_around(entry.value)
-    }
+    })
   }
 
   fn mut add_cell(x: Int, y: Int, alive: Bool) -> Option[ref Cell] {
@@ -141,7 +141,7 @@ class pub World {
         [-1, -1], [0, -1], [1, -1] # below
       ]
 
-      cached_directions.iter.each fn (set) {
+      cached_directions.iter.each(fn (set) {
         let neighbour = cell_at(
           cell.x + set.get(0),
           cell.y + set.get(1)
@@ -149,7 +149,7 @@ class pub World {
         if neighbour.some? {
           cell.neighbours.push(neighbour.get)
         }
-      }
+      })
     }
 
     cell.neighbours
@@ -163,19 +163,19 @@ class pub World {
     # The following works but it slower
     # neighbours
     #   .iter
-    #   .select fn (neighbour) { neighbour.alive }
+    #   .select(fn (neighbour) { neighbour.alive })
     #   .count
 
     # The following works but it slower
     # neighbours
     #   .iter
-    #   .reduce(0) fn (count, neighbour) {
+    #   .reduce(0, fn (count, neighbour) {
     #     if neighbour.alive {
     #       count + 1
     #     } else {
     #       count
     #     }
-    #   }
+    #   })
 
     # The following was the fastest method
     let mut alive_neighbours = 0
