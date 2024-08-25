@@ -8,4 +8,4 @@
 ## Usage
 
 * `scalac *.scala`
-* `scala Play`
+* `scala run -cp . -M Play`

@@ -1,2 +1,4 @@
+.bsp
+.scala-build
 *.class
 *.tasty
