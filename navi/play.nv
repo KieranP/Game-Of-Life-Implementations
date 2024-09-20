@@ -43,10 +43,7 @@ impl Play {
       const avg_render = (total_render as float / world.tick as float);
 
       if (!minimal) {
-        // print("\u001b[H\u001b[2J");
-        // print("\u{001b}[H\u{001b}[2J");
-        // print("\033[0;0H\033[2J");
-        // try! process.exec("clear");
+        print("\u{001b}[H\u{001b}[2J");
       }
       println(
         `#${world.tick} - `,

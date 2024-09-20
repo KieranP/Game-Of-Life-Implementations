@@ -14,4 +14,3 @@ This language is still in development, and lacks the following feature(s) compar
 
 * Does not support Infinity or Int/Float max values
 * Does not support Monotonic clock for benchmarking
-* Unable to use Unicode escape sequences to clear the console screen between renders
