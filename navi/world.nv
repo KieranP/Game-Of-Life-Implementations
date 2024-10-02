@@ -1,4 +1,5 @@
 use std.rand;
+use std.str.StringBuffer;
 
 struct LocationOccupied {
   x: int,
@@ -68,18 +69,31 @@ impl World {
     // }
     // return rendering;
 
+    // The following works but it slower
+    // let rendering: [string] = [];
+    // for (let y in 0..self.height) {
+    //   for (let x in 0..self.width) {
+    //     let cell = self.cell_at(x, y);
+    //     if (!cell.is_nil()) {
+    //       rendering.push(cell!.to_char().to_string());
+    //     }
+    //   }
+    //   rendering.push("\n");
+    // }
+    // return rendering.join("");
+
     // The following was the fastest method
-    let rendering: [string] = [];
+    let rendering = StringBuffer.new();
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
         let cell = self.cell_at(x, y);
         if (!cell.is_nil()) {
-          rendering.push(cell!.to_char().to_string());
+          rendering.push(cell!.to_char());
         }
       }
-      rendering.push("\n");
+      rendering.push('\n');
     }
-    return rendering.join("");
+    return rendering.to_string();
   }
 
   fn populate_cells(self) {

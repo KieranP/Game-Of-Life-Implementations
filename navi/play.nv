@@ -26,20 +26,20 @@ impl Play {
     let lowest_render = 100_000_000.0;
 
     while(true) {
-      const tick_start = DateTime.now();
+      const tick_start = DateTime.now_utc();
       world.tick();
-      const tick_finish = DateTime.now();
+      const tick_finish = DateTime.now_utc();
       const tick_time = tick_finish.sub(tick_start).nanoseconds();
       total_tick += tick_time;
-      lowest_tick = [lowest_tick, tick_time as float].min()!;
+      lowest_tick = lowest_tick.min(tick_time as float);
       const avg_tick = (total_tick as float / world.tick as float);
 
-      const render_start = DateTime.now();
+      const render_start = DateTime.now_utc();
       const rendered = world.render();
-      const render_finish = DateTime.now();
+      const render_finish = DateTime.now_utc();
       const render_time = render_finish.sub(render_start).nanoseconds();
       total_render += render_time;
-      lowest_render = [lowest_render, render_time as float].min()!;
+      lowest_render = lowest_render.min(render_time as float);
       const avg_render = (total_render as float / world.tick as float);
 
       if (!minimal) {
