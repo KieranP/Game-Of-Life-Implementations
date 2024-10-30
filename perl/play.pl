@@ -1,4 +1,4 @@
-use v5.36;
+use v5.40;
 use strict;
 use warnings;
 
@@ -23,9 +23,9 @@ sub run {
   }
 
   my $total_tick = 0;
-  my $lowest_tick = 9**9**9;
+  my $lowest_tick = builtin::inf;
   my $total_render = 0;
-  my $lowest_render = 9**9**9;
+  my $lowest_render = builtin::inf;
 
   while (1) {
     my $tick_start = clock_gettime(CLOCK_MONOTONIC);

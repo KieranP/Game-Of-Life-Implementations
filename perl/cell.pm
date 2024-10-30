@@ -1,4 +1,4 @@
-use v5.36;
+use v5.40;
 use strict;
 use warnings;
 use builtin qw(false);
