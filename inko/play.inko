@@ -1,5 +1,5 @@
 import world (World)
-import std.stdio (STDOUT)
+import std.stdio (Stdout)
 import std.time (Instant)
 import std.cmp (min)
 import std.env
@@ -11,10 +11,11 @@ class Play {
       height: 40,
     )
 
+    let stdout = Stdout.new
     let minimal = env.opt('MINIMAL').some?
 
     if minimal == false {
-      STDOUT.new.print(world.render())
+      stdout.print(world.render())
     }
 
     let mut total_tick = 0.0
@@ -40,9 +41,9 @@ class Play {
       let avg_render = total_render / world.tick.to_float
 
       if minimal == false {
-        STDOUT.new.print("\u{001b}[H\u{001b}[2J")
+        stdout.print("\u{001b}[H\u{001b}[2J")
       }
-      STDOUT.new.print(
+      stdout.print(
         "#" + world.tick.to_string +
         " - World Tick (L: " + _f(lowest_tick).round(3).to_string +
         "; A: " + _f(avg_tick).round(3).to_string + ")" +
@@ -50,7 +51,7 @@ class Play {
         "; A: " + _f(avg_render).round(3).to_string + ")"
       )
       if minimal == false {
-        STDOUT.new.print(rendered)
+        stdout.print(rendered)
       }
     }
   }
