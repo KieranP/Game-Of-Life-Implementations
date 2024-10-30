@@ -8,7 +8,7 @@
 ## Usage (Deno)
 
 * `brew install deno`
-* `deno run --allow-hrtime --allow-env play.js`
+* `deno run --allow-env play.js`
 
 ## Usage (Bun)
 
