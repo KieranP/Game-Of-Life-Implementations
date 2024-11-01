@@ -1,6 +1,4 @@
-$:.push(File.dirname(__FILE__))
-
-require 'world'
+require_relative 'world'
 
 class Play
   @@World_Width  = 150
