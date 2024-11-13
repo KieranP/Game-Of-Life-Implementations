@@ -1,7 +1,6 @@
-#include <iostream>
-#include <vector>
-#include <unordered_map>
+#include <algorithm>
 #include <sstream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -10,7 +9,7 @@ class Cell {
     int x, y;
     bool alive;
     bool next_state;
-    vector<Cell*> neighbours;
+    vector<Cell*>* neighbours;
 
     Cell(int x, int y, bool alive = false): x(x), y(y), alive(alive) {
     }
@@ -31,7 +30,7 @@ class World {
 
     void _tick() {
       // First determine the action for all cells
-      for (auto& [key, cell] : cells) {
+      for (auto& [_, cell] : cells) {
         auto alive_neighbours = alive_neighbours_around(cell);
         if (!cell->alive && alive_neighbours == 3) {
           cell->next_state = true;
@@ -43,11 +42,11 @@ class World {
       }
 
       // Then execute the determined action for all cells
-      for (auto& [key, cell] : cells) {
+      for (auto& [_, cell] : cells) {
         cell->alive = cell->next_state;
       }
 
-      tick += 1;
+      tick++;
     }
 
     // Implement first using string concatenation. Then implement any
@@ -68,7 +67,7 @@ class World {
       stringstream rendering;
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
-          auto cell = *cell_at(x, y);
+          auto cell = cell_at(x, y);
           rendering << cell->to_char();
         }
         rendering << "\n";
@@ -79,7 +78,7 @@ class World {
   private:
     int width, height;
     unordered_map<string, Cell*> cells;
-    int cached_directions[8][2] = {
+    vector<pair<int, int>> cached_directions = {
       {-1, 1},  {0, 1},  {1, 1},  // above
       {-1, 0},           {1, 0},  // sides
       {-1, -1}, {0, -1}, {1, -1}, // below
@@ -109,19 +108,14 @@ class World {
     }
 
     void prepopulate_neighbours() {
-      for (auto& [key, cell] : cells) {
+      for (auto& [_, cell] : cells) {
         neighbours_around(cell);
       }
     }
 
     Cell* add_cell(int x, int y, bool alive = false) {
       if (cell_at(x, y)) {
-        try {
-          throw LocationOccupied(x, y);
-        } catch (LocationOccupied err) {
-          cout << err.what();
-          abort();
-        }
+        throw LocationOccupied(x, y);
       }
 
       auto key = to_string(x)+"-"+to_string(y);
@@ -130,25 +124,24 @@ class World {
       return cell;
     }
 
-    optional<Cell*> cell_at(int x, int y) {
+    Cell* cell_at(int x, int y) {
       auto key = to_string(x)+"-"+to_string(y);
-      try {
-        return cells.at(key);
-      } catch(const out_of_range &e) {
-        return nullopt;
-      }
+      auto it = cells.find(key);
+      return it != cells.end() ? it->second : nullptr;
     }
 
-    vector<Cell*> neighbours_around(Cell* cell) {
-      if (cell->neighbours.empty()) {
+    vector<Cell*>* neighbours_around(Cell* cell) {
+      if (!cell->neighbours) {
+        cell->neighbours = new vector<Cell*>();
+
         for (auto& [x,y] : cached_directions) {
-          auto neighbour = *cell_at(
+          auto neighbour = cell_at(
             (cell->x + x),
             (cell->y + y)
           );
 
-          if (neighbour != NULL) {
-            cell->neighbours.push_back(neighbour);
+          if (neighbour) {
+            cell->neighbours->push_back(neighbour);
           }
         }
       }
@@ -161,23 +154,26 @@ class World {
     int alive_neighbours_around(Cell* cell) {
       auto neighbours = neighbours_around(cell);
 
-      // The following works but it slower
-      // return count_if(neighbours.begin(), neighbours.end(),
-      //   [](auto neighbour) { return neighbour->alive; });
-
       // The following was the fastest method
-      auto alive_neighbours = 0;
-      for (auto& neighbour : neighbours) {
-        if (neighbour->alive) {
-          alive_neighbours++;
-        }
-      }
-      return alive_neighbours;
+      return count_if(
+        begin(*neighbours),
+        end(*neighbours),
+        [](auto *neighbour) { return neighbour->alive; }
+      );
 
-      // The following works but it slower
+      // The following is about the same time as the fastest
       // auto alive_neighbours = 0;
-      // for (auto i = 0; i < neighbours.size(); i++) {
-      //   auto neighbour = neighbours[i];
+      // for (auto& neighbour : *neighbours) {
+      //   if (neighbour->alive) {
+      //     alive_neighbours++;
+      //   }
+      // }
+      // return alive_neighbours;
+
+      // The following is about the same time as the fastest
+      // auto alive_neighbours = 0;
+      // for (auto i = 0; i < (*neighbours).size(); i++) {
+      //   auto neighbour = (*neighbours)[i];
       //   if (neighbour->alive) {
       //     alive_neighbours++;
       //   }

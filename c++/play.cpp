@@ -14,32 +14,32 @@ class Play {
         World_Height
       );
 
-      auto minimal = getenv("MINIMAL") != NULL;
+      auto minimal = getenv("MINIMAL") != nullptr;
 
       if (!minimal) {
         cout << world->render();
       }
 
       auto total_tick = 0.0;
-      auto lowest_tick = std::numeric_limits<double>::infinity();
+      auto lowest_tick = numeric_limits<double>::infinity();
       auto total_render = 0.0;
-      auto lowest_render = std::numeric_limits<double>::infinity();
+      auto lowest_render = numeric_limits<double>::infinity();
 
       while(true) {
-        auto tick_start = std::chrono::steady_clock::now();
+        auto tick_start = chrono::high_resolution_clock::now();
         world->_tick();
-        auto tick_finish = std::chrono::steady_clock::now();
-        auto tick_time = std::chrono::duration_cast<std::chrono::nanoseconds>(tick_finish - tick_start).count();
+        auto tick_finish = chrono::high_resolution_clock::now();
+        auto tick_time = chrono::duration<double, std::nano>(tick_finish - tick_start).count();
         total_tick += tick_time;
-        lowest_tick = min(lowest_tick, (double)tick_time);
+        lowest_tick = min(lowest_tick, tick_time);
         auto avg_tick = total_tick / world->tick;
 
-        auto render_start = std::chrono::steady_clock::now();
+        auto render_start = chrono::high_resolution_clock::now();
         auto rendered = world->render();
-        auto render_finish = std::chrono::steady_clock::now();
-        auto render_time = std::chrono::duration_cast<std::chrono::nanoseconds>(render_finish - render_start).count();
+        auto render_finish = chrono::high_resolution_clock::now();
+        auto render_time = chrono::duration<double, std::nano>(render_finish - render_start).count();
         total_render += render_time;
-        lowest_render = min(lowest_render, (double)render_time);
+        lowest_render = min(lowest_render, render_time);
         auto avg_render = total_render / world->tick;
 
         if (!minimal) {
