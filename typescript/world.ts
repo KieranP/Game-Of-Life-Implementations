@@ -22,7 +22,7 @@ export class World {
     this.#prepopulate_neighbours()
   }
 
-  _tick() {
+  _tick(): void {
     // First determine the action for all cells
     for (const cell of this.#cells.values()) {
       const alive_neighbours = this.#alive_neighbours_around(cell)
@@ -45,7 +45,7 @@ export class World {
 
   // Implement first using string concatenation. Then implement any
   // special string builders, and use whatever runs the fastest
-  render() {
+  render(): string {
     // The following was the fastest method
     let rendering = ''
     for (let y = 0; y < this.#height; y++) {

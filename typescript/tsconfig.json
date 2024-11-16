@@ -1,4 +1,5 @@
 {
+  // See https://www.typescriptlang.org/tsconfig
   "compilerOptions": {
     // Type Checking
     "allowUnreachableCode": false,
@@ -14,15 +15,26 @@
     "strict": true,
 
     // Modules
-    "module": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noUncheckedSideEffectImports": true,
 
     // Emit
-    "sourceMap": false,
+    "declarationMap": true,
+    "sourceMap": true,
 
     // Interop
-    "isolatedModules": true,
+    "esModuleInterop": true,
+    "isolatedDeclarations": true,
 
     // Language & Environment
-    "target": "esnext"
+    "target": "esnext",
+    "useDefineForClassFields": true,
+
+    // Completeness
+    "skipLibCheck": true,
+
+    // Projects
+    "composite": true
   }
 }
