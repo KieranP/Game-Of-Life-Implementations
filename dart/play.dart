@@ -61,7 +61,7 @@ class Play {
 
   static String _f(double value) {
     // value is in microseconds, convert to milliseconds
-    return (value / 1000).toStringAsFixed(3);
+    return (value / 1_000).toStringAsFixed(3);
   }
 }
 
