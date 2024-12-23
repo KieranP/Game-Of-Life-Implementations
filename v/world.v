@@ -149,19 +149,22 @@ fn (w World) neighbours_around(mut cell Cell) []&Cell {
 fn (w World) alive_neighbours_around(mut cell &Cell) int {
   neighbours := w.neighbours_around(mut *cell)
 
+  // The following was the fastest method
+  return neighbours.count(it.alive)
+
   // The following works but is slower
   // return neighbours.filter(fn (neighbour &Cell) bool {
   //   return neighbour.alive
   // }).len
 
-  // The following was the fastest method
-  mut alive_neighbours := 0
-  for _, neighbour in neighbours {
-    if neighbour.alive {
-      alive_neighbours++
-    }
-  }
-  return alive_neighbours
+  // The following works and is the same speed
+  // mut alive_neighbours := 0
+  // for _, neighbour in neighbours {
+  //   if neighbour.alive {
+  //     alive_neighbours++
+  //   }
+  // }
+  // return alive_neighbours
 
   // The following works but is slower
   // mut alive_neighbours := 0
