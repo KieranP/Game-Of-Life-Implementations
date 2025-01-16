@@ -1,0 +1,8 @@
+{
+  "editor.defaultFormatter": null,
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "explorer.excludeGitIgnore": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+}
