@@ -2,7 +2,7 @@ import std.rand (Random)
 import std.string (StringBuffer)
 
 class pub World {
-  let pub @tick: Int
+  let pub mut @tick: Int
   let @width: Int
   let @height: Int
   let @cells: Map[String, Cell]
@@ -194,8 +194,8 @@ class pub World {
 class Cell {
   let @x: Int
   let @y: Int
-  let @alive: Bool
-  let @next_state: Bool
+  let mut @alive: Bool
+  let mut @next_state: Bool
   let @neighbours: Array[ref Cell]
 
   fn pub static new(x: Int, y: Int, alive: Bool) -> Cell {
