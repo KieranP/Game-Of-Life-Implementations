@@ -1,10 +1,10 @@
 class LocationOccupied extends Error {}
 
 export class World {
-  tick: number
+  tick = 0
   #width: number
   #height: number
-  #cells: Map<string, Cell>
+  #cells = new Map<string, Cell>()
   #cached_directions = [
     [-1, 1],  [0, 1],  [1, 1], // above
     [-1, 0],           [1, 0], // sides
@@ -12,10 +12,8 @@ export class World {
   ] as const
 
   constructor(width: number, height: number) {
-    this.tick = 0
     this.#width = width
     this.#height = height
-    this.#cells = new Map()
 
     this.#populate_cells()
     this.#prepopulate_neighbours()
@@ -49,7 +47,7 @@ export class World {
     let rendering = ''
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
-        const cell = this.#cell_at(x, y)
+        const cell = this.#cell_at(x, y)!
         rendering += cell.to_char()
       }
       rendering += "\n"
@@ -60,7 +58,7 @@ export class World {
     // let rendering: Array<string> = []
     // for (let y = 0; y < this.#height; y++) {
     //   for (let x = 0; x < this.#width; x++) {
-    //     const cell = this.#cell_at(x, y)
+    //     const cell = this.#cell_at(x, y)!
     //     rendering.push(cell.to_char())
     //   }
     //   rendering.push("\n")
@@ -94,16 +92,16 @@ export class World {
   }
 
   #cell_at(x: number, y: number) {
-    return this.#cells.get(`${x}-${y}`)!
+    return this.#cells.get(`${x}-${y}`)
   }
 
   #neighbours_around(cell: Cell) {
     if (cell.neighbours == null) {
       cell.neighbours = new Array
-      for (const set of this.#cached_directions) {
+      for (const [x, y] of this.#cached_directions) {
         const neighbour = this.#cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1])
+          (cell.x + x),
+          (cell.y + y)
         )
         if (neighbour != null) {
           cell.neighbours.push(neighbour)
@@ -149,15 +147,13 @@ class Cell {
   x: number
   y: number
   alive: boolean
-  next_state: boolean | null
-  neighbours: Cell[] | null
+  next_state: boolean | null = null
+  neighbours: Cell[] | null = null
 
   constructor(x: number, y: number, alive: boolean = false) {
     this.x = x
     this.y = y
     this.alive = alive
-    this.next_state = null
-    this.neighbours = null
   }
 
   to_char() {
