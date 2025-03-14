@@ -5,7 +5,7 @@ export class World {
   #width: number
   #height: number
   #cells: Map<string, Cell>
-  #cached_directions: number[][]
+  #cached_directions
 
   constructor(width: number, height: number) {
     this.tick = 0
@@ -16,7 +16,7 @@ export class World {
       [-1, 1],  [0, 1],  [1, 1], // above
       [-1, 0],           [1, 0], // sides
       [-1, -1], [0, -1], [1, -1] // below
-    ]
+    ] as const
 
     this.#populate_cells()
     this.#prepopulate_neighbours()
@@ -103,8 +103,8 @@ export class World {
       cell.neighbours = new Array
       for (const set of this.#cached_directions) {
         const neighbour = this.#cell_at(
-          (cell.x + set[0]!),
-          (cell.y + set[1]!)
+          (cell.x + set[0]),
+          (cell.y + set[1])
         )
         if (neighbour != null) {
           cell.neighbours.push(neighbour)
