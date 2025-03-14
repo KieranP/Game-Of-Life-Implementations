@@ -5,18 +5,17 @@ export class World {
   #width: number
   #height: number
   #cells: Map<string, Cell>
-  #cached_directions
+  #cached_directions = [
+    [-1, 1],  [0, 1],  [1, 1], // above
+    [-1, 0],           [1, 0], // sides
+    [-1, -1], [0, -1], [1, -1] // below
+  ] as const
 
   constructor(width: number, height: number) {
     this.tick = 0
     this.#width = width
     this.#height = height
     this.#cells = new Map()
-    this.#cached_directions = [
-      [-1, 1],  [0, 1],  [1, 1], // above
-      [-1, 0],           [1, 0], // sides
-      [-1, -1], [0, -1], [1, -1] // below
-    ] as const
 
     this.#populate_cells()
     this.#prepopulate_neighbours()
