@@ -7,23 +7,27 @@ import (
   "strings"
 )
 
-// GO doesn't have a concept of exception
-var LocationOccupied = fmt.Errorf("LocationOccupied")
+type LocationOccupied struct {
+  x, y int
+}
 
-var cached_directions = [8][2]int{
+func (e LocationOccupied) Error() string {
+  return fmt.Sprintf("LocationOccupied(%d-%d)", e.x, e.y)
+}
+
+var DIRECTIONS = [8][2]int{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
 }
 
 type World struct {
+  tick int64
   width int
   height int
-  tick int64
-	cells map[string]*Cell
+  cells map[string]*Cell
 }
 
-// Like constructor
 func new_world(width int, height int) *World {
   world := new(World)
   world.width = width
@@ -95,6 +99,12 @@ func (world *World) render() string {
   return rendering.String()
 }
 
+func (world *World) cell_at(x int, y int) (*Cell, bool) {
+  key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
+  cell, ok := world.cells[key]
+  return cell, ok
+}
+
 func (world *World) populate_cells() {
   for y := range(world.height) {
     for x := range(world.width) {
@@ -104,33 +114,20 @@ func (world *World) populate_cells() {
   }
 }
 
-func (world *World) prepopulate_neighbours() {
-  for _, cell := range world.cells {
-    world.neighbours_around(cell)
-  }
-}
-
 func (world *World) add_cell(x int, y int, alive bool) *Cell {
   if _, ok := world.cell_at(x, y); ok {
-    panic(LocationOccupied)
+    panic(LocationOccupied{ x: x, y: y })
   }
 
   cell := new_cell(x, y, alive)
-
   key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
   world.cells[key] = cell
   return cell
 }
 
-func (world *World) cell_at(x int, y int) (*Cell, bool) {
-  key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
-  cell, ok := world.cells[key]
-  return cell, ok
-}
-
-func (world *World) neighbours_around(cell *Cell) []*Cell {
-  if cell.neighbours == nil {
-    for _, set := range cached_directions {
+func (world *World) prepopulate_neighbours() {
+  for _, cell := range world.cells {
+    for _, set := range DIRECTIONS {
       neighbour, ok := world.cell_at(
         cell.x + set[0],
         cell.y + set[1],
@@ -141,17 +138,14 @@ func (world *World) neighbours_around(cell *Cell) []*Cell {
       }
     }
   }
-  return cell.neighbours
 }
 
 // Implement first using filter/lambda if available. Then implement
 // foreach and for. Use whatever implementation runs the fastest
 func (world *World) alive_neighbours_around(cell *Cell) int {
-  neighbours := world.neighbours_around(cell)
-
   // The following was the fastest method
   alive_neighbours := 0
-  for _, neighbour := range neighbours {
+  for _, neighbour := range cell.neighbours {
     if neighbour.alive {
       alive_neighbours++
     }
@@ -160,8 +154,8 @@ func (world *World) alive_neighbours_around(cell *Cell) int {
 
   // The following also works but is slower
   // alive_neighbours := 0
-  // for i := range(len(neighbours)) {
-  //   neighbour := neighbours[i]
+  // for i := range(len(cell.neighbours)) {
+  //   neighbour := cell.neighbours[i]
   //   if neighbour.alive {
   //     alive_neighbours++
   //   }

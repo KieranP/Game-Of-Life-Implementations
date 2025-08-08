@@ -11,7 +11,7 @@ sub new($class, $x, $y, $alive = false) {
     y => $y,
     alive => $alive,
     next_state => undef,
-    neighbours => undef
+    neighbours => []
   };
 
   bless $self, $class;

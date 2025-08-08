@@ -1,15 +1,21 @@
 class World
-  class LocationOccupied < Exception; end
+  getter tick : Int32 = 0
 
-  property width : Int32,
-           height : Int32,
-           tick : Int32 = 0,
-           cells = {} of String => Cell,
-           cached_directions = [
-             [-1, 1],  [0, 1],  [1, 1], # above
-             [-1, 0],           [1, 0], # sides
-             [-1, -1], [0, -1], [1, -1] # below
-           ]
+  @width : Int32
+  @height : Int32
+  @cells = {} of String => Cell
+
+  private class LocationOccupied < Exception
+    def initialize(@x : Int32, @y : Int32)
+      super("LocationOccupied(#{@x}-#{@y})")
+    end
+  end
+
+  private DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1], # above
+    [-1, 0],           [1, 0], # sides
+    [-1, -1], [0, -1], [1, -1] # below
+  ]
 
   def initialize(@width : Int32, @height : Int32)
     populate_cells
@@ -18,7 +24,7 @@ class World
 
   def _tick
     # First determine the action for all cells
-    @cells.each do |(key, cell)|
+    @cells.each_value do |cell|
       alive_neighbours = alive_neighbours_around(cell)
       if !cell.alive && alive_neighbours == 3
         cell.next_state = true
@@ -30,7 +36,7 @@ class World
     end
 
     # Then execute the determined action for all cells
-    @cells.each do |(key, cell)|
+    @cells.each_value do |cell|
       cell.alive = !!cell.next_state
     end
 
@@ -74,6 +80,10 @@ class World
     end
   end
 
+  private def cell_at(x : Int32, y : Int32)
+    @cells["#{x}-#{y}"]?
+  end
+
   private def populate_cells
     @height.times do |y|
       @width.times do |x|
@@ -83,53 +93,45 @@ class World
     end
   end
 
-  private def prepopulate_neighbours
-    @cells.each do |(key, cell)|
-      neighbours_around(cell)
-    end
-  end
-
   private def add_cell(x : Int32, y : Int32, alive : Bool = false)
-    raise LocationOccupied.new if cell_at(x, y)
+    if cell_at(x, y)
+      raise LocationOccupied.new(x, y)
+    end
+
     cell = Cell.new(x, y, alive)
     @cells["#{x}-#{y}"] = cell
-    cell_at(x, y).not_nil!
+    cell
   end
 
-  private def cell_at(x : Int32, y : Int32)
-    @cells["#{x}-#{y}"]?
-  end
-
-  private def neighbours_around(cell : Cell)
-    cell.neighbours ||= begin
-      @cached_directions.compact_map { |(rel_x, rel_y)|
-        cell_at(
-          (cell.x + rel_x),
-          (cell.y + rel_y)
-        )
-      }
+  private def prepopulate_neighbours
+    @cells.each_value do |cell|
+      cell.neighbours =
+        DIRECTIONS.compact_map { |(rel_x, rel_y)|
+          cell_at(
+            (cell.x + rel_x),
+            (cell.y + rel_y)
+          )
+        }
     end
   end
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   private def alive_neighbours_around(cell)
-    neighbours = neighbours_around(cell)
-
     # The following was the fastest method
-    neighbours.count(&.alive)
+    cell.neighbours.count(&.alive)
 
     # The following works but is slower
     # alive_neighbours = 0
-    # neighbours.each do |neighbour|
+    # cell.neighbours.each do |neighbour|
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
 
     # The following works but is slower
     # alive_neighbours = 0
-    # 0.upto(neighbours.size-1) do |i|
-    #   neighbour = neighbours[i]
+    # 0.upto(cell.neighbours.size-1) do |i|
+    #   neighbour = cell.neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
@@ -137,11 +139,12 @@ class World
 end
 
 class Cell
-  property x : Int32,
-           y : Int32,
-           alive : Bool,
+  getter x : Int32,
+         y : Int32
+
+  property alive : Bool,
            next_state : (Bool | Nil) = nil,
-           neighbours : (Array(Cell) | Nil) = nil
+           neighbours : Array(Cell) = [] of Cell
 
   def initialize(@x : Int32, @y : Int32, @alive : Bool = false)
   end

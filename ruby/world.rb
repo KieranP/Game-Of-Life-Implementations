@@ -1,20 +1,25 @@
 require 'stringio'
 
 class World
-  class LocationOccupied < Exception; end
+  attr_reader :tick
 
-  attr_accessor :tick
+  class LocationOccupied < Exception
+    def initialize(x, y)
+      super("LocationOccupied(#{x}-#{y})")
+    end
+  end
+
+  DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1], # above
+    [-1, 0],           [1, 0], # sides
+    [-1, -1], [0, -1], [1, -1] # below
+  ]
 
   def initialize(width:, height:)
+    @tick = 0
     @width = width
     @height = height
-    @tick = 0
     @cells = {}
-    @cached_directions = [
-      [-1, 1],  [0, 1],  [1, 1], # above
-      [-1, 0],           [1, 0], # sides
-      [-1, -1], [0, -1], [1, -1] # below
-    ]
 
     populate_cells
     prepopulate_neighbours
@@ -22,7 +27,7 @@ class World
 
   def _tick
     # First determine the action for all cells
-    @cells.each do |key, cell|
+    @cells.each_value do |cell|
       alive_neighbours = alive_neighbours_around(cell)
       if !cell.alive && alive_neighbours == 3
         cell.next_state = true
@@ -34,7 +39,7 @@ class World
     end
 
     # Then execute the determined action for all cells
-    @cells.each do |key, cell|
+    @cells.each_value do |cell|
       cell.alive = cell.next_state
     end
 
@@ -77,6 +82,10 @@ class World
 
   private
 
+  def cell_at(x, y)
+    @cells["#{x}-#{y}"]
+  end
+
   def populate_cells
     @height.times do |y|
       @width.times do |x|
@@ -86,53 +95,45 @@ class World
     end
   end
 
-  def prepopulate_neighbours
-    @cells.each do |key, cell|
-      neighbours_around(cell)
-    end
-  end
-
   def add_cell(x, y, alive = false)
-    raise LocationOccupied if cell_at(x, y)
+    if cell_at(x, y)
+      raise LocationOccupied.new(x, y)
+    end
+
     cell = Cell.new(x, y, alive)
     @cells["#{x}-#{y}"] = cell
-    cell_at(x, y)
+    cell
   end
 
-  def cell_at(x, y)
-    @cells["#{x}-#{y}"]
-  end
-
-  def neighbours_around(cell)
-    cell.neighbours ||= begin
-      @cached_directions.filter_map { |rel_x, rel_y|
-        cell_at(
-          (cell.x + rel_x),
-          (cell.y + rel_y)
-        )
-      }
+  def prepopulate_neighbours
+    @cells.each_value do |cell|
+      cell.neighbours =
+        DIRECTIONS.filter_map { |rel_x, rel_y|
+          cell_at(
+            (cell.x + rel_x),
+            (cell.y + rel_y)
+          )
+        }
     end
   end
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours_around(cell)
-    neighbours = neighbours_around(cell)
-
     # The following was the fastest method
-    neighbours.count(&:alive)
+    cell.neighbours.count(&:alive)
 
     # The following works but is slower
     # alive_neighbours = 0
-    # neighbours.each do |neighbour|
+    # cell.neighbours.each do |neighbour|
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
 
     # The following works but is slower
     # alive_neighbours = 0
-    # for i in 0...neighbours.size do
-    #   neighbour = neighbours[i]
+    # for i in 0...cell.neighbours.size do
+    #   neighbour = cell.neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
@@ -140,14 +141,15 @@ class World
 end
 
 class Cell
-  attr_accessor :x, :y, :alive, :next_state, :neighbours
+  attr_reader :x, :y
+  attr_accessor :alive, :next_state, :neighbours
 
   def initialize(x, y, alive = false)
     @x = x
     @y = y
     @alive = alive
     @next_state = nil
-    @neighbours = nil
+    @neighbours = []
   end
 
   def to_char

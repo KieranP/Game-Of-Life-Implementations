@@ -1,20 +1,21 @@
 from random import randint
 
 class World:
-  class LocationOccupied(RuntimeError): pass
+  class LocationOccupied(RuntimeError):
+    def __init__(self, x, y):
+      super().__init__(f"LocationOccupied({x}-{y})")
 
-  # Python doesn't have a concept of public/private variables
+  DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1], # above
+    [-1, 0],           [1, 0], # sides
+    [-1, -1], [0, -1], [1, -1] # below
+  ]
 
   def __init__(self, width, height):
+    self.tick = 0
     self.width = width
     self.height = height
-    self.tick = 0
     self.cells = {}
-    self.cached_directions = [
-      [-1, 1],  [0, 1],  [1, 1], # above
-      [-1, 0],           [1, 0], # sides
-      [-1, -1], [0, -1], [1, -1] # below
-    ]
 
     self.populate_cells()
     self.prepopulate_neighbours()
@@ -57,7 +58,8 @@ class World:
       rendering.append("\n")
     return ''.join(rendering)
 
-  # Python doesn't have a concept of public/private methods
+  def cell_at(self, x, y):
+    return self.cells.get(str(x)+'-'+str(y))
 
   def populate_cells(self):
     for y in list(range(self.height)):
@@ -65,54 +67,43 @@ class World:
         alive = (randint(0, 100) <= 20)
         self.add_cell(x, y, alive)
 
-  def prepopulate_neighbours(self):
-    for key,cell in self.cells.items():
-      self.neighbours_around(cell)
-
   def add_cell(self, x, y, alive = False):
     if self.cell_at(x, y) != None:
-      raise World.LocationOccupied
+      raise World.LocationOccupied(x, y)
 
     cell = Cell(x, y, alive)
     self.cells[str(x)+'-'+str(y)] = cell
-    return self.cell_at(x, y)
+    return cell
 
-  def cell_at(self, x, y):
-    return self.cells.get(str(x)+'-'+str(y))
-
-  def neighbours_around(self, cell):
-    if cell.neighbours is None:
-      cell.neighbours = []
-      for rel_x,rel_y in self.cached_directions:
+  def prepopulate_neighbours(self):
+    for key,cell in self.cells.items():
+      for rel_x,rel_y in self.DIRECTIONS:
         neighbour = self.cell_at(
           (cell.x + rel_x),
           (cell.y + rel_y)
         )
+
         if neighbour is not None:
           cell.neighbours.append(neighbour)
-
-    return cell.neighbours
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours_around(self, cell):
-    neighbours = self.neighbours_around(cell)
-
     # The following works but is slower
     # filter_alive = lambda neighbour: neighbour.alive
-    # return len(list(filter(filter_alive, neighbours)))
+    # return len(list(filter(filter_alive, cell.neighbours)))
 
     # The following was the fastest method
     alive_neighbours = 0
-    for neighbour in neighbours:
+    for neighbour in cell.neighbours:
       if neighbour.alive:
         alive_neighbours += 1
     return alive_neighbours
 
     # The following works but is slower
     # alive_neighbours = 0
-    # for i in range(len(neighbours)):
-    #   neighbour = neighbours[i]
+    # for i in range(len(cell.neighbours)):
+    #   neighbour = cell.neighbours[i]
     #   if neighbour.alive:
     #     alive_neighbours += 1
     # return alive_neighbours
@@ -123,7 +114,7 @@ class Cell:
     self.y = y
     self.alive = alive
     self.next_state = None
-    self.neighbours = None
+    self.neighbours = []
 
   def to_char(self):
     return 'o' if self.alive else ' '

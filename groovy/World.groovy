@@ -1,22 +1,27 @@
 public class World {
-  private class LocationOccupied extends Exception { }
-
   public Integer tick
+
   private Integer width
   private Integer height
   private HashMap<String, Cell> cells
-  private Integer[][] cached_directions
+
+  private class LocationOccupied extends Exception {
+    public LocationOccupied(int x, int y) {
+      super("LocationOccupied(${x}-${y})")
+    }
+  }
+
+  private static final Integer[][] DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1],  // above
+    [-1, 0],           [1, 0],  // sides
+    [-1, -1], [0, -1], [1, -1], // below
+  ]
 
   public World(int width, int height) {
+    this.tick = 0
     this.width = width
     this.height = height
-    this.tick = 0
     this.cells = [:]
-    this.cached_directions = [
-      [-1, 1],  [0, 1],  [1, 1],  // above
-      [-1, 0],           [1, 0],  // sides
-      [-1, -1], [0, -1], [1, -1], // below
-    ]
 
     populate_cells()
     prepopulate_neighbours()
@@ -80,6 +85,10 @@ public class World {
     rendering.toString()
   }
 
+  private Cell cell_at(int x, int y) {
+    cells["${x}-${y}".toString()]
+  }
+
   private void populate_cells() {
     for (y in 0..<height) {
       for (x in 0..<width) {
@@ -89,30 +98,19 @@ public class World {
     }
   }
 
-  private void prepopulate_neighbours() {
-    for (cell in cells.values()) {
-      neighbours_around(cell)
-    }
-  }
-
   private Cell add_cell(int x, int y, boolean alive = false) {
     if (cell_at(x, y)) {
-      throw new LocationOccupied()
+      throw new LocationOccupied(x, y)
     }
 
     def cell = new Cell(x, y, alive)
     cells["${x}-${y}".toString()] = cell
-    cell_at(x, y)
+    cell
   }
 
-  private Cell cell_at(int x, int y) {
-    cells["${x}-${y}".toString()]
-  }
-
-  private ArrayList<Cell> neighbours_around(Cell cell) {
-    if (cell.neighbours == null) { // Must return a boolean
-      cell.neighbours = []
-      for (set in cached_directions) {
+  private void prepopulate_neighbours() {
+    for (cell in cells.values()) {
+      for (set in DIRECTIONS) {
         def neighbour = cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
@@ -123,21 +121,17 @@ public class World {
         }
       }
     }
-
-    cell.neighbours
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private Integer alive_neighbours_around(Cell cell) {
-    def neighbours = neighbours_around(cell)
-
     // The following works but is slower
-    // neighbours.count { it.alive }
+    // cell.neighbours.count { it.alive }
 
     // The following was the fastest method
     def alive_neighbours = 0
-    for (neighbour in neighbours) {
+    for (neighbour in cell.neighbours) {
       if (neighbour.alive) {
         alive_neighbours++
       }
@@ -146,8 +140,8 @@ public class World {
 
     // The following works but is slower
     // def alive_neighbours = 0
-    // for (i in 0..neighbours.size()-1) {
-    //   def neighbour = neighbours.get(i)
+    // for (i in 0..cell.neighbours.size()-1) {
+    //   def neighbour = cell.neighbours.get(i)
     //   if (neighbour.alive) {
     //     alive_neighbours++
     //   }
@@ -168,7 +162,7 @@ class Cell {
     this.y = y
     this.alive = alive
     this.next_state = null
-    this.neighbours = null
+    this.neighbours = []
   }
 
   public String to_char() {
