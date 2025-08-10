@@ -1,6 +1,3 @@
-// Files must be named the same as the class they contain
-// Files can have multiple classes, but only one public class
-
 public class Play {
   private static int World_Width  = 150;
   private static int World_Height = 40;

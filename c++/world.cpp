@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <sstream>
 #include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -9,10 +10,9 @@ class Cell {
     int x, y;
     bool alive;
     bool next_state;
-    vector<Cell*>* neighbours;
+    vector<Cell*>* neighbours = new vector<Cell*>();
 
-    Cell(int x, int y, bool alive = false): x(x), y(y), alive(alive) {
-    }
+    Cell(int x, int y, bool alive = false): x(x), y(y), alive(alive) { }
 
     char to_char() {
       return alive ? 'o' : ' ';
@@ -78,15 +78,10 @@ class World {
   private:
     int width, height;
     unordered_map<string, Cell*> cells;
-    vector<pair<int, int>> cached_directions = {
-      {-1, 1},  {0, 1},  {1, 1},  // above
-      {-1, 0},           {1, 0},  // sides
-      {-1, -1}, {0, -1}, {1, -1}, // below
-    };
 
     class LocationOccupied : public exception {
       public:
-        LocationOccupied(int x, int y) : x(x), y(y) {}
+        LocationOccupied(int x, int y) : x(x), y(y) { }
 
         string what() {
           auto key = to_string(x)+"-"+to_string(y);
@@ -97,6 +92,18 @@ class World {
         int x, y;
     };
 
+    static inline const vector<pair<int, int>> DIRECTIONS = {
+      {-1, 1},  {0, 1},  {1, 1},  // above
+      {-1, 0},           {1, 0},  // sides
+      {-1, -1}, {0, -1}, {1, -1}, // below
+    };
+
+    Cell* cell_at(int x, int y) {
+      auto key = to_string(x)+"-"+to_string(y);
+      auto it = cells.find(key);
+      return it != cells.end() ? it->second : nullptr;
+    }
+
     void populate_cells() {
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
@@ -104,12 +111,6 @@ class World {
           auto alive = (random <= 0.2);
           add_cell(x, y, alive);
         }
-      }
-    }
-
-    void prepopulate_neighbours() {
-      for (auto& [_, cell] : cells) {
-        neighbours_around(cell);
       }
     }
 
@@ -124,17 +125,9 @@ class World {
       return cell;
     }
 
-    Cell* cell_at(int x, int y) {
-      auto key = to_string(x)+"-"+to_string(y);
-      auto it = cells.find(key);
-      return it != cells.end() ? it->second : nullptr;
-    }
-
-    vector<Cell*>* neighbours_around(Cell* cell) {
-      if (!cell->neighbours) {
-        cell->neighbours = new vector<Cell*>();
-
-        for (auto& [x,y] : cached_directions) {
+    void prepopulate_neighbours() {
+      for (auto& [_, cell] : cells) {
+        for (auto& [x,y] : DIRECTIONS) {
           auto neighbour = cell_at(
             (cell->x + x),
             (cell->y + y)
@@ -145,25 +138,21 @@ class World {
           }
         }
       }
-
-      return cell->neighbours;
     }
 
     // Implement first using filter/lambda if available. Then implement
     // foreach and for. Use whatever implementation runs the fastest
     int alive_neighbours_around(Cell* cell) {
-      auto neighbours = neighbours_around(cell);
-
       // The following was the fastest method
       return count_if(
-        begin(*neighbours),
-        end(*neighbours),
+        begin(*cell->neighbours),
+        end(*cell->neighbours),
         [](auto *neighbour) { return neighbour->alive; }
       );
 
       // The following is about the same time as the fastest
       // auto alive_neighbours = 0;
-      // for (auto& neighbour : *neighbours) {
+      // for (auto& neighbour : *cell->neighbours) {
       //   if (neighbour->alive) {
       //     alive_neighbours++;
       //   }
@@ -172,8 +161,8 @@ class World {
 
       // The following is about the same time as the fastest
       // auto alive_neighbours = 0;
-      // for (auto i = 0; i < (*neighbours).size(); i++) {
-      //   auto neighbour = (*neighbours)[i];
+      // for (auto i = 0; i < (*cell->neighbours).size(); i++) {
+      //   auto neighbour = (*cell->neighbours)[i];
       //   if (neighbour->alive) {
       //     alive_neighbours++;
       //   }

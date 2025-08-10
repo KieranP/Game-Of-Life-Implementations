@@ -1,18 +1,21 @@
 defmodule World do
-  defmodule LocationOccupied do
-    defexception [:message]
-  end
-
   defstruct [
     :width,
     :height,
     tick: 0,
-    cells: %{},
-    cached_directions: [
-      [-1, 1],  [0, 1],  [1, 1], # above
-      [-1, 0],           [1, 0], # sides
-      [-1, -1], [0, -1], [1, -1] # below
-    ]
+    cells: %{}
+  ]
+
+  defmodule LocationOccupied do
+    defexception [:x, :y]
+    def message(e), do:
+      "LocationOccupied(#{e.x}-#{e.y})"
+  end
+
+  @directions [
+    [-1, 1],  [0, 1],  [1, 1], # above
+    [-1, 0],           [1, 0], # sides
+    [-1, -1], [0, -1], [1, -1] # below
   ]
 
   def new(width: width, height: height) do
@@ -77,6 +80,10 @@ defmodule World do
     # end)
   end
 
+  defp cell_at(world, x, y) do
+    Map.get(world.cells, "#{x}-#{y}")
+  end
+
   defp populate_cells(world) do
     for y <- 0..(world.height - 1), reduce: world do
       world ->
@@ -89,17 +96,9 @@ defmodule World do
     end
   end
 
-  defp prepopulate_neighbours(world) do
-    for {_key, cell} <- world.cells, reduce: world do
-      world ->
-        {world, _neighbours} = neighbours_around(world, cell)
-        world
-    end
-  end
-
   defp add_cell(world, x, y, alive) do
     if cell_at(world, x, y) do
-      raise LocationOccupied, message: "LocationOccupied(#{x}-#{y})"
+      raise LocationOccupied, x: x, y: y
     end
 
     cell = Cell.new(x, y, alive)
@@ -107,30 +106,23 @@ defmodule World do
     {world, cell}
   end
 
-  defp cell_at(world, x, y) do
-    Map.get(world.cells, "#{x}-#{y}")
-  end
+  defp prepopulate_neighbours(world) do
+    for {_key, cell} <- world.cells, reduce: world do
+      world ->
+        neighbours =
+          for set <- @directions, into: [] do
+            "#{cell.x + Enum.at(set, 0)}-#{cell.y + Enum.at(set, 1)}"
+          end
 
-  defp neighbours_around(world, cell) do
-    if !cell.neighbours do
-      neighbours =
-        for set <- world.cached_directions, into: [] do
-          "#{cell.x + Enum.at(set, 0)}-#{cell.y + Enum.at(set, 1)}"
-        end
-
-      world = put_in(world.cells["#{cell.x}-#{cell.y}"].neighbours, neighbours)
-
-      {world, neighbours}
-    else
-      {world, cell.neighbours}
+        world = put_in(world.cells["#{cell.x}-#{cell.y}"].neighbours, neighbours)
+        world
     end
   end
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   defp alive_neighbours_around(world, cell) do
-    {world, neighbour_coords} = neighbours_around(world, cell)
-    neighbours = Map.take(world.cells, neighbour_coords)
+    neighbours = Map.take(world.cells, cell.neighbours)
 
     # The following works but is slower
     # Enum.count(neighbours, fn {_key, neighbour} ->

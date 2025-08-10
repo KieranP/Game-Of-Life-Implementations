@@ -1,6 +1,12 @@
 import std.rand (Random)
 import std.string (StringBuffer)
 
+let DIRECTIONS = [
+  [-1, 1],  [0, 1],  [1, 1], # above
+  [-1, 0],           [1, 0], # sides
+  [-1, -1], [0, -1], [1, -1] # below
+]
+
 class pub World {
   let pub mut @tick: Int
   let @width: Int
@@ -9,9 +15,9 @@ class pub World {
 
   fn pub static new(width: Int, height: Int) -> World {
     let world = World(
+      tick: 0,
       width: width,
       height: height,
-      tick: 0,
       cells: Map.new,
     )
 
@@ -98,6 +104,10 @@ class pub World {
     rendering.to_string
   }
 
+  fn cell_at(x: Int, y: Int) -> Option[ref Cell] {
+    @cells.opt("${x}-${y}")
+  }
+
   fn mut populate_cells {
     let rng = Random.new
     let mut y = 0
@@ -112,62 +122,43 @@ class pub World {
     }
   }
 
-  fn mut prepopulate_neighbours {
-    @cells.iter_mut.each(fn (entry) {
-      neighbours_around(entry.value)
-    })
-  }
-
-  fn mut add_cell(x: Int, y: Int, alive: Bool) -> Option[ref Cell] {
-    let key = "${x}-${y}"
+  fn mut add_cell(x: Int, y: Int, alive: Bool) -> ref Cell {
     if cell_at(x, y).some? {
-      panic("LocationOccupied(${key})")
+      panic("LocationOccupied(${x}-${y})")
     }
 
     let cell = Cell.new(x, y, alive)
-    @cells.set(key, cell)
-    cell_at(x, y)
+    @cells.set("${x}-${y}", cell)
+    cell_at(x, y).get
   }
 
-  fn cell_at(x: Int, y: Int) -> Option[ref Cell] {
-    @cells.opt("${x}-${y}")
-  }
-
-  fn mut neighbours_around(cell: mut Cell) -> ref Array[ref Cell] {
-    if cell.neighbours.size == 0 {
-      let cached_directions = [
-        [-1, 1],  [0, 1],  [1, 1], # above
-        [-1, 0],           [1, 0], # sides
-        [-1, -1], [0, -1], [1, -1] # below
-      ]
-
-      cached_directions.iter.each(fn (set) {
+  fn mut prepopulate_neighbours {
+    @cells.iter_mut.each(fn (entry) {
+      let cell = entry.value
+      DIRECTIONS.iter.each(fn (set) {
         let neighbour = cell_at(
           cell.x + set.get(0),
           cell.y + set.get(1)
         )
+
         if neighbour.some? {
           cell.neighbours.push(neighbour.get)
         }
       })
-    }
-
-    cell.neighbours
+    })
   }
 
   # Implement first using filter/lambda if available. Then implement
   # foreach and for. Use whatever implementation runs the fastest
   fn mut alive_neighbours_around(cell: mut Cell) -> Int {
-    let neighbours = neighbours_around(cell)
-
     # The following works but it slower
-    # neighbours
+    # cell.neighbours
     #   .iter
     #   .select(fn (neighbour) { neighbour.alive })
     #   .count
 
     # The following works but it slower
-    # neighbours
+    # cell.neighbours
     #   .iter
     #   .reduce(0, fn (count, neighbour) {
     #     if neighbour.alive {
@@ -180,8 +171,8 @@ class pub World {
     # The following was the fastest method
     let mut alive_neighbours = 0
     let mut num = 0
-    while num < neighbours.size {
-      let neighbour = neighbours.get(num)
+    while num < cell.neighbours.size {
+      let neighbour = cell.neighbours.get(num)
       if neighbour.alive {
         alive_neighbours += 1
       }

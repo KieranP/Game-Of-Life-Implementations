@@ -1,9 +1,5 @@
-// File couldn't be named play.swift because Swift doesnt allow
-// top-level code (such as below) unless the file is named main
-
 import Foundation
 
-// Swift doesn't support class constants so declare them here
 let World_Width  = 150
 let World_Height = 40
 

@@ -1,15 +1,21 @@
-class LocationOccupied extends Error {}
+class LocationOccupied extends Error {
+  constructor(x: number, y: number) {
+    super(`LocationOccupied(${x}-${y})`)
+  }
+}
+
+const DIRECTIONS = [
+  [-1, 1],  [0, 1],  [1, 1], // above
+  [-1, 0],           [1, 0], // sides
+  [-1, -1], [0, -1], [1, -1] // below
+] as const
 
 export class World {
   tick = 0
+
   #width: number
   #height: number
   #cells = new Map<string, Cell>()
-  #cached_directions = [
-    [-1, 1],  [0, 1],  [1, 1], // above
-    [-1, 0],           [1, 0], // sides
-    [-1, -1], [0, -1], [1, -1] // below
-  ] as const
 
   constructor(width: number, height: number) {
     this.#width = width
@@ -66,6 +72,10 @@ export class World {
     // return rendering.join("")
   }
 
+  #cell_at(x: number, y: number) {
+    return this.#cells.get(`${x}-${y}`)
+  }
+
   #populate_cells() {
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
@@ -75,56 +85,42 @@ export class World {
     }
   }
 
-  #prepopulate_neighbours() {
-    for (const cell of this.#cells.values()) {
-      this.#neighbours_around(cell)
-    }
-  }
-
   #add_cell(x: number, y: number, alive: boolean = false) {
     if (this.#cell_at(x, y) != null) {
-      throw new LocationOccupied
+      throw new LocationOccupied(x, y)
     }
 
     const cell = new Cell(x, y, alive)
     this.#cells.set(`${x}-${y}`, cell)
-    return this.#cell_at(x, y)
+    return cell
   }
 
-  #cell_at(x: number, y: number) {
-    return this.#cells.get(`${x}-${y}`)
-  }
-
-  #neighbours_around(cell: Cell) {
-    if (cell.neighbours == null) {
-      cell.neighbours = new Array
-      for (const [x, y] of this.#cached_directions) {
+  #prepopulate_neighbours() {
+    for (const cell of this.#cells.values()) {
+      for (const [x, y] of DIRECTIONS) {
         const neighbour = this.#cell_at(
           (cell.x + x),
           (cell.y + y)
         )
+
         if (neighbour != null) {
           cell.neighbours.push(neighbour)
         }
       }
     }
-
-    return cell.neighbours
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   #alive_neighbours_around(cell: Cell) {
-    const neighbours = this.#neighbours_around(cell)
-
     // The following works but is slower
-    // return neighbours.filter(function(neighbour) {
+    // return cell.neighbours.filter(function(neighbour) {
     //   return neighbour.alive
     // }).length
 
     // The following works but is slower
     // let alive_neighbours = 0
-    // for (const neighbour of neighbours) {
+    // for (const neighbour of cell.neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
     //   }
@@ -133,8 +129,8 @@ export class World {
 
     // The following was the fastest method
     let alive_neighbours = 0
-    for (let i = 0; i < neighbours.length; i++) {
-      const neighbour = neighbours[i]
+    for (let i = 0; i < cell.neighbours.length; i++) {
+      const neighbour = cell.neighbours[i]
       if (neighbour?.alive) {
         alive_neighbours += 1
       }
@@ -148,7 +144,7 @@ class Cell {
   y: number
   alive: boolean
   next_state: boolean | null = null
-  neighbours: Cell[] | null = null
+  neighbours: Cell[] = []
 
   constructor(x: number, y: number, alive: boolean = false) {
     this.x = x

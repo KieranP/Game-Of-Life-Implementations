@@ -1,30 +1,32 @@
-// Files must be named the same as the class they contain
-// Files can have multiple classes, but only one public class
-
 import java.util.HashMap;
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class World {
-  private class LocationOccupied extends Exception { }
-
   public int tick;
+
   private int width;
   private int height;
   private HashMap<String, Cell> cells;
-  private int[][] cached_directions;
+
+  private class LocationOccupied extends Exception {
+    public LocationOccupied(int x, int y) {
+      super("LocationOccupied("+x+"-"+y+")");
+    }
+  }
+
+  private static final int[][] DIRECTIONS = new int[][]{
+    {-1, 1},  {0, 1},  {1, 1},  // above
+    {-1, 0},           {1, 0},  // sides
+    {-1, -1}, {0, -1}, {1, -1}, // below
+  };
 
   public World(int width, int height) {
+    this.tick = 0;
     this.width = width;
     this.height = height;
-    this.tick = 0;
     this.cells = new HashMap<>();
-    this.cached_directions = new int[][]{
-      {-1, 1},  {0, 1},  {1, 1},  // above
-      {-1, 0},           {1, 0},  // sides
-      {-1, -1}, {0, -1}, {1, -1}, // below
-    };
 
     populate_cells();
     prepopulate_neighbours();
@@ -88,6 +90,10 @@ public class World {
     return rendering.toString();
   }
 
+  private Cell cell_at(int x, int y) {
+    return cells.get(x+"-"+y);
+  }
+
   private void populate_cells() {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
@@ -97,39 +103,24 @@ public class World {
     }
   }
 
-  private void prepopulate_neighbours() {
-    for (var cell : cells.values()) {
-      neighbours_around(cell);
-    }
-  }
-
-  // Java doesn't have the concept of optional or default values
-  // The workaround is catch all args as an array and disect it
   private Cell add_cell(int x, int y, boolean... args) {
-    if (cell_at(x, y) != null) { // Must return a boolean
-      // Java won't let us throw an error without catching it
-      // so emulate a runtime abort by catching and exiting
+    if (cell_at(x, y) != null) {
       try {
-        throw new LocationOccupied();
+        throw new LocationOccupied(x, y);
       } catch(LocationOccupied m) {
-        System.out.println("Error: World.LocationOccupied "+x+"-"+y+"");
-        System.exit(0);
+        System.out.println(m.getMessage());
+        System.exit(1);
       }
     }
 
     var cell = new Cell(x, y, args[0]);
     cells.put(x+"-"+y, cell);
-    return cell_at(x, y);
+    return cell;
   }
 
-  private Cell cell_at(int x, int y) {
-    return cells.get(x+"-"+y);
-  }
-
-  private ArrayList<Cell> neighbours_around(Cell cell) {
-    if (cell.neighbours == null) { // Must return a boolean
-      cell.neighbours = new ArrayList<>();
-      for (var set : cached_directions) {
+  private void prepopulate_neighbours() {
+    for (var cell : cells.values()) {
+      for (var set : DIRECTIONS) {
         var neighbour = cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
@@ -140,24 +131,20 @@ public class World {
         }
       }
     }
-
-    return cell.neighbours;
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
-    var neighbours = neighbours_around(cell);
-
     // The following works but is slower
-    // return neighbours.stream().
+    // return cell.neighbours.stream().
     //   filter(neighbour -> neighbour.alive).
     //   collect(Collectors.toList()).
     //   size();
 
     // The following works but is slower
     // var alive_neighbours = 0;
-    // for (var neighbour : neighbours) {
+    // for (var neighbour : cell.neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
     //   }
@@ -166,8 +153,8 @@ public class World {
 
     // The following was the fastest method
     var alive_neighbours = 0;
-    for (var i = 0; i < neighbours.size(); i++) {
-      var neighbour = neighbours.get(i);
+    for (var i = 0; i < cell.neighbours.size(); i++) {
+      var neighbour = cell.neighbours.get(i);
       if (neighbour.alive) {
         alive_neighbours++;
       }
@@ -183,14 +170,12 @@ class Cell {
   public Boolean next_state;
   public ArrayList<Cell> neighbours;
 
-  // Java doesn't have the concept of optional or default values
-  // The workaround is catch all args as an array and disect it
   public Cell(int x, int y, boolean... args) {
     this.x = x;
     this.y = y;
     this.alive = args[0];
     this.next_state = null;
-    this.neighbours = null;
+    this.neighbours = new ArrayList<>();
   }
 
   public char to_char() {

@@ -16,8 +16,8 @@ actor Main
 
     world = World(
       where
-      width' = 150,
-      height' = 40
+      width = 150,
+      height = 40
     )
 
     for env_var in env.vars.values() do

@@ -1,5 +1,3 @@
-// Files must be named the same as the class/object they contain
-
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.Map
 import scala.util.Random
@@ -8,11 +6,14 @@ class World(
   private val width: Int,
   private val height: Int,
 ) {
-  class LocationOccupied extends Exception { }
-
   var tick = 0
+
   private var cells = Map[String,Cell]()
-  private val cached_directions = Array(
+
+  private class LocationOccupied(x: Int, y: Int) extends
+    Exception(s"LocationOccupied($x-$y)")
+
+  private val DIRECTIONS = Array(
     Array(-1, 1),  Array(0, 1),  Array(1, 1),  // above
     Array(-1, 0),                Array(1, 0),  // sides
     Array(-1, -1), Array(0, -1), Array(1, -1), // below
@@ -76,13 +77,16 @@ class World(
     var (x, y) = (0, 0)
     for (y <- 0 until height) {
       for (x <- 0 until width) {
-        // get pulls the Cell out of an Option[]
         val cell = cell_at(x, y).get
         rendering.append(cell.to_char)
       }
       rendering.append("\n")
     }
     rendering.toString
+  }
+
+  private def cell_at(x: Int, y: Int) = {
+    cells.get(s"$x-$y")
   }
 
   private def populate_cells = {
@@ -95,56 +99,40 @@ class World(
     }
   }
 
-  private def prepopulate_neighbours = {
-    for ((key,cell) <- cells) {
-      neighbours_around(cell)
-    }
-  }
-
   private def add_cell(x: Int, y: Int, alive: Boolean = false) = {
-    if (cell_at(x, y) != None) { // Must return a boolean
-      throw new LocationOccupied()
+    if (cell_at(x, y) != None) {
+      throw new LocationOccupied(x, y)
     }
 
     val cell = new Cell(x, y, alive)
     cells.put(s"$x-$y", cell)
-    // get pulls the Cell out of an Option[]
-    cell_at(x, y).get
+    cell
   }
 
-  private def cell_at(x: Int, y: Int) = {
-    cells.get(s"$x-$y")
-  }
-
-  private def neighbours_around(cell: Cell) = {
-    if (cell.neighbours == null) { // Must return a boolean
-      cell.neighbours = ArrayBuffer[Cell]()
-      for (set <- cached_directions) {
+  private def prepopulate_neighbours = {
+    for ((key,cell) <- cells) {
+      for (set <- DIRECTIONS) {
         val neighbour = cell_at(
           x = (cell.x + set(0)),
           y = (cell.y + set(1)),
         )
+
         if (neighbour != None) {
-          // get pulls the Cell out of an Option[]
           cell.neighbours.append(neighbour.get)
         }
       }
     }
-
-    cell.neighbours
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private def alive_neighbours_around(cell: Cell) = {
-    val neighbours = neighbours_around(cell)
-
     // The following works but is slower
-    // neighbours.filter(_.alive).length
+    // cell.neighbours.filter(_.alive).length
 
     // The following works but is slower
     // var alive_neighbours = 0
-    // for (neighbour <- neighbours) {
+    // for (neighbour <- cell.neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours += 1
     //   }
@@ -153,8 +141,8 @@ class World(
 
     // The following was the fastest method
     var alive_neighbours = 0
-    for (i <- 0 until neighbours.length) {
-      val neighbour = neighbours(i)
+    for (i <- 0 until cell.neighbours.length) {
+      val neighbour = cell.neighbours(i)
       if (neighbour.alive) {
         alive_neighbours += 1
       }
@@ -169,7 +157,7 @@ class Cell(
   var alive: Boolean = false,
 ) {
   var next_state: Option[Boolean] = None
-  var neighbours: ArrayBuffer[Cell] = null
+  var neighbours = ArrayBuffer[Cell]()
 
   def to_char = {
     if (alive) "o" else " "

@@ -1,0 +1,14 @@
+{
+  // Input / Function
+  "format_on_save": "off",
+  "tab_size": 2,
+
+  // Language / LSP
+  "lsp": {
+    "clangd": {
+      "binary": {
+        "arguments": ["-std=c++23"]
+      }
+    }
+  }
+}

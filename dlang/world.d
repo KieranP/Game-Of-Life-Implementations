@@ -65,11 +65,6 @@ class World {
   private:
     uint width, height;
     Cell[string] cells;
-    auto cached_directions = [
-      [-1, 1],  [0, 1],  [1, 1],  // above
-      [-1, 0],           [1, 0],  // sides
-      [-1, -1], [0, -1], [1, -1], // below
-    ];
 
     static class LocationOccupied: Exception {
       public:
@@ -85,6 +80,17 @@ class World {
         uint x, y;
     }
 
+    static immutable DIRECTIONS = [
+      [-1, 1],  [0, 1],  [1, 1],  // above
+      [-1, 0],           [1, 0],  // sides
+      [-1, -1], [0, -1], [1, -1], // below
+    ];
+
+    auto cell_at(int x, int y) {
+      auto key = to!string(x)~"-"~to!string(y);
+      return cells.get(key, null);
+    }
+
     auto populate_cells() {
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
@@ -92,12 +98,6 @@ class World {
           auto alive = (random <= 0.2);
           add_cell(x, y, alive);
         }
-      }
-    }
-
-    auto prepopulate_neighbours() {
-      foreach (ref cell; cells) {
-        neighbours_around(cell);
       }
     }
 
@@ -112,14 +112,9 @@ class World {
       return cell;
     }
 
-    auto cell_at(int x, int y) {
-      auto key = to!string(x)~"-"~to!string(y);
-      return cells.get(key, null);
-    }
-
-    auto neighbours_around(ref Cell cell) {
-      if (cell.neighbours.length == 0) {
-        foreach (ref set; cached_directions) {
+    auto prepopulate_neighbours() {
+      foreach (ref cell; cells) {
+        foreach (ref set; DIRECTIONS) {
           auto neighbour = cell_at(
             (cell.x + set[0]),
             (cell.y + set[1])
@@ -130,23 +125,19 @@ class World {
           }
         }
       }
-
-      return cell.neighbours;
     }
 
     // Implement first using filter/lambda if available. Then implement
     // foreach and for. Use whatever implementation runs the fastest
     auto alive_neighbours_around(ref Cell cell) {
-      auto neighbours = neighbours_around(cell);
-
       // The following works but it slower
-      // return neighbours.filter!(
+      // return cell.neighbours.filter!(
       //   neighbour => neighbour.alive
       // ).array.length;
 
       // The following was the fastest method
       auto alive_neighbours = 0;
-      foreach (ref neighbour; neighbours) {
+      foreach (ref neighbour; cell.neighbours) {
         if (neighbour.alive) {
           alive_neighbours++;
         }
@@ -155,8 +146,8 @@ class World {
 
       // The following works but it slower
       // auto alive_neighbours = 0;
-      // for (auto i = 0; i < neighbours.length; i++) {
-      //   auto neighbour = neighbours[i];
+      // for (auto i = 0; i < cell.neighbours.length; i++) {
+      //   auto neighbour = cell.neighbours[i];
       //   if (neighbour.alive) {
       //     alive_neighbours++;
       //   }

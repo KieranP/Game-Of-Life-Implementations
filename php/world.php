@@ -2,22 +2,28 @@
 
 error_reporting(E_ALL);
 
-// PHP doesn't have a concept of nested classes
-class LocationOccupied extends Exception { }
+class LocationOccupied extends Exception {
+  public function __construct($x, $y) {
+    parent::__construct("LocationOccupied($x-$y)");
+  }
+}
 
 class World {
   public $tick;
 
-  function __construct($width, $height) {
+  private $width, $height, $cells;
+
+  private static $DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1], // above
+    [-1, 0],           [1, 0], // sides
+    [-1, -1], [0, -1], [1, -1] // below
+  ];
+
+  public function __construct($width, $height) {
+    $this->tick = 0;
     $this->width = $width;
     $this->height = $height;
-    $this->tick = 0;
-    $this->cells = array();
-    $this->cached_directions = array(
-      array(-1, 1),  array(0, 1),  array(1, 1), // above
-      array(-1, 0),                array(1, 0), // sides
-      array(-1, -1), array(0, -1), array(1, -1) // below
-    );
+    $this->cells = [];
 
     $this->populate_cells();
     $this->prepopulate_neighbours();
@@ -70,65 +76,55 @@ class World {
     // return join($rendering);
   }
 
-  private function populate_cells() {
-    for ($y = 0; $y < $this->height; $y++) {
-      for ($x = 0; $x < $this->width; $x++) {
-        $alive = (rand(0, 100) <= 20);
-        $this->add_cell($x, $y, $alive);
-      }
-    }
-  }
-
-  private function prepopulate_neighbours() {
-    foreach ($this->cells as $cell) {
-      $this->neighbours_around($cell);
-    }
-  }
-
-  private function add_cell($x, $y, $alive = false) {
-    if ($this->cell_at($x, $y) != null) {
-      throw new LocationOccupied;
-    }
-
-    $cell = new Cell($x, $y, $alive);
-    $this->cells["$x-$y"] = $cell;
-    return $this->cell_at($x, $y);
-  }
-
   private function cell_at($x, $y) {
     if (isset($this->cells["$x-$y"])) {
       return $this->cells["$x-$y"];
     }
   }
 
-  private function neighbours_around($cell) {
-    if ($cell->neighbours == null) {
-      $cell->neighbours = array();
-      foreach ($this->cached_directions as $set) {
+  private function populate_cells() {
+    for ($y = 0; $y < $this->height; $y++) {
+      for ($x = 0; $x < $this->width; $x++) {
+        $alive = rand(0, 100) <= 20;
+        $this->add_cell($x, $y, $alive);
+      }
+    }
+  }
+
+  private function add_cell($x, $y, $alive = false) {
+    if ($this->cell_at($x, $y) != null) {
+      throw new LocationOccupied($x, $y);
+    }
+
+    $cell = new Cell($x, $y, $alive);
+    $this->cells["$x-$y"] = $cell;
+    return $cell;
+  }
+
+  private function prepopulate_neighbours() {
+    foreach ($this->cells as $cell) {
+      foreach (self::$DIRECTIONS as $set) {
         $neighbour = $this->cell_at(
-          ($cell->x + $set[0]),
-          ($cell->y + $set[1])
+          $cell->x + $set[0],
+          $cell->y + $set[1]
         );
+
         if ($neighbour != null) {
           $cell->neighbours[] = $neighbour;
         }
       }
     }
-
-    return $cell->neighbours;
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private function alive_neighbours_around($cell) {
-    $neighbours = $this->neighbours_around($cell);
-
     // The following works but is slower
     // return count(array_filter($neighbours, function($n) { return $n->alive; }));
 
     // The following was the fastest method
     $alive_neighbours = 0;
-    foreach ($neighbours as $neighbour) {
+    foreach ($cell->neighbours as $neighbour) {
       if ($neighbour->alive) {
         $alive_neighbours++;
       }
@@ -137,8 +133,8 @@ class World {
 
     // The following works but is slower
     // $alive_neighbours = 0;
-    // for ($i = 0; $i < count($neighbours); $i++) {
-    //   $neighbour = $neighbours[$i];
+    // for ($i = 0; $i < count($cell->neighbours); $i++) {
+    //   $neighbour = $cell->neighbours[$i];
     //   if ($neighbour->alive) {
     //     $alive_neighbours++;
     //   }
@@ -148,19 +144,17 @@ class World {
 }
 
 class Cell {
-  var $x, $y, $alive, $next_state, $neighbours;
+  public $x, $y, $alive, $next_state, $neighbours;
 
-  function __construct($x, $y, $alive = false) {
+  public function __construct($x, $y, $alive = false) {
     $this->x = $x;
     $this->y = $y;
     $this->alive = $alive;
     $this->next_state = null;
-    $this->neighbours = null;
+    $this->neighbours = [];
   }
 
   public function to_char() {
-    return ($this->alive ? 'o' : ' ');
+    return $this->alive ? 'o' : ' ';
   }
 }
-
-?>

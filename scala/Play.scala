@@ -1,5 +1,3 @@
-// Files must be named the same as the class/object they contain
-
 object Play {
   private val World_Width  = 150
   private val World_Height = 40

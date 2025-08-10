@@ -4,13 +4,18 @@ using System.Linq;
 using System.Collections.Generic;
 
 public class World {
-  private class LocationOccupied : Exception {}
-
   public int tick = 0;
+
   private int width;
   private int height;
   private Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
-  private readonly int[][] cached_directions = [
+
+  private class LocationOccupied : Exception {
+    public LocationOccupied(int x, int y) :
+      base($"LocationOccupied({x}-{y})") { }
+  }
+
+  private static readonly int[][] DIRECTIONS = [
     [-1, 1],  [0, 1],  [1, 1], // above
     [-1, 0],           [1, 0], // sides
     [-1, -1], [0, -1], [1, -1] // below
@@ -82,6 +87,15 @@ public class World {
     return rendering.ToString();
   }
 
+  private Cell cell_at(int x, int y) {
+    var key = $"{x}-{y}";
+    if (cells.TryGetValue(key, out Cell value)) {
+      return value;
+    } else {
+      return null;
+    }
+  }
+
   private void populate_cells() {
     var random = new Random();
     for (var y = 0; y < height; y++) {
@@ -92,35 +106,19 @@ public class World {
     }
   }
 
-  private void prepopulate_neighbours() {
-    foreach (var cell in cells.Values) {
-      neighbours_around(cell);
-    }
-  }
-
   private Cell add_cell(int x, int y, bool alive = false) {
-    if (cell_at(x, y) != null) { // Must return a boolean
-      throw new LocationOccupied();
+    if (cell_at(x, y) != null) {
+      throw new LocationOccupied(x, y);
     }
 
     var cell = new Cell(x, y, alive);
     cells.Add($"{x}-{y}", cell);
-    return cell_at(x, y);
+    return cell;
   }
 
-  private Cell cell_at(int x, int y) {
-    var key = $"{x}-{y}";
-    if (cells.TryGetValue(key, out Cell value)) {
-      return value;
-    } else {
-      return null;
-    }
-  }
-
-  private List<Cell> neighbours_around(Cell cell) {
-    if (cell.neighbours == null) {
-      cell.neighbours = new List<Cell>();
-      foreach (var set in cached_directions) {
+  private void prepopulate_neighbours() {
+    foreach (var cell in cells.Values) {
+      foreach (var set in DIRECTIONS) {
         var neighbour = cell_at(
           cell.x + set[0],
           cell.y + set[1]
@@ -131,23 +129,19 @@ public class World {
         }
       }
     }
-
-    return cell.neighbours;
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   private int alive_neighbours_around(Cell cell) {
-    var neighbours = neighbours_around(cell);
-
     // The following works but is slower
-    // return neighbours.Where(
+    // return cell.neighbours.Where(
     //   (neighbour) => neighbour.alive
     // ).ToList().Count;
 
     // The following works but is slower
     // var alive_neighbours = 0;
-    // foreach (var neighbour in neighbours) {
+    // foreach (var neighbour in cell.neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
     //   }
@@ -156,8 +150,8 @@ public class World {
 
     // The following was the fastest method
     var alive_neighbours = 0;
-    for (var i = 0; i < neighbours.Count; i++) {
-      var neighbour = neighbours[i];
+    for (var i = 0; i < cell.neighbours.Count; i++) {
+      var neighbour = cell.neighbours[i];
       if (neighbour.alive) {
         alive_neighbours++;
       }
@@ -171,7 +165,7 @@ public class Cell {
   public int y;
   public bool alive;
   public bool? next_state = null;
-  public List<Cell> neighbours = null;
+  public List<Cell> neighbours = [];
 
   public Cell(int x, int y, bool alive = false) {
     this.x = x;

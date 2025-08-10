@@ -8,3 +8,7 @@
 
 * `swiftc -O -whole-module-optimization -o play *.swift`
 * `./play`
+
+## Notes
+
+* Entrypoint file must be named `main.swift`

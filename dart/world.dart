@@ -1,21 +1,28 @@
-// In Dart, anything preceeded by an underscore (_) is a private function/variable
-
 import 'dart:math';
 
-class LocationOccupied implements Exception {}
+class LocationOccupied implements Exception {
+  final int _x, _y;
+
+  LocationOccupied(this._x, this._y);
+
+  @override
+  String toString() => 'LocationOccupied($_x-$_y)';
+}
 
 class World {
-  int width;
-  int height;
   int tick = 0;
+
+  int _width;
+  int _height;
   Map<String, Cell> _cells = {};
-  List<List<int>> _cached_directions = const [
+
+  static const List<List<int>> _DIRECTIONS = [
     [-1, 1],  [0, 1],  [1, 1], // above
     [-1, 0],           [1, 0], // sides
     [-1, -1], [0, -1], [1, -1] // below
   ];
 
-  World(this.width, this.height) {
+  World(this._width, this._height) {
     _populate_cells();
     _prepopulate_neighbours();
   }
@@ -46,8 +53,8 @@ class World {
   String render() {
     // The following works but is slower
     // var rendering = '';
-    // for (var y = 0; y < this.height; y++) {
-    //   for (var x = 0; x < this.width; x++) {
+    // for (var y = 0; y < this._height; y++) {
+    //   for (var x = 0; x < this._width; x++) {
     //     final cell = this._cell_at(x, y);
     //     if (cell != null) {
     //       rendering += cell.to_char();
@@ -59,8 +66,8 @@ class World {
 
     // The following was the fastest method
     var rendering = [];
-    for (var y = 0; y < this.height; y++) {
-      for (var x = 0; x < this.width; x++) {
+    for (var y = 0; y < this._height; y++) {
+      for (var x = 0; x < this._width; x++) {
         final cell = this._cell_at(x, y);
         if (cell != null) {
           rendering.add(cell.to_char());
@@ -72,8 +79,8 @@ class World {
 
     // The following works but is slower
     // var rendering = StringBuffer();
-    // for (var y = 0; y < this.height; y++) {
-    //   for (var x = 0; x < this.width; x++) {
+    // for (var y = 0; y < this._height; y++) {
+    //   for (var x = 0; x < this._width; x++) {
     //     final cell = this._cell_at(x, y);
     //     if (cell != null) {
     //       rendering.write(cell.to_char());
@@ -84,67 +91,56 @@ class World {
     // return rendering.toString();
   }
 
+  Cell? _cell_at(int x, int y) {
+    return this._cells["$x-$y"];
+  }
+
   void _populate_cells() {
     final rng = Random();
-    for (var y = 0; y < this.height; y++) {
-      for (var x = 0; x < this.width; x++) {
+    for (var y = 0; y < this._height; y++) {
+      for (var x = 0; x < this._width; x++) {
         final alive = (rng.nextDouble() <= 0.2);
         this._add_cell(x, y, alive);
       }
     }
   }
 
-  void _prepopulate_neighbours() {
-    this._cells.forEach((key, cell) {
-      this._neighbours_around(cell);
-    });
-  }
-
-  Cell? _add_cell(int x, int y, [bool alive = false]) {
-    if (this._cell_at(x, y) != null) { // Must return a boolean
-      throw LocationOccupied();
+  Cell _add_cell(int x, int y, [bool alive = false]) {
+    if (this._cell_at(x, y) != null) {
+      throw LocationOccupied(x, y);
     }
 
     final cell = Cell(x, y, alive);
     this._cells["$x-$y"] = cell;
-    return this._cell_at(x, y);
+    return cell;
   }
 
-  Cell? _cell_at(int x, int y) {
-    return this._cells["$x-$y"];
-  }
-
-  List<Cell> _neighbours_around(Cell cell) {
-    if (cell.neighbours == null) { // Must return a boolean
-      cell.neighbours = [];
-      for (final set in this._cached_directions) {
+  void _prepopulate_neighbours() {
+    this._cells.forEach((key, cell) {
+      for (final set in _DIRECTIONS) {
         final neighbour = this._cell_at(
           (cell.x + set[0]),
           (cell.y + set[1])
         );
 
         if (neighbour != null) {
-          cell.neighbours!.add(neighbour);
+          cell.neighbours.add(neighbour);
         }
       }
-    }
-
-    return cell.neighbours!;
+    });
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   int _alive_neighbours_around(Cell cell) {
-    final neighbours = this._neighbours_around(cell);
-
     // The following works but is slower
-    // return neighbours.where(
+    // return cell.neighbours.where(
     //   (neighbour) => neighbour.alive
     // ).length;
 
     // The following was the fastest method
     var alive_neighbours = 0;
-    neighbours.forEach((neighbour) {
+    cell.neighbours.forEach((neighbour) {
       if (neighbour.alive) {
         alive_neighbours += 1;
       }
@@ -153,8 +149,8 @@ class World {
 
     // The following also works but is slower
     // var alive_neighbours = 0;
-    // for (var i = 0; i < neighbours.length; i++) {
-    //   final neighbour = neighbours[i];
+    // for (var i = 0; i < cell.neighbours.length; i++) {
+    //   final neighbour = cell.neighbours[i];
     //   if (neighbour.alive) {
     //     alive_neighbours += 1;
     //   }
@@ -168,7 +164,7 @@ class Cell {
   int y;
   bool alive;
   bool? next_state = null;
-  List<Cell>? neighbours = null;
+  List<Cell> neighbours = [];
 
   Cell(this.x, this.y, [this.alive = false]) {}
 

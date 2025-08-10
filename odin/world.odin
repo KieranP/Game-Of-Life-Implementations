@@ -1,11 +1,12 @@
 package main
 
+import "core:fmt"
 import "core:math/rand"
 import "core:strconv"
 import "core:strings"
 import "core:unicode/utf8"
 
-cached_directions := [8][2]int{
+DIRECTIONS := [8][2]int{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
@@ -74,6 +75,21 @@ world_render :: proc(world: ^World) -> string {
   return strings.to_string(rendering)
 }
 
+world_cell_key :: proc(x: int, y: int) -> string {
+  buf1: [3]byte
+  xs := strconv.itoa(buf1[:], x)
+
+  buf2: [3]byte
+  ys := strconv.itoa(buf2[:], y)
+
+  return strings.join({xs, ys}, "-")
+}
+
+world_cell_at :: proc(world: ^World, x: int, y: int) -> (^Cell, bool) {
+  key := world_cell_key(x, y)
+  return world.cells[key]
+}
+
 world_populate_cells :: proc(world: ^World) {
   for y in 0..<world.height {
     for x in 0..<world.width {
@@ -83,44 +99,20 @@ world_populate_cells :: proc(world: ^World) {
   }
 }
 
-world_prepopulate_neighbours :: proc(world: ^World) {
-  for _, cell in world.cells {
-    world_neighbours_around(world, cell)
-  }
-}
-
 world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> ^Cell {
   if _, ok := world_cell_at(world, x, y); ok {
-    panic("LocationOccupied")
+    panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
   }
 
   cell := new_cell(x, y, alive)
-
-  buf1: [3]byte
-  xs := strconv.itoa(buf1[:], x)
-
-  buf2: [3]byte
-  ys := strconv.itoa(buf2[:], y)
-
-  key := strings.join({xs, ys}, "-")
+  key := world_cell_key(x, y)
   world.cells[key] = cell
   return cell
 }
 
-world_cell_at :: proc(world: ^World, x: int, y: int) -> (^Cell, bool) {
-  buf1: [3]byte
-  xs := strconv.itoa(buf1[:], x)
-
-  buf2: [3]byte
-  ys := strconv.itoa(buf2[:], y)
-
-  key := strings.join({xs, ys}, "-")
-  return world.cells[key]
-}
-
-world_neighbours_around :: proc(world: ^World, cell: ^Cell) -> []^Cell {
-  if len(cell.neighbours) == 0 {
-    for set in cached_directions {
+world_prepopulate_neighbours :: proc(world: ^World) {
+  for _, cell in world.cells {
+    for set in DIRECTIONS {
       neighbour, ok := world_cell_at(
         world,
         cell.x + set[0],
@@ -132,16 +124,12 @@ world_neighbours_around :: proc(world: ^World, cell: ^Cell) -> []^Cell {
       }
     }
   }
-
-  return cell.neighbours[:]
 }
 
 world_alive_neighbours_around :: proc(world: ^World, cell: ^Cell) -> int {
-  neighbours := world_neighbours_around(world, cell)
-
   // The following was the fastest method
   alive_neighbours := 0
-  for neighbour in neighbours {
+  for neighbour in cell.neighbours {
     if neighbour.alive {
       alive_neighbours += 1
     }
@@ -150,8 +138,8 @@ world_alive_neighbours_around :: proc(world: ^World, cell: ^Cell) -> int {
 
   // The following also works but is slower
   // alive_neighbours := 0
-  // for i := 0; i < len(neighbours); i += 1 {
-  //   neighbour := neighbours[i]
+  // for i := 0; i < len(cell.neighbours); i += 1 {
+  //   neighbour := cell.neighbours[i]
   //   if neighbour.alive {
   //     alive_neighbours += 1
   //   }

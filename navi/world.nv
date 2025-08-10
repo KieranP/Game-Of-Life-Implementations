@@ -12,16 +12,17 @@ impl Error for LocationOccupied {
   }
 }
 
+const DIRECTIONS: [[int]] = [
+  [-1, 1],  [0, 1],  [1, 1], // above
+  [-1, 0],           [1, 0], // sides
+  [-1, -1], [0, -1], [1, -1] // below
+];
+
 struct World {
   width: int,
   height: int,
   tick: int = 0,
   cells: <string, Cell> = {:},
-  cached_directions: [[int]] = [
-    [-1, 1],  [0, 1],  [1, 1], // above
-    [-1, 0],           [1, 0], // sides
-    [-1, -1], [0, -1], [1, -1] // below
-  ],
 }
 
 impl World {
@@ -96,6 +97,10 @@ impl World {
     return rendering.to_string();
   }
 
+  fn cell_at(self, x: int, y: int): Cell? {
+    return self.cells.get(`${x}-${y}`);
+  }
+
   fn populate_cells(self) {
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
@@ -105,57 +110,42 @@ impl World {
     }
   }
 
-  fn prepopulate_neighbours(self) {
-    for (let key, cell in self.cells) {
-      self.neighbours_around(cell);
-    }
-  }
-
-  fn add_cell(self, x: int, y: int, alive: bool): Cell? throws LocationOccupied {
+  fn add_cell(self, x: int, y: int, alive: bool): Cell throws LocationOccupied {
     if (!self.cell_at(x, y).is_nil()) {
       throw LocationOccupied { x, y };
     }
 
     const cell = Cell.new(x, y, alive);
     self.cells[`${x}-${y}`] = cell;
-    return self.cell_at(x, y);
+    return cell;
   }
 
-  fn cell_at(self, x: int, y: int): Cell? {
-    return self.cells.get(`${x}-${y}`);
-  }
-
-  fn neighbours_around(self, cell: Cell): [Cell] {
-    if (cell.neighbours.is_nil()) {
-      cell.neighbours = [];
-      for (let set in self.cached_directions) {
+  fn prepopulate_neighbours(self) {
+    for (let key, cell in self.cells) {
+      for (let set in DIRECTIONS) {
         const neighbour = self.cell_at(
           (cell.x + set[0]),
           (cell.y + set[1]),
         );
 
         if (!neighbour.is_nil()) {
-          cell.neighbours?.push(neighbour!);
+          cell.neighbours.push(neighbour!);
         }
       }
     }
-
-    return cell.neighbours!;
   }
 
   // Implement first using filter/lambda if available. Then implement
   // foreach and for. Use whatever implementation runs the fastest
   fn alive_neighbours_around(self, cell: Cell): int {
-    let neighbours = self.neighbours_around(cell);
-
     // The following works but is slower
-    // return neighbours.filter(|neighbour| {
+    // return cell.neighbours.filter(|neighbour| {
     //   return neighbour.alive;
     // }).len();
 
     // The following was the fastest method
     let alive_neighbours = 0;
-    for (let neighbour in neighbours) {
+    for (let neighbour in cell.neighbours) {
       if (neighbour.alive) {
         alive_neighbours += 1;
       }
@@ -164,8 +154,8 @@ impl World {
 
     // The following works but is slower
     // let alive_neighbours = 0;
-    // for (let i in 0..neighbours.len()) {
-    //   let neighbour = neighbours[i];
+    // for (let i in 0..cell.neighbours.len()) {
+    //   let neighbour = cell.neighbours[i];
     //   if (neighbour.alive) {
     //     alive_neighbours += 1;
     //   }
@@ -179,7 +169,7 @@ struct Cell {
   y: int,
   alive: bool,
   next_state: bool? = nil,
-  neighbours: [Cell]? = nil,
+  neighbours: [Cell] = [],
 }
 
 impl Cell {

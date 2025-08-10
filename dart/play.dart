@@ -1,5 +1,3 @@
-// In Dart, anything preceeded by an underscore (_) is a private function/variable
-
 import 'world.dart';
 import 'dart:io';
 import 'dart:math';
