@@ -1,5 +1,5 @@
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.mutable.Map
+import scala.collection.mutable.HashMap
 import scala.util.Random
 
 class World(
@@ -8,7 +8,7 @@ class World(
 ) {
   var tick = 0
 
-  private var cells = Map[String,Cell]()
+  private var cells = HashMap[String,Cell]()
 
   private class LocationOccupied(x: Int, y: Int) extends
     Exception(s"LocationOccupied($x-$y)")
