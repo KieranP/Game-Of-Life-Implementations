@@ -16,7 +16,7 @@ benchmark ruby --jit play.rb
 
 # echo -n "Ruby - JRuby - "
 # ruby --version | head -n 1
-# benchmark ruby --server play.rb
+# benchmark ruby play.rb
 
 # echo ""
 

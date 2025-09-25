@@ -18,4 +18,4 @@
 
 # Usage (JRuby)
 
-* `ruby --server play.rb`
+* `ruby play.rb`

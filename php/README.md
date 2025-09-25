@@ -10,4 +10,4 @@
 
 ## Usage (with JIT)
 
-* `php -dopcache.enable_cli=1 -dopcache.jit_buffer_size=256M play.php`
+* `php -c jit.ini play.php`
