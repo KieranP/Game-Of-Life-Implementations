@@ -14,8 +14,8 @@ pub const Play = struct {
             WORLD_WIDTH,
             WORLD_HEIGHT,
         );
-        defer world.deinit();
         defer allocator.destroy(world);
+        defer world.deinit();
 
         const minimal = std.process.hasEnvVarConstant("MINIMAL");
 

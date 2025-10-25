@@ -9,7 +9,7 @@ const DIRECTIONS = [8][2]i8{
     .{ -1, -1 }, .{ 0, -1 }, .{ 1, -1 }, // below
 };
 
-pub const LocationOccupied = error{
+pub const Errors = error{
     LocationOccupied,
 };
 
@@ -122,7 +122,7 @@ pub const World = struct {
         const key = try std.fmt.allocPrint(self.allocator, "{d}-{d}", .{ x, y });
 
         if (self.cells.get(key)) |_| {
-            return LocationOccupied.LocationOccupied;
+            return Errors.LocationOccupied;
         }
 
         const cell = try Cell.init(self.allocator, x, y, alive);
