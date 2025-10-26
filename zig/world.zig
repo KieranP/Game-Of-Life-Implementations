@@ -78,7 +78,7 @@ pub const World = struct {
         // try rendering.ensureTotalCapacity(self.allocator, total_size);
         // for (0..self.height) |y| {
         //     for (0..self.width) |x| {
-        //         if (self.cell_at(@intCast(x), @intCast(y))) |cell| {
+        //         if (self.cell_at(x, y)) |cell| {
         //             try rendering.append(self.allocator, cell.to_char());
         //         }
         //     }
@@ -91,7 +91,7 @@ pub const World = struct {
         var idx: usize = 0;
         for (0..self.height) |y| {
             for (0..self.width) |x| {
-                if (self.cell_at(@intCast(x), @intCast(y))) |cell| {
+                if (self.cell_at(x, y)) |cell| {
                     buffer[idx] = cell.to_char();
                 }
                 idx += 1;
@@ -102,7 +102,7 @@ pub const World = struct {
         return buffer;
     }
 
-    fn cell_at(self: *World, x: isize, y: isize) ?*Cell {
+    fn cell_at(self: *World, x: usize, y: usize) ?*Cell {
         var key_buf: [32]u8 = undefined;
         const key = std.fmt.bufPrint(&key_buf, "{d}-{d}", .{ x, y }) catch unreachable;
         return self.cells.get(key);
@@ -133,10 +133,19 @@ pub const World = struct {
     fn prepopulate_neighbours(self: *World) !void {
         var it = self.cells.valueIterator();
         while (it.next()) |cell| {
+            const x = @as(isize, @intCast(cell.*.x));
+            const y = @as(isize, @intCast(cell.*.y));
+
             for (DIRECTIONS) |direction| {
-                const nx = @as(isize, @intCast(cell.*.x)) + direction[0];
-                const ny = @as(isize, @intCast(cell.*.y)) + direction[1];
-                if (self.cell_at(nx, ny)) |neighbour| {
+                const nx1 = x + direction[0];
+                const ny1 = y + direction[1];
+                if (nx1 < 0 or ny1 < 0) { // Out of bounds
+                    continue;
+                }
+
+                const nx2 = @as(usize, @intCast(nx1));
+                const ny2 = @as(usize, @intCast(ny1));
+                if (self.cell_at(nx2, ny2)) |neighbour| {
                     try cell.*.neighbours.append(self.allocator, neighbour);
                 }
             }
