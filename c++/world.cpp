@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <sstream>
+// #include <sstream>
 #include <unordered_map>
 #include <vector>
 
@@ -10,7 +10,7 @@ class Cell {
     int x, y;
     bool alive;
     bool next_state;
-    vector<Cell*>* neighbours = new vector<Cell*>();
+    vector<Cell*> neighbours;
 
     Cell(int x, int y, bool alive = false): x(x), y(y), alive(alive) { }
 
@@ -52,27 +52,28 @@ class World {
     // Implement first using string concatenation. Then implement any
     // special string builders, and use whatever runs the fastest
     string render() {
-      // The following works but it slower
-      // string rendering = "";
-      // for (auto y = 0; y < height; y++) {
-      //   for (auto x = 0; x < width; x++) {
-      //     auto cell = *cell_at(x, y);
-      //     rendering += cell->to_char();
-      //   }
-      //   rendering += "\n";
-      // }
-      // return rendering;
-
       // The following was the fastest method
-      stringstream rendering;
+      string rendering;
+      rendering.reserve(width * height + height);
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
           auto cell = cell_at(x, y);
-          rendering << cell->to_char();
+          rendering += cell->to_char();
         }
-        rendering << "\n";
+        rendering += '\n';
       }
-      return rendering.str();
+      return rendering;
+
+      // The following works but it slower
+      // stringstream rendering;
+      // for (auto y = 0; y < height; y++) {
+      //   for (auto x = 0; x < width; x++) {
+      //     auto cell = cell_at(x, y);
+      //     rendering << cell->to_char();
+      //   }
+      //   rendering << '\n';
+      // }
+      // return rendering.str();
     }
 
   private:
@@ -134,7 +135,7 @@ class World {
           );
 
           if (neighbour) {
-            cell->neighbours->push_back(neighbour);
+            cell->neighbours.push_back(neighbour);
           }
         }
       }
@@ -145,14 +146,14 @@ class World {
     int alive_neighbours_around(Cell* cell) {
       // The following was the fastest method
       return count_if(
-        begin(*cell->neighbours),
-        end(*cell->neighbours),
+        begin(cell->neighbours),
+        end(cell->neighbours),
         [](auto *neighbour) { return neighbour->alive; }
       );
 
       // The following is about the same time as the fastest
       // auto alive_neighbours = 0;
-      // for (auto& neighbour : *cell->neighbours) {
+      // for (auto& neighbour : cell->neighbours) {
       //   if (neighbour->alive) {
       //     alive_neighbours++;
       //   }
@@ -161,8 +162,8 @@ class World {
 
       // The following is about the same time as the fastest
       // auto alive_neighbours = 0;
-      // for (auto i = 0; i < (*cell->neighbours).size(); i++) {
-      //   auto neighbour = (*cell->neighbours)[i];
+      // for (auto i = 0; i < cell->neighbours.size(); i++) {
+      //   auto neighbour = cell->neighbours[i];
       //   if (neighbour->alive) {
       //     alive_neighbours++;
       //   }

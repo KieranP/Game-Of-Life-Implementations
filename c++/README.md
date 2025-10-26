@@ -2,5 +2,5 @@
 
 ## Usage
 
-* `g++ -std=c++23 -O3 -o play play.cpp`
+* `g++ -std=c++23 -O3 -march=native -flto -o play play.cpp`
 * `./play`
