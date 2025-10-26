@@ -118,24 +118,24 @@ export class World {
     //   return neighbour.alive
     // }).length
 
-    // The following works but is slower
-    // let alive_neighbours = 0
-    // for (const neighbour of cell.neighbours) {
-    //   if (neighbour.alive) {
-    //     alive_neighbours += 1
-    //   }
-    // }
-    // return alive_neighbours
-
     // The following was the fastest method
     let alive_neighbours = 0
-    for (let i = 0; i < cell.neighbours.length; i++) {
-      const neighbour = cell.neighbours[i]
-      if (neighbour?.alive) {
+    for (const neighbour of cell.neighbours) {
+      if (neighbour.alive) {
         alive_neighbours += 1
       }
     }
     return alive_neighbours
+
+    // The following works but is slower
+    // let alive_neighbours = 0
+    // for (let i = 0; i < cell.neighbours.length; i++) {
+    //   const neighbour = cell.neighbours[i]
+    //   if (neighbour?.alive) {
+    //     alive_neighbours += 1
+    //   }
+    // }
+    // return alive_neighbours
   }
 }
 
