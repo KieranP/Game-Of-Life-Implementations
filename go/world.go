@@ -88,7 +88,7 @@ func (world *World) render() string {
 
   // The following was the fastest method
   rendering := strings.Builder{}
-  rendering.Grow(world.width * world.height)
+  rendering.Grow(world.width * world.height + world.height)
   for y := range(world.height) {
     for x := range(world.width) {
       cell, _ := world.cell_at(x, y)
