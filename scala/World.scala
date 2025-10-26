@@ -23,8 +23,10 @@ class World(
   prepopulate_neighbours
 
   def _tick = {
+    val cell_values = cells.values
+
     // First determine the action for all cells
-    for ((key, cell) <- cells) {
+    for (cell <- cell_values) {
       val alive_neighbours = alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = Some(true)
@@ -36,7 +38,7 @@ class World(
     }
 
     // Then execute the determined action for all cells
-    for ((key, cell) <- cells) {
+    for (cell <- cell_values) {
       cell.alive = cell.next_state == Some(true)
     }
 
@@ -73,7 +75,7 @@ class World(
     // rendering.mkString("")
 
     // The following was the fastest method
-    val rendering = new StringBuilder()
+    val rendering = new StringBuilder(width * height + height)
     var (x, y) = (0, 0)
     for (y <- 0 until height) {
       for (x <- 0 until width) {
@@ -110,7 +112,7 @@ class World(
   }
 
   private def prepopulate_neighbours = {
-    for ((key,cell) <- cells) {
+    for (cell <- cells.values) {
       for (set <- DIRECTIONS) {
         val neighbour = cell_at(
           x = (cell.x + set(0)),

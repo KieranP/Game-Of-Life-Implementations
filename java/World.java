@@ -33,8 +33,10 @@ public class World {
   }
 
   public void _tick() {
+    var cell_values = cells.values();
+
     // First determine the action for all cells
-    for (var cell : cells.values()) {
+    for (var cell : cell_values) {
       var alive_neighbours = alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true;
@@ -46,7 +48,7 @@ public class World {
     }
 
     // Then execute the determined action for all cells
-    for (var cell : cells.values()) {
+    for (var cell : cell_values) {
       cell.alive = cell.next_state;
     }
 
@@ -79,7 +81,7 @@ public class World {
     // return String.join("", rendering);
 
     // The following was the fastest method
-    var rendering = new StringBuilder();
+    var rendering = new StringBuilder(width * height + height);
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         var cell = cell_at(x, y);

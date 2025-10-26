@@ -28,8 +28,10 @@ public class World {
   }
 
   public void _tick() {
+    def cell_values = cells.values()
+
     // First determine the action for all cells
-    for (cell in cells.values()) {
+    for (cell in cell_values) {
       def alive_neighbours = alive_neighbours_around(cell)
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
@@ -41,7 +43,7 @@ public class World {
     }
 
     // Then execute the determined action for all cells
-    for (cell in cells.values()) {
+    for (cell in cell_values) {
       cell.alive = cell.next_state
     }
 
@@ -74,7 +76,7 @@ public class World {
     // rendering.join("")
 
     // The following was the fastest method
-    def rendering = new StringBuilder()
+    def rendering = new StringBuilder(width * height + height)
     for (y in 0..<height) {
       for (x in 0..<width) {
         def cell = cell_at(x, y)
