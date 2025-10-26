@@ -30,8 +30,10 @@ public class World {
   }
 
   public void _tick() {
+    var cell_values = cells.Values;
+
     // First determine the action for all cells
-    foreach (var cell in cells.Values) {
+    foreach (var cell in cell_values) {
       var alive_neighbours = alive_neighbours_around(cell);
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true;
@@ -43,7 +45,7 @@ public class World {
     }
 
     // Then execute the determined action for all cells
-    foreach (var cell in cells.Values) {
+    foreach (var cell in cell_values) {
       cell.alive = cell.next_state ?? false;
     }
 
@@ -76,13 +78,13 @@ public class World {
     // return String.Join("", rendering.ToArray());
 
     // The following was the fastest method
-    var rendering = new StringBuilder();
+    var rendering = new StringBuilder(width * height + height);
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         var cell = cell_at(x, y);
         rendering.Append(cell.to_char());
       }
-      rendering.Append("\n");
+      rendering.Append('\n');
     }
     return rendering.ToString();
   }

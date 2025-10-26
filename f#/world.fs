@@ -16,7 +16,7 @@ type Cell(x, y, ?alive) =
   member val neighbours = [] with get,set
 
   member this.to_char() =
-    if this.alive then "o" else " "
+    if this.alive then 'o' else ' '
 
 type World(width, height) =
   let cells = new Dictionary<string, Cell>()
@@ -30,8 +30,10 @@ type World(width, height) =
   member val tick = 0 with get,set
 
   member this._tick() =
+    let cell_values = cells.Values
+
     // First determine the action for all cells
-    for cell in cells.Values do
+    for cell in cell_values do
       let alive_neighbours = this.alive_neighbours_around(cell)
       if (not cell.alive && alive_neighbours = 3) then
         cell.next_state <- true
@@ -41,7 +43,7 @@ type World(width, height) =
         cell.next_state <- cell.alive
 
     // Then execute the determined action for all cells
-    for cell in cells.Values do
+    for cell in cell_values do
       cell.alive <- cell.next_state
 
     this.tick <- this.tick + 1
@@ -71,14 +73,14 @@ type World(width, height) =
     // rendering |> String.concat ""
 
     // The following was the fastest method
-    let rendering = new StringBuilder()
+    let rendering = new StringBuilder(width * height + height : int)
     for y in [0..height-1] do
       for x in [0..width-1] do
         let cell = this.cell_at(x, y)
         if cell.IsSome then
           rendering.Append(cell.Value.to_char())
           |> ignore
-      rendering.Append("\n")
+      rendering.Append('\n')
       |> ignore
     rendering.ToString()
 
