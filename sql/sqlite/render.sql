@@ -1,0 +1,7 @@
+SELECT GROUP_CONCAT(
+  CASE WHEN alive = 1 THEN 'o' ELSE ' ' END,
+  ''
+)
+FROM cells
+GROUP BY y
+ORDER BY y;

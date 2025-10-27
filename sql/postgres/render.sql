@@ -1,0 +1,8 @@
+SELECT STRING_AGG(
+  CASE WHEN alive = 1 THEN 'o' ELSE ' ' END,
+  ''
+  ORDER BY x
+)
+FROM cells
+GROUP BY y
+ORDER BY y;
