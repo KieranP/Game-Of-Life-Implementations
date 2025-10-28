@@ -133,3 +133,29 @@ void **hashmap_get_all_values(HashMap *map) {
 
   return values;
 }
+
+HashMapIterator hashmap_iterator(HashMap *map) {
+  HashMapIterator it;
+  it._map = map;
+  it._index = 0;
+  return it;
+}
+
+bool hashmap_iterator_next(HashMapIterator *it) {
+  HashMap *map = it->_map;
+  while (it->_index < map->capacity) {
+    size_t i = it->_index;
+    it->_index++;
+    if (map->entries[i].state == HASH_ENTRY_OCCUPIED) {
+      HashEntry entry = map->entries[i];
+      it->key = entry.key;
+      it->value = entry.value;
+      return true;
+    }
+  }
+  return false;
+}
+
+void hashmap_iterator_reset(HashMapIterator *it) {
+  it->_index = 0;
+}

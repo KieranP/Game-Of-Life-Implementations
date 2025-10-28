@@ -25,9 +25,19 @@ typedef struct {
   size_t count;
 } HashMap;
 
+typedef struct {
+  const char *key;
+  void *value;
+  HashMap *_map;
+  size_t _index;
+} HashMapIterator;
+
 HashMap *hashmap_new(void);
 bool hashmap_put(HashMap *map, const char *key, void *value);
 void *hashmap_get(HashMap *map, const char *key);
 void **hashmap_get_all_values(HashMap *map);
+HashMapIterator hashmap_iterator(HashMap *map);
+bool hashmap_iterator_next(HashMapIterator *it);
+void hashmap_iterator_reset(HashMapIterator *it);
 
 #endif
