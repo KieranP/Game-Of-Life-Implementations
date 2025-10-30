@@ -1,11 +1,11 @@
 object Play {
-  private val World_Width  = 150
-  private val World_Height = 40
+  private val WORLD_WIDTH  = 150
+  private val WORLD_HEIGHT = 40
 
   def main(args: Array[String]) = {
     val world = new World(
-      width = World_Width,
-      height = World_Height,
+      width = WORLD_WIDTH,
+      height = WORLD_HEIGHT,
     )
 
     val minimal = System.getenv("MINIMAL") != null

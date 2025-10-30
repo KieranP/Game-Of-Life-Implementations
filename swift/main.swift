@@ -1,13 +1,13 @@
 import Foundation
 
-let World_Width  = 150
-let World_Height = 40
+let WORLD_WIDTH  = 150
+let WORLD_HEIGHT = 40
 
 final private class Play {
   public class func run() -> Void {
     let world = World(
-      width: World_Width,
-      height: World_Height
+      width: WORLD_WIDTH,
+      height: WORLD_HEIGHT
     )
 
     let minimal = ProcessInfo.processInfo.environment["MINIMAL"] != nil

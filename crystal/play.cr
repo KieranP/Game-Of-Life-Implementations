@@ -1,13 +1,13 @@
 require "./world"
 
 class Play
-  @@World_Width  = 150
-  @@World_Height = 40
+  @@WORLD_WIDTH  = 150
+  @@WORLD_HEIGHT = 40
 
   def self.run
     world = World.new(
-      width: @@World_Width,
-      height: @@World_Height,
+      width: @@WORLD_WIDTH,
+      height: @@WORLD_HEIGHT,
     )
 
     minimal = ENV["MINIMAL"]?

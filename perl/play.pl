@@ -7,13 +7,13 @@ use world;
 use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 use List::Util qw(min);
 
-use constant World_Width => 150;
-use constant World_Height => 40;
+use constant WORLD_WIDTH => 150;
+use constant WORLD_HEIGHT => 40;
 
 sub run {
   my $world = World->new({
-    width => World_Width,
-    height => World_Height,
+    width => WORLD_WIDTH,
+    height => WORLD_HEIGHT,
   });
 
   my $minimal = $ENV{MINIMAL} != "";

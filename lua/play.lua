@@ -1,14 +1,14 @@
 dofile('world.lua')
 
 Play = {
-  World_Width = 150,
-  World_Height = 40,
+  WORLD_WIDTH = 150,
+  WORLD_HEIGHT = 40,
 }
 
 function Play:run()
   world = World:new(
-    self.World_Width,
-    self.World_Height
+    self.WORLD_WIDTH,
+    self.WORLD_HEIGHT
   )
 
   minimal = os.getenv("MINIMAL") ~= nil

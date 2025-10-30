@@ -5,13 +5,13 @@ error_reporting(E_ALL);
 require_once 'world.php';
 
 class Play {
-  private static $World_Width = 150;
-  private static $World_Height = 40;
+  private static $WORLD_WIDTH = 150;
+  private static $WORLD_HEIGHT = 40;
 
   public static function run() {
     $world = new World(
-      width: self::$World_Width,
-      height: self::$World_Height,
+      width: self::$WORLD_WIDTH,
+      height: self::$WORLD_HEIGHT,
     );
 
     $minimal = getenv("MINIMAL") != null;

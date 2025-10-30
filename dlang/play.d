@@ -6,13 +6,13 @@ import world;
 
 class Play {
   public:
-    static const auto World_Width = 150;
-    static const auto World_Height = 40;
+    static const auto WORLD_WIDTH = 150;
+    static const auto WORLD_HEIGHT = 40;
 
     static void run() {
       auto world = new World(
-        width: World_Width,
-        height: World_Height,
+        width: WORLD_WIDTH,
+        height: WORLD_HEIGHT,
       );
 
       auto minimal = environment.get("MINIMAL") != null;

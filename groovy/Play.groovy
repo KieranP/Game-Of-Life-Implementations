@@ -1,6 +1,6 @@
 class Play {
-  private static int World_Width  = 150
-  private static int World_Height = 40
+  private static int WORLD_WIDTH  = 150
+  private static int WORLD_HEIGHT = 40
 
   public static void main(String[] args) {
     run()
@@ -8,8 +8,8 @@ class Play {
 
   public static void run() {
     def world = new World(
-      World_Width,
-      World_Height,
+      WORLD_WIDTH,
+      WORLD_HEIGHT,
     )
 
     def minimal = System.getenv("MINIMAL") != null

@@ -1,12 +1,12 @@
 public class Play {
   companion object {
-    private const val World_Width: Int  = 150
-    private const val World_Height: Int = 40
+    private const val WORLD_WIDTH: Int  = 150
+    private const val WORLD_HEIGHT: Int = 40
 
     public fun run() {
       val world = World(
-        width = World_Width,
-        height = World_Height,
+        width = WORLD_WIDTH,
+        height = WORLD_HEIGHT,
       )
 
       var minimal = System.getenv("MINIMAL") != null;

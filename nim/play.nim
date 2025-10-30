@@ -3,8 +3,8 @@ import strutils
 from strformat import fmt
 include world
 
-const World_Width  = 150
-const World_Height = 40
+const WORLD_WIDTH  = 150
+const WORLD_HEIGHT = 40
 
 type
   Play = ref object
@@ -17,8 +17,8 @@ proc f(self: Play, value: float): float
 
 proc run(self: Play) =
   let world = World(
-    width: World_Width,
-    height: World_Height,
+    width: WORLD_WIDTH,
+    height: WORLD_HEIGHT,
   ).initialize()
 
   let minimal = getEnv("MINIMAL") != ""

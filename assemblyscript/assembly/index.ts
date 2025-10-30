@@ -1,13 +1,13 @@
 import { World } from './world'
 
 class Play {
-  static World_Width: u32 = 150
-  static World_Height: u32 = 40
+  static WORLD_WIDTH: u32 = 150
+  static WORLD_HEIGHT: u32 = 40
 
   public static run(): void {
     const world = new World(
-      Play.World_Width,
-      Play.World_Height,
+      Play.WORLD_WIDTH,
+      Play.WORLD_HEIGHT,
     )
 
     // TODO: Get this from environment

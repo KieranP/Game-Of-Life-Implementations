@@ -8,13 +8,13 @@ globalThis.performance ??= {
 }
 
 class Play {
-  static #World_Width = 150
-  static #World_Height = 40
+  static #WORLD_WIDTH = 150
+  static #WORLD_HEIGHT = 40
 
   public static run() {
     const world = new World(
-      Play.#World_Width,
-      Play.#World_Height,
+      Play.#WORLD_WIDTH,
+      Play.#WORLD_HEIGHT,
     )
 
     let minimal: boolean

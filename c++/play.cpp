@@ -5,13 +5,13 @@ using namespace std;
 
 class Play {
   public:
-    static const auto World_Width = 150;
-    static const auto World_Height = 40;
+    static const auto WORLD_WIDTH = 150;
+    static const auto WORLD_HEIGHT = 40;
 
     static void run() {
       auto world = new World(
-        World_Width,
-        World_Height
+        WORLD_WIDTH,
+        WORLD_HEIGHT
       );
 
       auto minimal = getenv("MINIMAL") != nullptr;

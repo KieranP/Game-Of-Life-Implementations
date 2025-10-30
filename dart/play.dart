@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 class Play {
-  static const World_Width  = 150;
-  static const World_Height = 40;
+  static const WORLD_WIDTH  = 150;
+  static const WORLD_HEIGHT = 40;
 
   static void run() {
     final world = World(
-      World_Width,
-      World_Height,
+      WORLD_WIDTH,
+      WORLD_HEIGHT,
     );
 
     var minimal = Platform.environment["MINIMAL"] != null;

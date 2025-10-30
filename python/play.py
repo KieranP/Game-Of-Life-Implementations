@@ -3,14 +3,14 @@ from world import *
 from os import environ
 
 class Play:
-  World_Width = 150
-  World_Height = 40
+  WORLD_WIDTH = 150
+  WORLD_HEIGHT = 40
 
   @classmethod
   def run(cls):
     world = World(
-      Play.World_Width,
-      Play.World_Height,
+      Play.WORLD_WIDTH,
+      Play.WORLD_HEIGHT,
     )
 
     minimal = environ.get("MINIMAL") != None

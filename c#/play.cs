@@ -3,8 +3,8 @@ using System.Linq;
 using System.Diagnostics;
 
 public class Play {
-  private static readonly int World_Width  = 150;
-  private static readonly int World_Height = 40;
+  private static readonly int WORLD_WIDTH  = 150;
+  private static readonly int WORLD_HEIGHT = 40;
 
   public static void Main(string[] args) {
     run();
@@ -12,8 +12,8 @@ public class Play {
 
   public static void run() {
     var world = new World(
-      width: World_Width,
-      height: World_Height
+      width: WORLD_WIDTH,
+      height: WORLD_HEIGHT
     );
 
     var minimal = Environment.GetEnvironmentVariable("MINIMAL") != null;

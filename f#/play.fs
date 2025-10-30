@@ -4,13 +4,13 @@ open System
 open System.Diagnostics
 
 type Play =
-  static let World_Width = 150
-  static let World_Height = 40
+  static let WORLD_WIDTH = 150
+  static let WORLD_HEIGHT = 40
 
   static member run() =
     let world = new World(
-      width = World_Width,
-      height = World_Height
+      width = WORLD_WIDTH,
+      height = WORLD_HEIGHT
     )
 
     world.populate_cells()

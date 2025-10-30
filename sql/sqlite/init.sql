@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS cells;
-DROP TABLE IF EXISTS neighbors;
+DROP TABLE IF EXISTS neighbours;
 
 CREATE TABLE cells (
   x INTEGER NOT NULL,
@@ -9,17 +9,17 @@ CREATE TABLE cells (
   PRIMARY KEY (x, y)
 );
 
-CREATE TABLE neighbors (
+CREATE TABLE neighbours (
   cell_x INTEGER NOT NULL,
   cell_y INTEGER NOT NULL,
-  neighbor_x INTEGER NOT NULL,
-  neighbor_y INTEGER NOT NULL,
-  PRIMARY KEY (cell_x, cell_y, neighbor_x, neighbor_y),
+  neighbour_x INTEGER NOT NULL,
+  neighbour_y INTEGER NOT NULL,
+  PRIMARY KEY (cell_x, cell_y, neighbour_x, neighbour_y),
   FOREIGN KEY (cell_x, cell_y) REFERENCES cells(x, y),
-  FOREIGN KEY (neighbor_x, neighbor_y) REFERENCES cells(x, y)
+  FOREIGN KEY (neighbour_x, neighbour_y) REFERENCES cells(x, y)
 );
 
-CREATE INDEX idx_neighbors_cell ON neighbors(cell_x, cell_y);
+CREATE INDEX idx_neighbours_cell ON neighbours(cell_x, cell_y);
 
 WITH RECURSIVE
   xs(x) AS (
@@ -39,12 +39,12 @@ SELECT
   CASE WHEN (ABS(RANDOM()) % 100) <= 20 THEN 1 ELSE 0 END
 FROM xs, ys;
 
-INSERT INTO neighbors (cell_x, cell_y, neighbor_x, neighbor_y)
+INSERT INTO neighbours (cell_x, cell_y, neighbour_x, neighbour_y)
 SELECT
   c1.x AS cell_x,
   c1.y AS cell_y,
-  c2.x AS neighbor_x,
-  c2.y AS neighbor_y
+  c2.x AS neighbour_x,
+  c2.y AS neighbour_y
 FROM cells c1
 INNER JOIN cells c2
   ON c2.x BETWEEN c1.x - 1 AND c1.x + 1

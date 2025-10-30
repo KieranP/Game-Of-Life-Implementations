@@ -5,13 +5,13 @@ import "core:fmt"
 import "core:time"
 import "core:math"
 
-World_Width := 150
-World_Height := 40
+WORLD_WIDTH := 150
+WORLD_HEIGHT := 40
 
 run :: proc() {
   world := new_world(
-    width=World_Width,
-    height=World_Height,
+    width=WORLD_WIDTH,
+    height=WORLD_HEIGHT,
   )
 
   minimal := os.get_env("MINIMAL") != ""

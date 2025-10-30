@@ -28,15 +28,15 @@ export class World {
 
   public _tick(): void {
     const cells = this.cells.values()
-    const cellCount = cells.length
+    const cell_count = cells.length
 
     // First determine the action for all cells
-    for (let i = 0; i < cellCount; i++) {
+    for (let i = 0; i < cell_count; i++) {
       const cell = cells.at(i)
-      const aliveNeighbours = this.alive_neighbours_around(cell)
-      if (!cell.alive && aliveNeighbours == 3) {
+      const alive_neighbours = this.alive_neighbours_around(cell)
+      if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
-      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
         cell.next_state = false
       } else {
         cell.next_state = cell.alive
@@ -44,7 +44,7 @@ export class World {
     }
 
     // Then execute the determined action for all cells
-    for (let i = 0; i < cellCount; i++) {
+    for (let i = 0; i < cell_count; i++) {
       const cell = cells.at(i)
       cell.alive = cell.next_state
     }
@@ -113,9 +113,9 @@ export class World {
 
   private prepopulate_neighbours(): void {
     const cells = this.cells.values()
-    const cellCount = cells.length
+    const cell_count = cells.length
 
-    for (let i = 0; i < cellCount; i++) {
+    for (let i = 0; i < cell_count; i++) {
       const cell = cells.at(i)
 
       for (let j = 0; j < DIRECTIONS.length; j++) {

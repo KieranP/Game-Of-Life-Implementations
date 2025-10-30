@@ -8,13 +8,13 @@ import (
   "time"
 )
 
-const World_Width = 150
-const World_Height = 40
+const WORLD_WIDTH = 150
+const WORLD_HEIGHT = 40
 
 func run() {
   world := new_world(
-    World_Width,
-    World_Height,
+    WORLD_WIDTH,
+    WORLD_HEIGHT,
   )
 
   minimal := os.Getenv("MINIMAL") != ""
