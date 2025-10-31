@@ -55,6 +55,7 @@ actor Main
     if not minimal then
       _env.out.write("\u001b[H\u001b[2J")
     end
+
     // Pony does not have native string formatting (i.e. printf),
     // so falling back to string concatenation
     _env.out.write(
@@ -63,6 +64,7 @@ actor Main
       " - Rendering (L: " + _f(_lowest_render) + "; A: " + _f(avg_render) + ")" +
       "\n"
     )
+
     if not minimal then
       _env.out.write("" + rendered)
     end

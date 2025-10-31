@@ -41,7 +41,7 @@ pub fn new_world(width int, height int) World {
 pub fn (mut w World) tick() {
   // First determine the action for all cells
   for _, mut cell in w.cells {
-    alive_neighbours := w.alive_neighbours_around(mut *cell)
+    alive_neighbours := cell.alive_neighbours()
     if !cell.alive && alive_neighbours == 3 {
       cell.next_state = true
     } else if alive_neighbours < 2 || alive_neighbours > 3 {
@@ -115,7 +115,7 @@ fn (mut w World) populate_cells() {
   }
 }
 
-fn (mut w World) add_cell(x int, y int, alive bool) &Cell {
+fn (mut w World) add_cell(x int, y int, alive bool) bool {
   if _ := w.cell_at(x, y) {
     panic(IError(LocationOccupied{ x: x, y: y }))
   }
@@ -127,7 +127,7 @@ fn (mut w World) add_cell(x int, y int, alive bool) &Cell {
   }
 
   w.cells['$x-$y'] = cell
-  return cell
+  return true
 }
 
 fn (mut w World) prepopulate_neighbours() {
@@ -140,54 +140,5 @@ fn (mut w World) prepopulate_neighbours() {
         cell.neighbours << neighbour
       }
     }
-  }
-}
-
-// Implement first using filter/lambda if available. Then implement
-// foreach and for. Use whatever implementation runs the fastest
-fn (w World) alive_neighbours_around(mut cell &Cell) int {
-  // The following was the fastest method
-  return cell.neighbours.count(it.alive)
-
-  // The following works but is slower
-  // return cell.neighbours.filter(fn (neighbour &Cell) bool {
-  //   return neighbour.alive
-  // }).len
-
-  // The following works and is the same speed
-  // mut alive_neighbours := 0
-  // for _, neighbour in cell.neighbours {
-  //   if neighbour.alive {
-  //     alive_neighbours++
-  //   }
-  // }
-  // return alive_neighbours
-
-  // The following works but is slower
-  // mut alive_neighbours := 0
-  // for i in 0 .. cell.neighbours.len {
-  //   neighbour := cell.neighbours[i]
-  //   if neighbour.alive {
-  //     alive_neighbours++
-  //   }
-  // }
-  // return alive_neighbours
-}
-
-struct Cell {
-pub:
-  x int
-  y int
-pub mut:
-  alive bool
-  next_state bool
-  neighbours []&Cell
-}
-
-fn (c Cell) to_char() string {
-  if c.alive {
-    return 'o'
-  } else {
-    return ' '
   }
 }

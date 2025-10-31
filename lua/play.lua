@@ -42,6 +42,7 @@ function Play:run()
     if not minimal then
       print("\u{001b}[H\u{001b}[2J")
     end
+
     print(
       string.format(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -52,6 +53,7 @@ function Play:run()
         self:_f(avg_render)
       )
     )
+
     if not minimal then
       print(rendered)
     end

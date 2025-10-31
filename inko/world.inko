@@ -1,3 +1,4 @@
+import cell (Cell)
 import std.rand (Random)
 import std.string (StringBuffer)
 
@@ -30,7 +31,7 @@ class pub World {
     # First determine the action for all cells
     @cells.iter_mut.each(fn (entry) {
       let cell = entry.value
-      let alive_neighbours = alive_neighbours_around(cell)
+      let alive_neighbours = cell.alive_neighbours()
       if cell.alive == false and alive_neighbours == 3 {
         cell.next_state = true
       } else if alive_neighbours < 2 or alive_neighbours > 3 {
@@ -122,14 +123,14 @@ class pub World {
     }
   }
 
-  fn mut add_cell(x: Int, y: Int, alive: Bool) -> ref Cell {
+  fn mut add_cell(x: Int, y: Int, alive: Bool) -> Bool {
     if cell_at(x, y).some? {
       panic("LocationOccupied(${x}-${y})")
     }
 
     let cell = Cell.new(x, y, alive)
     @cells.set("${x}-${y}", cell)
-    cell_at(x, y).get
+    true
   }
 
   fn mut prepopulate_neighbours {
@@ -146,64 +147,5 @@ class pub World {
         }
       })
     })
-  }
-
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
-  fn mut alive_neighbours_around(cell: mut Cell) -> Int {
-    # The following works but it slower
-    # cell.neighbours
-    #   .iter
-    #   .select(fn (neighbour) { neighbour.alive })
-    #   .count
-
-    # The following works but it slower
-    # cell.neighbours
-    #   .iter
-    #   .reduce(0, fn (count, neighbour) {
-    #     if neighbour.alive {
-    #       count + 1
-    #     } else {
-    #       count
-    #     }
-    #   })
-
-    # The following was the fastest method
-    let mut alive_neighbours = 0
-    let mut num = 0
-    while num < cell.neighbours.size {
-      let neighbour = cell.neighbours.get(num)
-      if neighbour.alive {
-        alive_neighbours += 1
-      }
-      num += 1
-    }
-    alive_neighbours
-  }
-}
-
-class Cell {
-  let @x: Int
-  let @y: Int
-  let mut @alive: Bool
-  let mut @next_state: Bool
-  let @neighbours: Array[ref Cell]
-
-  fn pub static new(x: Int, y: Int, alive: Bool) -> Cell {
-    Cell(
-      x: x,
-      y: y,
-      alive: alive,
-      next_state: false,
-      neighbours: [],
-    )
-  }
-
-  fn to_char -> String {
-    if @alive {
-      "o"
-    } else {
-      " "
-    }
   }
 }

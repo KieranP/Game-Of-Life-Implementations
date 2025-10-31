@@ -43,7 +43,7 @@ func new_world(width int, height int) *World {
 func (world *World) _tick() {
   // First determine the action for all cells
   for _, cell := range world.cells {
-    alive_neighbours := world.alive_neighbours_around(cell)
+    alive_neighbours := cell.alive_neighbours()
     if !cell.alive && alive_neighbours == 3 {
       cell.next_state = true
     } else if alive_neighbours < 2 || alive_neighbours > 3 {
@@ -114,7 +114,7 @@ func (world *World) populate_cells() {
   }
 }
 
-func (world *World) add_cell(x int, y int, alive bool) *Cell {
+func (world *World) add_cell(x int, y int, alive bool) bool {
   if _, ok := world.cell_at(x, y); ok {
     panic(LocationOccupied{ x: x, y: y })
   }
@@ -122,7 +122,7 @@ func (world *World) add_cell(x int, y int, alive bool) *Cell {
   cell := new_cell(x, y, alive)
   key := strconv.Itoa(x) + "-" + strconv.Itoa(y)
   world.cells[key] = cell
-  return cell
+  return true
 }
 
 func (world *World) prepopulate_neighbours() {
@@ -137,53 +137,5 @@ func (world *World) prepopulate_neighbours() {
         cell.neighbours = append(cell.neighbours, neighbour)
       }
     }
-  }
-}
-
-// Implement first using filter/lambda if available. Then implement
-// foreach and for. Use whatever implementation runs the fastest
-func (world *World) alive_neighbours_around(cell *Cell) int {
-  // The following was the fastest method
-  alive_neighbours := 0
-  for _, neighbour := range cell.neighbours {
-    if neighbour.alive {
-      alive_neighbours++
-    }
-  }
-  return alive_neighbours
-
-  // The following also works but is slower
-  // alive_neighbours := 0
-  // for i := range(len(cell.neighbours)) {
-  //   neighbour := cell.neighbours[i]
-  //   if neighbour.alive {
-  //     alive_neighbours++
-  //   }
-  // }
-  // return alive_neighbours
-}
-
-type Cell struct {
-  x int
-  y int
-  alive bool
-  next_state bool
-  neighbours []*Cell
-}
-
-func new_cell(x int, y int, alive bool) *Cell {
-  var cell = new(Cell)
-  cell.x = x
-  cell.y = y
-  cell.alive = alive
-
-  return cell
-}
-
-func (cell *Cell) to_char() rune {
-  if cell.alive {
-    return 'o'
-  } else {
-    return ' '
   }
 }

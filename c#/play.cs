@@ -47,6 +47,7 @@ public class Play {
       if (!minimal) {
         Console.Write("\u001b[H\u001b[2J");
       }
+
       Console.WriteLine(
         "#{0} - World Tick (L: {1:f3}; A: {2:f3}) - Rendering (L: {3:f3}; A: {4:f3})",
         world.tick,
@@ -55,6 +56,7 @@ public class Play {
         _f(lowest_render),
         _f(avg_render)
       );
+
       if (!minimal) {
         Console.WriteLine(rendered);
       }

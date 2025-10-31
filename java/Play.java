@@ -43,6 +43,7 @@ public class Play {
       if (!minimal) {
         System.out.print("\u001b[H\u001b[2J");
       }
+
       System.out.println(
         String.format(
           "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -53,6 +54,7 @@ public class Play {
           _f(avg_render)
         )
       );
+
       if (!minimal) {
         System.out.print(rendered);
       }

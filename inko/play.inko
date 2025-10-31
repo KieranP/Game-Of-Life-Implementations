@@ -43,6 +43,7 @@ class Play {
       if minimal == false {
         stdout.print("\u{001b}[H\u{001b}[2J")
       }
+
       stdout.print(
         "#" + world.tick.to_string +
         " - World Tick (L: " + _f(lowest_tick).round(3).to_string +
@@ -50,6 +51,7 @@ class Play {
         " - Rendering (L: " + _f(lowest_render).round(3).to_string +
         "; A: " + _f(avg_render).round(3).to_string + ")"
       )
+
       if minimal == false {
         stdout.print(rendered)
       }

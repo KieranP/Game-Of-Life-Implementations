@@ -43,11 +43,13 @@ fn run() {
     if !minimal {
       print('\u001b[H\u001b[2J')
     }
+
     println(
       "#${world.tick}" +
       " - World Tick (L: ${f(lowest_tick):.3}; A: ${f(avg_tick):.3})" +
       " - Rendering (L: ${f(lowest_render):.3}; A: ${f(avg_render):.3})"
     )
+
     if !minimal {
       print(rendered)
     }

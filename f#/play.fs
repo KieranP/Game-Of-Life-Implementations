@@ -1,5 +1,4 @@
-﻿open World
-
+open World
 open System
 open System.Diagnostics
 
@@ -45,12 +44,14 @@ type Play =
 
       if not minimal then
         printf "\u001b[H\u001b[2J"
+
       printfn "#%i - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)"
         world.tick
         (Play._f(lowest_tick))
         (Play._f(avg_tick))
         (Play._f(lowest_render))
         (Play._f(avg_render))
+
       if not minimal then
         printfn "%s" rendered
 

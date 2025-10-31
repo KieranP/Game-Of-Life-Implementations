@@ -1,3 +1,4 @@
+from cell import Cell
 from random import randint
 
 class World:
@@ -23,7 +24,7 @@ class World:
   def _tick(self):
     # First determine the action for all cells
     for key,cell in self.cells.items():
-      alive_neighbours = self.alive_neighbours_around(cell)
+      alive_neighbours = cell.alive_neighbours()
       if not cell.alive and alive_neighbours == 3:
         cell.next_state = True
       elif alive_neighbours < 2 or alive_neighbours > 3:
@@ -68,12 +69,12 @@ class World:
         self.add_cell(x, y, alive)
 
   def add_cell(self, x, y, alive = False):
-    if self.cell_at(x, y) != None:
+    if self.cell_at(x, y) is not None:
       raise World.LocationOccupied(x, y)
 
     cell = Cell(x, y, alive)
     self.cells[str(x)+'-'+str(y)] = cell
-    return cell
+    return True
 
   def prepopulate_neighbours(self):
     for key,cell in self.cells.items():
@@ -85,36 +86,3 @@ class World:
 
         if neighbour is not None:
           cell.neighbours.append(neighbour)
-
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
-  def alive_neighbours_around(self, cell):
-    # The following works but is slower
-    # filter_alive = lambda neighbour: neighbour.alive
-    # return len(list(filter(filter_alive, cell.neighbours)))
-
-    # The following was the fastest method
-    alive_neighbours = 0
-    for neighbour in cell.neighbours:
-      if neighbour.alive:
-        alive_neighbours += 1
-    return alive_neighbours
-
-    # The following works but is slower
-    # alive_neighbours = 0
-    # for i in range(len(cell.neighbours)):
-    #   neighbour = cell.neighbours[i]
-    #   if neighbour.alive:
-    #     alive_neighbours += 1
-    # return alive_neighbours
-
-class Cell:
-  def __init__(self, x, y, alive = False):
-    self.x = x
-    self.y = y
-    self.alive = alive
-    self.next_state = None
-    self.neighbours = []
-
-  def to_char(self):
-    return 'o' if self.alive else ' '

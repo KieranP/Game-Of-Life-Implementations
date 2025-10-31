@@ -1,4 +1,3 @@
-import Darwin
 import Foundation
 
 final public class World {
@@ -36,7 +35,7 @@ final public class World {
   public func _tick() -> Void {
     // First determine the action for all cells
     for (_, cell) in cells {
-      let alive_neighbours = alive_neighbours_around(cell: cell)
+      let alive_neighbours = cell.alive_neighbours()
       if !cell.alive && alive_neighbours == 3 {
         cell.next_state = true
       } else if alive_neighbours < 2 || alive_neighbours > 3 {
@@ -93,7 +92,7 @@ final public class World {
     }
   }
 
-  private func add_cell(x: Int, y: Int, alive: Bool = false) -> Cell {
+  private func add_cell(x: Int, y: Int, alive: Bool = false) -> Bool {
     if cell_at(x: x, y: y) != nil {
       do {
         throw LocationOccupied(x: x, y: y)
@@ -105,7 +104,7 @@ final public class World {
 
     let cell = Cell(x: x, y: y, alive: alive)
     cells["\(x)-\(y)"] = cell
-    return cell
+    return true
   }
 
   private func prepopulate_neighbours() -> Void {
@@ -121,51 +120,5 @@ final public class World {
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  private func alive_neighbours_around(cell: Cell) -> Int {
-    // The following works but is slower
-    // return cell.neighbours.filter { $0.alive }.count
-
-    // The following works but is slower
-    // var alive_neighbours = 0;
-    // for neighbour in cell.neighbours {
-    //   if neighbour.alive {
-    //     alive_neighbours += 1
-    //   }
-    // }
-    // return alive_neighbours
-
-    // The following was the fastest method
-    var alive_neighbours = 0
-    for i in 0 ..< cell.neighbours.count {
-      let neighbour = cell.neighbours[i]
-      if neighbour.alive {
-        alive_neighbours += 1
-      }
-    }
-    return alive_neighbours
-  }
-}
-
-final private class Cell {
-  public var x: Int
-  public var y: Int
-  public var alive: Bool
-  public var next_state: Bool?
-  public var neighbours: Array<Cell>
-
-  public init(x: Int, y: Int, alive: Bool = false) {
-    self.x = x
-    self.y = y
-    self.alive = alive
-    self.next_state = nil
-    self.neighbours = []
-  }
-
-  public func to_char() -> String {
-    return alive ? "o" : " "
   }
 }

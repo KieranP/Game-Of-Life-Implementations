@@ -1,3 +1,5 @@
+import { Cell } from './cell.js'
+
 class LocationOccupied extends Error {
   constructor(x: number, y: number) {
     super(`LocationOccupied(${x}-${y})`)
@@ -28,7 +30,7 @@ export class World {
   _tick(): void {
     // First determine the action for all cells
     for (const cell of this.#cells.values()) {
-      const alive_neighbours = this.#alive_neighbours_around(cell)
+      const alive_neighbours = cell.alive_neighbours()
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -92,7 +94,7 @@ export class World {
 
     const cell = new Cell(x, y, alive)
     this.#cells.set(`${x}-${y}`, cell)
-    return cell
+    return true
   }
 
   #prepopulate_neighbours() {
@@ -108,51 +110,5 @@ export class World {
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  #alive_neighbours_around(cell: Cell) {
-    // The following works but is slower
-    // return cell.neighbours.filter(function(neighbour) {
-    //   return neighbour.alive
-    // }).length
-
-    // The following was the fastest method
-    let alive_neighbours = 0
-    for (const neighbour of cell.neighbours) {
-      if (neighbour.alive) {
-        alive_neighbours += 1
-      }
-    }
-    return alive_neighbours
-
-    // The following works but is slower
-    // let alive_neighbours = 0
-    // for (let i = 0; i < cell.neighbours.length; i++) {
-    //   const neighbour = cell.neighbours[i]
-    //   if (neighbour?.alive) {
-    //     alive_neighbours += 1
-    //   }
-    // }
-    // return alive_neighbours
-  }
-}
-
-class Cell {
-  x: number
-  y: number
-  alive: boolean
-  next_state: boolean | null = null
-  neighbours: Cell[] = []
-
-  constructor(x: number, y: number, alive: boolean = false) {
-    this.x = x
-    this.y = y
-    this.alive = alive
-  }
-
-  to_char() {
-    return (this.alive ? 'o' : ' ')
   }
 }

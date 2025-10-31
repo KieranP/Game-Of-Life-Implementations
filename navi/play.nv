@@ -45,11 +45,13 @@ impl Play {
       if (!minimal) {
         print("\u{001b}[H\u{001b}[2J");
       }
+
       println(
         `#${world.tick} - `,
         `World Tick (L: ${Play._f(lowest_tick)}; A: ${Play._f(avg_tick)}) - `,
         `Rendering (L: ${Play._f(lowest_render)}; A: ${Play._f(avg_render)})`
       );
+
       if (!minimal) {
         println(rendered);
       }

@@ -32,7 +32,7 @@ public class World {
 
     // First determine the action for all cells
     for (cell in cell_values) {
-      def alive_neighbours = alive_neighbours_around(cell)
+      def alive_neighbours = cell.alive_neighbours()
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -100,14 +100,14 @@ public class World {
     }
   }
 
-  private Cell add_cell(int x, int y, boolean alive = false) {
+  private boolean add_cell(int x, int y, boolean alive = false) {
     if (cell_at(x, y)) {
       throw new LocationOccupied(x, y)
     }
 
     def cell = new Cell(x, y, alive)
     cells["${x}-${y}".toString()] = cell
-    cell
+    true
   }
 
   private void prepopulate_neighbours() {
@@ -123,51 +123,5 @@ public class World {
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  private Integer alive_neighbours_around(Cell cell) {
-    // The following works but is slower
-    // cell.neighbours.count { it.alive }
-
-    // The following was the fastest method
-    def alive_neighbours = 0
-    for (neighbour in cell.neighbours) {
-      if (neighbour.alive) {
-        alive_neighbours++
-      }
-    }
-    alive_neighbours
-
-    // The following works but is slower
-    // def alive_neighbours = 0
-    // for (i in 0..cell.neighbours.size()-1) {
-    //   def neighbour = cell.neighbours.get(i)
-    //   if (neighbour.alive) {
-    //     alive_neighbours++
-    //   }
-    // }
-    // alive_neighbours
-  }
-}
-
-class Cell {
-  public Integer x
-  public Integer y
-  public Boolean alive
-  public Boolean next_state
-  public ArrayList<Cell> neighbours
-
-  public Cell(int x, int y, boolean alive = false) {
-    this.x = x
-    this.y = y
-    this.alive = alive
-    this.next_state = null
-    this.neighbours = []
-  }
-
-  public String to_char() {
-    alive ? 'o' : ' '
   }
 }

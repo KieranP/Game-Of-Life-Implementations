@@ -47,6 +47,7 @@ sub run {
     if (!$minimal) {
       print "\033[0;0H\033[2J";
     }
+
     print sprintf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       $world->{tick},
@@ -55,6 +56,7 @@ sub run {
       _f($lowest_render),
       _f($avg_render)
     );
+
     if (!$minimal) {
       print $rendered;
     }

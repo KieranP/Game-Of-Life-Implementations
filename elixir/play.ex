@@ -40,6 +40,7 @@ defmodule Play do
     if !minimal do
       IO.puts("\u001b[H\u001b[2J")
     end
+
     IO.puts(
       :io_lib.format(
         "#~.B - World Tick (L: ~.3f; A: ~.3f) - Rendering (L: ~.3f; A: ~.3f)",
@@ -52,6 +53,7 @@ defmodule Play do
         ]
       )
     )
+
     if !minimal do
       IO.puts(rendered)
     end

@@ -1,7 +1,7 @@
 use v5.40;
 use strict;
 use warnings;
-use builtin qw(false);
+use builtin qw(true false);
 
 use lib './';
 use cell;
@@ -33,7 +33,7 @@ sub new($class, $args) {
 sub tick($self) {
   # First determine the next state for all cells
   foreach my $cell (values %{$self->{cells}}) {
-    my $alive_neighbours = $self->alive_neighbours_around($cell);
+    my $alive_neighbours = $cell->alive_neighbours();
     if (!$cell->{alive} && $alive_neighbours == 3) {
       $cell->{next_state} = 1;
     } elsif ($alive_neighbours < 2 || $alive_neighbours > 3) {
@@ -97,7 +97,7 @@ sub add_cell($self, $x, $y, $alive = false) {
 
   my $cell = Cell->new($x, $y, $alive);
   $self->{cells}{"$x-$y"} = $cell;
-  $cell;
+  true;
 }
 
 sub prepopulate_neighbours($self) {
@@ -113,32 +113,6 @@ sub prepopulate_neighbours($self) {
       }
     }
   }
-}
-
-# Implement first using filter/lambda if available. Then implement
-# foreach. Use whatever implementation runs the fastest
-sub alive_neighbours_around($self, $cell) {
-  # The following was the fastest method
-  grep { $_->{alive} } @{$cell->{neighbours}};
-
-  # The following also works but is slower
-  # my $alive_neighbours = 0;
-  # foreach my $neighbour (@{$cell->{neighbours}}) {
-  #   if ($neighbour->{alive}) {
-  #     $alive_neighbours += 1;
-  #   }
-  # }
-  # $alive_neighbours;
-
-  # The following also works but is slower
-  # my $alive_neighbours = 0;
-  # for (my $i = 0; $i < @{$cell->{neighbours}}; $i++) {
-  #   my $neighbour = @{$cell->{neighbours}}[$i];
-  #   if ($neighbour->{alive}) {
-  #     $alive_neighbours += 1;
-  #   }
-  # }
-  # $alive_neighbours;
 }
 
 1;

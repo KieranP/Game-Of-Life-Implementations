@@ -44,6 +44,7 @@ class Play {
       if (!minimal) {
         stdout.write("\u001b[H\u001b[2J");
       }
+
       // Dart does not have native string formatting (i.e. printf),
       // so falling back to string concatenation
       stdout.writeln(
@@ -51,6 +52,7 @@ class Play {
         " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})" +
         " - Rendering (L: ${_f(lowest_render)}, A: ${_f(avg_render)})"
       );
+
       if (!minimal) {
         stdout.write(rendered);
       }

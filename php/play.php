@@ -45,6 +45,7 @@ class Play {
       if (!$minimal) {
         echo "\u{001b}[H\u{001b}[2J";
       }
+
       echo sprintf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
         $world->tick,
@@ -53,6 +54,7 @@ class Play {
         self::_f($lowest_render),
         self::_f($avg_render)
       );
+
       if (!$minimal) {
         echo $rendered;
       }

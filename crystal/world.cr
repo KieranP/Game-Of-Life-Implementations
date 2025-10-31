@@ -1,3 +1,5 @@
+require "./cell"
+
 class World
   getter tick : Int32 = 0
 
@@ -25,7 +27,7 @@ class World
   def _tick
     # First determine the action for all cells
     @cells.each_value do |cell|
-      alive_neighbours = alive_neighbours_around(cell)
+      alive_neighbours = cell.alive_neighbours
       if !cell.alive && alive_neighbours == 3
         cell.next_state = true
       elsif alive_neighbours < 2 || alive_neighbours > 3
@@ -100,7 +102,7 @@ class World
 
     cell = Cell.new(x, y, alive)
     @cells["#{x}-#{y}"] = cell
-    cell
+    true
   end
 
   private def prepopulate_neighbours
@@ -113,43 +115,5 @@ class World
           )
         }
     end
-  end
-
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
-  private def alive_neighbours_around(cell)
-    # The following was the fastest method
-    cell.neighbours.count(&.alive)
-
-    # The following works but is slower
-    # alive_neighbours = 0
-    # cell.neighbours.each do |neighbour|
-    #   alive_neighbours += 1 if neighbour.alive
-    # end
-    # alive_neighbours
-
-    # The following works but is slower
-    # alive_neighbours = 0
-    # 0.upto(cell.neighbours.size-1) do |i|
-    #   neighbour = cell.neighbours[i]
-    #   alive_neighbours += 1 if neighbour.alive
-    # end
-    # alive_neighbours
-  end
-end
-
-class Cell
-  getter x : Int32,
-         y : Int32
-
-  property alive : Bool,
-           next_state : (Bool | Nil) = nil,
-           neighbours : Array(Cell) = [] of Cell
-
-  def initialize(@x : Int32, @y : Int32, @alive : Bool = false)
-  end
-
-  def to_char
-    @alive ? "o" : " "
   end
 end

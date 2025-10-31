@@ -1,3 +1,4 @@
+import 'cell.dart';
 import 'dart:math';
 
 class LocationOccupied implements Exception {
@@ -30,7 +31,7 @@ class World {
   void tick_() {
     // First determine the action for all cells
     this._cells.forEach((key, cell) {
-      final alive_neighbours = this._alive_neighbours_around(cell);
+      final alive_neighbours = cell.alive_neighbours();
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -105,14 +106,14 @@ class World {
     }
   }
 
-  Cell _add_cell(int x, int y, [bool alive = false]) {
+  bool _add_cell(int x, int y, [bool alive = false]) {
     if (this._cell_at(x, y) != null) {
       throw LocationOccupied(x, y);
     }
 
     final cell = Cell(x, y, alive);
     this._cells["$x-$y"] = cell;
-    return cell;
+    return true;
   }
 
   void _prepopulate_neighbours() {
@@ -128,47 +129,5 @@ class World {
         }
       }
     });
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  int _alive_neighbours_around(Cell cell) {
-    // The following works but is slower
-    // return cell.neighbours.where(
-    //   (neighbour) => neighbour.alive
-    // ).length;
-
-    // The following was the fastest method
-    var alive_neighbours = 0;
-    cell.neighbours.forEach((neighbour) {
-      if (neighbour.alive) {
-        alive_neighbours += 1;
-      }
-    });
-    return alive_neighbours;
-
-    // The following also works but is slower
-    // var alive_neighbours = 0;
-    // for (var i = 0; i < cell.neighbours.length; i++) {
-    //   final neighbour = cell.neighbours[i];
-    //   if (neighbour.alive) {
-    //     alive_neighbours += 1;
-    //   }
-    // }
-    // return alive_neighbours;
-  }
-}
-
-class Cell {
-  int x;
-  int y;
-  bool alive;
-  bool? next_state = null;
-  List<Cell> neighbours = [];
-
-  Cell(this.x, this.y, [this.alive = false]) {}
-
-  String to_char() {
-    return this.alive ? 'o' : ' ';
   }
 }

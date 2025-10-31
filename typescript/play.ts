@@ -1,4 +1,4 @@
-import {World} from './world.js'
+import { World } from './world.js'
 
 // @ts-expect-error Needed for Boa runtime
 globalThis.performance ??= {
@@ -55,6 +55,7 @@ class Play {
       if (!minimal) {
         console.log("\u001b[H\u001b[2J")
       }
+
       // JS/TS does not have native string formatting (i.e. printf),
       // so falling back to string concatenation
       console.log(
@@ -62,6 +63,7 @@ class Play {
         ` - World Tick (L: ${Play.#_f(lowest_tick)}; A: ${Play.#_f(avg_tick)})` +
         ` - Rendering (L: ${Play.#_f(lowest_render)}; A: ${Play.#_f(avg_render)})`
       )
+
       if (!minimal) {
         console.log(rendered)
       }

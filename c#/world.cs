@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Linq;
 using System.Collections.Generic;
 
 public class World {
@@ -34,7 +33,7 @@ public class World {
 
     // First determine the action for all cells
     foreach (var cell in cell_values) {
-      var alive_neighbours = alive_neighbours_around(cell);
+      var alive_neighbours = cell.alive_neighbours();
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true;
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -108,14 +107,14 @@ public class World {
     }
   }
 
-  private Cell add_cell(int x, int y, bool alive = false) {
+  private bool add_cell(int x, int y, bool alive = false) {
     if (cell_at(x, y) != null) {
       throw new LocationOccupied(x, y);
     }
 
     var cell = new Cell(x, y, alive);
     cells.Add($"{x}-{y}", cell);
-    return cell;
+    return true;
   }
 
   private void prepopulate_neighbours() {
@@ -131,51 +130,5 @@ public class World {
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  private int alive_neighbours_around(Cell cell) {
-    // The following works but is slower
-    // return cell.neighbours.Where(
-    //   (neighbour) => neighbour.alive
-    // ).ToList().Count;
-
-    // The following works but is slower
-    // var alive_neighbours = 0;
-    // foreach (var neighbour in cell.neighbours) {
-    //   if (neighbour.alive) {
-    //     alive_neighbours++;
-    //   }
-    // }
-    // return alive_neighbours;
-
-    // The following was the fastest method
-    var alive_neighbours = 0;
-    for (var i = 0; i < cell.neighbours.Count; i++) {
-      var neighbour = cell.neighbours[i];
-      if (neighbour.alive) {
-        alive_neighbours++;
-      }
-    }
-    return alive_neighbours;
-  }
-}
-
-public class Cell {
-  public int x;
-  public int y;
-  public bool alive;
-  public bool? next_state = null;
-  public List<Cell> neighbours = [];
-
-  public Cell(int x, int y, bool alive = false) {
-    this.x = x;
-    this.y = y;
-    this.alive = alive;
-  }
-
-  public char to_char() {
-    return this.alive ? 'o' : ' ';
   }
 }

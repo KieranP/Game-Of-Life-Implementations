@@ -2,6 +2,8 @@
 
 error_reporting(E_ALL);
 
+require_once 'cell.php';
+
 class LocationOccupied extends Exception {
   public function __construct($x, $y) {
     parent::__construct("LocationOccupied($x-$y)");
@@ -32,7 +34,7 @@ class World {
   public function _tick() {
     // First determine the action for all cells
     foreach ($this->cells as $cell) {
-      $alive_neighbours = $this->alive_neighbours_around($cell);
+      $alive_neighbours = $cell->alive_neighbours();
       if (!$cell->alive && $alive_neighbours == 3) {
         $cell->next_state = true;
       } else if ($alive_neighbours < 2 || $alive_neighbours > 3) {
@@ -98,7 +100,7 @@ class World {
 
     $cell = new Cell($x, $y, $alive);
     $this->cells["$x-$y"] = $cell;
-    return $cell;
+    return true;
   }
 
   private function prepopulate_neighbours() {
@@ -114,47 +116,5 @@ class World {
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  private function alive_neighbours_around($cell) {
-    // The following works but is slower
-    // return count(array_filter($neighbours, function($n) { return $n->alive; }));
-
-    // The following was the fastest method
-    $alive_neighbours = 0;
-    foreach ($cell->neighbours as $neighbour) {
-      if ($neighbour->alive) {
-        $alive_neighbours++;
-      }
-    }
-    return $alive_neighbours;
-
-    // The following works but is slower
-    // $alive_neighbours = 0;
-    // for ($i = 0; $i < count($cell->neighbours); $i++) {
-    //   $neighbour = $cell->neighbours[$i];
-    //   if ($neighbour->alive) {
-    //     $alive_neighbours++;
-    //   }
-    // }
-    // return $alive_neighbours;
-  }
-}
-
-class Cell {
-  public $x, $y, $alive, $next_state, $neighbours;
-
-  public function __construct($x, $y, $alive = false) {
-    $this->x = $x;
-    $this->y = $y;
-    $this->alive = $alive;
-    $this->next_state = null;
-    $this->neighbours = [];
-  }
-
-  public function to_char() {
-    return $this->alive ? 'o' : ' ';
   }
 }

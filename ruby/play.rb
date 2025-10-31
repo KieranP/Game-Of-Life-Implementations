@@ -41,6 +41,7 @@ class Play
       unless minimal
         puts "\u001b[H\u001b[2J"
       end
+
       puts sprintf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
         world.tick,
@@ -49,6 +50,7 @@ class Play
         _f(lowest_render),
         _f(avg_render)
       )
+
       unless minimal
         puts rendered
       end

@@ -40,6 +40,7 @@ public class Play {
         if (!minimal) {
           print("\u001b[H\u001b[2J")
         }
+
         println(
           String.format(
             "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -50,6 +51,7 @@ public class Play {
             _f(avg_render)
           )
         )
+
         if (!minimal) {
           print(rendered)
         }

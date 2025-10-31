@@ -27,7 +27,7 @@ public class World(
 
     // First determine the action for all cells
     for (cell in cell_values) {
-      val alive_neighbours = alive_neighbours_around(cell)
+      val alive_neighbours = cell.alive_neighbours()
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -95,14 +95,14 @@ public class World(
     }
   }
 
-  private fun add_cell(x: Int, y: Int, alive: Boolean = false): Cell {
+  private fun add_cell(x: Int, y: Int, alive: Boolean = false): Boolean {
     if (cell_at(x, y) != null) {
       throw LocationOccupied(x, y)
     }
 
     val cell = Cell(x, y, alive)
     cells.put("$x-$y", cell)
-    return cell
+    return true
   }
 
   private fun prepopulate_neighbours() {
@@ -118,42 +118,5 @@ public class World(
         }
       }
     }
-  }
-
-  private fun alive_neighbours_around(cell: Cell): Int {
-    // The following works but is slower
-    // return cell.neighbours.filter { it.alive }.size
-
-    // The following works but is slower
-    // var alive_neighbours = 0
-    // for (neighbour in cell.neighbours) {
-    //   if (neighbour.alive) {
-    //     alive_neighbours += 1
-    //   }
-    // }
-    // return alive_neighbours
-
-    // The following was the fastest method
-    var alive_neighbours = 0
-    for (i in 0 until cell.neighbours.size) {
-      val neighbour = cell.neighbours.get(i)
-      if (neighbour.alive) {
-        alive_neighbours++
-      }
-    }
-    return alive_neighbours
-  }
-}
-
-public class Cell(
-  public val x: Int,
-  public val y: Int,
-  public var alive: Boolean = false
-) {
-  public var next_state: Boolean? = null
-  public var neighbours = ArrayList<Cell>()
-
-  fun to_char(): Char {
-    return if (this.alive) 'o' else ' '
   }
 }

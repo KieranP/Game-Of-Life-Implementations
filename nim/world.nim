@@ -1,23 +1,9 @@
-from strutils import intToStr,join
+include cell
+
+# from strutils import join
 from random import rand
-from sequtils import filter
-import options
 import tables
 import ropes
-
-type
-  Cell = ref object
-    x: int
-    y: int
-    alive: bool
-    next_state: Option[bool]
-    neighbours: seq[Cell]
-
-proc to_char(self: Cell): string =
-  if self.alive:
-    "o"
-  else:
-    " "
 
 type
   LocationOccupied = object of ValueError
@@ -51,9 +37,8 @@ proc tick(self: World)
 proc render(self: World): string
 proc cell_at(self: World, x: int, y: int): Cell
 proc populate_cells(self: World)
-proc add_cell(self: World, x: int, y: int, alive: bool = false): Cell
+proc add_cell(self: World, x: int, y: int, alive: bool = false): bool
 proc prepopulate_neighbours(self: World)
-proc alive_neighbours_around(self: World, cell: Cell): int
 
 proc initialize(self: World): World =
   self.cells = initTable[string, Cell]()
@@ -65,7 +50,7 @@ proc initialize(self: World): World =
 proc tick(self: World) =
   # First determine the action for all cells
   for key,cell in self.cells:
-    let alive_neighbours = self.alive_neighbours_around(cell)
+    let alive_neighbours = cell.alive_neighbours()
     if not cell.alive and alive_neighbours == 3:
       cell.next_state = some(true)
     elif alive_neighbours < 2 or alive_neighbours > 3:
@@ -100,6 +85,15 @@ proc render(self: World): string =
   #   rendering.add("\n")
   # join(rendering, "")
 
+  # The following works but it slower
+  # var rendering = rope("")
+  # for y in 0..<self.height:
+  #   for x in 0..<self.width:
+  #     let cell = self.cell_at(x, y)
+  #     rendering.add(cell.to_char())
+  #   rendering.add("\n")
+  # $rendering
+
 proc cell_at(self: World, x: int, y: int): Cell =
   let key = intToStr(x) & "-" & intToStr(y)
   if self.cells.hasKey(key):
@@ -113,14 +107,14 @@ proc populate_cells(self: World) =
       let alive = (rand(100) <= 20)
       discard self.add_cell(x, y, alive)
 
-proc add_cell(self: World, x: int, y: int, alive: bool = false): Cell =
+proc add_cell(self: World, x: int, y: int, alive: bool = false): bool =
   if self.cell_at(x, y) != nil:
     raise newLocationOccupied(x, y)
 
   let cell = Cell(x: x, y: y, alive: alive)
   let key = intToStr(x) & "-" & intToStr(y)
   self.cells[key] = cell
-  cell
+  true
 
 proc prepopulate_neighbours(self: World) =
   for key,cell in self.cells:
@@ -132,27 +126,3 @@ proc prepopulate_neighbours(self: World) =
 
       if neighbour != nil:
         cell.neighbours.add(neighbour)
-
-# Implement first using filter/lambda if available. Then implement
-# foreach and for. Use whatever implementation runs the fastest
-proc alive_neighbours_around(self: World, cell: Cell): int =
-  # The following works but is slower
-  # filter(
-  #   cell.neighbours,
-  #   proc(cell: Cell): bool = cell.alive
-  # ).len
-
-  # The following was the fastest method
-  var alive_neighbours = 0
-  for neighbour in cell.neighbours:
-    if neighbour.alive:
-      alive_neighbours += 1
-  alive_neighbours
-
-  # The following works but is slower
-  # var alive_neighbours = 0
-  # for i in 0..<cell.neighbours.len:
-  #   let neighbour = cell.neighbours[i]
-  #   if neighbour.alive:
-  #     alive_neighbours += 1
-  # alive_neighbours

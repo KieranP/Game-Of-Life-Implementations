@@ -32,7 +32,7 @@ defmodule World do
   def tick(world) do
     cells =
       for {key, cell} <- world.cells, into: %{} do
-        alive_neighbours = alive_neighbours_around(world, cell)
+        alive_neighbours = Cell.alive_neighbours(cell, world)
 
         cond do
           !cell.alive && alive_neighbours == 3 ->
@@ -90,7 +90,7 @@ defmodule World do
         for x <- 0..(world.width - 1), reduce: world do
           world ->
             alive = Enum.random(1..100) <= 20
-            {world, _cell} = add_cell(world, x, y, alive)
+            {world, _success} = add_cell(world, x, y, alive)
             world
         end
     end
@@ -103,7 +103,7 @@ defmodule World do
 
     cell = Cell.new(x, y, alive)
     world = put_in(world.cells["#{x}-#{y}"], cell)
-    {world, cell}
+    {world, true}
   end
 
   defp prepopulate_neighbours(world) do
@@ -116,27 +116,6 @@ defmodule World do
 
         world = put_in(world.cells["#{cell.x}-#{cell.y}"].neighbours, neighbours)
         world
-    end
-  end
-
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
-  defp alive_neighbours_around(world, cell) do
-    neighbours = Map.take(world.cells, cell.neighbours)
-
-    # The following works but is slower
-    # Enum.count(neighbours, fn {_key, neighbour} ->
-    #   neighbour.alive
-    # end)
-
-    # The following was the fastest method
-    for {_key, neighbour} <- neighbours, reduce: 0 do
-      count ->
-        if neighbour.alive do
-          count + 1
-        else
-          count
-        end
     end
   end
 end

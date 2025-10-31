@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="cell.fs" />
     <Compile Include="world.fs" />
     <Compile Include="play.fs" />
   </ItemGroup>

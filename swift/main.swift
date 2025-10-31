@@ -41,6 +41,7 @@ final private class Play {
       if !minimal {
         print("\u{001b}[H\u{001b}[2J")
       }
+
       print(
         String(
           format: "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
@@ -51,6 +52,7 @@ final private class Play {
           _f(value: avg_render)
         )
       )
+
       if !minimal {
         print(rendered)
       }

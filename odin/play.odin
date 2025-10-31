@@ -45,6 +45,7 @@ run :: proc() {
     if !minimal {
       fmt.print("\u001b[H\u001b[2J")
     }
+
     fmt.printf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       world.tick,
@@ -53,6 +54,7 @@ run :: proc() {
       _f(lowest_render),
       _f(f64(avg_render)),
     )
+
     if !minimal {
       fmt.print(rendered)
     }

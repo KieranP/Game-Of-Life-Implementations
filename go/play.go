@@ -48,6 +48,7 @@ func run() {
     if !minimal {
       fmt.Print("\u001b[H\u001b[2J")
     }
+
     fmt.Printf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       world.tick,
@@ -56,6 +57,7 @@ func run() {
       _f(lowest_render),
       _f(avg_render),
     )
+
     if !minimal {
       fmt.Print(rendered)
     }

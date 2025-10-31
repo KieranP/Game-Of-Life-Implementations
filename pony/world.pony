@@ -1,7 +1,6 @@
 use "collections"
 use "random"
 use "time"
-use "itertools"
 
 class World
   var tick: U64 = 0
@@ -26,7 +25,7 @@ class World
   fun ref do_tick() =>
     // First determine the action for all cells
     for (key, cell) in _cells.pairs() do
-      let alive_neighbours = _alive_neighbours_around(cell)
+      let alive_neighbours = cell.alive_neighbours()
       if (not cell.alive) and (alive_neighbours == 3) then
         cell.next_state = true
       elseif (alive_neighbours < 2) or (alive_neighbours > 3) then
@@ -85,13 +84,13 @@ class World
       end
     end
 
-  fun ref _add_cell(x: USize, y: USize, alive: Bool = false): Cell ref =>
+  fun ref _add_cell(x: USize, y: USize, alive: Bool = false): Bool =>
     // Pony doesn't support runtime exceptions
 
     let key = x.string() + " " + y.string()
     let cell = Cell(x, y, alive)
     _cells.insert(consume key, cell)
-    cell
+    true
 
   fun ref prepopulate_neighbours() =>
     for (key, cell) in _cells.pairs() do
@@ -105,52 +104,4 @@ class World
           cell.neighbours.push(neighbour)
         end
       end
-    end
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  fun ref _alive_neighbours_around(cell: Cell ref): USize =>
-    // The following works but it slower
-    // Iter[Cell](cell.neighbours.values())
-    //   .filter({(cell) => cell.alive })
-    //   .count()
-
-    // The following was the fastest method
-    var alive_neighbours: USize = 0
-    for neighbour in cell.neighbours.values() do
-      if neighbour.alive then
-        alive_neighbours = alive_neighbours + 1
-      end
-    end
-    alive_neighbours
-
-    // The following works but it slower
-    // var alive_neighbours: USize = 0
-    // for i in Range(0, cell.neighbours.size()) do
-    //   try
-    //     let neighbour = cell.neighbours(i)?
-    //     if neighbour.alive then
-    //       alive_neighbours = alive_neighbours + 1
-    //     end
-    //   end
-    // end
-    // alive_neighbours
-
-class Cell
-  let x: USize
-  let y: USize
-  var alive: Bool
-  var next_state: Bool = false
-  var neighbours: Array[Cell ref] = []
-
-  new create(x': USize, y': USize, alive': Bool = false) =>
-    x = x'
-    y = y'
-    alive = alive'
-
-  fun to_char(): String val =>
-    if alive then
-      "o"
-    else
-      " "
     end

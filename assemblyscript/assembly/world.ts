@@ -1,3 +1,5 @@
+import { Cell } from './cell'
+
 class LocationOccupied extends Error {
   constructor(message: string) {
     super(`LocationOccupied(${message})`)
@@ -33,7 +35,7 @@ export class World {
     // First determine the action for all cells
     for (let i = 0; i < cell_count; i++) {
       const cell = cells.at(i)
-      const alive_neighbours = this.alive_neighbours_around(cell)
+      const alive_neighbours = cell.alive_neighbours()
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -100,7 +102,7 @@ export class World {
     }
   }
 
-  private add_cell(x: u32, y: u32, alive: bool = false): Cell {
+  private add_cell(x: u32, y: u32, alive: bool = false): bool {
     const key = `${x}-${y}`
     if (this.cell_at(x, y) != null) {
       throw new LocationOccupied(key)
@@ -108,7 +110,7 @@ export class World {
 
     const cell = new Cell(x, y, alive)
     this.cells.set(key, cell)
-    return cell
+    return true
   }
 
   private prepopulate_neighbours(): void {
@@ -129,44 +131,5 @@ export class World {
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  private alive_neighbours_around(cell: Cell): u32 {
-    // The following works but is slower
-    // return cell.neighbours.filter(function(neighbour) {
-    //   return neighbour.alive
-    // }).length
-
-    // The following was the fastest method
-    let alive_neighbours: u32 = 0
-    for (let i = 0; i < cell.neighbours.length; i++) {
-      const neighbour = cell.neighbours[i]
-      if (neighbour.alive) {
-        alive_neighbours += 1
-      }
-    }
-    return alive_neighbours
-  }
-}
-
-class Cell {
-  public x: u32
-  public y: u32
-  public alive: bool
-  public next_state: bool
-  public neighbours: Cell[]
-
-  constructor(x: u32, y: u32, alive: bool = false) {
-    this.x = x
-    this.y = y
-    this.alive = alive
-    this.next_state = alive
-    this.neighbours = []
-  }
-
-  public to_char(): string {
-    return this.alive ? 'o' : ' '
   }
 }

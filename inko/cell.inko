@@ -1,0 +1,58 @@
+class pub Cell {
+  let pub @x: Int
+  let pub @y: Int
+  let pub mut @alive: Bool
+  let pub mut @next_state: Bool
+  let pub @neighbours: Array[ref Cell]
+
+  fn pub static new(x: Int, y: Int, alive: Bool) -> Cell {
+    Cell(
+      x: x,
+      y: y,
+      alive: alive,
+      next_state: false,
+      neighbours: [],
+    )
+  }
+
+  fn pub to_char -> String {
+    if @alive {
+      "o"
+    } else {
+      " "
+    }
+  }
+
+  # Implement first using filter/lambda if available. Then implement
+  # foreach and for. Use whatever implementation runs the fastest
+  fn pub mut alive_neighbours() -> Int {
+    # The following works but it slower
+    # @neighbours
+    #   .iter
+    #   .select(fn (neighbour) { neighbour.alive })
+    #   .count
+
+    # The following works but it slower
+    # @neighbours
+    #   .iter
+    #   .reduce(0, fn (count, neighbour) {
+    #     if neighbour.alive {
+    #       count + 1
+    #     } else {
+    #       count
+    #     }
+    #   })
+
+    # The following was the fastest method
+    let mut alive_neighbours = 0
+    let mut num = 0
+    while num < @neighbours.size {
+      let neighbour = @neighbours.get(num)
+      if neighbour.alive {
+        alive_neighbours += 1
+      }
+      num += 1
+    }
+    alive_neighbours
+  }
+}

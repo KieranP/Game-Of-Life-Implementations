@@ -49,10 +49,12 @@ int main(void) {
     if (!minimal) {
       printf("\033[H\033[2J");
     }
+
     printf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
         world->tick, to_ms(lowest_tick), to_ms(avg_tick), to_ms(lowest_render),
         to_ms(avg_render));
+
     if (!minimal) {
       printf("%s", rendered);
     }

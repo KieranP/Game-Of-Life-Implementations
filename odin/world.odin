@@ -33,7 +33,7 @@ new_world :: proc(width: int, height: int) -> ^World {
 world_tick :: proc(world: ^World) {
   // First determine the action for all cells
   for _, cell in world.cells {
-    alive_neighbours := world_alive_neighbours_around(world, cell)
+    alive_neighbours := cell_alive_neighbours(cell)
     if !cell.alive && alive_neighbours == 3 {
       cell.next_state = true
     } else if alive_neighbours < 2 || alive_neighbours > 3 {
@@ -99,7 +99,7 @@ world_populate_cells :: proc(world: ^World) {
   }
 }
 
-world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> ^Cell {
+world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> bool {
   if _, ok := world_cell_at(world, x, y); ok {
     panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
   }
@@ -107,7 +107,7 @@ world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> ^C
   cell := new_cell(x, y, alive)
   key := world_cell_key(x, y)
   world.cells[key] = cell
-  return cell
+  return true
 }
 
 world_prepopulate_neighbours :: proc(world: ^World) {
@@ -124,46 +124,4 @@ world_prepopulate_neighbours :: proc(world: ^World) {
       }
     }
   }
-}
-
-world_alive_neighbours_around :: proc(world: ^World, cell: ^Cell) -> int {
-  // The following was the fastest method
-  alive_neighbours := 0
-  for neighbour in cell.neighbours {
-    if neighbour.alive {
-      alive_neighbours += 1
-    }
-  }
-  return alive_neighbours
-
-  // The following also works but is slower
-  // alive_neighbours := 0
-  // for i := 0; i < len(cell.neighbours); i += 1 {
-  //   neighbour := cell.neighbours[i]
-  //   if neighbour.alive {
-  //     alive_neighbours += 1
-  //   }
-  // }
-  // return alive_neighbours
-}
-
-Cell :: struct {
-  x: int,
-  y: int,
-  alive: bool,
-  next_state: bool,
-  neighbours: [dynamic]^Cell
-}
-
-new_cell :: proc(x: int, y: int, alive: bool) -> ^Cell {
-  cell := new(Cell)
-  cell.x = x
-  cell.y = y
-  cell.alive = alive
-
-  return cell
-}
-
-cell_to_char :: proc(cell: ^Cell) -> rune {
-  return cell.alive ? 'o' : ' '
 }

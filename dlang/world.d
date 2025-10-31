@@ -1,3 +1,4 @@
+import cell;
 import std.conv : to;
 import std.random : uniform01;
 import std.array : array, join;
@@ -18,7 +19,7 @@ class World {
     auto _tick() {
       // First determine the action for all cells
       foreach (ref cell; cells) {
-        auto alive_neighbours = alive_neighbours_around(cell);
+        auto alive_neighbours = cell.alive_neighbours();
         if (!cell.alive && alive_neighbours == 3) {
           cell.next_state = true;
         } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -109,7 +110,7 @@ class World {
       auto key = to!string(x)~"-"~to!string(y);
       auto cell = new Cell(x, y, alive);
       cells[key] = cell;
-      return cell;
+      return true;
     }
 
     auto prepopulate_neighbours() {
@@ -125,51 +126,5 @@ class World {
           }
         }
       }
-    }
-
-    // Implement first using filter/lambda if available. Then implement
-    // foreach and for. Use whatever implementation runs the fastest
-    auto alive_neighbours_around(ref Cell cell) {
-      // The following works but it slower
-      // return cell.neighbours.filter!(
-      //   neighbour => neighbour.alive
-      // ).array.length;
-
-      // The following was the fastest method
-      auto alive_neighbours = 0;
-      foreach (ref neighbour; cell.neighbours) {
-        if (neighbour.alive) {
-          alive_neighbours++;
-        }
-      }
-      return alive_neighbours;
-
-      // The following works but it slower
-      // auto alive_neighbours = 0;
-      // for (auto i = 0; i < cell.neighbours.length; i++) {
-      //   auto neighbour = cell.neighbours[i];
-      //   if (neighbour.alive) {
-      //     alive_neighbours++;
-      //   }
-      // }
-      // return alive_neighbours;
-    }
-}
-
-private class Cell {
-  public:
-    uint x, y;
-    bool alive;
-    bool next_state;
-    Cell[] neighbours;
-
-    this(uint x, uint y, bool alive = false) {
-      this.x = x;
-      this.y = y;
-      this.alive = alive;
-    }
-
-    auto to_char() {
-      return alive ? 'o' : ' ';
     }
 }

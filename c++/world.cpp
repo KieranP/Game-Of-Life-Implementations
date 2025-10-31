@@ -1,23 +1,9 @@
-#include <algorithm>
+#include "cell.cpp"
 // #include <sstream>
 #include <unordered_map>
 #include <vector>
 
 using namespace std;
-
-class Cell {
-  public:
-    int x, y;
-    bool alive;
-    bool next_state;
-    vector<Cell*> neighbours;
-
-    Cell(int x, int y, bool alive = false): x(x), y(y), alive(alive) { }
-
-    char to_char() {
-      return alive ? 'o' : ' ';
-    }
-};
 
 class World {
   public:
@@ -31,7 +17,7 @@ class World {
     void _tick() {
       // First determine the action for all cells
       for (auto& [_, cell] : cells) {
-        auto alive_neighbours = alive_neighbours_around(cell);
+        auto alive_neighbours = cell->alive_neighbours();
         if (!cell->alive && alive_neighbours == 3) {
           cell->next_state = true;
         } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -115,7 +101,7 @@ class World {
       }
     }
 
-    Cell* add_cell(int x, int y, bool alive = false) {
+    bool add_cell(int x, int y, bool alive = false) {
       if (cell_at(x, y)) {
         throw LocationOccupied(x, y);
       }
@@ -123,7 +109,7 @@ class World {
       auto key = to_string(x)+"-"+to_string(y);
       auto cell = new Cell(x, y, alive);
       cells[key] = cell;
-      return cell;
+      return true;
     }
 
     void prepopulate_neighbours() {
@@ -139,35 +125,5 @@ class World {
           }
         }
       }
-    }
-
-    // Implement first using filter/lambda if available. Then implement
-    // foreach and for. Use whatever implementation runs the fastest
-    int alive_neighbours_around(Cell* cell) {
-      // The following was the fastest method
-      return count_if(
-        begin(cell->neighbours),
-        end(cell->neighbours),
-        [](auto *neighbour) { return neighbour->alive; }
-      );
-
-      // The following is about the same time as the fastest
-      // auto alive_neighbours = 0;
-      // for (auto& neighbour : cell->neighbours) {
-      //   if (neighbour->alive) {
-      //     alive_neighbours++;
-      //   }
-      // }
-      // return alive_neighbours;
-
-      // The following is about the same time as the fastest
-      // auto alive_neighbours = 0;
-      // for (auto i = 0; i < cell->neighbours.size(); i++) {
-      //   auto neighbour = cell->neighbours[i];
-      //   if (neighbour->alive) {
-      //     alive_neighbours++;
-      //   }
-      // }
-      // return alive_neighbours;
     }
 };

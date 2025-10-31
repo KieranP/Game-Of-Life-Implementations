@@ -1,4 +1,5 @@
 #include "world.h"
+#include "cell.h"
 #include "lib/utils.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -10,18 +11,6 @@ static const int DIRECTIONS[8][2] = {
     {-1, 0},  {1, 0},          // sides
     {-1, -1}, {0, -1}, {1, -1} // below
 };
-
-static Cell *cell_new(int x, int y, bool alive) {
-  Cell *cell = malloc(sizeof(Cell));
-  cell->x = x;
-  cell->y = y;
-  cell->alive = alive;
-  cell->next_state = alive;
-  cell->neighbour_count = 0;
-  return cell;
-}
-
-static char cell_to_char(Cell *cell) { return cell->alive ? 'o' : ' '; }
 
 static void make_key(char *buffer, int x, int y) {
   char *ptr = int_to_str(buffer, x);
@@ -37,7 +26,7 @@ static Cell *cell_at(World *world, int x, int y) {
   return (Cell *)hashmap_get(world->cells, key);
 }
 
-static Cell *add_cell(World *world, int x, int y, bool alive) {
+static bool add_cell(World *world, int x, int y, bool alive) {
   if (cell_at(world, x, y)) {
     fprintf(stderr, "LocationOccupied(%d-%d)\n", x, y);
     exit(1);
@@ -48,7 +37,7 @@ static Cell *add_cell(World *world, int x, int y, bool alive) {
 
   Cell *cell = cell_new(x, y, alive);
   hashmap_put(world->cells, key, cell);
-  return cell;
+  return true;
 }
 
 static void populate_cells(World *world) {
@@ -81,18 +70,6 @@ static void prepopulate_neighbours(World *world) {
   }
 }
 
-// Implement first using filter/lambda if available. Then implement
-// foreach and for. Use whatever implementation runs the fastest
-static int alive_neighbours_around(Cell *cell) {
-  int alive_neighbours = 0;
-  for (int i = 0; i < cell->neighbour_count; i++) {
-    if (cell->neighbours[i]->alive) {
-      alive_neighbours++;
-    }
-  }
-  return alive_neighbours;
-}
-
 World *world_new(int width, int height) {
   World *world = malloc(sizeof(World));
   world->width = width;
@@ -113,7 +90,7 @@ void world_tick(World *world) {
   // First determine the action for all cells
   for (int i = 0; i < cell_count; i++) {
     Cell *cell = cells[i];
-    int alive_neighbours = alive_neighbours_around(cell);
+    int alive_neighbours = cell_alive_neighbours(cell);
     if (!cell->alive && alive_neighbours == 3) {
       cell->next_state = true;
     } else if (alive_neighbours < 2 || alive_neighbours > 3) {

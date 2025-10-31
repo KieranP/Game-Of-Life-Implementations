@@ -39,6 +39,7 @@ object Play {
       if (!minimal) {
         print("\u001b[H\u001b[2J")
       }
+
       println(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)".format(
           world.tick,
@@ -48,6 +49,7 @@ object Play {
           _f(avg_render)
         )
       )
+
       if (!minimal) {
         print(rendered)
       }

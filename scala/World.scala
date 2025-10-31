@@ -27,7 +27,7 @@ class World(
 
     // First determine the action for all cells
     for (cell <- cell_values) {
-      val alive_neighbours = alive_neighbours_around(cell)
+      val alive_neighbours = cell.alive_neighbours
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = Some(true)
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -108,7 +108,7 @@ class World(
 
     val cell = new Cell(x, y, alive)
     cells.put(s"$x-$y", cell)
-    cell
+    true
   }
 
   private def prepopulate_neighbours = {
@@ -124,44 +124,5 @@ class World(
         }
       }
     }
-  }
-
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  private def alive_neighbours_around(cell: Cell) = {
-    // The following works but is slower
-    // cell.neighbours.filter(_.alive).length
-
-    // The following works but is slower
-    // var alive_neighbours = 0
-    // for (neighbour <- cell.neighbours) {
-    //   if (neighbour.alive) {
-    //     alive_neighbours += 1
-    //   }
-    // }
-    // alive_neighbours
-
-    // The following was the fastest method
-    var alive_neighbours = 0
-    for (i <- 0 until cell.neighbours.length) {
-      val neighbour = cell.neighbours(i)
-      if (neighbour.alive) {
-        alive_neighbours += 1
-      }
-    }
-    alive_neighbours
-  }
-}
-
-class Cell(
-  val x: Int,
-  val y: Int,
-  var alive: Boolean = false,
-) {
-  var next_state: Option[Boolean] = None
-  var neighbours = ArrayBuffer[Cell]()
-
-  def to_char = {
-    if (alive) "o" else " "
   }
 }

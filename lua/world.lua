@@ -1,3 +1,5 @@
+dofile('cell.lua')
+
 DIRECTIONS = {
   {-1, 1},  {0, 1},  {1, 1}, -- above
   {-1, 0},           {1, 0}, -- sides
@@ -24,7 +26,7 @@ end
 function World:_tick()
   -- First determine the action for all cells
   for key,cell in pairs(self.cells) do
-    local alive_neighbours = self:alive_neighbours_around(cell)
+    local alive_neighbours = cell:alive_neighbours()
     if not cell.alive and alive_neighbours == 3 then
       cell.next_state = true
     elseif alive_neighbours < 2 or alive_neighbours > 3 then
@@ -89,7 +91,7 @@ function World:add_cell(x, y, alive)
 
   local cell = Cell:new(x, y, alive)
   self.cells[x..'-'..y] = cell
-  return cell
+  return true
 end
 
 function World:prepopulate_neighbours()
@@ -105,46 +107,4 @@ function World:prepopulate_neighbours()
       end
     end
   end
-end
-
--- Implement first using filter/lambda if available. Then implement
--- foreach and for. Use whatever implementation runs the fastest
-function World:alive_neighbours_around(cell)
-  -- The following works but is slower
-  -- local alive_neighbours = 0
-  -- for index,neighbour in pairs(cell.neighbours) do
-  --   if neighbour.alive then
-  --     alive_neighbours = (alive_neighbours + 1)
-  --   end
-  -- end
-  -- return alive_neighbours
-
-  -- The following was the fastest method
-  local alive_neighbours = 0
-  for i = 1, #cell.neighbours do
-    local neighbour = cell.neighbours[i]
-    if neighbour.alive then
-      alive_neighbours = (alive_neighbours + 1)
-    end
-  end
-  return alive_neighbours
-end
-
-Cell = {}
-
-function Cell:new(x, y, alive)
-  self.__index = self
-  local cell = setmetatable({
-    x = x,
-    y = y,
-    alive = (alive or false),
-    next_state = nil,
-    neighbours = {},
-  }, self)
-
-  return cell
-end
-
-function Cell:to_char()
-  return self.alive and 'o' or ' '
 end

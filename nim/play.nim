@@ -50,11 +50,13 @@ proc run(self: Play) =
 
     if not minimal:
       echo "\u001b[H\u001b[2J"
+
     echo fmt"""
       #{world.tick_num} -
       World Tick (L: {self.f(lowest_tick):.3f}; A: {self.f(avg_tick):.3f}) -
       Rendering (L: {self.f(lowest_render):.3f}; A: {self.f(avg_render):.3f})
     """.dedent().replace("\n", " ")
+
     if not minimal:
       echo rendered
 

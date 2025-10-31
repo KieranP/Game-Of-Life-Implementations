@@ -1,5 +1,5 @@
+from world import World
 from time import monotonic_ns
-from world import *
 from os import environ
 
 class Play:
@@ -42,6 +42,7 @@ class Play:
 
       if not minimal:
         print("\u001b[H\u001b[2J")
+
       print(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)" % (
           world.tick,
@@ -51,6 +52,7 @@ class Play:
           cls._f(avg_render)
         )
       )
+
       if not minimal:
         print(rendered)
 
