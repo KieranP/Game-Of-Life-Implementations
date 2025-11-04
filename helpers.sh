@@ -11,8 +11,16 @@ function compile {
 }
 
 function benchmark {
-  for i in {1..3}; do
-    output=$(MINIMAL=1 timeout -s9 30 "$@" 2>&1)
+  if [ "${QUICK}" = "true" ]; then
+    TIMEOUT_SECS=5
+    LOOP_COUNT=2
+  else
+    TIMEOUT_SECS=30
+    LOOP_COUNT=3
+  fi
+
+  for i in $(seq 1 $LOOP_COUNT); do
+    output=$(MINIMAL=1 timeout -s9 $TIMEOUT_SECS "$@" 2>&1)
     echo "$output" | grep -E '\)\s*$' | tail -n 1
   done
 }
