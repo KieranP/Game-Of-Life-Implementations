@@ -14,37 +14,37 @@ int main(void) {
   // Initialize the random seed generator
   srand(time(NULL));
 
-  World *world = world_new(WORLD_WIDTH, WORLD_HEIGHT);
+  auto world = world_new(WORLD_WIDTH, WORLD_HEIGHT);
 
-  bool minimal = getenv("MINIMAL") != NULL;
+  auto minimal = getenv("MINIMAL") != NULL;
 
   if (!minimal) {
-    char *rendered = world_render(world);
+    auto rendered = world_render(world);
     printf("%s", rendered);
     free(rendered);
   }
 
-  double total_tick = 0.0;
-  double lowest_tick = INFINITY;
-  double total_render = 0.0;
-  double lowest_render = INFINITY;
+  auto total_tick = 0.0;
+  auto lowest_tick = INFINITY;
+  auto total_render = 0.0;
+  auto lowest_render = INFINITY;
 
   while (true) {
-    double tick_start = get_time_ns();
+    auto tick_start = get_time_ns();
     world_tick(world);
-    double tick_finish = get_time_ns();
-    double tick_time = tick_finish - tick_start;
+    auto tick_finish = get_time_ns();
+    auto tick_time = tick_finish - tick_start;
     total_tick += tick_time;
     lowest_tick = min_double(lowest_tick, tick_time);
-    double avg_tick = total_tick / world->tick;
+    auto avg_tick = total_tick / world->tick;
 
-    double render_start = get_time_ns();
-    char *rendered = world_render(world);
-    double render_finish = get_time_ns();
-    double render_time = render_finish - render_start;
+    auto render_start = get_time_ns();
+    auto rendered = world_render(world);
+    auto render_finish = get_time_ns();
+    auto render_time = render_finish - render_start;
     total_render += render_time;
     lowest_render = min_double(lowest_render, render_time);
-    double avg_render = total_render / world->tick;
+    auto avg_render = total_render / world->tick;
 
     if (!minimal) {
       printf("\033[H\033[2J");

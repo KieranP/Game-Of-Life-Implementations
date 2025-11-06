@@ -6,8 +6,8 @@
 
 /* FNV-1a 32-bit */
 static inline uint32_t hash_full(const char *key) {
-  uint32_t hash = 2166136261u;
-  const unsigned char *p = (const unsigned char *)key;
+  auto hash = 2166136261u;
+  auto p = (const unsigned char *)key;
   while (*p) {
     hash ^= (uint32_t)(*p++);
     hash *= 16777619u;
@@ -24,12 +24,12 @@ static inline int fast_strcmp(const char *s1, const char *s2) {
 }
 
 HashMap *hashmap_new(void) {
-  HashMap *map = malloc(sizeof(HashMap));
+  auto map = (HashMap *)malloc(sizeof(HashMap));
   if (!map) {
     return NULL;
   }
 
-  size_t capacity = (size_t)HASH_TABLE_SIZE;
+  auto capacity = (size_t)HASH_TABLE_SIZE;
   assert((capacity & (capacity - 1)) == 0);
 
   map->entries = calloc(capacity, sizeof(HashEntry));
@@ -40,7 +40,7 @@ HashMap *hashmap_new(void) {
 
   map->capacity = capacity;
   map->count = 0;
-  for (size_t i = 0; i < capacity; ++i) {
+  for (auto i = 0; i < capacity; ++i) {
     map->entries[i].state = HASH_ENTRY_EMPTY;
   }
 
@@ -52,13 +52,13 @@ bool hashmap_put(HashMap *map, const char *key, void *value) {
     return false;
   }
 
-  uint32_t hash = hash_full(key);
-  size_t capacity = map->capacity;
-  size_t mask = capacity - 1;
-  size_t idx = (size_t)hash & mask;
+  auto hash = hash_full(key);
+  auto capacity = map->capacity;
+  auto mask = capacity - 1;
+  auto idx = (size_t)hash & mask;
 
-  for (size_t probe = 0; probe < capacity; ++probe) {
-    HashEntry *entry = &map->entries[idx];
+  for (auto probe = 0; probe < capacity; ++probe) {
+    auto entry = &map->entries[idx];
 
     if (entry->state == HASH_ENTRY_OCCUPIED) {
       if (entry->hash == hash && fast_strcmp(entry->key, key) == 0) {
@@ -68,7 +68,7 @@ bool hashmap_put(HashMap *map, const char *key, void *value) {
         idx = (idx + 1) & mask;
       }
     } else {
-      char *dup = strdup(key);
+      auto dup = strdup(key);
       if (!dup) {
         return false;
       }
@@ -92,13 +92,13 @@ void *hashmap_get(HashMap *map, const char *key) {
     return NULL;
   }
 
-  uint32_t hash = hash_full(key);
-  size_t capacity = map->capacity;
-  size_t mask = capacity - 1;
-  size_t idx = (size_t)hash & mask;
+  auto hash = hash_full(key);
+  auto capacity = map->capacity;
+  auto mask = capacity - 1;
+  auto idx = (size_t)hash & mask;
 
-  for (size_t probe = 0; probe < capacity; ++probe) {
-    HashEntry *entry = &map->entries[idx];
+  for (auto probe = 0; probe < capacity; ++probe) {
+    auto entry = &map->entries[idx];
 
     if (entry->state == HASH_ENTRY_OCCUPIED) {
       if (entry->hash == hash && fast_strcmp(entry->key, key) == 0) {
@@ -119,13 +119,13 @@ void **hashmap_get_all_values(HashMap *map) {
     return NULL;
   }
 
-  void **values = malloc(map->count * sizeof(void *));
+  auto values = (void **)malloc(map->count * sizeof(void *));
   if (!values) {
     return NULL;
   }
 
-  size_t j = 0;
-  for (size_t i = 0; i < map->capacity; ++i) {
+  auto j = 0;
+  for (auto i = 0; i < map->capacity; ++i) {
     if (map->entries[i].state == HASH_ENTRY_OCCUPIED) {
       values[j++] = map->entries[i].value;
     }
@@ -142,12 +142,12 @@ HashMapIterator hashmap_iterator(HashMap *map) {
 }
 
 bool hashmap_iterator_next(HashMapIterator *it) {
-  HashMap *map = it->_map;
+  auto map = it->_map;
   while (it->_index < map->capacity) {
-    size_t i = it->_index;
+    auto i = it->_index;
     it->_index++;
     if (map->entries[i].state == HASH_ENTRY_OCCUPIED) {
-      HashEntry entry = map->entries[i];
+      auto entry = map->entries[i];
       it->key = entry.key;
       it->value = entry.value;
       return true;
@@ -156,6 +156,4 @@ bool hashmap_iterator_next(HashMapIterator *it) {
   return false;
 }
 
-void hashmap_iterator_reset(HashMapIterator *it) {
-  it->_index = 0;
-}
+void hashmap_iterator_reset(HashMapIterator *it) { it->_index = 0; }

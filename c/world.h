@@ -3,8 +3,6 @@
 
 #include "lib/hashmap.h"
 
-#define MAX_NEIGHBOURS 8
-
 typedef struct {
   int width;
   int height;

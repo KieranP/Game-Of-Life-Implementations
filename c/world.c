@@ -7,13 +7,13 @@
 #include <string.h>
 
 static const int DIRECTIONS[8][2] = {
-    {-1, 1},  {0, 1},  {1, 1}, // above
-    {-1, 0},  {1, 0},          // sides
-    {-1, -1}, {0, -1}, {1, -1} // below
+    {-1, 1},  {0, 1},  {1, 1},  // above
+    {-1, 0},  {1, 0},           // sides
+    {-1, -1}, {0, -1}, {1, -1}, // below
 };
 
 static void make_key(char *buffer, int x, int y) {
-  char *ptr = int_to_str(buffer, x);
+  auto ptr = int_to_str(buffer, x);
   *ptr++ = '-';
   ptr = int_to_str(ptr, y);
   *ptr = '\0';
@@ -35,32 +35,32 @@ static bool add_cell(World *world, int x, int y, bool alive) {
   char key[32];
   make_key(key, x, y);
 
-  Cell *cell = cell_new(x, y, alive);
+  auto cell = cell_new(x, y, alive);
   hashmap_put(world->cells, key, cell);
   return true;
 }
 
 static void populate_cells(World *world) {
-  for (int y = 0; y < world->height; y++) {
-    for (int x = 0; x < world->width; x++) {
-      float random = (float)rand() / RAND_MAX;
-      bool alive = (random <= 0.2);
+  for (auto y = 0; y < world->height; y++) {
+    for (auto x = 0; x < world->width; x++) {
+      auto random = (float)rand() / RAND_MAX;
+      auto alive = (random <= 0.2);
       add_cell(world, x, y, alive);
     }
   }
 }
 
 static void prepopulate_neighbours(World *world) {
-  for (int y = 0; y < world->height; y++) {
-    for (int x = 0; x < world->width; x++) {
-      Cell *cell = cell_at(world, x, y);
+  for (auto y = 0; y < world->height; y++) {
+    for (auto x = 0; x < world->width; x++) {
+      auto cell = cell_at(world, x, y);
       if (!cell)
         continue;
 
-      for (int d = 0; d < 8; d++) {
-        int nx = cell->x + DIRECTIONS[d][0];
-        int ny = cell->y + DIRECTIONS[d][1];
-        Cell *neighbour = cell_at(world, nx, ny);
+      for (auto d = 0; d < 8; d++) {
+        auto nx = cell->x + DIRECTIONS[d][0];
+        auto ny = cell->y + DIRECTIONS[d][1];
+        auto neighbour = cell_at(world, nx, ny);
 
         if (neighbour) {
           cell->neighbours[cell->neighbour_count++] = neighbour;
@@ -71,7 +71,7 @@ static void prepopulate_neighbours(World *world) {
 }
 
 World *world_new(int width, int height) {
-  World *world = malloc(sizeof(World));
+  auto world = (World *)malloc(sizeof(World));
   world->width = width;
   world->height = height;
   world->tick = 0;
@@ -84,13 +84,13 @@ World *world_new(int width, int height) {
 }
 
 void world_tick(World *world) {
-  Cell **cells = (Cell **)hashmap_get_all_values(world->cells);
-  int cell_count = world->cells->count;
+  auto cells = (Cell **)hashmap_get_all_values(world->cells);
+  auto cell_count = world->cells->count;
 
   // First determine the action for all cells
-  for (int i = 0; i < cell_count; i++) {
-    Cell *cell = cells[i];
-    int alive_neighbours = cell_alive_neighbours(cell);
+  for (auto i = 0; i < cell_count; i++) {
+    auto cell = cells[i];
+    auto alive_neighbours = cell_alive_neighbours(cell);
     if (!cell->alive && alive_neighbours == 3) {
       cell->next_state = true;
     } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -101,8 +101,8 @@ void world_tick(World *world) {
   }
 
   // Then execute the determined action for all cells
-  for (int i = 0; i < cell_count; i++) {
-    Cell *cell = cells[i];
+  for (auto i = 0; i < cell_count; i++) {
+    auto cell = cells[i];
     cell->alive = cell->next_state;
   }
 
@@ -113,13 +113,13 @@ void world_tick(World *world) {
 // Implement first using string concatenation. Then implement any
 // special string builders, and use whatever runs the fastest
 char *world_render(World *world) {
-  int size = world->width * world->height + world->height + 1;
-  char *rendering = malloc(size);
-  int idx = 0;
+  auto size = world->width * world->height + world->height + 1;
+  auto rendering = (char *)malloc(size);
+  auto idx = 0;
 
-  for (int y = 0; y < world->height; y++) {
-    for (int x = 0; x < world->width; x++) {
-      Cell *cell = cell_at(world, x, y);
+  for (auto y = 0; y < world->height; y++) {
+    for (auto x = 0; x < world->width; x++) {
+      auto cell = cell_at(world, x, y);
       rendering[idx++] = cell_to_char(cell);
     }
     rendering[idx++] = '\n';

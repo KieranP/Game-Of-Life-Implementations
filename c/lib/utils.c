@@ -12,7 +12,7 @@ double get_time_ns(void) {
 double min_double(double a, double b) { return a < b ? a : b; }
 
 // Convert nanoseconds to milliseconds
-double to_ms(double nanoseconds) { return nanoseconds / 1000000.0; }
+double to_ms(double nanoseconds) { return nanoseconds / 1'000'000.0; }
 
 // Fast integer to string conversion without using sprintf/snprintf
 // Writes the string representation of num into buf
@@ -25,8 +25,8 @@ char *int_to_str(char *buf, int num) {
   }
 
   char temp[12];
-  int i = 0;
-  int is_negative = num < 0;
+  auto i = 0;
+  auto is_negative = num < 0;
 
   if (is_negative) {
     num = -num;
