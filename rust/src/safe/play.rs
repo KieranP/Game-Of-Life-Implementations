@@ -6,8 +6,8 @@ use crate::world::World;
 pub struct Play;
 
 impl Play {
-    pub const WORLD_WIDTH: usize = 150;
-    pub const WORLD_HEIGHT: usize = 40;
+    const WORLD_WIDTH: usize = 150;
+    const WORLD_HEIGHT: usize = 40;
 
     pub fn run() {
         let mut world = World::new(Self::WORLD_WIDTH, Self::WORLD_HEIGHT);

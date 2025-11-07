@@ -1,21 +1,31 @@
+use crate::cell::Cell;
 use rand::Rng;
 use std::collections::HashMap;
-
-use crate::cell::Cell;
+use std::error::Error;
+use std::fmt;
 
 const DIRECTIONS: [(isize, isize); 8] = [
+    // above
     (-1, 1),
     (0, 1),
-    (1, 1), // above
+    (1, 1),
+    // sides
     (-1, 0),
-    (1, 0), // sides
+    (1, 0),
+    // below
     (-1, -1),
     (0, -1),
-    (1, -1), // below
+    (1, -1),
 ];
 
-#[allow(dead_code)]
+#[derive(Debug)]
 pub struct LocationOccupied(usize, usize);
+impl Error for LocationOccupied {}
+impl fmt::Display for LocationOccupied {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "LocationOccupied({},{})", self.0, self.1)
+    }
+}
 
 pub struct World {
     pub tick: usize,
@@ -92,7 +102,7 @@ impl World {
         // String::from_iter(rendering)
     }
 
-    pub fn cell_at(&self, x: usize, y: usize) -> Option<&Cell> {
+    fn cell_at(&self, x: usize, y: usize) -> Option<&Cell> {
         let key = format!("{}-{}", x, y);
         self.cells.get(&key).map(|b| &**b)
     }
@@ -101,21 +111,21 @@ impl World {
         let mut rng = rand::rng();
         for y in 0..self.height {
             for x in 0..self.width {
-                let alive = rng.random_range(0..=100) <= 20;
+                let alive = rng.random_bool(0.20);
                 let _ = self.add_cell(x, y, alive);
             }
         }
     }
 
-    pub fn add_cell(&mut self, x: usize, y: usize, alive: bool) -> Result<bool, LocationOccupied> {
+    fn add_cell(&mut self, x: usize, y: usize, alive: bool) -> bool {
         if self.cell_at(x, y).is_some() {
-            return Err(LocationOccupied(x, y));
+            panic!("{}", LocationOccupied(x, y));
         }
 
         let key = format!("{}-{}", x, y);
         let cell = Box::new(Cell::new(x, y, alive));
         self.cells.insert(key, cell);
-        Ok(true)
+        true
     }
 
     fn prepopulate_neighbours(&mut self) {
