@@ -1,0 +1,16 @@
+[package]
+name = "gol"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[[bin]]
+name = "play-unsafe"
+path = "src/unsafe/main.rs"
+
+[[bin]]
+name = "play-safe"
+path = "src/safe/main.rs"
+
+[dependencies]
+rand = "0.9.2"
