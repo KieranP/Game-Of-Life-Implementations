@@ -10,4 +10,8 @@ class Cell:
         return "o" if self.alive else " "
 
     def alive_neighbours(self):
-        return sum(neighbour.alive for neighbour in self.neighbours)
+        alive_neighbours = 0
+        for neighbour in self.neighbours:
+            if neighbour.alive:
+                alive_neighbours += 1
+        return alive_neighbours
