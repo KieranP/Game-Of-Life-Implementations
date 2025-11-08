@@ -26,20 +26,25 @@ class World:
 
         self.populate_cells()
         self.prepopulate_neighbours()
+        self.initialize_neighbor_counts()
 
     def _tick(self):
         cells = self.cells.values()
 
         for cell in cells:
-            alive_neighbours = cell.alive_neighbours()
-            if not cell.alive and alive_neighbours == 3:
+            if not cell.alive and cell.alive_neighbors == 3:
                 cell.next_state = True
-            elif alive_neighbours < 2 or alive_neighbours > 3:
+            elif cell.alive_neighbors < 2 or cell.alive_neighbors > 3:
                 cell.next_state = False
             else:
                 cell.next_state = cell.alive
 
         for cell in cells:
+            # if state changed, update neighbors alive count
+            if cell.alive != cell.next_state:
+                delta = 1 if cell.next_state else -1
+                for neighbour in cell.neighbours:
+                    neighbour.alive_neighbors += delta
             cell.alive = cell.next_state
 
         self.tick += 1
@@ -75,3 +80,9 @@ class World:
                 neighbour = cells.get((cell.x + rel_x, cell.y + rel_y))
                 if neighbour is not None:
                     cell.neighbours.append(neighbour)
+
+    def initialize_neighbor_counts(self):
+        for cell in self.cells.values():
+            for neighbour in cell.neighbours:
+                if neighbour.alive:
+                    cell.alive_neighbors += 1
