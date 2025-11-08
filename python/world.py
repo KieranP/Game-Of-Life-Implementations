@@ -50,12 +50,9 @@ class World:
         for y in range(self.height):
             for x in range(self.width):
                 cell = cells[(x, y)]
-                rendering.append(cell.to_char())
+                rendering.append("o" if cell.alive else " ")
             rendering.append("\n")
         return "".join(rendering)
-
-    def cell_at(self, x, y):
-        return self.cells.get((x, y))
 
     def populate_cells(self):
         for y in range(self.height):
@@ -64,7 +61,7 @@ class World:
                 self.add_cell(x, y, alive=alive)
 
     def add_cell(self, x, y, alive=False):
-        if self.cell_at(x, y) is not None:
+        if (x, y) in self.cells:
             raise World.LocationOccupied(x, y)
 
         cell = Cell(x, y, alive=alive)

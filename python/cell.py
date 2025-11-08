@@ -6,9 +6,6 @@ class Cell:
         self.next_state = None
         self.neighbours = []
 
-    def to_char(self):
-        return "o" if self.alive else " "
-
     def alive_neighbours(self):
         alive_neighbours = 0
         for neighbour in self.neighbours:
