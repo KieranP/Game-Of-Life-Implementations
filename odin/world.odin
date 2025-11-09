@@ -64,7 +64,8 @@ world_render :: proc(world: ^World) -> string {
   // return strings.concatenate(rendering[:])
 
   // The following was the fastest method
-  rendering := strings.builder_make()
+  size := world.width * world.height + world.height
+  rendering := strings.builder_make_len(size)
   for y in 0..<world.height {
     for x in 0..<world.width {
       cell, _ := world_cell_at(world, x, y)
@@ -77,10 +78,10 @@ world_render :: proc(world: ^World) -> string {
 
 world_cell_key :: proc(x: int, y: int) -> string {
   buf1: [3]byte
-  xs := strconv.itoa(buf1[:], x)
+  xs := strconv.write_int(buf1[:], i64(x), 10)
 
   buf2: [3]byte
-  ys := strconv.itoa(buf2[:], y)
+  ys := strconv.write_int(buf2[:], i64(y), 10)
 
   return strings.join({xs, ys}, "-")
 }
