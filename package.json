@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "pidtree": "^0.6.0",
+    "pidusage": "^4.0.1"
+  }
+}
