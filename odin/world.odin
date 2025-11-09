@@ -64,8 +64,8 @@ world_render :: proc(world: ^World) -> string {
   // return strings.concatenate(rendering[:])
 
   // The following was the fastest method
-  size := world.width * world.height + world.height
-  rendering := strings.builder_make_len(size)
+  total_size := world.width * world.height + world.height
+  rendering := strings.builder_make_len(total_size)
   for y in 0..<world.height {
     for x in 0..<world.width {
       cell, _ := world_cell_at(world, x, y)
@@ -76,19 +76,17 @@ world_render :: proc(world: ^World) -> string {
   return strings.to_string(rendering)
 }
 
-world_cell_key :: proc(x: int, y: int) -> string {
-  buf1: [3]byte
-  xs := strconv.write_int(buf1[:], i64(x), 10)
-
-  buf2: [3]byte
-  ys := strconv.write_int(buf2[:], i64(y), 10)
-
-  return strings.join({xs, ys}, "-")
+world_cell_key :: proc(buf: []u8, x: int, y: int) -> string {
+  n := len(strconv.write_int(buf[:], i64(x), 10))
+  buf[n] = '-'
+  n += 1
+  n += len(strconv.write_int(buf[n:], i64(y), 10))
+  return string(buf[:n])
 }
 
 world_cell_at :: proc(world: ^World, x: int, y: int) -> (^Cell, bool) {
-  key := world_cell_key(x, y)
-  defer delete(key)
+  buf: [32]u8
+  key := world_cell_key(buf[:], x, y)
   return world.cells[key]
 }
 
@@ -106,8 +104,11 @@ world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> bo
     panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
   }
 
+  buf: [32]u8
+  key := world_cell_key(buf[:], x, y)
+
   cell := new_cell(x, y, alive)
-  key := world_cell_key(x, y)
+  key = strings.clone(key)
   world.cells[key] = cell
   return true
 }
