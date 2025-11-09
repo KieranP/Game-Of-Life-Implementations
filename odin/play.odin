@@ -17,7 +17,9 @@ run :: proc() {
   minimal := os.get_env("MINIMAL") != ""
 
   if !minimal {
-    fmt.println(world_render(world))
+    rendered := world_render(world)
+    defer delete(rendered)
+    fmt.println(rendered)
   }
 
   total_tick: i64
@@ -36,6 +38,7 @@ run :: proc() {
 
     render_start := time.tick_now()
     rendered := world_render(world)
+    defer delete(rendered)
     render_finish := time.tick_now()
     render_time := time.duration_nanoseconds(time.tick_diff(render_start, render_finish))
     total_render += render_time

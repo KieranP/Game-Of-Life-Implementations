@@ -88,6 +88,7 @@ world_cell_key :: proc(x: int, y: int) -> string {
 
 world_cell_at :: proc(world: ^World, x: int, y: int) -> (^Cell, bool) {
   key := world_cell_key(x, y)
+  defer delete(key)
   return world.cells[key]
 }
 
