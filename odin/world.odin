@@ -65,13 +65,13 @@ world_render :: proc(world: ^World) -> string {
 
   // The following was the fastest method
   total_size := world.width * world.height + world.height
-  rendering := strings.builder_make_len(total_size)
+  rendering := strings.builder_make_len_cap(0, total_size)
   for y in 0..<world.height {
     for x in 0..<world.width {
       cell, _ := world_cell_at(world, x, y)
-      strings.write_rune(&rendering, cell_to_char(cell))
+      strings.write_byte(&rendering, cell_to_char(cell))
     }
-    strings.write_rune(&rendering, '\n')
+    strings.write_byte(&rendering, '\n')
   }
   return strings.to_string(rendering)
 }

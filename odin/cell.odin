@@ -17,7 +17,7 @@ new_cell :: proc(x: int, y: int, alive: bool) -> ^Cell {
   return cell
 }
 
-cell_to_char :: proc(cell: ^Cell) -> rune {
+cell_to_char :: proc(cell: ^Cell) -> u8 {
   return cell.alive ? 'o' : ' '
 }
 
