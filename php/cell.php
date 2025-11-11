@@ -24,22 +24,23 @@ class Cell {
     // return count(array_filter($this->neighbours, function($n) { return $n->alive; }));
 
     // The following was the fastest method
-    $alive_neighbours = 0;
-    foreach ($this->neighbours as $neighbour) {
-      if ($neighbour->alive) {
-        $alive_neighbours++;
-      }
-    }
-    return $alive_neighbours;
-
-    // The following works but is slower
     // $alive_neighbours = 0;
-    // for ($i = 0; $i < count($this->neighbours); $i++) {
-    //   $neighbour = $this->neighbours[$i];
+    // foreach ($this->neighbours as $neighbour) {
     //   if ($neighbour->alive) {
     //     $alive_neighbours++;
     //   }
     // }
     // return $alive_neighbours;
+
+    // The following works but is slower
+    $alive_neighbours = 0;
+    $count = count($this->neighbours);
+    for ($i = 0; $i < $count; $i++) {
+      $neighbour = $this->neighbours[$i];
+      if ($neighbour->alive) {
+        $alive_neighbours++;
+      }
+    }
+    return $alive_neighbours;
   }
 }
