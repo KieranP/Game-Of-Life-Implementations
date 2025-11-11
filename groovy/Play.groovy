@@ -1,5 +1,5 @@
 class Play {
-  private static int WORLD_WIDTH  = 150
+  private static int WORLD_WIDTH = 150
   private static int WORLD_HEIGHT = 40
 
   public static void main(String[] args) {
@@ -62,7 +62,7 @@ class Play {
   }
 
   private static double _f(double value) {
-    // value is in nanoseconds, convert to milliseconds
+    // nanoseconds -> milliseconds
     value / 1000000
   }
 }

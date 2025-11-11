@@ -5,28 +5,27 @@ using namespace std;
 
 class Cell {
   public:
-    int x, y;
+    uint32_t x;
+    uint32_t y;
     bool alive;
     bool next_state;
     vector<Cell*> neighbours;
 
-    Cell(int x, int y, bool alive = false): x(x), y(y), alive(alive) { }
+    Cell(uint32_t x, uint32_t y, bool alive = false): x(x), y(y), alive(alive) { }
 
     char to_char() {
       return alive ? 'o' : ' ';
     }
 
-    // Implement first using filter/lambda if available. Then implement
-    // foreach and for. Use whatever implementation runs the fastest
-    int alive_neighbours() {
-      // The following was the fastest method
+    uint32_t alive_neighbours() {
+      // The following is the fastest
       return count_if(
         begin(neighbours),
         end(neighbours),
         [](auto *neighbour) { return neighbour->alive; }
       );
 
-      // The following is about the same time as the fastest
+      // The following is about the same speed
       // auto alive_neighbours = 0;
       // for (auto& neighbour : neighbours) {
       //   if (neighbour->alive) {
@@ -35,9 +34,10 @@ class Cell {
       // }
       // return alive_neighbours;
 
-      // The following is about the same time as the fastest
+      // The following is about the same speed
       // auto alive_neighbours = 0;
-      // for (auto i = 0; i < neighbours.size(); i++) {
+      // auto count = neighbours.size();
+      // for (auto i = 0; i < count; i++) {
       //   auto neighbour = neighbours[i];
       //   if (neighbour->alive) {
       //     alive_neighbours++;

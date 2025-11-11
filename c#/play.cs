@@ -3,8 +3,8 @@ using System.Linq;
 using System.Diagnostics;
 
 public class Play {
-  private static readonly int WORLD_WIDTH  = 150;
-  private static readonly int WORLD_HEIGHT = 40;
+  private static readonly uint WORLD_WIDTH = 150;
+  private static readonly uint WORLD_HEIGHT = 40;
 
   public static void Main(string[] args) {
     run();
@@ -33,7 +33,7 @@ public class Play {
       var tick_finish = Stopwatch.GetTimestamp();
       var tick_time = Stopwatch.GetElapsedTime(tick_start, tick_finish).TotalNanoseconds;
       total_tick += tick_time;
-      lowest_tick = new double[]{ lowest_tick, tick_time }.Min();
+      lowest_tick = Math.Min(lowest_tick, tick_time);
       var avg_tick = (total_tick / world.tick);
 
       var render_start = Stopwatch.GetTimestamp();
@@ -41,7 +41,7 @@ public class Play {
       var render_finish = Stopwatch.GetTimestamp();
       var render_time = Stopwatch.GetElapsedTime(render_start, render_finish).TotalNanoseconds;
       total_render += render_time;
-      lowest_render = new double[]{ lowest_render, render_time }.Min();
+      lowest_render = Math.Min(lowest_render, render_time);
       var avg_render = (total_render / world.tick);
 
       if (!minimal) {
@@ -64,7 +64,7 @@ public class Play {
   }
 
   private static double _f(double value) {
-    // value is in nanoseconds, convert to milliseconds
+    // nanoseconds -> milliseconds
     return value / 1_000_000;
   }
 }

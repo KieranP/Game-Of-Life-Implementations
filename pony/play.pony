@@ -6,10 +6,11 @@ actor Main
   let _env: Env
   let world: World
   var minimal: Bool = false
-  var _total_tick: U64 = 0
-  var _lowest_tick: U64 = U64.max_value()
-  var _total_render: U64 = 0
-  var _lowest_render: U64 = U64.max_value()
+
+  var _total_tick: F64 = 0
+  var _lowest_tick: F64 = F64.max_value()
+  var _total_render: F64 = 0
+  var _lowest_render: F64 = F64.max_value()
 
   new create(env: Env) =>
     _env = env
@@ -35,22 +36,22 @@ actor Main
     let tick_start = Time.nanos()
     world.do_tick()
     let tick_finish = Time.nanos()
-    let tick_time = (tick_finish - tick_start)
+    let tick_time = (tick_finish - tick_start).f64()
     _total_tick = _total_tick + tick_time
     if tick_time < _lowest_tick then
       _lowest_tick = tick_time
     end
-    let avg_tick = (_total_tick / world.tick)
+    let avg_tick = (_total_tick / world.tick.f64())
 
     let render_start = Time.nanos()
     let rendered = world.render()
     let render_finish = Time.nanos()
-    let render_time = (render_finish - render_start)
+    let render_time = (render_finish - render_start).f64()
     _total_render = _total_render + render_time
     if render_time < _lowest_render then
       _lowest_render = render_time
     end
-    let avg_render = (_total_render / world.tick)
+    let avg_render = (_total_render / world.tick.f64())
 
     if not minimal then
       _env.out.write("\u001b[H\u001b[2J")
@@ -71,8 +72,8 @@ actor Main
 
     tick()
 
-  fun _f(value: U64): String =>
-    // value is in nanoseconds, convert to milliseconds
+  fun _f(value: F64): String =>
+    // nanoseconds -> milliseconds
     Format.float[F64](
-      (value.f64() / 1_000_000.0) where prec = 3
+      (value / 1_000_000.0) where prec = 3
     )

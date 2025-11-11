@@ -47,10 +47,8 @@ class World
     @tick += 1
   end
 
-  # Implement first using string concatenation. Then implement any
-  # special string builders, and use whatever runs the fastest
   def render
-    # The following works but it slower
+    # The following is slower
     # rendering = ""
     # @height.times.each { |y|
     #   @width.times.each { |x|
@@ -60,7 +58,7 @@ class World
     # }
     # rendering
 
-    # The following was the fastest method
+    # The following is the fastest
     rendering = []
     @height.times.each { |y|
       @width.times.each { |x|
@@ -70,7 +68,7 @@ class World
     }
     rendering.join
 
-    # The following works but it slower
+    # The following is slower
     # rendering = StringIO.new
     # @height.times.each { |y|
     #   @width.times.each { |x|
@@ -108,12 +106,22 @@ class World
 
   def prepopulate_neighbours
     @cells.each_value do |cell|
+      x = cell.x
+      y = cell.y
+
       cell.neighbours =
         DIRECTIONS.filter_map { |rel_x, rel_y|
-          cell_at(
-            (cell.x + rel_x),
-            (cell.y + rel_y)
-          )
+          nx = x + rel_x
+          ny = y + rel_y
+          if nx < 0 || ny < 0
+            next # Out of bounds
+          end
+
+          if nx >= @width || ny >= @height
+            next # Out of bounds
+          end
+
+          cell_at(nx, ny)
         }
     end
   end

@@ -29,7 +29,7 @@ class Play {
       let tick_time = tick_finish - tick_start
       total_tick += tick_time
       if (tick_time < lowest_tick) lowest_tick = tick_time
-      let avg_tick = total_tick / <f64>world.tick
+      let avg_tick = total_tick / world.tick
 
       let render_start = performance.now()
       let rendered = world.render()
@@ -37,7 +37,7 @@ class Play {
       let render_time = render_finish - render_start
       total_render += render_time
       if (render_time < lowest_render) lowest_render = render_time
-      let avg_render = total_render / <f64>world.tick
+      let avg_render = total_render / world.tick
 
       if (!minimal) {
         console.log("\u001b[H\u001b[2J")

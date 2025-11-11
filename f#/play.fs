@@ -3,8 +3,8 @@ open System
 open System.Diagnostics
 
 type Play =
-  static let WORLD_WIDTH = 150
-  static let WORLD_HEIGHT = 40
+  static let WORLD_WIDTH = 150u
+  static let WORLD_HEIGHT = 40u
 
   static member run() =
     let world = new World(
@@ -56,7 +56,7 @@ type Play =
         printfn "%s" rendered
 
   static member private _f(value) =
-    // value is in nanoseconds, convert to milliseconds
+    // nanoseconds -> milliseconds
     value / 1_000_000.0
 
 Play.run()

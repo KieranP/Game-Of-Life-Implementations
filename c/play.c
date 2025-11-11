@@ -14,7 +14,10 @@ int main(void) {
   // Initialize the random seed generator
   srand(time(NULL));
 
-  auto world = world_new(WORLD_WIDTH, WORLD_HEIGHT);
+  auto world = world_new(
+    WORLD_WIDTH,
+    WORLD_HEIGHT
+  );
 
   auto minimal = getenv("MINIMAL") != NULL;
 
@@ -25,9 +28,9 @@ int main(void) {
   }
 
   auto total_tick = 0.0;
-  auto lowest_tick = INFINITY;
+  double lowest_tick = INFINITY;
   auto total_render = 0.0;
-  auto lowest_render = INFINITY;
+  double lowest_render = INFINITY;
 
   while (true) {
     auto tick_start = get_time_ns();
@@ -51,9 +54,13 @@ int main(void) {
     }
 
     printf(
-        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
-        world->tick, to_ms(lowest_tick), to_ms(avg_tick), to_ms(lowest_render),
-        to_ms(avg_render));
+      "#%u - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
+      world->tick,
+      to_ms(lowest_tick),
+      to_ms(avg_tick),
+      to_ms(lowest_render),
+      to_ms(avg_render)
+    );
 
     if (!minimal) {
       printf("%s", rendered);

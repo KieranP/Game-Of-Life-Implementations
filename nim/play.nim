@@ -3,7 +3,7 @@ import strutils
 from strformat import fmt
 include world
 
-const WORLD_WIDTH  = 150
+const WORLD_WIDTH = 150
 const WORLD_HEIGHT = 40
 
 type
@@ -61,7 +61,7 @@ proc run(self: Play) =
       echo rendered
 
 proc f(self: Play, value: float): float =
-  # value is in nanoseconds, convert to milliseconds
+  # nanoseconds -> milliseconds
   value / 1_000_000
 
 Play().run()

@@ -17,17 +17,16 @@ export class Cell {
     return this.alive ? 'o' : ' '
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
   public alive_neighbours(): u32 {
-    // The following works but is slower
+    // The following is slower
     // return this.neighbours.filter(function(neighbour) {
     //   return neighbour.alive
     // }).length
 
-    // The following was the fastest method
+    // The following is the fastest
     let alive_neighbours: u32 = 0
-    for (let i = 0; i < this.neighbours.length; i++) {
+    let count = this.neighbours.length
+    for (let i = 0; i < count; i++) {
       const neighbour = this.neighbours[i]
       if (neighbour.alive) {
         alive_neighbours += 1

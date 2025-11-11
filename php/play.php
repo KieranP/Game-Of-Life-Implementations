@@ -62,7 +62,7 @@ class Play {
   }
 
   private static function _f($value) {
-    # value is in nanoseconds, convert to milliseconds
+    # nanoseconds -> milliseconds
     return $value / 1_000_000;
   }
 }

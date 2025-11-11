@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 class Play {
-  static const WORLD_WIDTH  = 150;
+  static const WORLD_WIDTH = 150;
   static const WORLD_HEIGHT = 40;
 
   static void run() {
@@ -45,8 +45,6 @@ class Play {
         stdout.write("\u001b[H\u001b[2J");
       }
 
-      // Dart does not have native string formatting (i.e. printf),
-      // so falling back to string concatenation
       stdout.writeln(
         "#${world.tick}" +
         " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})" +
@@ -60,7 +58,7 @@ class Play {
   }
 
   static String _f(double value) {
-    // value is in microseconds, convert to milliseconds
+    // microseconds -> milliseconds
     return (value / 1_000).toStringAsFixed(3);
   }
 }

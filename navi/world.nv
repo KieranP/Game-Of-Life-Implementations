@@ -54,10 +54,8 @@ impl World {
     self.tick += 1;
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   fn render(self): string {
-    // The following works but it slower
+    // The following is slower
     // let rendering = "";
     // for (let y in 0..self.height) {
     //   for (let x in 0..self.width) {
@@ -70,7 +68,7 @@ impl World {
     // }
     // return rendering;
 
-    // The following works but it slower
+    // The following is slower
     // let rendering: [string] = [];
     // for (let y in 0..self.height) {
     //   for (let x in 0..self.width) {
@@ -83,7 +81,7 @@ impl World {
     // }
     // return rendering.join("");
 
-    // The following was the fastest method
+    // The following is the fastest
     let rendering = StringBuffer.new();
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
@@ -122,12 +120,21 @@ impl World {
 
   fn prepopulate_neighbours(self) {
     for (let key, cell in self.cells) {
-      for (let set in DIRECTIONS) {
-        const neighbour = self.cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1]),
-        );
+      const x = cell.x;
+      const y = cell.y;
 
+      for (let set in DIRECTIONS) {
+        const nx = x + set[0];
+        const ny = y + set[1];
+        if (nx < 0 || ny < 0) {
+          continue; // Out of bounds
+        }
+
+        if (nx >= self.width || ny >= self.height) {
+          continue; // Out of bounds
+        }
+
+        const neighbour = self.cell_at(nx, ny);
         if (!neighbour.is_nil()) {
           cell.neighbours.push(neighbour!);
         }

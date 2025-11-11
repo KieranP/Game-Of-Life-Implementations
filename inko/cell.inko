@@ -23,16 +23,14 @@ class pub Cell {
     }
   }
 
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
   fn pub mut alive_neighbours() -> Int {
-    # The following works but it slower
+    # The following is slower
     # @neighbours
     #   .iter
     #   .select(fn (neighbour) { neighbour.alive })
     #   .count
 
-    # The following works but it slower
+    # The following is slower
     # @neighbours
     #   .iter
     #   .reduce(0, fn (count, neighbour) {
@@ -43,10 +41,11 @@ class pub Cell {
     #     }
     #   })
 
-    # The following was the fastest method
+    # The following is the fastest
     let mut alive_neighbours = 0
+    let count = @neighbours.size
     let mut num = 0
-    while num < @neighbours.size {
+    while num < count {
       let neighbour = @neighbours.get(num)
       if neighbour.alive {
         alive_neighbours += 1

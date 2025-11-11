@@ -61,7 +61,7 @@ function Play:run()
 end
 
 function Play:_f(value)
-  -- value is in seconds, convert to milliseconds
+  -- seconds -> milliseconds
   return value * 1000
 end
 

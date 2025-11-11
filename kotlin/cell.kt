@@ -11,10 +11,10 @@ public class Cell(
   }
 
   fun alive_neighbours(): Int {
-    // The following works but is slower
+    // The following is slower
     // return this.neighbours.filter { it.alive }.size
 
-    // The following works but is slower
+    // The following is slower
     // var alive_neighbours = 0
     // for (neighbour in this.neighbours) {
     //   if (neighbour.alive) {
@@ -23,10 +23,11 @@ public class Cell(
     // }
     // return alive_neighbours
 
-    // The following was the fastest method
+    // The following is the fastest
     var alive_neighbours = 0
-    for (i in 0 until this.neighbours.size) {
-      val neighbour = this.neighbours.get(i)
+    var count = this.neighbours.size
+    for (i in 0 until count) {
+      val neighbour = this.neighbours[i]
       if (neighbour.alive) {
         alive_neighbours++
       }

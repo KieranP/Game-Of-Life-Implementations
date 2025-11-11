@@ -1,13 +1,13 @@
 pub struct Cell {
-    pub x: usize,
-    pub y: usize,
+    pub x: u32,
+    pub y: u32,
     pub alive: bool,
     pub next_state: bool,
     pub neighbours: Vec<*const Cell>,
 }
 
 impl Cell {
-    pub fn new(x: usize, y: usize, alive: bool) -> Self {
+    pub fn new(x: u32, y: u32, alive: bool) -> Self {
         Self {
             x,
             y,
@@ -21,25 +21,36 @@ impl Cell {
         if self.alive { 'o' } else { ' ' }
     }
 
-    // Implement first using filter/lambda if available. Then implement
-    // foreach and for. Use whatever implementation runs the fastest
-    pub fn alive_neighbours(&self) -> usize {
-        // The following works but is slower
+    pub fn alive_neighbours(&self) -> u32 {
+        // The following is slower
         // self.neighbours
         //     .iter()
         //     .copied()
         //     .filter(|ptr| unsafe { (**ptr).alive })
         //     .count()
 
-        // The following was the fastest method
-        let mut count = 0;
+        // The following is the fastest
+        let mut alive_neighbours = 0;
         for ptr in self.neighbours.iter().copied() {
             unsafe {
                 if (*ptr).alive {
-                    count += 1;
+                    alive_neighbours += 1;
                 }
             }
         }
-        count
+        alive_neighbours
+
+        // The following is about the same speed
+        // let mut alive_neighbours = 0;
+        // let count = self.neighbours.len();
+        // for i in 0..count {
+        //     let ptr = self.neighbours[i];
+        //     unsafe {
+        //         if (*ptr).alive {
+        //             alive_neighbours += 1;
+        //         }
+        //     }
+        // }
+        // alive_neighbours
     }
 }

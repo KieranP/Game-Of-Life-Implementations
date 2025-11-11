@@ -1,7 +1,7 @@
 import Foundation
 
-let WORLD_WIDTH  = 150
-let WORLD_HEIGHT = 40
+let WORLD_WIDTH = UInt32(150)
+let WORLD_HEIGHT = UInt32(40)
 
 final private class Play {
   public class func run() -> Void {
@@ -60,7 +60,7 @@ final private class Play {
   }
 
   private class func _f(value: Double) -> Double {
-    // value is in seconds, convert to milliseconds
+    // seconds -> milliseconds
     return value * 1_000
   }
 }

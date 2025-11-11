@@ -13,13 +13,13 @@ DIRECTIONS := [8][2]int{
 }
 
 World :: struct {
-  width: int,
-  height: int,
-  tick: i64,
+  width: u32,
+  height: u32,
+  tick: u32,
   cells: map[string]^Cell
 }
 
-new_world :: proc(width: int, height: int) -> ^World {
+new_world :: proc(width: u32, height: u32) -> ^World {
   world := new(World)
   world.width = width
   world.height = height
@@ -52,20 +52,20 @@ world_tick :: proc(world: ^World) {
 }
 
 world_render :: proc(world: ^World) -> string {
-  // The following works but is slower
-  // rendering: [dynamic]string
+  // The following is slower
+  // rendering: [dynamic]u8
   // for y in 0..<world.height {
   //   for x in 0..<world.width {
   //     cell, _ := world_cell_at(world, x, y)
-  //     append(&rendering, utf8.runes_to_string({cell_to_char(cell)}))
+  //     append(&rendering, cell_to_char(cell))
   //   }
   //   append(&rendering, "\n")
   // }
-  // return strings.concatenate(rendering[:])
+  // return string(rendering[:])
 
-  // The following was the fastest method
-  total_size := world.width * world.height + world.height
-  rendering := strings.builder_make_len_cap(0, total_size)
+  // The following is the fastest
+  render_size := int(world.width * world.height + world.height)
+  rendering := strings.builder_make_len_cap(0, render_size)
   for y in 0..<world.height {
     for x in 0..<world.width {
       cell, _ := world_cell_at(world, x, y)
@@ -76,15 +76,15 @@ world_render :: proc(world: ^World) -> string {
   return strings.to_string(rendering)
 }
 
-world_cell_key :: proc(buf: []u8, x: int, y: int) -> string {
-  n := len(strconv.write_int(buf[:], i64(x), 10))
+world_cell_key :: proc(buf: []u8, x: u32, y: u32) -> string {
+  n := len(strconv.write_uint(buf[:], u64(x), 10))
   buf[n] = '-'
   n += 1
-  n += len(strconv.write_int(buf[n:], i64(y), 10))
+  n += len(strconv.write_uint(buf[n:], u64(y), 10))
   return string(buf[:n])
 }
 
-world_cell_at :: proc(world: ^World, x: int, y: int) -> (^Cell, bool) {
+world_cell_at :: proc(world: ^World, x: u32, y: u32) -> (^Cell, bool) {
   buf: [32]u8
   key := world_cell_key(buf[:], x, y)
   return world.cells[key]
@@ -99,7 +99,7 @@ world_populate_cells :: proc(world: ^World) {
   }
 }
 
-world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> bool {
+world_add_cell :: proc(world: ^World, x: u32, y: u32, alive: bool = false) -> bool {
   if _, ok := world_cell_at(world, x, y); ok {
     panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
   }
@@ -115,13 +115,23 @@ world_add_cell :: proc(world: ^World, x: int, y: int, alive: bool = false) -> bo
 
 world_prepopulate_neighbours :: proc(world: ^World) {
   for _, cell in world.cells {
-    for set in DIRECTIONS {
-      neighbour, ok := world_cell_at(
-        world,
-        cell.x + set[0],
-        cell.y + set[1]
-      )
+    x := int(cell.x)
+    y := int(cell.y)
 
+    for set in DIRECTIONS {
+      nx := x + set[0]
+      ny := y + set[1]
+      if (nx < 0 || ny < 0) {
+        continue // Out of bounds
+      }
+
+      ux := u32(nx)
+      uy := u32(ny)
+      if ux >= world.width || uy >= world.height {
+        continue // Out of bounds
+      }
+
+      neighbour, ok := world_cell_at(world, ux, uy)
       if ok {
         append(&cell.neighbours, neighbour)
       }

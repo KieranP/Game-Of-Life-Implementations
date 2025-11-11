@@ -50,10 +50,8 @@ class pub World {
     @tick += 1
   }
 
-  # Implement first using string concatenation. Then implement any
-  # special string builders, and use whatever runs the fastest
   fn pub render -> String {
-    # The following works but it slower
+    # The following is slower
     # let mut rendering = ""
     # let mut y = 0
     # while y < @height {
@@ -70,7 +68,7 @@ class pub World {
     # }
     # rendering
 
-    # The following works but it slower
+    # The following is slower
     # let mut rendering = []
     # let mut y = 0
     # while y < @height {
@@ -87,7 +85,7 @@ class pub World {
     # }
     # String.join(rendering.iter, with: '')
 
-    # The following was the fastest method
+    # The following is the fastest
     let rendering = StringBuffer.new
     let mut y = 0
     while y < @height {
@@ -136,12 +134,21 @@ class pub World {
   fn mut prepopulate_neighbours {
     @cells.iter_mut.each(fn (entry) {
       let cell = entry.value
-      DIRECTIONS.iter.each(fn (set) {
-        let neighbour = cell_at(
-          cell.x + set.get(0),
-          cell.y + set.get(1)
-        )
+      let x = cell.x
+      let y = cell.y
 
+      DIRECTIONS.iter.each(fn (set) {
+        let nx = x + set.get(0)
+        let ny = y + set.get(1)
+        if nx < 0 or ny < 0 {
+          return # Out of bounds
+        }
+
+        if nx >= @width or ny >= @height {
+          return # Out of bounds
+        }
+
+        let neighbour = cell_at(nx, ny)
         if neighbour.some? {
           cell.neighbours.push(neighbour.get)
         }

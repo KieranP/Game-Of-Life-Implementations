@@ -12,13 +12,11 @@ class Cell(
     if (alive) "o" else " "
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours = {
-    // The following works but is slower
+    // The following is slower
     // neighbours.filter(_.alive).length
 
-    // The following works but is slower
+    // The following is slower
     // var alive_neighbours = 0
     // for (neighbour <- neighbours) {
     //   if (neighbour.alive) {
@@ -27,9 +25,10 @@ class Cell(
     // }
     // alive_neighbours
 
-    // The following was the fastest method
+    // The following is the fastest
     var alive_neighbours = 0
-    for (i <- 0 until neighbours.length) {
+    var count = neighbours.length
+    for (i <- 0 until count) {
       val neighbour = neighbours(i)
       if (neighbour.alive) {
         alive_neighbours += 1

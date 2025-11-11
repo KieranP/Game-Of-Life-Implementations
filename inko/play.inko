@@ -4,11 +4,14 @@ import std.time (Instant)
 import std.cmp (min)
 import std.env
 
+let WORLD_WIDTH = 150
+let WORLD_HEIGHT = 40
+
 class Play {
   fn static run() {
     let world = World.new(
-      width: 150,
-      height: 40,
+      width: WORLD_WIDTH,
+      height: WORLD_HEIGHT,
     )
 
     let stdout = Stdout.new
@@ -59,6 +62,7 @@ class Play {
   }
 
   fn static _f(value: Float) -> Float {
+    # nanoseconds -> milliseconds
     value / 1_000_000.0
   }
 }

@@ -5,11 +5,11 @@ open System
 open System.Text
 open System.Collections.Generic
 
-exception LocationOccupied of x:int * y:int with
+exception LocationOccupied of x:uint * y:uint with
   override this.Message =
     sprintf "LocationOccupied(%d-%d)" this.x this.y
 
-type World(width: int, height: int) =
+type World(width: uint, height: uint) =
   let cells = new Dictionary<string, Cell>()
 
   let DIRECTIONS = [
@@ -18,7 +18,7 @@ type World(width: int, height: int) =
     [-1; -1]; [0; -1]; [1; -1] // below
   ]
 
-  member val tick = 0 with get,set
+  member val tick = 0u with get,set
 
   member this._tick() =
     let cell_values = cells.Values
@@ -37,36 +37,35 @@ type World(width: int, height: int) =
     for cell in cell_values do
       cell.alive <- cell.next_state
 
-    this.tick <- this.tick + 1
+    this.tick <- this.tick + 1u
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   member this.render() =
-    // The following works but is slower
+    // The following is slower
     // let mutable rendering = ""
-    // for y in [0..height-1] do
-    //   for x in [0..width-1] do
+    // for y in [0u..height-1u] do
+    //   for x in [0u..width-1u] do
     //     let cell = this.cell_at(x, y)
     //     if cell.IsSome then
-    //       rendering <- rendering + cell.Value.to_char()
+    //       rendering <- rendering + string(cell.Value.to_char())
     //   rendering <- rendering + "\n"
     // rendering
 
-    // The following works but is slower
+    // The following is slower
     // let mutable rendering = []
-    // for y in [0..height-1] do
+    // for y in [0u..height-1u] do
     //   rendering <- rendering @ [
-    //     for x in [0..width-1] do
+    //     for x in [0u..width-1u] do
     //       let cell = this.cell_at(x, y)
     //       if cell.IsSome then
     //         cell.Value.to_char()
-    //   ] @ ["\n"]
-    // rendering |> String.concat ""
+    //   ] @ ['\n']
+    // String.Concat(rendering)
 
-    // The following was the fastest method
-    let rendering = new StringBuilder(width * height + height : int)
-    for y in [0..height-1] do
-      for x in [0..width-1] do
+    // The following is the fastest
+    let render_size = int (width * height + height)
+    let rendering = new StringBuilder(render_size)
+    for y in [0u..height-1u] do
+      for x in [0u..width-1u] do
         let cell = this.cell_at(x, y)
         if cell.IsSome then
           rendering.Append(cell.Value.to_char())
@@ -78,8 +77,8 @@ type World(width: int, height: int) =
   member this.populate_cells() =
     let random = Random()
 
-    for y in [0..height-1] do
-      for x in [0..width-1] do
+    for y in [0u..height-1u] do
+      for x in [0u..width-1u] do
         let alive = random.NextDouble() <= 0.2
         this.add_cell(x, y, alive)
         |> ignore
@@ -100,11 +99,18 @@ type World(width: int, height: int) =
 
   member this.prepopulate_neighbours() =
     for cell in cells.Values do
-      for set in DIRECTIONS do
-        let neighbour = this.cell_at(
-          cell.x + set[0],
-          cell.y + set[1]
-        )
+      let x = int(cell.x)
+      let y = int(cell.y)
 
-        if neighbour.IsSome then
-          cell.neighbours <- neighbour.Value :: cell.neighbours
+      for set in DIRECTIONS do
+        let nx = x + set[0]
+        let ny = y + set[1]
+
+        if nx >= 0 && ny >= 0 then
+          let ux = uint(nx)
+          let uy = uint(ny)
+
+          if ux < width && uy < height then
+            let neighbour = this.cell_at(ux, uy)
+            if neighbour.IsSome then
+              cell.neighbours <- neighbour.Value :: cell.neighbours

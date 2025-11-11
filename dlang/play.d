@@ -63,7 +63,7 @@ class Play {
     }
 
     static float _f(float value) {
-      // value is in nanoseconds, convert to milliseconds
+      // nanoseconds -> milliseconds
       return value / 1_000_000.0;
     }
 }

@@ -45,10 +45,8 @@ class World(
     tick += 1
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   def render = {
-    // The following works but is slower
+    // The following is slower
     // var rendering = ""
     // var (x, y) = (0, 0)
     // for (y <- 0 until height) {
@@ -61,7 +59,7 @@ class World(
     // }
     // rendering
 
-    // The following works but is slower
+    // The following is slower
     // var rendering = ArrayBuffer[String]()
     // var (x, y) = (0, 0)
     // for (y <- 0 until height) {
@@ -74,8 +72,9 @@ class World(
     // }
     // rendering.mkString("")
 
-    // The following was the fastest method
-    val rendering = new StringBuilder(width * height + height)
+    // The following is the fastest
+    val render_size = width * height + height
+    val rendering = new StringBuilder(render_size)
     var (x, y) = (0, 0)
     for (y <- 0 until height) {
       for (x <- 0 until width) {
@@ -113,14 +112,20 @@ class World(
 
   private def prepopulate_neighbours = {
     for (cell <- cells.values) {
-      for (set <- DIRECTIONS) {
-        val neighbour = cell_at(
-          x = (cell.x + set(0)),
-          y = (cell.y + set(1)),
-        )
+      val x = cell.x
+      val y = cell.y
 
-        if (neighbour != None) {
-          cell.neighbours.append(neighbour.get)
+      for (set <- DIRECTIONS) {
+        val nx = x + set(0)
+        val ny = y + set(1)
+
+        if (nx >= 0 && ny >= 0) {
+          if (nx < width && ny < height) {
+            val neighbour = cell_at(nx, ny)
+            if (neighbour != None) {
+              cell.neighbours.append(neighbour.get)
+            }
+          }
         }
       }
     }

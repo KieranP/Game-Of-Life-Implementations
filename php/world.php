@@ -52,10 +52,8 @@ class World {
     $this->tick += 1;
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public function render() {
-    // The following was the fastest method
+    // The following is the fastest
     $rendering = '';
     for ($y = 0; $y < $this->height; $y++) {
       for ($x = 0; $x < $this->width; $x++) {
@@ -66,7 +64,7 @@ class World {
     }
     return $rendering;
 
-    // The following also works but is slower
+    // The following is slower
     // $rendering = array();
     // for ($y = 0; $y < $this->height; $y++) {
     //   for ($x = 0; $x < $this->width; $x++) {
@@ -105,12 +103,21 @@ class World {
 
   private function prepopulate_neighbours() {
     foreach ($this->cells as $cell) {
-      foreach (self::$DIRECTIONS as $set) {
-        $neighbour = $this->cell_at(
-          $cell->x + $set[0],
-          $cell->y + $set[1]
-        );
+      $x = $cell->x;
+      $y = $cell->y;
 
+      foreach (self::$DIRECTIONS as $set) {
+        $nx = $x + $set[0];
+        $ny = $y + $set[1];
+        if ($nx < 0 || $ny < 0) {
+          continue; // Out of bounds
+        }
+
+        if ($nx >= $this->width || $ny >= $this->height) {
+          continue; // Out of bounds
+        }
+
+        $neighbour = $this->cell_at($nx, $ny);
         if ($neighbour != null) {
           $cell->neighbours[] = $neighbour;
         }

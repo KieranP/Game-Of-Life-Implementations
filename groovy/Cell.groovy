@@ -1,7 +1,7 @@
 class Cell {
-  public Integer x
-  public Integer y
-  public Boolean alive
+  public int x
+  public int y
+  public boolean alive
   public Boolean next_state
   public ArrayList<Cell> neighbours
 
@@ -13,33 +13,32 @@ class Cell {
     this.neighbours = []
   }
 
-  public String to_char() {
-    alive ? 'o' : ' '
+  public char to_char() {
+    (alive ? 'o' : ' ') as char
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  public Integer alive_neighbours() {
-    // The following works but is slower
-    // neighbours.count { it.alive }
+  public int alive_neighbours() {
+    // The following is slower
+    // neighbours.count { it.alive } as int
 
-    // The following was the fastest method
-    def alive_neighbours = 0
-    for (neighbour in neighbours) {
-      if (neighbour.alive) {
-        alive_neighbours++
-      }
-    }
-    alive_neighbours
-
-    // The following works but is slower
+    // The following is the fastest
     // def alive_neighbours = 0
-    // for (i in 0..neighbours.size()-1) {
-    //   def neighbour = neighbours.get(i)
+    // for (neighbour in neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++
     //   }
     // }
     // alive_neighbours
+
+    // The following is slower
+    def alive_neighbours = 0
+    def count = neighbours.size()
+    for (i in 0..<count) {
+      def neighbour = neighbours[i]
+      if (neighbour.alive) {
+        alive_neighbours++
+      }
+    }
+    alive_neighbours
   }
 }

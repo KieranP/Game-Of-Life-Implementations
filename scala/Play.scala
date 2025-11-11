@@ -1,5 +1,5 @@
 object Play {
-  private val WORLD_WIDTH  = 150
+  private val WORLD_WIDTH = 150
   private val WORLD_HEIGHT = 40
 
   def main(args: Array[String]) = {
@@ -57,7 +57,7 @@ object Play {
   }
 
   private def _f(value: Double) = {
-    // value is in nanoseconds, convert to milliseconds
+    // nanoseconds -> milliseconds
     value / 1_000_000
   }
 }

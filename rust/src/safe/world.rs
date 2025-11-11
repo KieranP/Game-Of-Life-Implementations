@@ -21,7 +21,7 @@ const DIRECTIONS: [(isize, isize); 8] = [
 ];
 
 #[derive(Debug)]
-pub struct LocationOccupied(usize, usize);
+pub struct LocationOccupied(u32, u32);
 impl Error for LocationOccupied {}
 impl fmt::Display for LocationOccupied {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -30,19 +30,19 @@ impl fmt::Display for LocationOccupied {
 }
 
 pub struct World {
-    pub tick: usize,
-    width: usize,
-    height: usize,
+    pub tick: u32,
+    width: u32,
+    height: u32,
     cells: HashMap<String, Rc<RefCell<Cell>>>,
 }
 
 impl World {
-    pub fn new(width: usize, height: usize) -> Self {
+    pub fn new(width: u32, height: u32) -> Self {
         let mut world = Self {
             tick: 0,
             width,
             height,
-            cells: HashMap::with_capacity(width * height),
+            cells: HashMap::with_capacity((width * height) as usize),
         };
 
         world.populate_cells();
@@ -74,26 +74,11 @@ impl World {
         self.tick += 1;
     }
 
-    // Implement first using string concatenation. Then implement any
-    // special string builders, and use whatever runs the fastest
     pub fn render(&self) -> String {
-        let total_size = self.width * self.height + self.height;
+        let render_size = (self.width * self.height + self.height) as usize;
 
-        // The following was the fastest method
-        let mut rendering = String::with_capacity(total_size);
-        for y in 0..self.height {
-            for x in 0..self.width {
-                if let Some(rc) = self.cell_at(x, y) {
-                    let cell = rc.borrow();
-                    rendering.push(cell.to_char());
-                }
-            }
-            rendering.push('\n');
-        }
-        rendering
-
-        // The following works but is slower
-        // let mut rendering: Vec<char> = Vec::with_capacity(total_size);
+        // The following is slower
+        // let mut rendering: Vec<char> = Vec::with_capacity(render_size);
         // for y in 0..self.height {
         //     for x in 0..self.width {
         //         if let Some(rc) = self.cell_at(x, y) {
@@ -104,9 +89,22 @@ impl World {
         //     rendering.push('\n');
         // }
         // String::from_iter(rendering)
+
+        // The following is the fastest
+        let mut rendering = String::with_capacity(render_size);
+        for y in 0..self.height {
+            for x in 0..self.width {
+                if let Some(rc) = self.cell_at(x, y) {
+                    let cell = rc.borrow();
+                    rendering.push(cell.to_char());
+                }
+            }
+            rendering.push('\n');
+        }
+        rendering
     }
 
-    fn cell_at(&self, x: usize, y: usize) -> Option<Rc<RefCell<Cell>>> {
+    fn cell_at(&self, x: u32, y: u32) -> Option<Rc<RefCell<Cell>>> {
         let key = format!("{}-{}", x, y);
         self.cells.get(&key).cloned()
     }
@@ -121,7 +119,7 @@ impl World {
         }
     }
 
-    fn add_cell(&mut self, x: usize, y: usize, alive: bool) -> bool {
+    fn add_cell(&mut self, x: u32, y: u32, alive: bool) -> bool {
         if self.cell_at(x, y).is_some() {
             panic!("{}", LocationOccupied(x, y));
         }
@@ -138,17 +136,17 @@ impl World {
             let x = cell.x as isize;
             let y = cell.y as isize;
 
-            for &(dx, dy) in &DIRECTIONS {
-                let nx = x + dx;
-                let ny = y + dy;
+            for &(rel_x, rel_y) in &DIRECTIONS {
+                let nx = x + rel_x;
+                let ny = y + rel_y;
                 if nx < 0 || ny < 0 {
-                    continue;
+                    continue; // Out of bounds
                 }
 
-                let ux = nx as usize;
-                let uy = ny as usize;
+                let ux = nx as u32;
+                let uy = ny as u32;
                 if ux >= self.width || uy >= self.height {
-                    continue;
+                    continue; // Out of bounds
                 }
 
                 if let Some(neighbour_rc) = self.cell_at(ux, uy) {

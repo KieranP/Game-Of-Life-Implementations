@@ -20,16 +20,14 @@ public class Cell {
     return this.alive ? 'o' : ' ';
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
   public int alive_neighbours() {
-    // The following works but is slower
+    // The following is slower
     // return this.neighbours.stream().
     //   filter(neighbour -> neighbour.alive).
     //   collect(Collectors.toList()).
     //   size();
 
-    // The following works but is slower
+    // The following is slower
     // var alive_neighbours = 0;
     // for (var neighbour : this.neighbours) {
     //   if (neighbour.alive) {
@@ -38,9 +36,10 @@ public class Cell {
     // }
     // return alive_neighbours;
 
-    // The following was the fastest method
+    // The following is the fastest
     var alive_neighbours = 0;
-    for (var i = 0; i < this.neighbours.size(); i++) {
+    var count = this.neighbours.size();
+    for (var i = 0; i < count; i++) {
       var neighbour = this.neighbours.get(i);
       if (neighbour.alive) {
         alive_neighbours++;

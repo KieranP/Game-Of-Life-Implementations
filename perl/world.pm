@@ -51,10 +51,8 @@ sub tick($self) {
   $self->{tick} += 1;
 }
 
-# Implement first using string concatenation. Then implement any
-# special string builders, and use whatever runs the fastest
 sub render($self) {
-  # The following was the fastest method
+  # The following is the fastest
   my $rendering = "";
   for my $y ((0..$self->{height}-1)) {
     for my $x ((0..$self->{width}-1)) {
@@ -65,7 +63,7 @@ sub render($self) {
   }
   $rendering;
 
-  # The following works but is slower
+  # The following is slower
   # my @rendering = ();
   # for my $y ((0..$self->{height}-1)) {
   #   for my $x ((0..$self->{width}-1)) {
@@ -102,12 +100,21 @@ sub add_cell($self, $x, $y, $alive = false) {
 
 sub prepopulate_neighbours($self) {
   foreach my $cell (values %{$self->{cells}}) {
-    foreach my $set (@{$DIRECTIONS}) {
-      my $neighbour = $self->cell_at(
-        ($cell->{x} + @$set[0]),
-        ($cell->{y} + @$set[1])
-      );
+    my $x = $cell->{x};
+    my $y = $cell->{y};
 
+    foreach my $set (@{$DIRECTIONS}) {
+      my $nx = $x + @$set[0];
+      my $ny = $y + @$set[1];
+      if ($nx < 0 || $ny < 0) {
+        next; # Out of bounds
+      }
+
+      if ($nx >= $self->{width} || $ny >= $self->{height}) {
+        next; # Out of bounds
+      }
+
+      my $neighbour = $self->cell_at($nx, $ny);
       if ($neighbour) {
         push(@{$cell->{neighbours}}, $neighbour);
       }

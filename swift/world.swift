@@ -1,15 +1,15 @@
 import Foundation
 
 final public class World {
-  public var tick: Int
+  public var tick: UInt32
 
-  private var width: Int
-  private var height: Int
+  private var width: UInt32
+  private var height: UInt32
   private var cells: Dictionary<String, Cell>
 
   private struct LocationOccupied: Error, LocalizedError {
-     let x: Int
-     let y: Int
+     let x: UInt32
+     let y: UInt32
 
      var errorDescription: String? {
        return "LocationOccupied(\(x)-\(y))"
@@ -22,7 +22,7 @@ final public class World {
     [-1, -1], [0, -1], [1, -1] // below
   ]
 
-  public init(width: Int, height: Int) {
+  public init(width: UInt32, height: UInt32) {
     self.tick = 0
     self.width = width
     self.height = height
@@ -53,10 +53,8 @@ final public class World {
     tick += 1
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public func render() -> String {
-    // The following was the fastest method
+    // The following is the fastest
     var rendering = ""
     for y in 0..<height {
       for x in 0..<width {
@@ -67,7 +65,7 @@ final public class World {
     }
     return rendering
 
-    // The following works but is slower
+    // The following is slower
     // var rendering: Array<String> = []
     // for y in 0..<height {
     //   for x in 0..<width {
@@ -79,7 +77,7 @@ final public class World {
     // return rendering.joined()
   }
 
-  private func cell_at(x: Int, y: Int) -> Cell? {
+  private func cell_at(x: UInt32, y: UInt32) -> Cell? {
     return cells["\(x)-\(y)"]
   }
 
@@ -92,7 +90,7 @@ final public class World {
     }
   }
 
-  private func add_cell(x: Int, y: Int, alive: Bool = false) -> Bool {
+  private func add_cell(x: UInt32, y: UInt32, alive: Bool = false) -> Bool {
     if cell_at(x: x, y: y) != nil {
       do {
         throw LocationOccupied(x: x, y: y)
@@ -109,12 +107,23 @@ final public class World {
 
   private func prepopulate_neighbours() -> Void {
     for (_, cell) in cells {
-      for set in World.DIRECTIONS {
-        let neighbour = cell_at(
-          x: (cell.x + set[0]),
-          y: (cell.y + set[1])
-        )
+      let x = Int(cell.x)
+      let y = Int(cell.y)
 
+      for set in World.DIRECTIONS {
+        let nx = x + set[0]
+        let ny = y + set[1]
+        if nx < 0 || ny < 0 {
+          continue // Out of bounds
+        }
+
+        let ux = UInt32(nx)
+        let uy = UInt32(ny)
+        if ux >= width || uy >= height {
+          continue // Out of bounds
+        }
+
+        let neighbour = cell_at(x: ux, y: uy)
         if (neighbour != nil) {
           cell.neighbours.append(neighbour!)
         }

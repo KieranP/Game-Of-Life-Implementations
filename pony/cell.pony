@@ -1,13 +1,14 @@
+use "collections"
 use "itertools"
 
 class Cell
-  let x: USize
-  let y: USize
+  let x: U32
+  let y: U32
   var alive: Bool
   var next_state: Bool = false
   var neighbours: Array[Cell ref] = []
 
-  new create(x': USize, y': USize, alive': Bool = false) =>
+  new create(x': U32, y': U32, alive': Bool = false) =>
     x = x'
     y = y'
     alive = alive'
@@ -19,31 +20,30 @@ class Cell
       " "
     end
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  fun alive_neighbours(): USize =>
-    // The following works but it slower
+  fun alive_neighbours(): U32 =>
+    // The following is slower
     // Iter[Cell](neighbours.values())
     //   .filter({(cell) => cell.alive })
     //   .count()
 
-    // The following was the fastest method
-    var count: USize = 0
+    // The following is the fastest
+    var alive_count: U32 = 0
     for neighbour in neighbours.values() do
       if neighbour.alive then
-        count = count + 1
+        alive_count = alive_count + 1
       end
     end
-    count
+    alive_count
 
-    // The following works but it slower
-    // var count: USize = 0
-    // for i in Range(0, neighbours.size()) do
+    // The following is slower
+    // var alive_count: U32 = 0
+    // var count = neighbours.size()
+    // for i in Range(0, count) do
     //   try
     //     let neighbour = neighbours(i)?
     //     if neighbour.alive then
-    //       count = count + 1
+    //       alive_count = alive_count + 1
     //     end
     //   end
     // end
-    // count
+    // alive_count

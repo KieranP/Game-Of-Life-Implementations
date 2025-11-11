@@ -15,15 +15,13 @@ export class Cell {
     return (this.alive ? 'o' : ' ')
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
   alive_neighbours(): number {
-    // The following works but is slower
+    // The following is slower
     // return this.neighbours.filter(function(neighbour) {
     //   return neighbour.alive
     // }).length
 
-    // The following was the fastest method
+    // The following is the fastest
     let alive_neighbours = 0
     for (const neighbour of this.neighbours) {
       if (neighbour.alive) {
@@ -32,9 +30,10 @@ export class Cell {
     }
     return alive_neighbours
 
-    // The following works but is slower
+    // The following is slower
     // let alive_neighbours = 0
-    // for (let i = 0; i < this.neighbours.length; i++) {
+    // let count = this.neighbours.length
+    // for (let i = 0; i < count; i++) {
     //   const neighbour = this.neighbours[i]
     //   if (neighbour?.alive) {
     //     alive_neighbours += 1

@@ -45,10 +45,8 @@ public class World(
     tick++
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public fun render(): String {
-    // The following works but is slower
+    // The following is slower
     // var rendering = ""
     // for (y in 0 until height) {
     //   for (x in 0 until width) {
@@ -59,7 +57,7 @@ public class World(
     // }
     // return rendering
 
-    // The following works but is slower
+    // The following is slower
     // val rendering = ArrayList<String>();
     // for (y in 0 until height) {
     //   for (x in 0 until width) {
@@ -70,8 +68,9 @@ public class World(
     // }
     // return rendering.joinToString(separator = "");
 
-    // The following was the fastest method
-    val rendering = StringBuilder(width * height + height)
+    // The following is the fastest
+    var render_size = width * height + height
+    val rendering = StringBuilder(render_size)
     for (y in 0 until height) {
       for (x in 0 until width) {
         val cell = cell_at(x, y)!!
@@ -107,12 +106,21 @@ public class World(
 
   private fun prepopulate_neighbours() {
     for (cell in cells.values) {
-      for ((rel_x, rel_y) in DIRECTIONS) {
-        val neighbour = cell_at(
-          (cell.x + rel_x),
-          (cell.y + rel_y)
-        )
+      val x = cell.x
+      val y = cell.y
 
+      for ((rel_x, rel_y) in DIRECTIONS) {
+        val nx = x + rel_x
+        val ny = y + rel_y
+        if (nx < 0 || ny < 0) {
+          continue // Out of bounds
+        }
+
+        if (nx >= width || ny >= height) {
+          continue // Out of bounds
+        }
+
+        val neighbour = cell_at(nx, ny)
         if (neighbour != null) {
           cell.neighbours.add(neighbour)
         }

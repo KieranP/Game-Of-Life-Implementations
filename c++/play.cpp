@@ -47,7 +47,7 @@ class Play {
         }
 
         printf(
-          "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
+          "#%u - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
           world->tick,
           _f(lowest_tick),
           _f(avg_tick),
