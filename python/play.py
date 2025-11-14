@@ -13,7 +13,7 @@ class Play:
       Play.WORLD_HEIGHT,
     )
 
-    minimal = environ.get("MINIMAL") != None
+    minimal = environ.get("MINIMAL") is not None
 
     if not minimal:
       print(world.render())
@@ -58,7 +58,7 @@ class Play:
 
   @classmethod
   def _f(cls, value):
-    # value is in nanoseconds, convert to milliseconds
+    # nanoseconds -> milliseconds
     return value / 1_000_000
 
 Play.run()

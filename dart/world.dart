@@ -49,10 +49,8 @@ class World {
     this.tick += 1;
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   String render() {
-    // The following works but is slower
+    // The following is slower
     // var rendering = '';
     // for (var y = 0; y < this._height; y++) {
     //   for (var x = 0; x < this._width; x++) {
@@ -65,7 +63,7 @@ class World {
     // }
     // return rendering;
 
-    // The following was the fastest method
+    // The following is the fastest
     var rendering = [];
     for (var y = 0; y < this._height; y++) {
       for (var x = 0; x < this._width; x++) {
@@ -78,7 +76,7 @@ class World {
     }
     return rendering.join("");
 
-    // The following works but is slower
+    // The following is slower
     // var rendering = StringBuffer();
     // for (var y = 0; y < this._height; y++) {
     //   for (var x = 0; x < this._width; x++) {
@@ -118,12 +116,21 @@ class World {
 
   void _prepopulate_neighbours() {
     this._cells.forEach((key, cell) {
-      for (final set in _DIRECTIONS) {
-        final neighbour = this._cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1])
-        );
+      final x = cell.x;
+      final y = cell.y;
 
+      for (final set in _DIRECTIONS) {
+        final nx = x + set[0];
+        final ny = y + set[1];
+        if (nx < 0 || ny < 0) {
+          continue; // Out of bounds
+        }
+
+        if (nx >= this._width || ny >= this._height) {
+          continue; // Out of bounds
+        }
+
+        final neighbour = this._cell_at(nx, ny);
         if (neighbour != null) {
           cell.neighbours.add(neighbour);
         }

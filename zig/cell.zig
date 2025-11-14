@@ -3,13 +3,13 @@ const Allocator = std.mem.Allocator;
 const ArrayList = std.ArrayList;
 
 pub const Cell = struct {
-    x: usize,
-    y: usize,
+    x: u32,
+    y: u32,
     alive: bool,
     next_state: bool,
     neighbours: ArrayList(*Cell),
 
-    pub fn init(allocator: Allocator, x: usize, y: usize, alive: bool) !*Cell {
+    pub fn init(allocator: Allocator, x: u32, y: u32, alive: bool) !*Cell {
         const cell = try allocator.create(Cell);
         cell.x = x;
         cell.y = y;
@@ -27,26 +27,25 @@ pub const Cell = struct {
         return if (self.alive) 'o' else ' ';
     }
 
-    // Implement first using filter/lambda if available. Then implement
-    // foreach and for. Use whatever implementation runs the fastest
-    pub fn alive_neighbours(self: *const Cell) usize {
-        // The following was the fastest method
-        var count: usize = 0;
+    pub fn alive_neighbours(self: *const Cell) u32 {
+        // The following is the fastest
+        var alive_count: u32 = 0;
         for (self.neighbours.items) |neighbour| {
             if (neighbour.alive) {
-                count += 1;
+                alive_count += 1;
             }
         }
-        return count;
+        return alive_count;
 
-        // The following works and is the same speed
-        // var count: usize = 0;
-        // var i: usize = 0;
-        // while (i < self.neighbours.items.len) : (i += 1) {
+        // The following is about the same speed
+        // var alive_count: u32 = 0;
+        // const count = self.neighbours.items.len;
+        // var i: u32 = 0;
+        // while (i < count) : (i += 1) {
         //     if (self.neighbours.items[i].alive) {
-        //         count += 1;
+        //         alive_count += 1;
         //     }
         // }
-        // return count;
+        // return alive_count;
     }
 };

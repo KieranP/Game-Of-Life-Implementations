@@ -57,7 +57,7 @@ fn run() {
 }
 
 fn f(value f64) f64 {
-  // value is in nanoseconds, convert to milliseconds
+  // nanoseconds -> milliseconds
   return value / 1_000_000
 }
 

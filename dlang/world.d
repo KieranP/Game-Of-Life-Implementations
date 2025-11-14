@@ -2,7 +2,6 @@ import cell;
 import std.conv : to;
 import std.random : uniform01;
 import std.array : array, join;
-import std.algorithm : filter;
 
 class World {
   public:
@@ -37,21 +36,19 @@ class World {
       tick += 1;
     }
 
-    // Implement first using string concatenation. Then implement any
-    // special string builders, and use whatever runs the fastest
     auto render() {
-      // The following was the fastest method
-      string rendering = "";
-      for (auto y = 0; y < height; y++) {
-        for (auto x = 0; x < width; x++) {
-          auto cell = cell_at(x, y);
-          rendering ~= cell.to_char();
-        }
-        rendering ~= "\n";
-      }
-      return rendering;
+      // The following is slower
+      // string rendering = "";
+      // for (auto y = 0; y < height; y++) {
+      //   for (auto x = 0; x < width; x++) {
+      //     auto cell = cell_at(x, y);
+      //     rendering ~= cell.to_char();
+      //   }
+      //   rendering ~= "\n";
+      // }
+      // return rendering;
 
-      // The following works but it slower
+      // The following is slower
       // string[] rendering = [];
       // for (auto y = 0; y < height; y++) {
       //   for (auto x = 0; x < width; x++) {
@@ -61,10 +58,23 @@ class World {
       //   rendering ~= "\n";
       // }
       // return rendering.join("");
+
+      // The following is the fastest
+      auto render_size = width * height + height;
+      char[] rendering = new char[render_size];
+      for (auto y = 0; y < height; y++) {
+        for (auto x = 0; x < width; x++) {
+          auto cell = cell_at(x, y);
+          rendering ~= cell.to_char();
+        }
+        rendering ~= "\n";
+      }
+      return cast(string)rendering;
     }
 
   private:
-    uint width, height;
+    uint width;
+    uint height;
     Cell[string] cells;
 
     static class LocationOccupied: Exception {
@@ -115,12 +125,21 @@ class World {
 
     auto prepopulate_neighbours() {
       foreach (ref cell; cells) {
-        foreach (ref set; DIRECTIONS) {
-          auto neighbour = cell_at(
-            (cell.x + set[0]),
-            (cell.y + set[1])
-          );
+        auto x = cell.x;
+        auto y = cell.y;
 
+        foreach (ref set; DIRECTIONS) {
+          auto nx = x + set[0];
+          auto ny = y + set[1];
+          if (nx < 0 || ny < 0) {
+            continue; // Out of bounds
+          }
+
+          if (nx >= width || ny >= height) {
+            continue; // Out of bounds
+          }
+
+          auto neighbour = cell_at(nx, ny);
           if (neighbour) {
             cell.neighbours ~= neighbour;
           }

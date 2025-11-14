@@ -1,5 +1,5 @@
 public class Play {
-  private static int WORLD_WIDTH  = 150;
+  private static int WORLD_WIDTH = 150;
   private static int WORLD_HEIGHT = 40;
 
   public static void main(String[] args) {
@@ -27,7 +27,7 @@ public class Play {
       var tick_start = System.nanoTime();
       world._tick();
       var tick_finish = System.nanoTime();
-      var tick_time = (tick_finish - tick_start) / 1d;
+      var tick_time = (tick_finish - tick_start);
       total_tick += tick_time;
       lowest_tick = Math.min(lowest_tick, tick_time);
       var avg_tick = (total_tick / world.tick);
@@ -35,7 +35,7 @@ public class Play {
       var render_start = System.nanoTime();
       var rendered = world.render();
       var render_finish = System.nanoTime();
-      var render_time = (render_finish - render_start) / 1d;
+      var render_time = (render_finish - render_start);
       total_render += render_time;
       lowest_render = Math.min(lowest_render, render_time);
       var avg_render = (total_render / world.tick);
@@ -62,7 +62,7 @@ public class Play {
   }
 
   private static double _f(double value) {
-    // value is in nanoseconds, convert to milliseconds
+    // nanoseconds -> milliseconds
     return value / 1_000_000;
   }
 }

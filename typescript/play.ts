@@ -56,8 +56,6 @@ class Play {
         console.log("\u001b[H\u001b[2J")
       }
 
-      // JS/TS does not have native string formatting (i.e. printf),
-      // so falling back to string concatenation
       console.log(
         `#${world.tick}` +
         ` - World Tick (L: ${Play.#_f(lowest_tick)}; A: ${Play.#_f(avg_tick)})` +
@@ -71,7 +69,7 @@ class Play {
   }
 
   static #_f(value: number) {
-    // value is in milliseconds, no conversion needed
+    // milliseconds -> no conversion needed
     return value.toFixed(3)
   }
 }

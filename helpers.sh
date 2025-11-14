@@ -11,6 +11,10 @@ function compile {
 }
 
 function benchmark {
+  if [ "${COMPILEONLY}" = "true" ]; then
+    return
+  fi
+
   if [ "${QUICK}" = "true" ]; then
     TIMEOUT_SECS=5
     LOOP_COUNT=2

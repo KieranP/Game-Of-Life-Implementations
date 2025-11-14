@@ -7,14 +7,14 @@ import ropes
 
 type
   LocationOccupied = object of ValueError
-    x: int
-    y: int
+    x: uint32
+    y: uint32
 
-proc newLocationOccupied(x, y: int): ref LocationOccupied =
+proc newLocationOccupied(x, y: uint32): ref LocationOccupied =
   new(result)
   result.x = x
   result.y = y
-  result.msg = "LocationOccupied(" & intToStr(x) & "-" & intToStr(y) & ")"
+  result.msg = "LocationOccupied(" & $x & "-" & $y & ")"
 
 const DIRECTIONS: array[8, array[2, int]] = [
   [-1, 1],  [0, 1],  [1, 1], # above
@@ -24,9 +24,9 @@ const DIRECTIONS: array[8, array[2, int]] = [
 
 type
   World = ref object of RootObj
-    tick_num: int
-    width: int
-    height: int
+    tick_num: uint32
+    width: uint32
+    height: uint32
     cells: Table[string, Cell]
 
 # By default, Nim requires methods be declared before they are used elsewhere
@@ -35,9 +35,9 @@ type
 proc initialize(self: World): World
 proc tick(self: World)
 proc render(self: World): string
-proc cell_at(self: World, x: int, y: int): Cell
+proc cell_at(self: World, x: uint32, y: uint32): Cell
 proc populate_cells(self: World)
-proc add_cell(self: World, x: int, y: int, alive: bool = false): bool
+proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool
 proc prepopulate_neighbours(self: World)
 
 proc initialize(self: World): World =
@@ -64,10 +64,8 @@ proc tick(self: World) =
 
   self.tick_num += 1
 
-# Implement first using string concatenation. Then implement any
-# special string builders, and use whatever runs the fastest
 proc render(self: World): string =
-  # The following was the fastest method
+  # The following is the fastest
   var rendering = ""
   for y in 0..<self.height:
     for x in 0..<self.width:
@@ -76,7 +74,7 @@ proc render(self: World): string =
     rendering &= "\n"
   rendering
 
-  # The following works but it slower
+  # The following is slower
   # var rendering: seq[string] = @[]
   # for y in 0..<self.height:
   #   for x in 0..<self.width:
@@ -85,7 +83,7 @@ proc render(self: World): string =
   #   rendering.add("\n")
   # join(rendering, "")
 
-  # The following works but it slower
+  # The following is slower
   # var rendering = rope("")
   # for y in 0..<self.height:
   #   for x in 0..<self.width:
@@ -94,8 +92,8 @@ proc render(self: World): string =
   #   rendering.add("\n")
   # $rendering
 
-proc cell_at(self: World, x: int, y: int): Cell =
-  let key = intToStr(x) & "-" & intToStr(y)
+proc cell_at(self: World, x: uint32, y: uint32): Cell =
+  let key = $x & "-" & $y
   if self.cells.hasKey(key):
     return self.cells[key]
   else:
@@ -107,22 +105,31 @@ proc populate_cells(self: World) =
       let alive = (rand(100) <= 20)
       discard self.add_cell(x, y, alive)
 
-proc add_cell(self: World, x: int, y: int, alive: bool = false): bool =
+proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
   if self.cell_at(x, y) != nil:
     raise newLocationOccupied(x, y)
 
   let cell = Cell(x: x, y: y, alive: alive)
-  let key = intToStr(x) & "-" & intToStr(y)
+  let key = $x & "-" & $y
   self.cells[key] = cell
   true
 
 proc prepopulate_neighbours(self: World) =
   for key,cell in self.cells:
-    for coords in DIRECTIONS:
-      let neighbour = self.cell_at(
-        (cell.x + coords[0]),
-        (cell.y + coords[1]),
-      )
+    let x = int(cell.x)
+    let y = int(cell.y)
 
+    for coords in DIRECTIONS:
+      let nx = x + coords[0]
+      let ny = y + coords[1]
+      if nx < 0 or ny < 0:
+        continue # Out of bounds
+
+      let ux = uint32(nx)
+      let uy = uint32(ny)
+      if ux >= self.width or uy >= self.height:
+        continue # Out of bounds
+
+      let neighbour = self.cell_at(ux, uy)
       if neighbour != nil:
         cell.neighbours.add(neighbour)

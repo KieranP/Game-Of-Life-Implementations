@@ -1,34 +1,33 @@
 class Cell
-  getter x : Int32,
-         y : Int32
+  getter x : UInt32,
+         y : UInt32
 
   property alive : Bool,
            next_state : (Bool | Nil) = nil,
            neighbours : Array(Cell) = [] of Cell
 
-  def initialize(@x : Int32, @y : Int32, @alive : Bool = false)
+  def initialize(@x : UInt32, @y : UInt32, @alive : Bool = false)
   end
 
   def to_char
     @alive ? "o" : " "
   end
 
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours
-    # The following was the fastest method
+    # The following is the fastest
     neighbours.count(&.alive)
 
-    # The following works but is slower
+    # The following is about the same speed
     # alive_neighbours = 0
     # neighbours.each do |neighbour|
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
 
-    # The following works but is slower
+    # The following is slower
     # alive_neighbours = 0
-    # 0.upto(neighbours.size-1) do |i|
+    # count = neighbours.size-1
+    # 0.upto(count) do |i|
     #   neighbour = neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
     # end

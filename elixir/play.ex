@@ -62,7 +62,7 @@ defmodule Play do
   end
 
   def _f(value) do
-    # value is in nanoseconds, convert to milliseconds
+    # nanoseconds -> milliseconds
     value / 1_000_000
   end
 end

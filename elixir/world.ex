@@ -49,10 +49,8 @@ defmodule World do
     %{world | tick: world.tick + 1, cells: cells}
   end
 
-  # Implement first using string concatenation. Then implement any
-  # special string builders, and use whatever runs the fastest
   def render(world) do
-    # The following was the fastest method
+    # The following is the fastest
     for y <- 0..(world.height - 1), reduce: "" do
       rendering ->
         for x <- 0..(world.width - 1), reduce: rendering do
@@ -62,7 +60,7 @@ defmodule World do
         end <> "\n"
     end
 
-    # The following works but it slower
+    # The following is slower
     # Enum.map(0..(world.height - 1), fn y ->
     #   Enum.map(0..(world.width - 1), fn x ->
     #     cell = cell_at(world, x, y)
@@ -71,7 +69,7 @@ defmodule World do
     # end)
     # |> Enum.join()
 
-    # The following works but it slower
+    # The following is slower
     # Enum.map_join(0..(world.height - 1), fn y ->
     #   Enum.map_join(0..(world.width - 1), fn x ->
     #     cell = cell_at(world, x, y)

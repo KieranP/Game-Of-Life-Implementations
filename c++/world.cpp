@@ -7,9 +7,9 @@ using namespace std;
 
 class World {
   public:
-    int tick;
+    uint32_t tick;
 
-    World(int width, int height): width(width), height(height) {
+    World(uint32_t width, uint32_t height): width(width), height(height) {
       populate_cells();
       prepopulate_neighbours();
     }
@@ -35,12 +35,11 @@ class World {
       tick++;
     }
 
-    // Implement first using string concatenation. Then implement any
-    // special string builders, and use whatever runs the fastest
     string render() {
-      // The following was the fastest method
+      // The following is the fastest
+      uint32_t render_size = width * height + height;
       string rendering;
-      rendering.reserve(width * height + height);
+      rendering.reserve(render_size);
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
           auto cell = cell_at(x, y);
@@ -50,7 +49,7 @@ class World {
       }
       return rendering;
 
-      // The following works but it slower
+      // The following is slower
       // stringstream rendering;
       // for (auto y = 0; y < height; y++) {
       //   for (auto x = 0; x < width; x++) {
@@ -63,12 +62,13 @@ class World {
     }
 
   private:
-    int width, height;
+    uint32_t width;
+    uint32_t height;
     unordered_map<string, Cell*> cells;
 
     class LocationOccupied : public exception {
       public:
-        LocationOccupied(int x, int y) : x(x), y(y) { }
+        LocationOccupied(uint32_t x, uint32_t y) : x(x), y(y) { }
 
         string what() {
           auto key = to_string(x)+"-"+to_string(y);
@@ -76,7 +76,7 @@ class World {
         }
 
       private:
-        int x, y;
+        uint32_t x, y;
     };
 
     static inline const vector<pair<int, int>> DIRECTIONS = {
@@ -85,7 +85,7 @@ class World {
       {-1, -1}, {0, -1}, {1, -1}, // below
     };
 
-    Cell* cell_at(int x, int y) {
+    Cell* cell_at(uint32_t x, uint32_t y) {
       auto key = to_string(x)+"-"+to_string(y);
       auto it = cells.find(key);
       return it != cells.end() ? it->second : nullptr;
@@ -101,7 +101,7 @@ class World {
       }
     }
 
-    bool add_cell(int x, int y, bool alive = false) {
+    bool add_cell(uint32_t x, uint32_t y, bool alive = false) {
       if (cell_at(x, y)) {
         throw LocationOccupied(x, y);
       }
@@ -114,12 +114,23 @@ class World {
 
     void prepopulate_neighbours() {
       for (auto& [_, cell] : cells) {
-        for (auto& [x,y] : DIRECTIONS) {
-          auto neighbour = cell_at(
-            (cell->x + x),
-            (cell->y + y)
-          );
+        auto x = (int)cell->x;
+        auto y = (int)cell->y;
 
+        for (auto& set : DIRECTIONS) {
+          auto nx = x + set.first;
+          auto ny = y + set.second;
+          if (nx < 0 || ny < 0) {
+            continue; // Out of bounds
+          }
+
+          auto ux = (uint32_t)nx;
+          auto uy = (uint32_t)ny;
+          if (ux >= width || uy >= height) {
+            continue; // Out of bounds
+          }
+
+          auto neighbour = cell_at(ux, uy);
           if (neighbour) {
             cell->neighbours.push_back(neighbour);
           }

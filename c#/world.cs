@@ -3,14 +3,14 @@ using System.Text;
 using System.Collections.Generic;
 
 public class World {
-  public int tick = 0;
+  public uint tick = 0;
 
-  private int width;
-  private int height;
+  private uint width;
+  private uint height;
   private Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
 
   private class LocationOccupied : Exception {
-    public LocationOccupied(int x, int y) :
+    public LocationOccupied(uint x, uint y) :
       base($"LocationOccupied({x}-{y})") { }
   }
 
@@ -20,7 +20,7 @@ public class World {
     [-1, -1], [0, -1], [1, -1] // below
   ];
 
-  public World(int width, int height) {
+  public World(uint width, uint height) {
     this.width = width;
     this.height = height;
 
@@ -51,13 +51,11 @@ public class World {
     tick++;
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public string render() {
-    // The following works but is slower
+    // The following is slower
     // var rendering = "";
-    // for (var y = 0; y < height; y++) {
-    //   for (var x = 0; x < width; x++) {
+    // for (var y = 0u; y < height; y++) {
+    //   for (var x = 0u; x < width; x++) {
     //     var cell = cell_at(x, y);
     //     rendering += cell.to_char();
     //   }
@@ -65,10 +63,10 @@ public class World {
     // }
     // return rendering;
 
-    // The following works but is slower
+    // The following is slower
     // var rendering = new List<String>();
-    // for (var y = 0; y < height; y++) {
-    //   for (var x = 0; x < width; x++) {
+    // for (var y = 0u; y < height; y++) {
+    //   for (var x = 0u; x < width; x++) {
     //     var cell = cell_at(x, y);
     //     rendering.Add(cell.to_char().ToString());
     //   }
@@ -76,10 +74,11 @@ public class World {
     // }
     // return String.Join("", rendering.ToArray());
 
-    // The following was the fastest method
-    var rendering = new StringBuilder(width * height + height);
-    for (var y = 0; y < height; y++) {
-      for (var x = 0; x < width; x++) {
+    // The following is the fastest
+    var render_size = (int)(width * height + height);
+    var rendering = new StringBuilder(render_size);
+    for (var y = 0u; y < height; y++) {
+      for (var x = 0u; x < width; x++) {
         var cell = cell_at(x, y);
         rendering.Append(cell.to_char());
       }
@@ -88,7 +87,7 @@ public class World {
     return rendering.ToString();
   }
 
-  private Cell cell_at(int x, int y) {
+  private Cell cell_at(uint x, uint y) {
     var key = $"{x}-{y}";
     if (cells.TryGetValue(key, out Cell value)) {
       return value;
@@ -99,15 +98,15 @@ public class World {
 
   private void populate_cells() {
     var random = new Random();
-    for (var y = 0; y < height; y++) {
-      for (var x = 0; x < width; x++) {
+    for (var y = 0u; y < height; y++) {
+      for (var x = 0u; x < width; x++) {
         var alive = random.NextDouble() <= 0.2;
         add_cell(x, y, alive);
       }
     }
   }
 
-  private bool add_cell(int x, int y, bool alive = false) {
+  private bool add_cell(uint x, uint y, bool alive = false) {
     if (cell_at(x, y) != null) {
       throw new LocationOccupied(x, y);
     }
@@ -119,12 +118,23 @@ public class World {
 
   private void prepopulate_neighbours() {
     foreach (var cell in cells.Values) {
-      foreach (var set in DIRECTIONS) {
-        var neighbour = cell_at(
-          cell.x + set[0],
-          cell.y + set[1]
-        );
+      var x = cell.x;
+      var y = cell.y;
 
+      foreach (var set in DIRECTIONS) {
+        var nx = x + set[0];
+        var ny = y + set[1];
+        if (nx < 0 || ny < 0) {
+          continue; // Out of bounds
+        }
+
+        var ux = (uint)nx;
+        var uy = (uint)ny;
+        if (ux >= width || uy >= height) {
+          continue; // Out of bounds
+        }
+
+        var neighbour = cell_at(ux, uy);
         if (neighbour != null) {
           cell.neighbours.Add(neighbour);
         }

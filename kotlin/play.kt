@@ -1,6 +1,6 @@
 public class Play {
   companion object {
-    private const val WORLD_WIDTH: Int  = 150
+    private const val WORLD_WIDTH: Int = 150
     private const val WORLD_HEIGHT: Int = 40
 
     public fun run() {
@@ -59,7 +59,7 @@ public class Play {
     }
 
     private fun _f(value: Double): Double {
-      // value is in nanoseconds, convert to milliseconds
+      // nanoseconds -> milliseconds
       return value / 1_000_000
     }
   }

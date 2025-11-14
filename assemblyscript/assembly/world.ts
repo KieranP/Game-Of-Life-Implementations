@@ -54,10 +54,8 @@ export class World {
     this.tick += 1
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public render(): string {
-    // The following works but is slower
+    // The following is slower
     // let rendering = ""
     // for (let y: u32 = 0; y < this.height; y++) {
     //   for (let x: u32 = 0; x < this.width; x++) {
@@ -70,7 +68,7 @@ export class World {
     // }
     // return rendering
 
-    // The following was the fastest method
+    // The following is the fastest
     let rendering: string[] = []
     for (let y: u32 = 0; y < this.height; y++) {
       for (let x: u32 = 0; x < this.width; x++) {
@@ -119,11 +117,20 @@ export class World {
 
     for (let i = 0; i < cell_count; i++) {
       const cell = cells.at(i)
+      const x = cell.x
+      const y = cell.y
 
       for (let j = 0; j < DIRECTIONS.length; j++) {
         const dir = DIRECTIONS[j]
-        const nx = (<i32>cell.x + dir[0])
-        const ny = (<i32>cell.y + dir[1])
+        const nx = (x + dir[0])
+        const ny = (y + dir[1])
+        if (nx < 0 || ny < 0) {
+          continue // Out of bounds
+        }
+
+        if (nx >= this.width || ny >= this.height) {
+          continue // Out of bounds
+        }
 
         const neighbour = this.cell_at(nx, ny)
         if (neighbour) {

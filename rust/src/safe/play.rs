@@ -6,8 +6,8 @@ use crate::world::World;
 pub struct Play;
 
 impl Play {
-    const WORLD_WIDTH: usize = 150;
-    const WORLD_HEIGHT: usize = 40;
+    const WORLD_WIDTH: u32 = 150;
+    const WORLD_HEIGHT: u32 = 40;
 
     pub fn run() {
         let mut world = World::new(Self::WORLD_WIDTH, Self::WORLD_HEIGHT);
@@ -58,7 +58,7 @@ impl Play {
     }
 
     fn _f(value: f64) -> f64 {
-        // value is in nanoseconds, convert to milliseconds
+        // nanoseconds -> milliseconds
         value / 1_000_000.0
     }
 }

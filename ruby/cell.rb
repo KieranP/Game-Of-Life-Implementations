@@ -14,22 +14,21 @@ class Cell
     @alive ? 'o' : ' '
   end
 
-  # Implement first using filter/lambda if available. Then implement
-  # foreach and for. Use whatever implementation runs the fastest
   def alive_neighbours()
-    # The following was the fastest method
+    # The following is the fastest
     neighbours.count(&:alive)
 
-    # The following works but is slower
+    # The following is slower
     # alive_neighbours = 0
     # neighbours.each do |neighbour|
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
 
-    # The following works but is slower
+    # The following is slower
     # alive_neighbours = 0
-    # for i in 0...neighbours.size do
+    # count = neighbours.size
+    # for i in 0...count do
     #   neighbour = neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
     # end

@@ -38,10 +38,8 @@ class World:
 
     self.tick += 1
 
-  # Implement first using string concatenation. Then implement any
-  # special string builders, and use whatever runs the fastest
   def render(self):
-    # The following works but is slower
+    # The following is slower
     # rendering = ''
     # for y in list(range(self.height)):
     #   for x in list(range(self.width)):
@@ -50,7 +48,7 @@ class World:
     #   rendering += "\n"
     # return rendering
 
-    # The following was the fastest method
+    # The following is the fastest
     rendering = []
     for y in list(range(self.height)):
       for x in list(range(self.width)):
@@ -78,11 +76,18 @@ class World:
 
   def prepopulate_neighbours(self):
     for key,cell in self.cells.items():
-      for rel_x,rel_y in self.DIRECTIONS:
-        neighbour = self.cell_at(
-          (cell.x + rel_x),
-          (cell.y + rel_y)
-        )
+      x = cell.x
+      y = cell.y
 
+      for rel_x,rel_y in self.DIRECTIONS:
+        nx = x + rel_x
+        ny = y + rel_y
+        if nx < 0 or ny < 0:
+          continue # Out of bounds
+
+        if nx >= self.width or ny >= self.height:
+          continue # Out of bounds
+
+        neighbour = self.cell_at(nx, ny)
         if neighbour is not None:
           cell.neighbours.append(neighbour)

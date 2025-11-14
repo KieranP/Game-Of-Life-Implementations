@@ -16,12 +16,12 @@ pub const Errors = error{
 
 pub const World = struct {
     allocator: Allocator,
-    tick: usize,
-    width: usize,
-    height: usize,
+    tick: u32,
+    width: u32,
+    height: u32,
     cells: StringHashMap(*Cell),
 
-    pub fn init(allocator: Allocator, width: usize, height: usize) !*World {
+    pub fn init(allocator: Allocator, width: u32, height: u32) !*World {
         const world = try allocator.create(World);
         world.allocator = allocator;
         world.tick = 0;
@@ -70,17 +70,16 @@ pub const World = struct {
         self.tick += 1;
     }
 
-    // Implement first using string concatenation. Then implement any
-    // special string builders, and use whatever runs the fastest
-    // Returns a string representation of the world grid
     pub fn render(self: *World) ![]const u8 {
-        const total_size = self.width * self.height + self.height;
+        const render_size = self.width * self.height + self.height;
 
-        // The following works and is the same speed
+        // The following is about the same speed
         // var rendering = ArrayList(u8){};
-        // try rendering.ensureTotalCapacity(self.allocator, total_size);
-        // for (0..self.height) |y| {
-        //     for (0..self.width) |x| {
+        // try rendering.ensureTotalCapacity(self.allocator, render_size);
+        // var y: u32 = 0;
+        // while (y < self.height) : (y += 1) {
+        //     var x: u32 = 0;
+        //     while (x < self.width) : (x += 1) {
         //         if (self.cell_at(x, y)) |cell| {
         //             try rendering.append(self.allocator, cell.to_char());
         //         }
@@ -89,11 +88,13 @@ pub const World = struct {
         // }
         // return rendering.toOwnedSlice(self.allocator);
 
-        // The following was the fastest method
-        const buffer = try self.allocator.alloc(u8, total_size);
-        var idx: usize = 0;
-        for (0..self.height) |y| {
-            for (0..self.width) |x| {
+        // The following is the fastest
+        const buffer = try self.allocator.alloc(u8, render_size);
+        var idx: u32 = 0;
+        var y: u32 = 0;
+        while (y < self.height) : (y += 1) {
+            var x: u32 = 0;
+            while (x < self.width) : (x += 1) {
                 if (self.cell_at(x, y)) |cell| {
                     buffer[idx] = cell.to_char();
                 }
@@ -105,15 +106,17 @@ pub const World = struct {
         return buffer;
     }
 
-    fn cell_at(self: *World, x: usize, y: usize) ?*Cell {
+    fn cell_at(self: *World, x: u32, y: u32) ?*Cell {
         var key_buf: [32]u8 = undefined;
         const key = std.fmt.bufPrint(&key_buf, "{d}-{d}", .{ x, y }) catch unreachable;
         return self.cells.get(key);
     }
 
     fn populate_cells(self: *World) !void {
-        for (0..self.height) |y| {
-            for (0..self.width) |x| {
+        var y: u32 = 0;
+        while (y < self.height) : (y += 1) {
+            var x: u32 = 0;
+            while (x < self.width) : (x += 1) {
                 const random = std.crypto.random.intRangeAtMost(u8, 0, 100);
                 const alive = random <= 20;
                 _ = try self.add_cell(x, y, alive);
@@ -121,7 +124,7 @@ pub const World = struct {
         }
     }
 
-    fn add_cell(self: *World, x: usize, y: usize, alive: bool) !bool {
+    fn add_cell(self: *World, x: u32, y: u32, alive: bool) !bool {
         if (self.cell_at(x, y)) |_| {
             return Errors.LocationOccupied;
         }
@@ -139,15 +142,19 @@ pub const World = struct {
             const y = @as(isize, @intCast(cell.*.y));
 
             for (DIRECTIONS) |direction| {
-                const nx1 = x + direction[0];
-                const ny1 = y + direction[1];
-                if (nx1 < 0 or ny1 < 0) { // Out of bounds
-                    continue;
+                const nx = x + direction[0];
+                const ny = y + direction[1];
+                if (nx < 0 or ny < 0) {
+                    continue; // Out of bounds
                 }
 
-                const nx2 = @as(usize, @intCast(nx1));
-                const ny2 = @as(usize, @intCast(ny1));
-                if (self.cell_at(nx2, ny2)) |neighbour| {
+                const ux = @as(u32, @intCast(nx));
+                const uy = @as(u32, @intCast(ny));
+                if (ux >= self.width or uy >= self.height) {
+                    continue; // Out of bounds
+                }
+
+                if (self.cell_at(ux, uy)) |neighbour| {
                     try cell.*.neighbours.append(self.allocator, neighbour);
                 }
             }

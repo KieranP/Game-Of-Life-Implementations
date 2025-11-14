@@ -11,7 +11,7 @@ double get_time_ns(void) {
 // Return the minimum of two doubles
 double min_double(double a, double b) { return a < b ? a : b; }
 
-// Convert nanoseconds to milliseconds
+// nanoseconds -> milliseconds
 double to_ms(double nanoseconds) { return nanoseconds / 1'000'000.0; }
 
 // Fast integer to string conversion without using sprintf/snprintf

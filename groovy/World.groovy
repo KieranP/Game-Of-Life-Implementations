@@ -1,8 +1,8 @@
 public class World {
-  public Integer tick
+  public int tick
 
-  private Integer width
-  private Integer height
+  private int width
+  private int height
   private HashMap<String, Cell> cells
 
   private class LocationOccupied extends Exception {
@@ -11,7 +11,7 @@ public class World {
     }
   }
 
-  private static final Integer[][] DIRECTIONS = [
+  private static final int[][] DIRECTIONS = [
     [-1, 1],  [0, 1],  [1, 1],  // above
     [-1, 0],           [1, 0],  // sides
     [-1, -1], [0, -1], [1, -1], // below
@@ -50,10 +50,8 @@ public class World {
     tick++
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public String render() {
-    // The following works but is slower
+    // The following is slower
     // def rendering = ""
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
@@ -64,7 +62,7 @@ public class World {
     // }
     // rendering
 
-    // The following works but is slower
+    // The following is slower
     // def rendering = []
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
@@ -75,8 +73,9 @@ public class World {
     // }
     // rendering.join("")
 
-    // The following was the fastest method
-    def rendering = new StringBuilder(width * height + height)
+    // The following is the fastest
+    def render_size = width * height + height
+    def rendering = new StringBuilder(render_size)
     for (y in 0..<height) {
       for (x in 0..<width) {
         def cell = cell_at(x, y)
@@ -112,12 +111,21 @@ public class World {
 
   private void prepopulate_neighbours() {
     for (cell in cells.values()) {
-      for (set in DIRECTIONS) {
-        def neighbour = cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1])
-        )
+      def x = cell.x
+      def y = cell.y
 
+      for (set in DIRECTIONS) {
+        def nx = x + set[0]
+        def ny = y + set[1]
+        if (nx < 0 || ny < 0) {
+          continue // Out of bounds
+        }
+
+        if (nx >= width || ny >= height) {
+          continue // Out of bounds
+        }
+
+        def neighbour = cell_at(nx, ny)
         if (neighbour != null) {
           cell.neighbours.add(neighbour)
         }

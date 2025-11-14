@@ -2,20 +2,21 @@
 #define CELL_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MAX_NEIGHBOURS 8
 
 typedef struct Cell {
-  int x;
-  int y;
+  uint32_t x;
+  uint32_t y;
   bool alive;
   bool next_state;
   struct Cell *neighbours[MAX_NEIGHBOURS];
-  int neighbour_count;
+  uint32_t neighbour_count;
 } Cell;
 
-Cell *cell_new(int x, int y, bool alive);
+Cell *cell_new(uint32_t x, uint32_t y, bool alive);
 char cell_to_char(Cell *cell);
-int cell_alive_neighbours(Cell *cell);
+uint32_t cell_alive_neighbours(Cell *cell);
 
 #endif

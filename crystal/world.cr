@@ -1,14 +1,14 @@
 require "./cell"
 
 class World
-  getter tick : Int32 = 0
+  getter tick : UInt32 = 0
 
-  @width : Int32
-  @height : Int32
+  @width : UInt32
+  @height : UInt32
   @cells = {} of String => Cell
 
   private class LocationOccupied < Exception
-    def initialize(@x : Int32, @y : Int32)
+    def initialize(@x : UInt32, @y : UInt32)
       super("LocationOccupied(#{@x}-#{@y})")
     end
   end
@@ -19,7 +19,7 @@ class World
     [-1, -1], [0, -1], [1, -1] # below
   ]
 
-  def initialize(@width : Int32, @height : Int32)
+  def initialize(@width : UInt32, @height : UInt32)
     populate_cells
     prepopulate_neighbours
   end
@@ -45,10 +45,8 @@ class World
     @tick += 1
   end
 
-  # Implement first using string concatenation. Then implement any
-  # special string builders, and use whatever runs the fastest
   def render
-    # The following works but it slower
+    # This following is slower
     # rendering = ""
     # @height.times.each { |y|
     #   @width.times.each { |x|
@@ -59,7 +57,7 @@ class World
     # }
     # rendering
 
-    # The following works but it slower
+    # The following is slower
     # rendering = [] of String
     # @height.times.each { |y|
     #   @width.times.each { |x|
@@ -70,8 +68,9 @@ class World
     # }
     # rendering.join("")
 
-    # The following was the fastest method
-    String.build(@height * @width) do |io|
+    # The following is the fastest
+    render_size = @width * @height + @height
+    String.build(render_size) do |io|
       @height.times.each { |y|
         @width.times.each { |x|
           cell = cell_at(x, y).not_nil!
@@ -82,7 +81,7 @@ class World
     end
   end
 
-  private def cell_at(x : Int32, y : Int32)
+  private def cell_at(x : UInt32, y : UInt32)
     @cells["#{x}-#{y}"]?
   end
 
@@ -95,7 +94,7 @@ class World
     end
   end
 
-  private def add_cell(x : Int32, y : Int32, alive : Bool = false)
+  private def add_cell(x : UInt32, y : UInt32, alive : Bool = false)
     if cell_at(x, y)
       raise LocationOccupied.new(x, y)
     end
@@ -107,13 +106,25 @@ class World
 
   private def prepopulate_neighbours
     @cells.each_value do |cell|
+      x = Int64.new(cell.x)
+      y = Int64.new(cell.y)
+
       cell.neighbours =
-        DIRECTIONS.compact_map { |(rel_x, rel_y)|
-          cell_at(
-            (cell.x + rel_x),
-            (cell.y + rel_y)
-          )
-        }
+        DIRECTIONS.compact_map do |(rel_x, rel_y)|
+          nx = x + rel_x
+          ny = y + rel_y
+          if nx < 0 || ny < 0
+            next # Out of bounds
+          end
+
+          ux = UInt32.new(nx)
+          uy = UInt32.new(ny)
+          if ux >= @width || uy >= @height
+            next # Out of bounds
+          end
+
+          cell_at(ux, uy)
+        end
     end
   end
 end

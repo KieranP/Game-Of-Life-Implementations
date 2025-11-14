@@ -1,8 +1,8 @@
 require "./world"
 
 class Play
-  @@WORLD_WIDTH  = 150
-  @@WORLD_HEIGHT = 40
+  @@WORLD_WIDTH : UInt32 = 150
+  @@WORLD_HEIGHT : UInt32 = 40
 
   def self.run
     world = World.new(
@@ -16,10 +16,10 @@ class Play
       puts world.render
     end
 
-    total_tick = 0
-    lowest_tick = Float32::INFINITY
-    total_render = 0
-    lowest_render = Float32::INFINITY
+    total_tick = 0.0
+    lowest_tick = Float64::INFINITY
+    total_render = 0.0
+    lowest_render = Float64::INFINITY
 
     while true
       tick_start = Time.monotonic
@@ -58,7 +58,7 @@ class Play
   end
 
   private def self._f(value)
-    # value is in nanoseconds, convert to milliseconds
+    # nanoseconds -> milliseconds
     value / 1_000_000
   end
 end

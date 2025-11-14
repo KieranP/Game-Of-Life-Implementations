@@ -1,14 +1,14 @@
 package main
 
 Cell :: struct {
-  x: int,
-  y: int,
+  x: u32,
+  y: u32,
   alive: bool,
   next_state: bool,
   neighbours: [dynamic]^Cell
 }
 
-new_cell :: proc(x: int, y: int, alive: bool) -> ^Cell {
+new_cell :: proc(x: u32, y: u32, alive: bool) -> ^Cell {
   cell := new(Cell)
   cell.x = x
   cell.y = y
@@ -21,9 +21,9 @@ cell_to_char :: proc(cell: ^Cell) -> u8 {
   return cell.alive ? 'o' : ' '
 }
 
-cell_alive_neighbours :: proc(cell: ^Cell) -> int {
-  // The following was the fastest method
-  alive_neighbours := 0
+cell_alive_neighbours :: proc(cell: ^Cell) -> u32 {
+  // The following is the fastest
+  alive_neighbours := u32(0)
   for neighbour in cell.neighbours {
     if neighbour.alive {
       alive_neighbours += 1
@@ -31,9 +31,10 @@ cell_alive_neighbours :: proc(cell: ^Cell) -> int {
   }
   return alive_neighbours
 
-  // The following also works but is slower
-  // alive_neighbours := 0
-  // for i := 0; i < len(cell.neighbours); i += 1 {
+  // The following is slower
+  // alive_neighbours := u32(0)
+  // count := len(cell.neighbours)
+  // for i := 0; i < count; i += 1 {
   //   neighbour := cell.neighbours[i]
   //   if neighbour.alive {
   //     alive_neighbours += 1

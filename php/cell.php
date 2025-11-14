@@ -17,13 +17,11 @@ class Cell {
     return $this->alive ? 'o' : ' ';
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
   public function alive_neighbours() {
-    // The following works but is slower
+    // The following is slower
     // return count(array_filter($this->neighbours, function($n) { return $n->alive; }));
 
-    // The following was the fastest method
+    // The following is the fastest
     $alive_neighbours = 0;
     foreach ($this->neighbours as $neighbour) {
       if ($neighbour->alive) {
@@ -32,9 +30,10 @@ class Cell {
     }
     return $alive_neighbours;
 
-    // The following works but is slower
+    // The following is slower
     // $alive_neighbours = 0;
-    // for ($i = 0; $i < count($this->neighbours); $i++) {
+    // $count = count($this->neighbours);
+    // for ($i = 0; $i < $count; $i++) {
     //   $neighbour = $this->neighbours[$i];
     //   if ($neighbour->alive) {
     //     $alive_neighbours++;

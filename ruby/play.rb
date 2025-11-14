@@ -58,7 +58,7 @@ class Play
   end
 
   def self._f(value)
-    # value is in seconds, convert to milliseconds
+    # seconds -> milliseconds
     value * 1_000
   end
   private_class_method :_f

@@ -1,6 +1,10 @@
+import std.algorithm : filter;
+import std.array;
+
 class Cell {
   public:
-    uint x, y;
+    uint x;
+    uint y;
     bool alive;
     bool next_state;
     Cell[] neighbours;
@@ -15,15 +19,13 @@ class Cell {
       return alive ? 'o' : ' ';
     }
 
-    // Implement first using filter/lambda if available. Then implement
-    // foreach and for. Use whatever implementation runs the fastest
     auto alive_neighbours() {
-      // The following works but it slower
+      // The following is slower
       // return neighbours.filter!(
       //   neighbour => neighbour.alive
       // ).array.length;
 
-      // The following was the fastest method
+      // The following is the fastest
       auto alive_neighbours = 0;
       foreach (ref neighbour; neighbours) {
         if (neighbour.alive) {
@@ -32,9 +34,10 @@ class Cell {
       }
       return alive_neighbours;
 
-      // The following works but it slower
+      // The following is about the same speed
       // auto alive_neighbours = 0;
-      // for (auto i = 0; i < neighbours.length; i++) {
+      // auto count = neighbours.length;
+      // for (auto i = 0; i < count; i++) {
       //   auto neighbour = neighbours[i];
       //   if (neighbour.alive) {
       //     alive_neighbours++;

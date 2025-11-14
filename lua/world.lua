@@ -44,10 +44,8 @@ function World:_tick()
   self.tick = (self.tick + 1)
 end
 
--- Implement first using string concatenation. Then implement any
--- special string builders, and use whatever runs the fastest
 function World:render()
-  -- The following works but is slower
+  -- The following is slower
   -- local rendering = ""
   -- for y = 0, self.height-1 do
   --   for x = 0, self.width-1 do
@@ -58,7 +56,7 @@ function World:render()
   -- end
   -- return rendering
 
-  -- The following was the fastest method
+  -- The following is the fastest
   local rendering = {}
   for y = 0, self.height-1 do
     for x = 0, self.width-1 do
@@ -96,14 +94,20 @@ end
 
 function World:prepopulate_neighbours()
   for key,cell in pairs(self.cells) do
-    for index,set in ipairs(DIRECTIONS) do
-      local neighbour = self:cell_at(
-        (cell.x + set[1]),
-        (cell.y + set[2])
-      )
+    local x = cell.x
+    local y = cell.y
 
-      if neighbour then
-        table.insert(cell.neighbours, neighbour)
+    for index,set in ipairs(DIRECTIONS) do
+      local nx = x + set[1]
+      local ny = y + set[2]
+
+      if (nx >= 0) and (ny >= 0) then
+        if (nx < self.width) and (ny < self.height) then
+          local neighbour = self:cell_at(nx, ny)
+          if neighbour then
+            table.insert(cell.neighbours, neighbour)
+          end
+        end
       end
     end
   end

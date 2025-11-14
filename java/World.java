@@ -53,10 +53,8 @@ public class World {
     tick++;
   }
 
-  // Implement first using string concatenation. Then implement any
-  // special string builders, and use whatever runs the fastest
   public String render() {
-    // The following works but is slower
+    // The following is slower
     // var rendering = "";
     // for (var y = 0; y < height; y++) {
     //   for (var x = 0; x < width; x++) {
@@ -67,7 +65,7 @@ public class World {
     // }
     // return rendering;
 
-    // The following works but is slower
+    // The following is slower
     // var rendering = new ArrayList<String>();
     // for (var y = 0; y < height; y++) {
     //   for (var x = 0; x < width; x++) {
@@ -78,8 +76,9 @@ public class World {
     // }
     // return String.join("", rendering);
 
-    // The following was the fastest method
-    var rendering = new StringBuilder(width * height + height);
+    // The following is the fastest
+    var render_size = width * height + height;
+    var rendering = new StringBuilder(render_size);
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         var cell = cell_at(x, y);
@@ -120,12 +119,21 @@ public class World {
 
   private void prepopulate_neighbours() {
     for (var cell : cells.values()) {
-      for (var set : DIRECTIONS) {
-        var neighbour = cell_at(
-          (cell.x + set[0]),
-          (cell.y + set[1])
-        );
+      var x = cell.x;
+      var y = cell.y;
 
+      for (var set : DIRECTIONS) {
+        var nx = x + set[0];
+        var ny = y + set[1];
+        if (nx < 0 || ny < 0) {
+          continue; // Out of bounds
+        }
+
+        if (nx >= width || ny >= height) {
+          continue; // Out of bounds
+        }
+
+        var neighbour = cell_at(nx, ny);
         if (neighbour != null) {
           cell.neighbours.add(neighbour);
         }

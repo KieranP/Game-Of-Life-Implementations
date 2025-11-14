@@ -17,10 +17,8 @@ function Cell:to_char()
   return self.alive and 'o' or ' '
 end
 
--- Implement first using filter/lambda if available. Then implement
--- foreach and for. Use whatever implementation runs the fastest
 function Cell:alive_neighbours()
-  -- The following works but is slower
+  -- The following is slower
   -- local alive_neighbours = 0
   -- for index,neighbour in pairs(self.neighbours) do
   --   if neighbour.alive then
@@ -29,7 +27,7 @@ function Cell:alive_neighbours()
   -- end
   -- return alive_neighbours
 
-  -- The following was the fastest method
+  -- The following is the fastest
   local alive_neighbours = 0
   for i = 1, #self.neighbours do
     local neighbour = self.neighbours[i]

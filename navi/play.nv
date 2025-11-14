@@ -59,7 +59,7 @@ impl Play {
   }
 
   fn _f(value: float): float {
-    // value is in nanoseconds, convert to milliseconds
+    // nanoseconds -> milliseconds
     return ((value / 1_000_000.0) * 1_000.0).round() / 1_000.0;
   }
 }

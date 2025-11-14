@@ -1,7 +1,7 @@
 struct Cell {
 pub:
-  x int
-  y int
+  x u32
+  y u32
 pub mut:
   alive bool
   next_state bool
@@ -16,19 +16,19 @@ fn (self Cell) to_char() string {
   }
 }
 
-// Implement first using filter/lambda if available. Then implement
-// foreach and for. Use whatever implementation runs the fastest
-fn (self Cell) alive_neighbours() int {
-  // The following was the fastest method
-  return self.neighbours.count(it.alive)
+fn (self Cell) alive_neighbours() u32 {
+  // The following is the fastest
+  return u32(self.neighbours.count(it.alive))
 
-  // The following works but is slower
-  // return self.neighbours.filter(fn (neighbour &Cell) bool {
-  //   return neighbour.alive
-  // }).len
+  // The following is slower
+  // return u32(
+  //   self.neighbours.filter(fn (neighbour &Cell) bool {
+  //     return neighbour.alive
+  //   }).len
+  // )
 
-  // The following works and is the same speed
-  // mut alive_neighbours := 0
+  // The following is about the same speed
+  // mut alive_neighbours := u32(0)
   // for _, neighbour in self.neighbours {
   //   if neighbour.alive {
   //     alive_neighbours++
@@ -36,9 +36,10 @@ fn (self Cell) alive_neighbours() int {
   // }
   // return alive_neighbours
 
-  // The following works but is slower
-  // mut alive_neighbours := 0
-  // for i in 0 .. self.neighbours.len {
+  // The following is slower
+  // mut alive_neighbours := u32(0)
+  // count := self.neighbours.len
+  // for i in 0..count {
   //   neighbour := self.neighbours[i]
   //   if neighbour.alive {
   //     alive_neighbours++

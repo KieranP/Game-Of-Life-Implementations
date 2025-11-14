@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class Cell {
-  public int x;
-  public int y;
+  public uint x;
+  public uint y;
   public bool alive;
   public bool? next_state = null;
   public List<Cell> neighbours = [];
 
-  public Cell(int x, int y, bool alive = false) {
+  public Cell(uint x, uint y, bool alive = false) {
     this.x = x;
     this.y = y;
     this.alive = alive;
@@ -18,16 +18,14 @@ public class Cell {
     return this.alive ? 'o' : ' ';
   }
 
-  // Implement first using filter/lambda if available. Then implement
-  // foreach and for. Use whatever implementation runs the fastest
-  public int alive_neighbours() {
-    // The following works but is slower
-    // return this.neighbours.Where(
+  public uint alive_neighbours() {
+    // The following is slower
+    // return (uint)this.neighbours.Where(
     //   (neighbour) => neighbour.alive
     // ).ToList().Count;
 
-    // The following works but is slower
-    // var alive_neighbours = 0;
+    // The following is slower
+    // var alive_neighbours = 0u;
     // foreach (var neighbour in this.neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++;
@@ -35,9 +33,10 @@ public class Cell {
     // }
     // return alive_neighbours;
 
-    // The following was the fastest method
-    var alive_neighbours = 0;
-    for (var i = 0; i < this.neighbours.Count; i++) {
+    // The following is the fastest
+    var alive_neighbours = 0u;
+    var count = this.neighbours.Count;
+    for (var i = 0; i < count; i++) {
       var neighbour = this.neighbours[i];
       if (neighbour.alive) {
         alive_neighbours++;
