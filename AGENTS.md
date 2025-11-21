@@ -10,6 +10,8 @@ When creating a new implementation or making changes to an existing implementati
    - Variable and function names should be snake_case
    - Class names should be PascalCase
    - Constants should be SCREAMING_SNAKE_CASE
+3. Do not create any documentation or summary files other than README.md.
+4. Keep README.md minimal, with only essential instructions to install dependencies and run the implementation.
 
 When asked for suggestions for improving an implementation's performance:
 
