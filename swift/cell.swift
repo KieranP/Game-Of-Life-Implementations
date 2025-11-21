@@ -3,7 +3,7 @@ final public class Cell {
   public var y: UInt32
   public var alive: Bool
   public var next_state: Bool?
-  public var neighbours: Array<Cell>
+  public var neighbours: [Cell]
 
   public init(x: UInt32, y: UInt32, alive: Bool = false) {
     self.x = x

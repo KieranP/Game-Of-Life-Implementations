@@ -5,18 +5,18 @@ final public class World {
 
   private var width: UInt32
   private var height: UInt32
-  private var cells: Dictionary<String, Cell>
+  private var cells: [String: Cell]
 
   private struct LocationOccupied: Error, LocalizedError {
-     let x: UInt32
-     let y: UInt32
+    let x: UInt32
+    let y: UInt32
 
-     var errorDescription: String? {
-       return "LocationOccupied(\(x)-\(y))"
-     }
-   }
+    var errorDescription: String? {
+      return "LocationOccupied(\(x)-\(y))"
+    }
+  }
 
-  private static let DIRECTIONS: Array<Array<Int>> = [
+  private static let DIRECTIONS: [[Int]] = [
     [-1, 1],  [0, 1],  [1, 1], // above
     [-1, 0],           [1, 0], // sides
     [-1, -1], [0, -1], [1, -1] // below
@@ -124,7 +124,7 @@ final public class World {
         }
 
         let neighbour = cell_at(x: ux, y: uy)
-        if (neighbour != nil) {
+        if neighbour != nil {
           cell.neighbours.append(neighbour!)
         }
       }
