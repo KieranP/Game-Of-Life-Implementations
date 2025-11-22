@@ -59,7 +59,7 @@ class Play {
     let rounded = Math.round(value * 1000.0) / 1000.0
     let parts = rounded.toString().split('.')
     const whole = parts[0]
-    let frac = parts[1]
+    let frac = parts.length > 1 ? parts[1] : "0"
     while (frac.length < 3) {
       frac = "0" + frac
     }

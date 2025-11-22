@@ -68,16 +68,31 @@ export class World {
     // }
     // return rendering
 
+    // The following is slower
+    // let rendering: string[] = []
+    // for (let y: u32 = 0; y < this.height; y++) {
+    //   for (let x: u32 = 0; x < this.width; x++) {
+    //     const cell = this.cell_at(x, y)
+    //     if (cell) {
+    //       rendering.push(cell.to_char())
+    //     }
+    //   }
+    //   rendering.push("\n")
+    // }
+    // return rendering.join("")
+
     // The following is the fastest
-    let rendering: string[] = []
+    let render_size = this.width * this.height + this.height
+    let rendering = new Array<string>(render_size)
+    let idx = 0
     for (let y: u32 = 0; y < this.height; y++) {
       for (let x: u32 = 0; x < this.width; x++) {
         const cell = this.cell_at(x, y)
         if (cell) {
-          rendering.push(cell.to_char())
+          rendering[idx++] = cell.to_char()
         }
       }
-      rendering.push("\n")
+      rendering[idx++] = "\n"
     }
     return rendering.join("")
   }
