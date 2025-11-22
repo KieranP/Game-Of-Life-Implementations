@@ -70,7 +70,8 @@ proc render(self: World): string =
   for y in 0..<self.height:
     for x in 0..<self.width:
       let cell = self.cell_at(x, y)
-      rendering &= cell.to_char()
+      if cell != nil:
+        rendering &= cell.to_char()
     rendering &= "\n"
   rendering
 
@@ -79,7 +80,8 @@ proc render(self: World): string =
   # for y in 0..<self.height:
   #   for x in 0..<self.width:
   #     let cell = self.cell_at(x, y)
-  #     rendering.add(cell.to_char())
+  #     if cell != nil:
+  #       rendering.add(cell.to_char())
   #   rendering.add("\n")
   # join(rendering, "")
 
@@ -88,7 +90,8 @@ proc render(self: World): string =
   # for y in 0..<self.height:
   #   for x in 0..<self.width:
   #     let cell = self.cell_at(x, y)
-  #     rendering.add(cell.to_char())
+  #     if cell != nil:
+  #       rendering.add(cell.to_char())
   #   rendering.add("\n")
   # $rendering
 
@@ -106,7 +109,8 @@ proc populate_cells(self: World) =
       discard self.add_cell(x, y, alive)
 
 proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
-  if self.cell_at(x, y) != nil:
+  let existing = self.cell_at(x, y)
+  if existing != nil:
     raise newLocationOccupied(x, y)
 
   let cell = Cell(x: x, y: y, alive: alive)

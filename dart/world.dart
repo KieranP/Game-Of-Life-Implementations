@@ -105,7 +105,8 @@ class World {
   }
 
   bool _add_cell(int x, int y, [bool alive = false]) {
-    if (this._cell_at(x, y) != null) {
+    final existing = this._cell_at(x, y);
+    if (existing != null) {
       throw LocationOccupied(x, y);
     }
 

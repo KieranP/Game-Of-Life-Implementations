@@ -43,7 +43,9 @@ class World {
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
           auto cell = cell_at(x, y);
-          rendering += cell->to_char();
+          if (cell) {
+            rendering += cell->to_char();
+          }
         }
         rendering += '\n';
       }
@@ -54,7 +56,9 @@ class World {
       // for (auto y = 0; y < height; y++) {
       //   for (auto x = 0; x < width; x++) {
       //     auto cell = cell_at(x, y);
-      //     rendering << cell->to_char();
+      //     if (cell) {
+      //       rendering << cell->to_char();
+      //     }
       //   }
       //   rendering << '\n';
       // }
@@ -102,7 +106,8 @@ class World {
     }
 
     bool add_cell(uint32_t x, uint32_t y, bool alive = false) {
-      if (cell_at(x, y)) {
+      auto existing = cell_at(x, y);
+      if (existing) {
         throw LocationOccupied(x, y);
       }
 

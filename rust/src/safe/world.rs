@@ -120,7 +120,8 @@ impl World {
     }
 
     fn add_cell(&mut self, x: u32, y: u32, alive: bool) -> bool {
-        if self.cell_at(x, y).is_some() {
+        let existing = self.cell_at(x, y);
+        if existing.is_some() {
             panic!("{}", LocationOccupied(x, y));
         }
 

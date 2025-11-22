@@ -66,8 +66,10 @@ func (world *World) render() string {
   // rendering := ""
   // for y := range(world.height) {
   //   for x := range(world.width) {
-  //     cell, _ := world.cell_at(x, y)
-  //     rendering += string(cell.to_char())
+  //     cell, ok := world.cell_at(x, y)
+  //     if ok {
+  //       rendering += string(cell.to_char())
+  //     }
   //   }
   //   rendering += "\n"
   // }
@@ -77,8 +79,10 @@ func (world *World) render() string {
   // rendering := []string{}
   // for y := range(world.height) {
   //   for x := range(world.width) {
-  //     cell, _ := world.cell_at(x, y)
-  //     rendering = append(rendering, string(cell.to_char()))
+  //     cell, ok := world.cell_at(x, y)
+  //     if ok {
+  //       rendering = append(rendering, string(cell.to_char()))
+  //     }
   //   }
   //   rendering = append(rendering, "\n")
   // }
@@ -90,8 +94,10 @@ func (world *World) render() string {
   rendering.Grow(render_size)
   for y := range(world.height) {
     for x := range(world.width) {
-      cell, _ := world.cell_at(x, y)
-      rendering.WriteRune(cell.to_char())
+      cell, ok := world.cell_at(x, y)
+      if ok {
+      	rendering.WriteRune(cell.to_char())
+      }
     }
     rendering.WriteRune('\n')
   }
@@ -115,7 +121,8 @@ func (world *World) populate_cells() {
 }
 
 func (world *World) add_cell(x uint32, y uint32, alive bool) bool {
-  if _, ok := world.cell_at(x, y); ok {
+  _, ok := world.cell_at(x, y)
+  if ok {
     panic(LocationOccupied{ x: x, y: y })
   }
 

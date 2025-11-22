@@ -64,7 +64,8 @@ pub fn (w World) render() string {
   // mut rendering := ''
   // for y in 0 .. w.height {
   //   for x in 0 .. w.width {
-  //     if cell := w.cell_at(x, y) {
+  //     cell := w.cell_at(x, y)
+  //     if cell != none {
   //       rendering += cell.to_char()
   //     }
   //   }
@@ -76,7 +77,8 @@ pub fn (w World) render() string {
   // mut rendering := []string{}
   // for y in 0 .. w.height {
   //   for x in 0 .. w.width {
-  //     if cell := w.cell_at(x, y) {
+  //     cell := w.cell_at(x, y)
+  //     if cell != none {
   //       rendering << cell.to_char()
   //     }
   //   }
@@ -89,7 +91,8 @@ pub fn (w World) render() string {
   mut rendering := strings.new_builder(render_size)
   for y in 0 .. w.height {
     for x in 0 .. w.width {
-      if cell := w.cell_at(x, y) {
+      cell := w.cell_at(x, y)
+      if cell != none {
         rendering.write_string(cell.to_char())
       }
     }
@@ -115,7 +118,8 @@ fn (mut w World) populate_cells() {
 }
 
 fn (mut w World) add_cell(x u32, y u32, alive bool) bool {
-  if _ := w.cell_at(x, y) {
+  existing := w.cell_at(x, y)
+  if existing != none {
     panic(IError(LocationOccupied{ x: x, y: y }))
   }
 
@@ -147,7 +151,8 @@ fn (mut w World) prepopulate_neighbours() {
         continue // Out of bounds
       }
 
-      if neighbour := w.cell_at(ux, uy) {
+      neighbour := w.cell_at(ux, uy)
+      if neighbour != none {
         cell.neighbours << neighbour
       }
     }

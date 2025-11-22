@@ -77,7 +77,9 @@ contains
     ! do y = 0, w%height - 1
     !   do x = 0, w%width - 1
     !     c => cell_at(w, x, y)
-    !     rendering = rendering // cell_to_char(c)
+    !     if (associated(c)) then
+    !       rendering = rendering // cell_to_char(c)
+    !     end if
     !   end do
     !   rendering = rendering // new_line('a')
     ! end do
@@ -87,7 +89,9 @@ contains
     do y = 0, w%height - 1
       do x = 0, w%width - 1
         c => cell_at(w, x, y)
-        rendering(idx:idx) = cell_to_char(c)
+        if (associated(c)) then
+          rendering(idx:idx) = cell_to_char(c)
+        end if
         idx = idx + 1
       end do
       rendering(idx:idx) = new_line('a')

@@ -50,7 +50,9 @@ function World:render()
   -- for y = 0, self.height-1 do
   --   for x = 0, self.width-1 do
   --     local cell = self:cell_at(x, y)
-  --     rendering = rendering..cell:to_char()
+  --     if cell then
+  --       rendering = rendering..cell:to_char()
+  --     end
   --   end
   --   rendering = rendering.."\n"
   -- end
@@ -61,7 +63,9 @@ function World:render()
   for y = 0, self.height-1 do
     for x = 0, self.width-1 do
       local cell = self:cell_at(x, y)
-      table.insert(rendering, cell:to_char())
+      if cell then
+        table.insert(rendering, cell:to_char())
+      end
     end
     table.insert(rendering, "\n")
   end
@@ -85,7 +89,9 @@ end
 
 function World:add_cell(x, y, alive)
   alive = (alive or false)
-  assert(not self:cell_at(x, y), "LocationOccupied("..x.."-"..y..")")
+
+  local existing = self:cell_at(x, y)
+  assert(not existing, "LocationOccupied("..x.."-"..y..")")
 
   local cell = Cell:new(x, y, alive)
   self.cells[x..'-'..y] = cell

@@ -58,7 +58,9 @@ class World {
     for ($y = 0; $y < $this->height; $y++) {
       for ($x = 0; $x < $this->width; $x++) {
         $cell = $this->cell_at($x, $y);
-        $rendering .= $cell->to_char();
+        if ($cell) {
+          $rendering .= $cell->to_char();
+        }
       }
       $rendering .= "\n";
     }
@@ -69,7 +71,9 @@ class World {
     // for ($y = 0; $y < $this->height; $y++) {
     //   for ($x = 0; $x < $this->width; $x++) {
     //     $cell = $this->cell_at($x, $y);
-    //     $rendering[] = $cell->to_char();
+    //     if ($cell) {
+    //       $rendering[] = $cell->to_char();
+    //     }
     //   }
     //   $rendering[] = "\n";
     // }
@@ -92,7 +96,8 @@ class World {
   }
 
   private function add_cell($x, $y, $alive = false) {
-    if ($this->cell_at($x, $y) != null) {
+    $existing = $this->cell_at($x, $y);
+    if ($existing) {
       throw new LocationOccupied($x, $y);
     }
 
@@ -118,7 +123,7 @@ class World {
         }
 
         $neighbour = $this->cell_at($nx, $ny);
-        if ($neighbour != null) {
+        if ($neighbour) {
           $cell->neighbours[] = $neighbour;
         }
       }

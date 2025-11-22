@@ -90,7 +90,8 @@ type World(width: uint, height: uint) =
   member private this.add_cell(x, y, ?alive) =
     let alive = defaultArg alive false
 
-    if this.cell_at(x, y).IsSome then
+    let existing = this.cell_at(x, y)
+    if existing.IsSome then
       raise(LocationOccupied(x, y))
 
     let cell = new Cell(x, y, alive)

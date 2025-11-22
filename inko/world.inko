@@ -122,7 +122,8 @@ class pub World {
   }
 
   fn mut add_cell(x: Int, y: Int, alive: Bool) -> Bool {
-    if cell_at(x, y).some? {
+    let existing = cell_at(x, y)
+    if existing.some? {
       panic("LocationOccupied(${x}-${y})")
     }
 

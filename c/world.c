@@ -27,7 +27,8 @@ static Cell *cell_at(World *world, uint32_t x, uint32_t y) {
 }
 
 static bool add_cell(World *world, uint32_t x, uint32_t y, bool alive) {
-  if (cell_at(world, x, y)) {
+  auto existing = cell_at(world, x, y);
+  if (existing) {
     fprintf(stderr, "LocationOccupied(%u-%u)\n", x, y);
     exit(1);
   }
@@ -131,7 +132,9 @@ char *world_render(World *world) {
   for (auto y = 0; y < world->height; y++) {
     for (auto x = 0; x < world->width; x++) {
       auto cell = cell_at(world, x, y);
-      rendering[idx++] = cell_to_char(cell);
+      if (cell) {
+        rendering[idx++] = cell_to_char(cell);
+      }
     }
     rendering[idx++] = '\n';
   }

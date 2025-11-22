@@ -53,8 +53,10 @@ export class World {
     let rendering = ''
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
-        const cell = this.#cell_at(x, y)!
-        rendering += cell.to_char()
+        const cell = this.#cell_at(x, y)
+        if (cell) {
+          rendering += cell.to_char()
+        }
       }
       rendering += "\n"
     }
@@ -64,8 +66,10 @@ export class World {
     // let rendering: Array<string> = []
     // for (let y = 0; y < this.#height; y++) {
     //   for (let x = 0; x < this.#width; x++) {
-    //     const cell = this.#cell_at(x, y)!
-    //     rendering.push(cell.to_char())
+    //     const cell = this.#cell_at(x, y)
+    //     if (cell) {
+    //       rendering.push(cell.to_char())
+    //     }
     //   }
     //   rendering.push("\n")
     // }
@@ -86,7 +90,8 @@ export class World {
   }
 
   #add_cell(x: number, y: number, alive: boolean = false) {
-    if (this.#cell_at(x, y) != null) {
+    const existing = this.#cell_at(x, y)
+    if (existing) {
       throw new LocationOccupied(x, y)
     }
 
@@ -112,7 +117,7 @@ export class World {
         }
 
         const neighbour = this.#cell_at(nx, ny)
-        if (neighbour != null) {
+        if (neighbour) {
           cell.neighbours.push(neighbour)
         }
       }

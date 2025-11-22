@@ -117,7 +117,8 @@ export class World {
 
   private add_cell(x: u32, y: u32, alive: bool = false): bool {
     const key = `${x}-${y}`
-    if (this.cell_at(x, y) != null) {
+    const existing = this.cell_at(x, y)
+    if (existing) {
       throw new LocationOccupied(key)
     }
 

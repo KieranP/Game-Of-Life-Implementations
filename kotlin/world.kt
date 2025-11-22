@@ -50,8 +50,10 @@ public class World(
     // var rendering = ""
     // for (y in 0 until height) {
     //   for (x in 0 until width) {
-    //     val cell = cell_at(x, y)!!
-    //     rendering += cell.to_char()
+    //     val cell = cell_at(x, y)
+    //     if (cell != null) {
+    //       rendering += cell.to_char()
+    //     }
     //   }
     //   rendering += "\n"
     // }
@@ -61,8 +63,10 @@ public class World(
     // val rendering = ArrayList<String>();
     // for (y in 0 until height) {
     //   for (x in 0 until width) {
-    //     val cell = cell_at(x, y)!!
-    //     rendering.add(cell.to_char().toString())
+    //     val cell = cell_at(x, y)
+    //     if (cell != null) {
+    //       rendering.add(cell.to_char().toString())
+    //     }
     //   }
     //   rendering.add("\n")
     // }
@@ -73,8 +77,10 @@ public class World(
     val rendering = StringBuilder(render_size)
     for (y in 0 until height) {
       for (x in 0 until width) {
-        val cell = cell_at(x, y)!!
-        rendering.append(cell.to_char())
+        val cell = cell_at(x, y)
+        if (cell != null) {
+          rendering.append(cell.to_char())
+        }
       }
       rendering.append("\n")
     }
@@ -95,7 +101,8 @@ public class World(
   }
 
   private fun add_cell(x: Int, y: Int, alive: Boolean = false): Boolean {
-    if (cell_at(x, y) != null) {
+    val existing = cell_at(x, y)
+    if (existing != null) {
       throw LocationOccupied(x, y)
     }
 

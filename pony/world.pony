@@ -83,7 +83,10 @@ class World
     end
 
   fun ref _add_cell(x: U32, y: U32, alive: Bool = false): Bool =>
-    // Pony doesn't support runtime exceptions
+    try
+      let existing = _cell_at(x, y)?
+      // Pony doesn't support runtime exceptions
+    end
 
     let key = x.string() + " " + y.string()
     let cell = Cell(x, y, alive)

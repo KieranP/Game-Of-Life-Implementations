@@ -56,8 +56,10 @@ world_render :: proc(world: ^World) -> string {
   // rendering: [dynamic]u8
   // for y in 0..<world.height {
   //   for x in 0..<world.width {
-  //     cell, _ := world_cell_at(world, x, y)
-  //     append(&rendering, cell_to_char(cell))
+  //     cell, ok := world_cell_at(world, x, y)
+  //     if ok {
+  //       append(&rendering, cell_to_char(cell))
+  //     }
   //   }
   //   append(&rendering, "\n")
   // }
@@ -68,8 +70,10 @@ world_render :: proc(world: ^World) -> string {
   rendering := strings.builder_make_len_cap(0, render_size)
   for y in 0..<world.height {
     for x in 0..<world.width {
-      cell, _ := world_cell_at(world, x, y)
-      strings.write_byte(&rendering, cell_to_char(cell))
+      cell, ok := world_cell_at(world, x, y)
+      if ok {
+        strings.write_byte(&rendering, cell_to_char(cell))
+      }
     }
     strings.write_byte(&rendering, '\n')
   }
@@ -100,7 +104,8 @@ world_populate_cells :: proc(world: ^World) {
 }
 
 world_add_cell :: proc(world: ^World, x: u32, y: u32, alive: bool = false) -> bool {
-  if _, ok := world_cell_at(world, x, y); ok {
+  _, ok := world_cell_at(world, x, y)
+  if ok {
     panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
   }
 

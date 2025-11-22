@@ -57,7 +57,9 @@ function world_render(world::World)
   # for y in 0:(world.height - 1)
   #   for x in 0:(world.width - 1)
   #     cell = world_cell_at(world, x, y)
-  #     rendering *= cell_to_char(cell)
+  #     if cell !== nothing
+  #       rendering *= cell_to_char(cell)
+  #     end
   #   end
   #   rendering *= '\n'
   # end
@@ -70,7 +72,9 @@ function world_render(world::World)
   # for y in 0:(world.height - 1)
   #   for x in 0:(world.width - 1)
   #     cell = world_cell_at(world, x, y)
-  #     push!(rendering, cell_to_char(cell))
+  #     if cell !== nothing
+  #       push!(rendering, cell_to_char(cell))
+  #     end
   #   end
   #   push!(rendering, '\n')
   # end
@@ -81,7 +85,9 @@ function world_render(world::World)
   for y in 0:(world.height - 1)
     for x in 0:(world.width - 1)
       cell = world_cell_at(world, x, y)
-      print(rendering, cell_to_char(cell))
+      if cell !== nothing
+        print(rendering, cell_to_char(cell))
+      end
     end
     print(rendering, "\n")
   end
@@ -94,7 +100,9 @@ function world_render(world::World)
   # for y in 0:(world.height - 1)
   #   for x in 0:(world.width - 1)
   #     cell = world_cell_at(world, x, y)
-  #     rendering[index] = UInt8(cell_to_char(cell))
+  #     if cell !== nothing
+  #       rendering[index] = UInt8(cell_to_char(cell))
+  #     end
   #     index += 1
   #   end
   #   rendering[index] = 0x0A
@@ -117,7 +125,8 @@ function world_populate_cells(world::World)
 end
 
 function world_add_cell(world::World, x::UInt64, y::UInt64, alive::Bool = false)
-  if world_cell_at(world, x, y) !== nothing
+  existing = world_cell_at(world, x, y)
+  if existing !== nothing
     throw(LocationOccupied(x, y))
   end
 

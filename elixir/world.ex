@@ -56,7 +56,9 @@ defmodule World do
         for x <- 0..(world.width - 1), reduce: rendering do
           rendering ->
             cell = cell_at(world, x, y)
-            rendering <> Cell.to_char(cell)
+            if cell do
+              rendering <> Cell.to_char(cell)
+            end
         end <> "\n"
     end
 
@@ -64,7 +66,9 @@ defmodule World do
     # Enum.map(0..(world.height - 1), fn y ->
     #   Enum.map(0..(world.width - 1), fn x ->
     #     cell = cell_at(world, x, y)
-    #     Cell.to_char(cell)
+    #     if cell do
+    #       Cell.to_char(cell)
+    #     end
     #   end) ++ ["\n"]
     # end)
     # |> Enum.join()
@@ -73,7 +77,9 @@ defmodule World do
     # Enum.map_join(0..(world.height - 1), fn y ->
     #   Enum.map_join(0..(world.width - 1), fn x ->
     #     cell = cell_at(world, x, y)
-    #     Cell.to_char(cell)
+    #     if cell do
+    #       Cell.to_char(cell)
+    #     end
     #   end) <> "\n"
     # end)
   end
@@ -95,7 +101,8 @@ defmodule World do
   end
 
   defp add_cell(world, x, y, alive) do
-    if cell_at(world, x, y) do
+    existing = cell_at(world, x, y)
+    if existing do
       raise LocationOccupied, x: x, y: y
     end
 

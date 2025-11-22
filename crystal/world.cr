@@ -50,8 +50,10 @@ class World
     # rendering = ""
     # @height.times.each { |y|
     #   @width.times.each { |x|
-    #     cell = cell_at(x, y).not_nil!
-    #     rendering += cell.to_char
+    #     cell = cell_at(x, y)
+    #     if cell
+    #       rendering += cell.to_char
+    #     end
     #   }
     #   rendering += "\n"
     # }
@@ -61,8 +63,10 @@ class World
     # rendering = [] of String
     # @height.times.each { |y|
     #   @width.times.each { |x|
-    #     cell = cell_at(x, y).not_nil!
-    #     rendering << cell.to_char
+    #     cell = cell_at(x, y)
+    #     if cell
+    #       rendering << cell.to_char
+    #     end
     #   }
     #   rendering << "\n"
     # }
@@ -73,8 +77,10 @@ class World
     String.build(render_size) do |io|
       @height.times.each { |y|
         @width.times.each { |x|
-          cell = cell_at(x, y).not_nil!
-          io << cell.to_char
+          cell = cell_at(x, y)
+          if cell
+            io << cell.to_char
+          end
         }
         io << "\n"
       }
@@ -95,7 +101,8 @@ class World
   end
 
   private def add_cell(x : UInt32, y : UInt32, alive : Bool = false)
-    if cell_at(x, y)
+    existing = cell_at(x, y)
+    if existing
       raise LocationOccupied.new(x, y)
     end
 

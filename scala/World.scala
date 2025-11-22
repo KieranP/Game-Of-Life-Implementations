@@ -51,9 +51,10 @@ class World(
     // var (x, y) = (0, 0)
     // for (y <- 0 until height) {
     //   for (x <- 0 until width) {
-    //     // get pulls the Cell out of an Option[]
-    //     val cell = cell_at(x, y).get
-    //     rendering += cell.to_char
+    //     val cell = cell_at(x, y)
+    //     if (cell != None) {
+    //       rendering += cell.get.to_char
+    //     }
     //   }
     //   rendering += "\n"
     // }
@@ -64,9 +65,10 @@ class World(
     // var (x, y) = (0, 0)
     // for (y <- 0 until height) {
     //   for (x <- 0 until width) {
-    //     // get pulls the Cell out of an Option[]
-    //     val cell = cell_at(x, y).get
-    //     rendering += cell.to_char
+    //     val cell = cell_at(x, y)
+    //     if (cell != None) {
+    //       rendering += cell.get.to_char
+    //     }
     //   }
     //   rendering += "\n"
     // }
@@ -78,8 +80,10 @@ class World(
     var (x, y) = (0, 0)
     for (y <- 0 until height) {
       for (x <- 0 until width) {
-        val cell = cell_at(x, y).get
-        rendering.append(cell.to_char)
+        val cell = cell_at(x, y)
+        if (cell != None) {
+          rendering.append(cell.get.to_char)
+        }
       }
       rendering.append("\n")
     }
@@ -101,7 +105,8 @@ class World(
   }
 
   private def add_cell(x: Int, y: Int, alive: Boolean = false) = {
-    if (cell_at(x, y) != None) {
+    val existing = cell_at(x, y)
+    if (existing != None) {
       throw new LocationOccupied(x, y)
     }
 

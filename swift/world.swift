@@ -58,8 +58,10 @@ final public class World {
     var rendering = ""
     for y in 0..<height {
       for x in 0..<width {
-        let cell = cell_at(x: x, y: y)!
-        rendering += cell.to_char()
+        let cell = cell_at(x: x, y: y)
+        if cell != nil {
+          rendering += cell!.to_char()
+        }
       }
       rendering += "\n"
     }
@@ -69,8 +71,10 @@ final public class World {
     // var rendering: Array<String> = []
     // for y in 0..<height {
     //   for x in 0..<width {
-    //     let cell = cell_at(x: x, y: y)!
-    //     rendering.append(cell.to_char())
+    //     let cell = cell_at(x: x, y: y)
+    //     if cell != nil {
+    //       rendering.append(cell!.to_char())
+    //     }
     //   }
     //   rendering.append("\n")
     // }
@@ -91,7 +95,8 @@ final public class World {
   }
 
   private func add_cell(x: UInt32, y: UInt32, alive: Bool = false) -> Bool {
-    if cell_at(x: x, y: y) != nil {
+    let existing = cell_at(x: x, y: y)
+    if existing != nil {
       do {
         throw LocationOccupied(x: x, y: y)
       } catch {

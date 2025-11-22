@@ -59,7 +59,9 @@ public class World {
     // for (var y = 0; y < height; y++) {
     //   for (var x = 0; x < width; x++) {
     //     var cell = cell_at(x, y);
-    //     rendering += cell.to_char();
+    //     if (cell != null) {
+    //       rendering += cell.to_char();
+    //     }
     //   }
     //   rendering += "\n";
     // }
@@ -70,7 +72,9 @@ public class World {
     // for (var y = 0; y < height; y++) {
     //   for (var x = 0; x < width; x++) {
     //     var cell = cell_at(x, y);
-    //     rendering.add(String.valueOf(cell.to_char()));
+    //     if (cell != null) {
+    //       rendering.add(String.valueOf(cell.to_char()));
+    //     }
     //   }
     //   rendering.add("\n");
     // }
@@ -82,7 +86,9 @@ public class World {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         var cell = cell_at(x, y);
-        rendering.append(cell.to_char());
+        if (cell != null) {
+          rendering.append(cell.to_char());
+        }
       }
       rendering.append("\n");
     }
@@ -103,7 +109,8 @@ public class World {
   }
 
   private boolean add_cell(int x, int y, boolean... args) {
-    if (cell_at(x, y) != null) {
+    var existing = cell_at(x, y);
+    if (existing != null) {
       try {
         throw new LocationOccupied(x, y);
       } catch(LocationOccupied m) {

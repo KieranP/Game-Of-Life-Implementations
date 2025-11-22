@@ -52,7 +52,10 @@ class World
     # rendering = ""
     # @height.times.each { |y|
     #   @width.times.each { |x|
-    #     rendering << cell_at(x, y).to_char
+    #     cell = cell_at(x, y)
+    #     if cell
+    #       rendering << cell.to_char
+    #     end
     #   }
     #   rendering << "\n"
     # }
@@ -62,7 +65,10 @@ class World
     rendering = []
     @height.times.each { |y|
       @width.times.each { |x|
-        rendering << cell_at(x, y).to_char
+        cell = cell_at(x, y)
+        if cell
+          rendering << cell.to_char
+        end
       }
       rendering << "\n"
     }
@@ -72,7 +78,10 @@ class World
     # rendering = StringIO.new
     # @height.times.each { |y|
     #   @width.times.each { |x|
-    #     rendering << cell_at(x, y).to_char
+    #     cell = cell_at(x, y)
+    #     if cell
+    #       rendering << cell.to_char
+    #     end
     #   }
     #   rendering << "\n"
     # }
@@ -95,7 +104,8 @@ class World
   end
 
   def add_cell(x, y, alive = false)
-    if cell_at(x, y)
+    existing = cell_at(x, y)
+    if existing
       raise LocationOccupied.new(x, y)
     end
 

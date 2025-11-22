@@ -44,7 +44,8 @@ class World:
     # for y in list(range(self.height)):
     #   for x in list(range(self.width)):
     #     cell = self.cell_at(x, y)
-    #     rendering += cell.to_char()
+    #     if cell is not None:
+    #       rendering += cell.to_char()
     #   rendering += "\n"
     # return rendering
 
@@ -53,7 +54,8 @@ class World:
     for y in list(range(self.height)):
       for x in list(range(self.width)):
         cell = self.cell_at(x, y)
-        rendering.append(cell.to_char())
+        if cell is not None:
+          rendering.append(cell.to_char())
       rendering.append("\n")
     return ''.join(rendering)
 
@@ -67,7 +69,8 @@ class World:
         self.add_cell(x, y, alive)
 
   def add_cell(self, x, y, alive = False):
-    if self.cell_at(x, y) is not None:
+    existing = self.cell_at(x, y)
+    if existing is not None:
       raise World.LocationOccupied(x, y)
 
     cell = Cell(x, y, alive)

@@ -109,7 +109,8 @@ impl World {
   }
 
   fn add_cell(self, x: int, y: int, alive: bool): bool throws LocationOccupied {
-    if (!self.cell_at(x, y).is_nil()) {
+    const existing = self.cell_at(x, y);
+    if (!existing.is_nil()) {
       throw LocationOccupied { x, y };
     }
 

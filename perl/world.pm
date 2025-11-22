@@ -57,7 +57,9 @@ sub render($self) {
   for my $y ((0..$self->{height}-1)) {
     for my $x ((0..$self->{width}-1)) {
       my $cell = $self->cell_at($x, $y);
-      $rendering .= $cell->to_char();
+      if ($cell) {
+        $rendering .= $cell->to_char();
+      }
     }
     $rendering .= "\n";
   }
@@ -68,7 +70,9 @@ sub render($self) {
   # for my $y ((0..$self->{height}-1)) {
   #   for my $x ((0..$self->{width}-1)) {
   #     my $cell = $self->cell_at($x, $y);
-  #     push(@rendering, $cell->to_char());
+  #     if ($cell) {
+  #       push(@rendering, $cell->to_char());
+  #     }
   #   }
   #   push(@rendering, "\n");
   # }
@@ -89,7 +93,8 @@ sub populate_cells($self) {
 }
 
 sub add_cell($self, $x, $y, $alive = false) {
-  if ($self->cell_at($x, $y)) {
+  my $existing = $self->cell_at($x, $y);
+  if ($existing) {
     die "LocationOccupied($x-$y)";
   }
 

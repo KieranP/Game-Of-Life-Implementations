@@ -56,7 +56,9 @@ public class World {
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
     //     def cell = cell_at(x, y)
-    //     rendering += cell.to_char()
+    //     if (cell) {
+    //       rendering += cell.to_char()
+    //     }
     //   }
     //   rendering += "\n"
     // }
@@ -67,7 +69,9 @@ public class World {
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
     //     def cell = cell_at(x, y)
-    //     rendering.add(cell.to_char())
+    //     if (cell) {
+    //       rendering.add(cell.to_char())
+    //     }
     //   }
     //   rendering.add("\n")
     // }
@@ -79,7 +83,9 @@ public class World {
     for (y in 0..<height) {
       for (x in 0..<width) {
         def cell = cell_at(x, y)
-        rendering.append(cell.to_char())
+        if (cell) {
+          rendering.append(cell.to_char())
+        }
       }
       rendering.append("\n")
     }
@@ -100,7 +106,8 @@ public class World {
   }
 
   private boolean add_cell(int x, int y, boolean alive = false) {
-    if (cell_at(x, y)) {
+    def existing = cell_at(x, y)
+    if (existing) {
       throw new LocationOccupied(x, y)
     }
 
@@ -126,7 +133,7 @@ public class World {
         }
 
         def neighbour = cell_at(nx, ny)
-        if (neighbour != null) {
+        if (neighbour) {
           cell.neighbours.add(neighbour)
         }
       }

@@ -42,7 +42,9 @@ class World {
       // for (auto y = 0; y < height; y++) {
       //   for (auto x = 0; x < width; x++) {
       //     auto cell = cell_at(x, y);
-      //     rendering ~= cell.to_char();
+      //     if (cell) {
+      //       rendering ~= cell.to_char();
+      //     }
       //   }
       //   rendering ~= "\n";
       // }
@@ -53,7 +55,9 @@ class World {
       // for (auto y = 0; y < height; y++) {
       //   for (auto x = 0; x < width; x++) {
       //     auto cell = cell_at(x, y);
-      //     rendering ~= to!string(cell.to_char());
+      //     if (cell) {
+      //       rendering ~= to!string(cell.to_char());
+      //     }
       //   }
       //   rendering ~= "\n";
       // }
@@ -65,7 +69,9 @@ class World {
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
           auto cell = cell_at(x, y);
-          rendering ~= cell.to_char();
+          if (cell) {
+            rendering ~= cell.to_char();
+          }
         }
         rendering ~= "\n";
       }
@@ -113,7 +119,8 @@ class World {
     }
 
     auto add_cell(int x, int y, bool alive = false) {
-      if (cell_at(x, y)) {
+      auto existing = cell_at(x, y);
+      if (existing) {
         throw new LocationOccupied(x, y);
       }
 
