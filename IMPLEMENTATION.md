@@ -16,7 +16,7 @@ But for the most part, each implementation will be similar to the following.
 - world.ext
 - cell.ext
 
-## play.ext
+### play.ext
 
 ```
 class Play {
@@ -29,7 +29,7 @@ class Play {
 }
 ```
 
-## world.ext
+### world.ext
 
 ```
 class World {
@@ -54,7 +54,44 @@ class World {
 }
 ```
 
-## cell.ext
+The `render` function should demonstrate several different ways of making the desired output. Comment out all but the fastest. Different approaches include:
+
+1. String Concatenation
+
+```
+rendering = ""
+rendering << cell.to_char()
+rendering
+```
+
+2. Append Strings to Array and Join
+
+```
+rendering = []
+rendering << cell.to_char()
+rendering.join
+```
+
+3. String Builder (if the language has a built-in one)
+
+```
+render_size = width * height + height
+rendering = StringBuilder.new(render_size)
+rendering << cell.to_char()
+rendering.to_s
+```
+
+4. Simulate String Builder (Preallocate U8 Array, Insert by Index)
+
+```
+render_size = width * height + height
+rendering = Array.new(render_size)
+idx = 0
+rendering[idx] = cell.to_char()
+String(rendering)
+```
+
+### cell.ext
 
 ```
 class Cell {
@@ -69,4 +106,38 @@ class Cell {
   public to_char(): Char // Or String
   public alive_neighbours(): UInt32
 }
+```
+
+The `alive_neighbours` function should demonstrate several different ways of calculating the desired output. Comment out all but the fastest. Different approaches include:
+
+1. Lamdba/Anonymous Function
+
+```
+neighbours.count(&:alive)
+```
+
+2. Loop over neighbour array and increment counter
+
+```
+alive_neighbours = 0
+for (neighbour in neighbours) {
+  if (neighbour.alive) {
+    alive_neighbours += 1
+  }
+}
+alive_neighbours
+```
+
+3. Traditional for loop with index access
+
+```
+alive_neighbours = 0
+count = neighbours.length
+for (i = 0; i < count; i++) {
+  neighbour = neighbours[i]
+  if (neighbour.alive) {
+    alive_neighbours += 1
+  }
+}
+alive_neighbours
 ```
