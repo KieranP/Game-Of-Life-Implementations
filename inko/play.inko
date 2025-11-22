@@ -7,7 +7,7 @@ import std.env
 let WORLD_WIDTH = 150
 let WORLD_HEIGHT = 40
 
-class Play {
+type Play {
   fn static run() {
     let world = World.new(
       width: WORLD_WIDTH,
@@ -15,7 +15,7 @@ class Play {
     )
 
     let stdout = Stdout.new
-    let minimal = env.opt('MINIMAL').some?
+    let minimal = env.get('MINIMAL').ok?
 
     if minimal == false {
       stdout.print(world.render())
@@ -47,7 +47,7 @@ class Play {
         stdout.print("\u{001b}[H\u{001b}[2J")
       }
 
-      stdout.print(
+      let _ = stdout.print(
         "#" + world.tick.to_string +
         " - World Tick (L: " + _f(lowest_tick).round(3).to_string +
         "; A: " + _f(avg_tick).round(3).to_string + ")" +
@@ -67,7 +67,7 @@ class Play {
   }
 }
 
-class async Main {
+type async Main {
   fn async main {
     Play.run
   }

@@ -1,4 +1,4 @@
-class pub Cell {
+type pub Cell {
   let pub @x: Int
   let pub @y: Int
   let pub mut @alive: Bool
@@ -30,28 +30,28 @@ class pub Cell {
     #   .select(fn (neighbour) { neighbour.alive })
     #   .count
 
-    # The following is slower
-    # @neighbours
-    #   .iter
-    #   .reduce(0, fn (count, neighbour) {
-    #     if neighbour.alive {
-    #       count + 1
-    #     } else {
-    #       count
-    #     }
-    #   })
-
     # The following is the fastest
-    let mut alive_neighbours = 0
-    let count = @neighbours.size
-    let mut num = 0
-    while num < count {
-      let neighbour = @neighbours.get(num)
-      if neighbour.alive {
-        alive_neighbours += 1
-      }
-      num += 1
-    }
-    alive_neighbours
+    @neighbours
+      .iter
+      .reduce(0, fn (count, neighbour) {
+        if neighbour.alive {
+          count + 1
+        } else {
+          count
+        }
+      })
+
+    # The following is slower
+    # let mut alive_neighbours = 0
+    # let count = @neighbours.size
+    # let mut num = 0
+    # while num < count {
+    #   let neighbour = @neighbours.get(num)
+    #   if neighbour.ok? and neighbour.get.alive {
+    #     alive_neighbours += 1
+    #   }
+    #   num += 1
+    # }
+    # alive_neighbours
   }
 }

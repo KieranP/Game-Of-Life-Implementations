@@ -6,5 +6,5 @@
 
 ## Usage
 
-* `inko build -i . -o play --opt aggressive play.inko`
-* `./play`
+* `inko build --release --include . play.inko`
+* `./build/release/play`

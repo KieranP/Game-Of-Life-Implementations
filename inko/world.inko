@@ -8,7 +8,7 @@ let DIRECTIONS = [
   [-1, -1], [0, -1], [1, -1] # below
 ]
 
-class pub World {
+type pub World {
   let pub mut @tick: Int
   let @width: Int
   let @height: Int
@@ -29,8 +29,7 @@ class pub World {
 
   fn pub mut _tick {
     # First determine the action for all cells
-    @cells.iter_mut.each(fn (entry) {
-      let cell = entry.value
+    for (_, cell) in @cells.iter_mut {
       let alive_neighbours = cell.alive_neighbours()
       if cell.alive == false and alive_neighbours == 3 {
         cell.next_state = true
@@ -39,13 +38,12 @@ class pub World {
       } else {
         cell.next_state = cell.alive
       }
-    })
+    }
 
     # Then execute the determined action for all cells
-    @cells.iter_mut.each(fn (entry) {
-      let cell = entry.value
+    for (_, cell) in @cells.iter_mut {
       cell.alive = cell.next_state
-    })
+    }
 
     @tick += 1
   }
@@ -100,11 +98,11 @@ class pub World {
       rendering.push("\n")
       y += 1
     }
-    rendering.to_string
+    rendering.into_string
   }
 
   fn cell_at(x: Int, y: Int) -> Option[ref Cell] {
-    @cells.opt("${x}-${y}")
+    @cells.get("${x}-${y}").ok
   }
 
   fn mut populate_cells {
@@ -133,27 +131,26 @@ class pub World {
   }
 
   fn mut prepopulate_neighbours {
-    @cells.iter_mut.each(fn (entry) {
-      let cell = entry.value
+    for (_, cell) in @cells.iter_mut {
       let x = cell.x
       let y = cell.y
 
-      DIRECTIONS.iter.each(fn (set) {
-        let nx = x + set.get(0)
-        let ny = y + set.get(1)
+      for set in DIRECTIONS.iter {
+        let nx = x + set.get(0).get
+        let ny = y + set.get(1).get
         if nx < 0 or ny < 0 {
-          return # Out of bounds
+          next # Out of bounds
         }
 
         if nx >= @width or ny >= @height {
-          return # Out of bounds
+          next # Out of bounds
         }
 
         let neighbour = cell_at(nx, ny)
         if neighbour.some? {
           cell.neighbours.push(neighbour.get)
         }
-      })
-    })
+      }
+    }
   }
 }
