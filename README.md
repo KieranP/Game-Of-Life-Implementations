@@ -25,7 +25,9 @@ Each language's developer community may prefer different code styles (spaces vs 
 
 **Note:** The lists below are not exhaustive, but include core things found in various languages. As expected, languages evolve over time, so if a language has added a feature marked with ✖ below, please open a ticket and let me know so I can take a look/update accordingly.
 
-[![Feature Comparison Spreadsheet](/features.png)](https://docs.google.com/spreadsheets/d/1XF2xgN_T3FIeFjJ4iqM1NvcvMG6Zz3ytyJXbvEDVb-U/edit?usp=sharing#gid=0)
+https://docs.google.com/spreadsheets/d/1XF2xgN_T3FIeFjJ4iqM1NvcvMG6Zz3ytyJXbvEDVb-U/edit?gid=0
+
+[![Feature Comparison Spreadsheet](/features.png)](https://github.com/KieranP/Game-Of-Life-Implementations/blob/master/features.png)
 
 ## Speed Results (by # iterations in 30 seconds)
 
@@ -33,4 +35,6 @@ Each language's developer community may prefer different code styles (spaces vs 
 
 **Note:** These speed results are taken on a MacBook Pro 16" (Nov 2023), Apple M3 Pro, with 18 GB of RAM. The times (measured in milliseconds) were calculated by playing each simulation for 30 seconds (using `benchmark.sh` in each implementation), and recording the fastest result. The table below is sorted by number of iterations that were completed within the 30 seconds. Iterations take into account aspects such as garbage collection and other overhead that are not necessarily measured by the tick and render values. This can result in some implementations with faster combined averages being ranked lower because of greater overhead.
 
-[![Speed Results Spreadsheet](/results.png)](https://docs.google.com/spreadsheets/d/1XF2xgN_T3FIeFjJ4iqM1NvcvMG6Zz3ytyJXbvEDVb-U/edit?usp=sharing#gid=1866601212)
+https://docs.google.com/spreadsheets/d/1XF2xgN_T3FIeFjJ4iqM1NvcvMG6Zz3ytyJXbvEDVb-U/edit?gid=1866601212
+
+[![Speed Results Spreadsheet](/results.png)](https://github.com/KieranP/Game-Of-Life-Implementations/blob/master/results.png)
