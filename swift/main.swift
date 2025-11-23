@@ -4,8 +4,8 @@ let WORLD_WIDTH = UInt32(150)
 let WORLD_HEIGHT = UInt32(40)
 
 final private class Play {
-  public class func run() -> Void {
-    let world = World(
+  public class func run() throws -> Void {
+    let world = try World(
       width: WORLD_WIDTH,
       height: WORLD_HEIGHT
     )
@@ -65,4 +65,4 @@ final private class Play {
   }
 }
 
-Play.run()
+try Play.run()

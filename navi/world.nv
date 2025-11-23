@@ -26,10 +26,15 @@ struct World {
 }
 
 impl World {
-  fn new(width: int, height: int): World {
-    const world = World { width, height };
-    world.populate_cells();
+  fn new(width: int, height: int): World throws LocationOccupied {
+    const world = World {
+      width,
+      height,
+    };
+
+    try world.populate_cells();
     world.prepopulate_neighbours();
+
     return world;
   }
 
@@ -60,7 +65,7 @@ impl World {
     // for (let y in 0..self.height) {
     //   for (let x in 0..self.width) {
     //     let cell = self.cell_at(x, y);
-    //     if (!cell.is_nil()) {
+    //     if (cell.is_some()) {
     //       rendering += cell!.to_char().to_string();
     //     }
     //   }
@@ -73,7 +78,7 @@ impl World {
     // for (let y in 0..self.height) {
     //   for (let x in 0..self.width) {
     //     let cell = self.cell_at(x, y);
-    //     if (!cell.is_nil()) {
+    //     if (cell.is_some()) {
     //       rendering.push(cell!.to_char().to_string());
     //     }
     //   }
@@ -86,7 +91,7 @@ impl World {
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
         let cell = self.cell_at(x, y);
-        if (!cell.is_nil()) {
+        if (cell.is_some()) {
           rendering.push(cell!.to_char());
         }
       }
@@ -99,18 +104,18 @@ impl World {
     return self.cells.get(`${x}-${y}`);
   }
 
-  fn populate_cells(self) {
+  fn populate_cells(self) throws LocationOccupied {
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
         let alive = (rand.float(0.0, 1.0) <= 0.2);
-        try! self.add_cell(x, y, alive);
+        try self.add_cell(x, y, alive);
       }
     }
   }
 
   fn add_cell(self, x: int, y: int, alive: bool): bool throws LocationOccupied {
     const existing = self.cell_at(x, y);
-    if (!existing.is_nil()) {
+    if (existing.is_some()) {
       throw LocationOccupied { x, y };
     }
 
@@ -136,7 +141,7 @@ impl World {
         }
 
         const neighbour = self.cell_at(nx, ny);
-        if (!neighbour.is_nil()) {
+        if (neighbour.is_some()) {
           cell.neighbours.push(neighbour!);
         }
       }

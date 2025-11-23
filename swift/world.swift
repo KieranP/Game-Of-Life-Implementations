@@ -7,11 +7,11 @@ final public class World {
   private var height: UInt32
   private var cells: [String: Cell]
 
-  private struct LocationOccupied: Error, LocalizedError {
+  public struct LocationOccupied: Error, LocalizedError {
     let x: UInt32
     let y: UInt32
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
       return "LocationOccupied(\(x)-\(y))"
     }
   }
@@ -22,13 +22,13 @@ final public class World {
     [-1, -1], [0, -1], [1, -1] // below
   ]
 
-  public init(width: UInt32, height: UInt32) {
+  public init(width: UInt32, height: UInt32) throws(LocationOccupied) {
     self.tick = 0
     self.width = width
     self.height = height
     self.cells = [:]
 
-    populate_cells()
+    try populate_cells()
     prepopulate_neighbours()
   }
 
@@ -85,24 +85,19 @@ final public class World {
     return cells["\(x)-\(y)"]
   }
 
-  private func populate_cells() -> Void {
+  private func populate_cells() throws(LocationOccupied) -> Void {
     for y in 0..<height {
       for x in 0..<width {
         let alive = (Int(arc4random_uniform(100)) <= 20)
-        _ = add_cell(x: x, y: y, alive: alive)
+        _ = try add_cell(x: x, y: y, alive: alive)
       }
     }
   }
 
-  private func add_cell(x: UInt32, y: UInt32, alive: Bool = false) -> Bool {
+  private func add_cell(x: UInt32, y: UInt32, alive: Bool = false) throws(LocationOccupied) -> Bool {
     let existing = cell_at(x: x, y: y)
     if existing != nil {
-      do {
-        throw LocationOccupied(x: x, y: y)
-      } catch {
-        print(error.localizedDescription)
-        exit(1)
-      }
+      throw LocationOccupied(x: x, y: y)
     }
 
     let cell = Cell(x: x, y: y, alive: alive)

@@ -20,7 +20,7 @@ public class World {
     {-1, -1}, {0, -1}, {1, -1}, // below
   };
 
-  public World(int width, int height) {
+  public World(int width, int height) throws LocationOccupied {
     this.tick = 0;
     this.width = width;
     this.height = height;
@@ -99,7 +99,7 @@ public class World {
     return cells.get(x+"-"+y);
   }
 
-  private void populate_cells() {
+  private void populate_cells() throws LocationOccupied {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         var alive = (Math.random() <= 0.2);
@@ -108,15 +108,10 @@ public class World {
     }
   }
 
-  private boolean add_cell(int x, int y, boolean... args) {
+  private boolean add_cell(int x, int y, boolean... args) throws LocationOccupied {
     var existing = cell_at(x, y);
     if (existing != null) {
-      try {
-        throw new LocationOccupied(x, y);
-      } catch(LocationOccupied m) {
-        System.out.println(m.getMessage());
-        System.exit(1);
-      }
+      throw new LocationOccupied(x, y);
     }
 
     var cell = new Cell(x, y, args[0]);

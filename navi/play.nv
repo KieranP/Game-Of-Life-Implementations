@@ -8,8 +8,8 @@ const WORLD_HEIGHT = 40;
 struct Play {}
 
 impl Play {
-  fn run() {
-    let world = World.new(
+  fn run() throws {
+    let world = try World.new(
       WORLD_WIDTH,
       WORLD_HEIGHT,
     );
@@ -65,5 +65,5 @@ impl Play {
 }
 
 fn main() throws {
-  Play.run();
+  try Play.run();
 }

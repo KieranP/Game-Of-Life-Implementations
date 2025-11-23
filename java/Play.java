@@ -2,11 +2,11 @@ public class Play {
   private static int WORLD_WIDTH = 150;
   private static int WORLD_HEIGHT = 40;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     run();
   }
 
-  public static void run() {
+  public static void run() throws Exception {
     var world = new World(
       WORLD_WIDTH,
       WORLD_HEIGHT
