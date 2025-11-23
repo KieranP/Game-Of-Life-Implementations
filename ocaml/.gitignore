@@ -1,0 +1,8 @@
+*.cmi
+*.cmx
+*.cmo
+*.o
+*.a
+*.cmxa
+*.cma
+play
