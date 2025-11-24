@@ -1,14 +1,19 @@
 # Dart
 
-## Installation
+## Install
 
-* `brew install dart-lang/dart/dart`
+```bash
+brew install dart-lang/dart/dart
+```
 
-## Usage
+## Build
 
-* `dart compile exe -o play play.dart`
-* `./play`
+```bash
+dart compile exe -o play play.dart
+```
 
-## Notes
+## Run
 
-* Rather than a `private` keyword, anything preceeded by an underscore (_) is a private function/variable
+```bash
+./play
+```

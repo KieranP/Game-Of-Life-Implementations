@@ -1,9 +1,17 @@
 # Perl
 
-## Installation
+## Install
 
-* `brew install perl`
+```bash
+brew install perl
+```
 
-## Usage
+## Build
 
-* `perl play.pl`
+(no build step required)
+
+## Run
+
+```bash
+perl play.pl
+```

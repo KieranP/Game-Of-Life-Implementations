@@ -1,11 +1,19 @@
 # Groovy
 
-## Installation
+## Install
 
-* `brew install java`
-* `brew install groovy`
+```bash
+brew install java groovy
+```
 
-## Usage
+## Build
 
-* `groovyc --compile-static *.groovy`
-* `groovy Play`
+```bash
+groovyc --compile-static *.groovy
+```
+
+## Run
+
+```bash
+groovy Play
+```

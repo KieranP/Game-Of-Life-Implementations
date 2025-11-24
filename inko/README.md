@@ -1,10 +1,19 @@
 # Inko
 
-## Installation
+## Install
 
-* `brew install inko`
+```bash
+brew install inko
+```
 
-## Usage
+## Build
 
-* `inko build --release --include . play.inko`
-* `./build/release/play`
+```bash
+inko build --release --include . play.inko
+```
+
+## Run
+
+```bash
+./build/release/play
+```

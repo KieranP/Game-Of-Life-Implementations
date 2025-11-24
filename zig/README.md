@@ -1,10 +1,19 @@
 # Zig
 
-## Installation
+## Install
 
-* `brew install zig`
+```bash
+brew install zig
+```
 
-## Usage
+## Build
 
-* `zig build-exe -O ReleaseFast play.zig`
-* `./play`
+```bash
+zig build-exe -O ReleaseFast play.zig
+```
+
+## Run
+
+```bash
+./play
+```

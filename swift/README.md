@@ -1,14 +1,19 @@
 # Swift
 
-## Installation
+## Install
 
-* Install XCode Developer Toolkit
+```bash
+xcode-select --install
+```
 
-## Usage
+## Build
 
-* `swiftc -O -whole-module-optimization -o play *.swift`
-* `./play`
+```bash
+swiftc -O -whole-module-optimization -o play *.swift
+```
 
-## Notes
+## Run
 
-* Entrypoint file must be named `main.swift`
+```bash
+./play
+```

@@ -1,15 +1,19 @@
 # Scala
 
-## Installation
+## Install
 
-* `brew install java`
-* `brew install scala`
+```bash
+brew install java scala
+```
 
-## Usage
+## Build
 
-* `scalac *.scala`
-* `scala run -cp . -M Play`
+```bash
+scalac *.scala
+```
 
-## Notes
+## Run
 
-* Filenames must match the class names
+```bash
+scala run -cp . -M Play
+```

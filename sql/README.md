@@ -1,16 +1,16 @@
 # SQL
 
-## Installation
+## Install
 
-### SQLite
+```bash
+brew install sqlite3 postgresql
+```
 
-* `brew install sqlite3`
+## Build
 
-### PostgreSQL
+(no build step required)
 
-* `brew install postgresql`
-
-## Usage
+## Run
 
 ### SQLite
 

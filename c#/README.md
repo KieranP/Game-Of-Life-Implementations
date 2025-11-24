@@ -1,10 +1,19 @@
 # C#
 
-## Installation
+## Install
 
-* `brew install --cask dotnet-sdk`
+```bash
+brew install --cask dotnet-sdk
+```
 
-## Usage
+## Build
 
-* `dotnet build`
-* `bin/play`
+```bash
+dotnet build
+```
+
+## Run
+
+```bash
+bin/play
+```

@@ -1,21 +1,37 @@
 # Ruby
 
-## Installation
+## Install
 
-* `brew install ruby`
+```bash
+brew install ruby jruby
+```
 
-## Usage (CRuby, without JIT)
+## Build
 
-* `ruby play.rb`
+(no build step required)
 
-## Usage (CRuby, with JIT)
+## Run
 
-* `ruby --jit play.rb`
+### CRuby, without JIT
 
-## Usage (TruffleRuby)
+```bash
+ruby play.rb
+```
 
-* `ruby play.rb`
+### CRuby, with JIT
 
-# Usage (JRuby)
+```bash
+ruby --jit play.rb
+```
 
-* `ruby play.rb`
+### TruffleRuby
+
+```bash
+ruby play.rb
+```
+
+### JRuby
+
+```bash
+ruby play.rb
+```

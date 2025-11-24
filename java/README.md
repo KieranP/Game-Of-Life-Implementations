@@ -1,17 +1,19 @@
 # Java
 
-## Installation
+## Install
 
-* `brew install java`
+```bash
+brew install java
+```
 
-## Usage
+## Build
 
-* `javac *.java`
-* `java Play`
+```bash
+javac *.java
+```
 
-## Notes
+## Run
 
-* Filenames must match the class names
-* Files can only contain one public class
-* Exceptions must be caught by try/catch
-* Does not have the concept of optional/default parameters
+```bash
+java Play
+```

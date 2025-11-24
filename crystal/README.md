@@ -1,10 +1,19 @@
 # Crystal
 
-## Installation
+## Install
 
-* `brew install crystal-lang`
+```bash
+brew install crystal-lang
+```
 
-## Usage
+## Build
 
-* `crystal build play.cr --release`
-* `./play`
+```bash
+crystal build play.cr --release
+```
+
+## Run
+
+```bash
+./play
+```

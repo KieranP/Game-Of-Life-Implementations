@@ -1,9 +1,17 @@
 # Julia
 
-## Installation
+## Install
 
-* `brew install julia`
+```bash
+brew install julia
+```
 
-## Usage
+## Build
 
-* `julia -O3 play.jl`
+(no build step required)
+
+## Run
+
+```bash
+julia -O3 play.jl
+```

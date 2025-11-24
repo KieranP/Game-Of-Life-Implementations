@@ -1,10 +1,19 @@
 # Odin
 
-## Installation
+## Install
 
-* `brew install odin`
+```bash
+brew install odin
+```
 
-## Usage
+## Build
 
-* `odin build . -o:speed --out=play`
-* `./play`
+```bash
+odin build . -o:speed --out=play
+```
+
+## Run
+
+```bash
+./play
+```

@@ -1,10 +1,19 @@
 # OCaml
 
-## Installation
+## Install
 
-* `brew install ocaml`
+```bash
+brew install ocaml
+```
 
-## Usage
+## Build
 
-* `ocamlopt -O3 -o play cell.ml world.ml play.ml`
-* `./play`
+```bash
+ocamlopt -O3 -o play cell.ml world.ml play.ml
+```
+
+## Run
+
+```bash
+./play
+```

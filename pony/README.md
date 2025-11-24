@@ -1,10 +1,19 @@
 # PonyLang
 
-## Installation
+## Install
 
-* `brew install ponyc`
+```bash
+brew install ponyc
+```
 
-## Usage
+## Build
 
-* `ponyc -b play`
-* `./play`
+```bash
+ponyc -b play
+```
+
+## Run
+
+```bash
+./play
+```

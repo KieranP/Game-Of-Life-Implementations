@@ -1,13 +1,25 @@
 # Python
 
-## Installation
+## Install
 
-* `brew install python3 pypy3`
+```bash
+brew install python3 pypy3
+```
 
-## Usage (CPython)
+## Build
 
-* `python3 play.py`
+(no build step required)
 
-## Usage (pypy3)
+## Run
 
-* `pypy3 play.py`
+### CPython
+
+```bash
+python3 play.py
+```
+
+### PyPy3
+
+```bash
+pypy3 play.py
+```

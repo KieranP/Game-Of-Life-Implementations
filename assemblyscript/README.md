@@ -1,17 +1,27 @@
 # AssemblyScript
 
-## Installation
+## Install
 
-* `brew install assemblyscript`
+```bash
+brew install assemblyscript
+```
 
-## Usage
+## Build
 
-* `npm run asbuild`
+```bash
+npm run asbuild
+```
+
+## Run
 
 ### Wasmer
 
-* `wasmer run build/release.wasm`
+```bash
+wasmer run build/release.wasm
+```
 
 ### Wasmtime
 
-* `wasmtime run build/release.wasm`
+```bash
+wasmtime run build/release.wasm
+```

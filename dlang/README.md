@@ -1,10 +1,19 @@
 # DLang
 
-## Installation
+## Install
 
-* `brew install ldc`
+```bash
+brew install ldc
+```
 
-# Usage
+## Build
 
-* `ldc2 -O3 --release -of=play *.d`
-* `./play`
+```bash
+ldc2 -O3 --release -of=play *.d
+```
+
+## Run
+
+```bash
+./play
+```

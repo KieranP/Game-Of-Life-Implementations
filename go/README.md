@@ -1,10 +1,19 @@
 # Go
 
-## Installation
+## Install
 
-* `brew install go`
+```bash
+brew install go
+```
 
-## Usage
+## Build
 
-* `go build -ldflags="-s -w" -o play *.go`
-* `./play`
+```bash
+go build -ldflags="-s -w" -o play *.go
+```
+
+## Run
+
+```bash
+./play
+```

@@ -1,10 +1,19 @@
 # Nim
 
-## Installation
+## Install
 
-* `brew install nim`
+```bash
+brew install nim
+```
 
-## Usage
+## Build
 
-* `nim c -d:release play.nim`
-* `./play`
+```bash
+nim c -d:release play.nim
+```
+
+## Run
+
+```bash
+./play
+```

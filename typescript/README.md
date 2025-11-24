@@ -1,21 +1,36 @@
 # Typescript
 
-## Installation
+## Install
 
-* `brew install typescript`
-* `tsc`
+```bash
+brew install typescript
+```
 
-## Usage (Deno)
+## Build
 
-* `brew install deno`
-* `deno run --allow-env play.js`
+```bash
+tsc
+```
 
-## Usage (Bun)
+## Run
 
-* `brew install oven-sh/bun/bun`
-* `bun run play.js`
+### Node
 
-## Usage (Node)
+```bash
+brew install node
+node play.js
+```
 
-* `brew install node`
-* `node play.js`
+### Deno
+
+```bash
+brew install deno
+deno run --allow-env play.js
+```
+
+### Bun
+
+```bash
+brew install oven-sh/bun/bun
+bun run play.js
+```

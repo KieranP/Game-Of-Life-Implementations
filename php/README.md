@@ -1,13 +1,25 @@
 # PHP
 
-## Installation
+## Install
 
-* `brew install php`
+```bash
+brew install php
+```
 
-## Usage (without JIT)
+## Build
 
-* `php play.php`
+(no build step required)
 
-## Usage (with JIT)
+## Run
 
-* `php -c jit.ini play.php`
+### Without JIT
+
+```bash
+php play.php
+```
+
+### With JIT
+
+```bash
+php -c jit.ini play.php
+```

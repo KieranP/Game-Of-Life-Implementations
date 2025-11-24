@@ -1,11 +1,19 @@
 # V
 
-## Installation
+## Install
 
-* `brew install vlang`
-* `v up`
+```bash
+brew install vlang
+```
 
-## Usage
+## Build
 
-* `v -prod -o play .`
-* `./play`
+```bash
+v -prod -o play .
+```
+
+## Run
+
+```bash
+./play
+```

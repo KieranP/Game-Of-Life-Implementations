@@ -1,17 +1,17 @@
 # Navi
 
-## Installation
+## Install
 
-* `curl -sSL https://navi-lang.org/install | bash`
+```bash
+curl -sSL https://navi-lang.org/install | bash
+```
 
-## Usage
+## Build
 
-* `navi run`
+(no build step required)
 
-## Notes
+## Run
 
-This language is still in development, and lacks the following feature(s) compared to other implementations:
-
-* Does not support Unsigned Integers (i.e. uint32)
-* Does not support Infinity or Int/Float max values
-* Does not support Monotonic clock for benchmarking
+```bash
+navi run
+```

@@ -1,11 +1,20 @@
 # Rust
 
-## Installation
+## Install
 
-* `brew install rust`
+```bash
+brew install rust
+```
 
-## Usage
+## Build
 
-* `cargo build --release`
-* `./target/release/play-unsafe` (Faster/Unsafe; uses raw memory pointers)
-* `./target/release/play-safe` (Slower/Safe: uses runtime Rc/RefCell)
+```bash
+cargo build --release
+```
+
+## Run
+
+```bash
+./target/release/play-unsafe # (Faster/Unsafe; uses raw memory pointers)
+./target/release/play-safe   # (Slower/Safe: uses runtime Rc/RefCell)
+```

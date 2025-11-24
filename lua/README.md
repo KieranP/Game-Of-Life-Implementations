@@ -1,13 +1,25 @@
 # Lua
 
-## Installation
+## Install
 
-* `brew install lua`
+```bash
+brew install lua luajit
+```
 
-## Usage (Lua)
+## Build
 
-* `lua play.lua`
+(No build step required)
 
-## Usage (LuaJIT)
+## Run
 
-* `luajit -O3 play.lua`
+### Lua
+
+```bash
+lua play.lua
+```
+
+### LuaJIT
+
+```bash
+luajit -O3 play.lua
+```

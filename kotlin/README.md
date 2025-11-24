@@ -1,11 +1,19 @@
 # Kotlin
 
-## Installation
+## Install
 
-* `brew install java`
-* `brew install kotlin`
+```bash
+brew install java kotlin
+```
 
-## Usage
+## Build
 
-* `kotlinc *.kt`
-* `kotlin PlayKt`
+```bash
+kotlinc *.kt
+```
+
+## Run
+
+```bash
+kotlin PlayKt
+```
