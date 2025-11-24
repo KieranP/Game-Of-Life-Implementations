@@ -14,7 +14,7 @@ class World {
       prepopulate_neighbours();
     }
 
-    void _tick() {
+    void dotick() {
       // First determine the action for all cells
       for (auto& [_, cell] : cells) {
         auto alive_neighbours = cell->alive_neighbours();

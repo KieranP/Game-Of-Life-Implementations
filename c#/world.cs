@@ -28,7 +28,7 @@ public class World {
     prepopulate_neighbours();
   }
 
-  public void _tick() {
+  public void dotick() {
     var cell_values = cells.Values;
 
     // First determine the action for all cells

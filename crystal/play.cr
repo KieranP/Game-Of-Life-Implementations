@@ -23,7 +23,7 @@ class Play
 
     while true
       tick_start = Time.monotonic
-      world._tick
+      world.dotick
       tick_finish = Time.monotonic
       tick_time = (tick_finish - tick_start).total_nanoseconds
       total_tick += tick_time

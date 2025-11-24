@@ -15,7 +15,7 @@ class World {
       prepopulate_neighbours();
     }
 
-    auto _tick() {
+    auto dotick() {
       // First determine the action for all cells
       foreach (ref cell; cells) {
         auto alive_neighbours = cell.alive_neighbours();

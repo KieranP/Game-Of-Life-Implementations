@@ -28,7 +28,7 @@ class World {
     _prepopulate_neighbours();
   }
 
-  void tick_() {
+  void dotick() {
     // First determine the action for all cells
     this._cells.forEach((key, cell) {
       final alive_neighbours = cell.alive_neighbours();

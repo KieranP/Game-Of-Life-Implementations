@@ -26,7 +26,7 @@ class World
     prepopulate_neighbours
   end
 
-  def _tick
+  def dotick
     # First determine the action for all cells
     @cells.each_value do |cell|
       alive_neighbours = cell.alive_neighbours

@@ -28,7 +28,7 @@ type Play {
 
     loop {
       let tick_start = Instant.new.to_float
-      world._tick()
+      world.dotick()
       let tick_finish = Instant.new.to_float
       let tick_time = tick_finish - tick_start
       total_tick += tick_time

@@ -37,7 +37,7 @@ class Play {
 
     while(true) {
       const tick_start = performance.now()
-      world._tick()
+      world.dotick()
       const tick_finish = performance.now()
       const tick_time = (tick_finish - tick_start)
       total_tick += tick_time

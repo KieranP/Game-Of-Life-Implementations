@@ -21,7 +21,7 @@ class World:
     self.populate_cells()
     self.prepopulate_neighbours()
 
-  def _tick(self):
+  def dotick(self):
     # First determine the action for all cells
     for key,cell in self.cells.items():
       alive_neighbours = cell.alive_neighbours()

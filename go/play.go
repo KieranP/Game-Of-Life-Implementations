@@ -29,7 +29,7 @@ func run() {
 
   for true {
     tick_start := time.Now()
-    world._tick()
+    world.dotick()
     tick_finish := time.Now()
     tick_time := float64(tick_finish.Sub(tick_start).Nanoseconds())
     total_tick += tick_time

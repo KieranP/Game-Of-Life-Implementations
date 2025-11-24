@@ -20,7 +20,7 @@ class world ~width ~height =
 
     method tick = tick
 
-    method _tick =
+    method dotick =
       (* First determine the action for all cells *)
       Hashtbl.iter (fun _ cell ->
         let alive_neighbours = cell#alive_neighbours in

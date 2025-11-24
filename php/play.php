@@ -27,7 +27,7 @@ class Play {
 
     while (true) {
       $tick_start = hrtime(true);
-      $world->_tick();
+      $world->dotick();
       $tick_finish = hrtime(true);
       $tick_time = $tick_finish - $tick_start;
       $total_tick += $tick_time;

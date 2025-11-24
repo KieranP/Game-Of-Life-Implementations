@@ -28,7 +28,7 @@ export class World {
     this.prepopulate_neighbours()
   }
 
-  public _tick(): void {
+  public dotick(): void {
     const cells = this.cells.values()
     const cell_count = cells.length
 

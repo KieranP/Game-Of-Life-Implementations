@@ -29,7 +29,7 @@ public class Play {
 
     while (true) {
       var tick_start = Stopwatch.GetTimestamp();
-      world._tick();
+      world.dotick();
       var tick_finish = Stopwatch.GetTimestamp();
       var tick_time = Stopwatch.GetElapsedTime(tick_start, tick_finish).TotalNanoseconds;
       total_tick += tick_time;

@@ -27,7 +27,7 @@ type Play =
 
     while true do
       let tick_start = Stopwatch.GetTimestamp()
-      world._tick()
+      world.dotick()
       let tick_finish = Stopwatch.GetTimestamp()
       let tick_time = Stopwatch.GetElapsedTime(tick_start, tick_finish).TotalNanoseconds
       total_tick <- total_tick + tick_time

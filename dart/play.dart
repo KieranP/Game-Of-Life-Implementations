@@ -28,7 +28,7 @@ class Play {
 
     while(true) {
       stopwatch.reset();
-      world.tick_();
+      world.dotick();
       final tick_time = stopwatch.elapsedMicroseconds / 1.0;
       total_tick += tick_time;
       lowest_tick = [lowest_tick, tick_time].reduce(min);

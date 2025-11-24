@@ -22,7 +22,7 @@ class World(
   populate_cells
   prepopulate_neighbours
 
-  def _tick = {
+  def dotick = {
     val cell_values = cells.values
 
     // First determine the action for all cells

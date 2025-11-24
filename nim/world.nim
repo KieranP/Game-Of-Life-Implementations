@@ -24,7 +24,7 @@ const DIRECTIONS: array[8, array[2, int]] = [
 
 type
   World = ref object of RootObj
-    tick_num: uint32
+    tick: uint32
     width: uint32
     height: uint32
     cells: Table[string, Cell]
@@ -33,7 +33,7 @@ type
 # and will error out if I dont. To to order the methods as I like, I need to
 # declare them ahead of time, known as "forward declaration".
 proc initialize(self: World): World
-proc tick(self: World)
+proc dotick(self: World)
 proc render(self: World): string
 proc cell_at(self: World, x: uint32, y: uint32): Cell
 proc populate_cells(self: World)
@@ -47,7 +47,7 @@ proc initialize(self: World): World =
   self.prepopulate_neighbours()
   self
 
-proc tick(self: World) =
+proc dotick(self: World) =
   # First determine the action for all cells
   for key,cell in self.cells:
     let alive_neighbours = cell.alive_neighbours()
@@ -62,7 +62,7 @@ proc tick(self: World) =
   for key,cell in self.cells:
     cell.alive = cell.next_state == some(true)
 
-  self.tick_num += 1
+  self.tick += 1
 
 proc render(self: World): string =
   # The following is the fastest

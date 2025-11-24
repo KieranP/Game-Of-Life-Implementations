@@ -33,12 +33,12 @@ proc run(self: Play) =
 
   while true:
     let tick_start = getMonoTime()
-    world.tick()
+    world.dotick()
     let tick_finish = getMonoTime()
     let tick_time = (tick_finish - tick_start).inNanoseconds.float
     total_tick += tick_time
     lowest_tick = min(lowest_tick, tick_time)
-    let avg_tick = (total_tick / world.tick_num.float)
+    let avg_tick = (total_tick / world.tick.float)
 
     let render_start = getMonoTime()
     let rendered = world.render()
@@ -46,13 +46,13 @@ proc run(self: Play) =
     let render_time = (render_finish - render_start).inNanoseconds.float
     total_render += render_time
     lowest_render = min(lowest_render, render_time)
-    let avg_render = (total_render / world.tick_num.float)
+    let avg_render = (total_render / world.tick.float)
 
     if not minimal:
       echo "\u001b[H\u001b[2J"
 
     echo fmt"""
-      #{world.tick_num} -
+      #{world.tick} -
       World Tick (L: {self.f(lowest_tick):.3f}; A: {self.f(avg_tick):.3f}) -
       Rendering (L: {self.f(lowest_render):.3f}; A: {self.f(avg_render):.3f})
     """.dedent().replace("\n", " ")

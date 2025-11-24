@@ -32,7 +32,7 @@ final public class World {
     prepopulate_neighbours()
   }
 
-  public func _tick() -> Void {
+  public func dotick() -> Void {
     // First determine the action for all cells
     for (_, cell) in cells {
       let alive_neighbours = cell.alive_neighbours()

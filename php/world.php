@@ -31,7 +31,7 @@ class World {
     $this->prepopulate_neighbours();
   }
 
-  public function _tick() {
+  public function dotick() {
     // First determine the action for all cells
     foreach ($this->cells as $cell) {
       $alive_neighbours = $cell->alive_neighbours();

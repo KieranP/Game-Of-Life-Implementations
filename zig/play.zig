@@ -32,7 +32,7 @@ pub const Play = struct {
 
         while (true) {
             const tick_start = std.time.nanoTimestamp();
-            world._tick();
+            world.dotick();
             const tick_finish = std.time.nanoTimestamp();
             const tick_time: f64 = @floatFromInt(tick_finish - tick_start);
             total_tick += tick_time;

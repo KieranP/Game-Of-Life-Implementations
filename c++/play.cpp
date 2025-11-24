@@ -27,7 +27,7 @@ class Play {
 
       while(true) {
         auto tick_start = chrono::high_resolution_clock::now();
-        world->_tick();
+        world->dotick();
         auto tick_finish = chrono::high_resolution_clock::now();
         auto tick_time = chrono::duration<double, std::nano>(tick_finish - tick_start).count();
         total_tick += tick_time;

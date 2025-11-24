@@ -45,7 +45,7 @@ pub const World = struct {
         self.cells.deinit();
     }
 
-    pub fn _tick(self: *World) void {
+    pub fn dotick(self: *World) void {
         // First determine the action for all cells
         var it = self.cells.valueIterator();
         while (it.next()) |val| {

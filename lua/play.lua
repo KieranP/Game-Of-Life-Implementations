@@ -24,7 +24,7 @@ function Play:run()
 
   while true do
     tick_start = os.clock()
-    world:_tick()
+    world:dotick()
     tick_finish = os.clock()
     tick_time = (tick_finish - tick_start)
     total_tick = (total_tick + tick_time)

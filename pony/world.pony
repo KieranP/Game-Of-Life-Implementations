@@ -22,7 +22,7 @@ class World
     populate_cells()
     prepopulate_neighbours()
 
-  fun ref do_tick() =>
+  fun ref dotick() =>
     // First determine the action for all cells
     for (key, cell) in _cells.pairs() do
       let alive_neighbours = cell.alive_neighbours()

@@ -21,7 +21,7 @@ class play =
 
       while true do
         let tick_start = Sys.time () in
-        world#_tick;
+        world#dotick;
         let tick_finish = Sys.time () in
         let tick_time = tick_finish -. tick_start in
         total_tick := !total_tick +. tick_time;

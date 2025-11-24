@@ -21,7 +21,7 @@ object Play {
 
     while (true) {
       val tick_start = System.nanoTime()
-      world._tick
+      world.dotick
       val tick_finish = System.nanoTime()
       val tick_time = (tick_finish - tick_start) / 1.0
       total_tick += tick_time

@@ -23,7 +23,7 @@ class Play
 
     while true
       tick_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      world._tick
+      world.dotick
       tick_finish = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       tick_time = (tick_finish - tick_start)
       total_tick += tick_time

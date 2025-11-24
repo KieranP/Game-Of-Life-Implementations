@@ -25,7 +25,7 @@ class Play {
 
     while (true) {
       def tick_start = System.nanoTime()
-      world._tick()
+      world.dotick()
       def tick_finish = System.nanoTime()
       def tick_time = (tick_finish - tick_start) / 1d
       total_tick += tick_time

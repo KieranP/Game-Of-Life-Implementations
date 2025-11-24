@@ -27,7 +27,7 @@ export class World {
     this.#prepopulate_neighbours()
   }
 
-  _tick(): void {
+  dotick(): void {
     // First determine the action for all cells
     for (const cell of this.#cells.values()) {
       const alive_neighbours = cell.alive_neighbours()

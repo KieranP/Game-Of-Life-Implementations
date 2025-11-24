@@ -24,7 +24,7 @@ class Play {
 
     while (true) {
       let tick_start = performance.now()
-      world._tick()
+      world.dotick()
       let tick_finish = performance.now()
       let tick_time = tick_finish - tick_start
       total_tick += tick_time

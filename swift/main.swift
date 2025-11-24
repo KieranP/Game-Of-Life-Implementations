@@ -23,7 +23,7 @@ final private class Play {
 
     while true {
       let tick_start = ProcessInfo.processInfo.systemUptime
-      world._tick()
+      world.dotick()
       let tick_finish = ProcessInfo.processInfo.systemUptime
       let tick_time = (tick_finish - tick_start)
       total_tick += tick_time

@@ -25,7 +25,7 @@ public class Play {
 
     while (true) {
       var tick_start = System.nanoTime();
-      world._tick();
+      world.dotick();
       var tick_finish = System.nanoTime();
       var tick_time = (tick_finish - tick_start);
       total_tick += tick_time;

@@ -27,7 +27,7 @@ type pub World {
     world
   }
 
-  fn pub mut _tick {
+  fn pub mut dotick {
     # First determine the action for all cells
     for (_, cell) in @cells.iter_mut {
       let alive_neighbours = cell.alive_neighbours()

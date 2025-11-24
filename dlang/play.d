@@ -28,7 +28,7 @@ class Play {
 
       while (true) {
         auto tick_start = MonoTime.currTime;
-        world._tick();
+        world.dotick();
         auto tick_finish = MonoTime.currTime;
         auto tick_time = (tick_finish - tick_start).total!"nsecs";
         total_tick += tick_time;

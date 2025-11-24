@@ -34,7 +34,7 @@ actor Main
 
   be tick() =>
     let tick_start = Time.nanos()
-    world.do_tick()
+    world.dotick()
     let tick_finish = Time.nanos()
     let tick_time = (tick_finish - tick_start).f64()
     _total_tick = _total_tick + tick_time

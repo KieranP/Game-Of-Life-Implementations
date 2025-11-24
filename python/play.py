@@ -25,7 +25,7 @@ class Play:
 
     while True:
       tick_start = monotonic_ns()
-      world._tick()
+      world.dotick()
       tick_finish = monotonic_ns()
       tick_time = (tick_finish - tick_start)
       total_tick += tick_time

@@ -23,7 +23,7 @@ function World:new(width, height)
   return world
 end
 
-function World:_tick()
+function World:dotick()
   -- First determine the action for all cells
   for key,cell in pairs(self.cells) do
     local alive_neighbours = cell:alive_neighbours()

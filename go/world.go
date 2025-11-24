@@ -40,7 +40,7 @@ func new_world(width uint32, height uint32) *World {
   return world
 }
 
-func (world *World) _tick() {
+func (world *World) dotick() {
   // First determine the action for all cells
   for _, cell := range world.cells {
     alive_neighbours := cell.alive_neighbours()

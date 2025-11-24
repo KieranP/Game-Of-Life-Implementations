@@ -20,7 +20,7 @@ type World(width: uint, height: uint) =
 
   member val tick = 0u with get,set
 
-  member this._tick() =
+  member this.dotick() =
     let cell_values = cells.Values
 
     // First determine the action for all cells
