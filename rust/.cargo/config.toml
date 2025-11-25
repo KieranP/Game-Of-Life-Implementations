@@ -5,3 +5,6 @@ rustflags = ["-C", "target-cpu=native"]
 codegen-units = 1
 lto = "fat"
 opt-level = 3
+
+[profile.release.package."*"]
+opt-level = 3

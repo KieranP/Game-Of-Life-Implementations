@@ -75,6 +75,18 @@ impl World {
     pub fn render(&self) -> String {
         let render_size = (self.width * self.height + self.height) as usize;
 
+        // The following is the slowest
+        // let mut rendering = String::new();
+        // for y in 0..self.height {
+        //     for x in 0..self.width {
+        //         if let Some(cell) = self.cell_at(x, y) {
+        //             rendering.push_str(&cell.to_char().to_string());
+        //         }
+        //     }
+        //     rendering.push('\n');
+        // }
+        // rendering
+
         // The following is slower
         // let mut rendering: Vec<char> = Vec::with_capacity(render_size);
         // for y in 0..self.height {
@@ -98,6 +110,21 @@ impl World {
             rendering.push('\n');
         }
         rendering
+
+        // The following is slower
+        // let mut buffer = vec![0u8; render_size];
+        // let mut idx: usize = 0;
+        // for y in 0..self.height {
+        //     for x in 0..self.width {
+        //         if let Some(cell) = self.cell_at(x, y) {
+        //             buffer[idx] = cell.to_char() as u8;
+        //         }
+        //         idx += 1;
+        //     }
+        //     buffer[idx] = b'\n';
+        //     idx += 1;
+        // }
+        // String::from_utf8(buffer).unwrap()
     }
 
     fn cell_at(&self, x: u32, y: u32) -> Option<&Cell> {
