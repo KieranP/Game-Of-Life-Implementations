@@ -22,17 +22,17 @@ class Play
     lowest_render = Float64::INFINITY
 
     while true
-      tick_start = Time.monotonic
+      tick_start = Time.instant
       world.dotick
-      tick_finish = Time.monotonic
+      tick_finish = Time.instant
       tick_time = (tick_finish - tick_start).total_nanoseconds
       total_tick += tick_time
       lowest_tick = [lowest_tick, tick_time].min
       avg_tick = (total_tick / world.tick)
 
-      render_start = Time.monotonic
+      render_start = Time.instant
       rendered = world.render
-      render_finish = Time.monotonic
+      render_finish = Time.instant
       render_time = (render_finish - render_start).total_nanoseconds
       total_render += render_time
       lowest_render = [lowest_render, render_time].min
