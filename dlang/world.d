@@ -65,7 +65,8 @@ class World {
 
       // The following is the fastest
       auto render_size = width * height + height;
-      char[] rendering = new char[render_size];
+      char[] rendering;
+      rendering.reserve(render_size);
       for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
           auto cell = cell_at(x, y);
