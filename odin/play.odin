@@ -14,7 +14,7 @@ run :: proc() {
     height=WORLD_HEIGHT,
   )
 
-  minimal := os.get_env("MINIMAL") != ""
+  minimal := os.get_env_alloc("MINIMAL", context.temp_allocator) != ""
 
   if !minimal {
     rendered := world_render(world)
