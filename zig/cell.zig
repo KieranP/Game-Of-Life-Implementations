@@ -15,7 +15,7 @@ pub const Cell = struct {
         cell.y = y;
         cell.alive = alive;
         cell.next_state = false;
-        cell.neighbours = ArrayList(*Cell){};
+        cell.neighbours = ArrayList(*Cell).empty;
         return cell;
     }
 

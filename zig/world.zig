@@ -2,6 +2,7 @@ const std = @import("std");
 const Allocator = std.mem.Allocator;
 const ArrayList = std.ArrayList;
 const StringHashMap = std.StringHashMap;
+const Io = std.Io;
 const Cell = @import("cell.zig").Cell;
 
 const DIRECTIONS = [8][2]i8{
@@ -21,7 +22,7 @@ pub const World = struct {
     height: u32,
     cells: StringHashMap(*Cell),
 
-    pub fn init(allocator: Allocator, width: u32, height: u32) !*World {
+    pub fn init(allocator: Allocator, io: Io, width: u32, height: u32) !*World {
         const world = try allocator.create(World);
         world.allocator = allocator;
         world.tick = 0;
@@ -29,7 +30,7 @@ pub const World = struct {
         world.height = height;
         world.cells = StringHashMap(*Cell).init(allocator);
 
-        try world.populate_cells();
+        try world.populate_cells(io);
         try world.prepopulate_neighbours();
 
         return world;
@@ -106,18 +107,32 @@ pub const World = struct {
         return buffer;
     }
 
+    fn make_key(buf: *[24]u8, x: u32, y: u32) []const u8 {
+        // The following is slower
+        // return try std.fmt.allocPrint(allocator, "{d}-{d}", .{ x, y });
+
+        // The following is the fastest
+        return std.fmt.bufPrint(buf, "{d}-{d}", .{ x, y }) catch unreachable;
+    }
+
     fn cell_at(self: *World, x: u32, y: u32) ?*Cell {
-        var key_buf: [32]u8 = undefined;
-        const key = std.fmt.bufPrint(&key_buf, "{d}-{d}", .{ x, y }) catch unreachable;
+        var buf: [24]u8 = undefined;
+        const key = make_key(&buf, x, y);
+
         return self.cells.get(key);
     }
 
-    fn populate_cells(self: *World) !void {
+    fn populate_cells(self: *World, io: Io) !void {
+        const timestamp = Io.Timestamp.now(io, .awake);
+        const seed: u64 = @truncate(@as(u96, @bitCast(timestamp.nanoseconds)));
+        var prng = std.Random.DefaultPrng.init(seed);
+        const rng = prng.random();
+
         var y: u32 = 0;
         while (y < self.height) : (y += 1) {
             var x: u32 = 0;
             while (x < self.width) : (x += 1) {
-                const random = std.crypto.random.intRangeAtMost(u8, 0, 100);
+                const random = rng.intRangeAtMost(u8, 0, 100);
                 const alive = random <= 20;
                 _ = try self.add_cell(x, y, alive);
             }
@@ -129,7 +144,9 @@ pub const World = struct {
             return Errors.LocationOccupied;
         }
 
-        const key = try std.fmt.allocPrint(self.allocator, "{d}-{d}", .{ x, y });
+        var buf: [24]u8 = undefined;
+        const key = try self.allocator.dupe(u8, make_key(&buf, x, y));
+
         const cell = try Cell.init(self.allocator, x, y, alive);
         try self.cells.put(key, cell);
         return true;
