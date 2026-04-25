@@ -4,10 +4,10 @@ source ../helpers.sh
 
 echo -n "Ruby - CRuby (w/o JIT) - "
 ruby --version | head -n 1
-benchmark ruby play.rb
+sample ruby play.rb
 
 echo ""
 
 echo -n "Ruby - CRuby (w/ JIT) - "
 ruby --version | head -n 1
-benchmark ruby --jit play.rb
+sample ruby --jit play.rb

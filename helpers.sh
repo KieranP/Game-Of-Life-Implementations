@@ -28,3 +28,13 @@ function benchmark {
     echo "$output" | grep -E '\)\s*$' | tail -n 1
   done
 }
+
+function sample {
+  if [ "${COMPILEONLY}" = "true" ]; then
+    return
+  fi
+
+  TIMEOUT_SECS=30
+
+  node ../sample.js $TIMEOUT_SECS "$@" 2>&1 | grep "Max RSS"
+}
