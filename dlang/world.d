@@ -1,7 +1,9 @@
 import cell;
-import std.conv : to;
+import std.conv : to, toChars;
+import std.algorithm.mutation : copy;
 import std.random : uniform01;
 import std.array : array, join;
+import std.format : format;
 
 class World {
   public:
@@ -104,8 +106,31 @@ class World {
       [-1, -1], [0, -1], [1, -1], // below
     ];
 
+    static auto make_key(ref char[24] buf, int x, int y) {
+      // The following is slower
+      // return format("%d-%d", x, y);
+
+      // The following is slower
+      // return to!string(x) ~ "-" ~ to!string(y);
+
+      // The following is slower
+      // return [to!string(x), to!string(y)].join("-");
+
+      // The following is the fastest
+      auto x_chars = toChars(x);
+      auto pos = x_chars.length;
+      copy(x_chars, buf[0..pos]);
+      buf[pos++] = '-';
+      auto y_chars = toChars(y);
+      copy(y_chars, buf[pos..pos + y_chars.length]);
+      pos += y_chars.length;
+      return buf[0..pos];
+    }
+
     auto cell_at(int x, int y) {
-      auto key = to!string(x)~"-"~to!string(y);
+      char[24] buf;
+      auto key = cast(string)make_key(buf, x, y);
+
       return cells.get(key, null);
     }
 
@@ -125,7 +150,9 @@ class World {
         throw new LocationOccupied(x, y);
       }
 
-      auto key = to!string(x)~"-"~to!string(y);
+      char[24] buf;
+      auto key = cast(string)make_key(buf, x, y).dup;
+
       auto cell = new Cell(x, y, alive);
       cells[key] = cell;
       return true;

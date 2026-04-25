@@ -177,6 +177,11 @@ contains
     character(len=32), intent(out) :: key
 
     write(key, '(I0,A,I0)') x, '-', y
+
+    ! character(len=16) :: x_str, y_str
+    ! write(x_str, '(I0)') x
+    ! write(y_str, '(I0)') y
+    ! key = trim(x_str) // '-' // trim(y_str)
   end subroutine make_key
 
 end module world_mod

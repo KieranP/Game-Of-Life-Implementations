@@ -93,8 +93,19 @@ public class World {
     return rendering.ToString();
   }
 
+  private string make_key(uint x, uint y) {
+    // The following is slower
+    // return $"{x}-{y}";
+
+    // The following is the fastest
+    return x.ToString() + "-" + y.ToString();
+
+    // The following is slower
+    // return string.Join("-", x.ToString(), y.ToString());
+  }
+
   private Cell cell_at(uint x, uint y) {
-    var key = $"{x}-{y}";
+    var key = make_key(x, y);
     if (cells.TryGetValue(key, out Cell value)) {
       return value;
     } else {
@@ -118,8 +129,9 @@ public class World {
       throw new LocationOccupied(x, y);
     }
 
+    var key = make_key(x, y);
     var cell = new Cell(x, y, alive);
-    cells.Add($"{x}-{y}", cell);
+    cells.Add(key, cell);
     return true;
   }
 

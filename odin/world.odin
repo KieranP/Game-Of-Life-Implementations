@@ -80,7 +80,11 @@ world_render :: proc(world: ^World) -> string {
   return strings.to_string(rendering)
 }
 
-world_cell_key :: proc(buf: []u8, x: u32, y: u32) -> string {
+world_make_key :: proc(buf: []u8, x: u32, y: u32) -> string {
+  // The following is slower
+  // return fmt.tprintf("%d-%d", x, y)
+
+  // The following is the fastest
   n := len(strconv.write_uint(buf[:], u64(x), 10))
   buf[n] = '-'
   n += 1
@@ -89,8 +93,9 @@ world_cell_key :: proc(buf: []u8, x: u32, y: u32) -> string {
 }
 
 world_cell_at :: proc(world: ^World, x: u32, y: u32) -> (^Cell, bool) {
-  buf: [32]u8
-  key := world_cell_key(buf[:], x, y)
+  buf: [24]u8
+  key := world_make_key(buf[:], x, y)
+
   return world.cells[key]
 }
 
@@ -109,11 +114,10 @@ world_add_cell :: proc(world: ^World, x: u32, y: u32, alive: bool = false) -> bo
     panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
   }
 
-  buf: [32]u8
-  key := world_cell_key(buf[:], x, y)
+  buf: [24]u8
+  key := strings.clone(world_make_key(buf[:], x, y))
 
   cell := new_cell(x, y, alive)
-  key = strings.clone(key)
   world.cells[key] = cell
   return true
 }

@@ -76,8 +76,20 @@ export class World {
     // return rendering.join("")
   }
 
+  #make_key(x: number, y: number): string {
+    // The following is the fastest
+    return `${x}-${y}`
+
+    // The following is slower
+    // return x + "-" + y
+
+    // The following is slower
+    // return [x, y].join("-")
+  }
+
   #cell_at(x: number, y: number) {
-    return this.#cells.get(`${x}-${y}`)
+    const key = this.#make_key(x, y)
+    return this.#cells.get(key)
   }
 
   #populate_cells() {
@@ -95,8 +107,9 @@ export class World {
       throw new LocationOccupied(x, y)
     }
 
+    const key = this.#make_key(x, y)
     const cell = new Cell(x, y, alive)
-    this.#cells.set(`${x}-${y}`, cell)
+    this.#cells.set(key, cell)
     return true
   }
 

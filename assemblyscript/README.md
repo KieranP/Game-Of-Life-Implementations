@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install assemblyscript
+npm install
 ```
 
 ## Build
@@ -17,11 +17,13 @@ npm run asbuild
 ### Wasmer
 
 ```bash
+brew install wasmer
 wasmer run build/release.wasm
 ```
 
 ### Wasmtime
 
 ```bash
+brew install wasmtime
 wasmtime run build/release.wasm
 ```

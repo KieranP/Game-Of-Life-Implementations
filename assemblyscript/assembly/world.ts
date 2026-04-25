@@ -97,8 +97,20 @@ export class World {
     return rendering.join("")
   }
 
+  private static make_key(x: u32, y: u32): string {
+    // The following is the fastest
+    return `${x}-${y}`
+
+    // The following is slower
+    // return x.toString() + "-" + y.toString()
+
+    // The following is slower
+    // let parts: string[] = [x.toString(), "-", y.toString()]
+    // return parts.join("")
+  }
+
   private cell_at(x: u32, y: u32): Cell | null {
-    const key = `${x}-${y}`
+    const key = World.make_key(x, y)
     if (this.cells.has(key)) {
       return this.cells.get(key)
     } else {
@@ -116,7 +128,7 @@ export class World {
   }
 
   private add_cell(x: u32, y: u32, alive: bool = false): bool {
-    const key = `${x}-${y}`
+    const key = World.make_key(x, y)
     const existing = this.cell_at(x, y)
     if (existing) {
       throw new LocationOccupied(key)

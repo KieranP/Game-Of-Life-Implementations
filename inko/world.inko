@@ -101,8 +101,20 @@ type pub World {
     rendering.into_string
   }
 
+  fn make_key(x: Int, y: Int) -> String {
+    # The following is the fastest
+    # "${x}-${y}"
+
+    # The following is slower
+    x.to_string + "-" + y.to_string
+
+    # The following is slower
+    # String.join([x.to_string, y.to_string].iter, with: "-")
+  }
+
   fn cell_at(x: Int, y: Int) -> Option[ref Cell] {
-    @cells.get("${x}-${y}").ok
+    let key = make_key(x, y)
+    @cells.get(key).ok
   }
 
   fn mut populate_cells {
@@ -125,8 +137,9 @@ type pub World {
       panic("LocationOccupied(${x}-${y})")
     }
 
+    let key = make_key(x, y)
     let cell = Cell.new(x, y, alive)
-    @cells.set("${x}-${y}", cell)
+    @cells.set(key, cell)
     true
   }
 

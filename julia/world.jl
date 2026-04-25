@@ -111,8 +111,20 @@ function world_render(world::World)
   # String(rendering)
 end
 
+function world_make_key(x::UInt64, y::UInt64)
+  # The following is slower
+  # "$(x)-$(y)"
+
+  # The following is the fastest
+  string(x) * "-" * string(y)
+
+  # The following is slower
+  # join([string(x), string(y)], "-")
+end
+
 function world_cell_at(world::World, x::UInt64, y::UInt64)
-  get(world.cells, "$(x)-$(y)", nothing)
+  key = world_make_key(x, y)
+  get(world.cells, key, nothing)
 end
 
 function world_populate_cells(world::World)
@@ -130,8 +142,9 @@ function world_add_cell(world::World, x::UInt64, y::UInt64, alive::Bool = false)
     throw(LocationOccupied(x, y))
   end
 
+  key = world_make_key(x, y)
   cell = Cell(x, y, alive)
-  world.cells["$(x)-$(y)"] = cell
+  world.cells[key] = cell
   true
 end
 

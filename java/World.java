@@ -95,8 +95,20 @@ public class World {
     return rendering.toString();
   }
 
+  private String make_key(int x, int y) {
+    // The following is slower
+    // return String.format("%d-%d", x, y);
+
+    // The following is the fastest
+    return x + "-" + y;
+
+    // The following is slower
+    // return String.join("-", String.valueOf(x), String.valueOf(y));
+  }
+
   private Cell cell_at(int x, int y) {
-    return cells.get(x+"-"+y);
+    var key = make_key(x, y);
+    return cells.get(key);
   }
 
   private void populate_cells() throws LocationOccupied {
@@ -114,8 +126,9 @@ public class World {
       throw new LocationOccupied(x, y);
     }
 
+    var key = make_key(x, y);
     var cell = new Cell(x, y, args[0]);
-    cells.put(x+"-"+y, cell);
+    cells.put(key, cell);
     return true;
   }
 

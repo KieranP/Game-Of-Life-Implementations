@@ -90,8 +90,20 @@ class World {
     // return rendering.toString();
   }
 
+  String _make_key(int x, int y) {
+    // The following is the fastest
+    return "$x-$y";
+
+    // The following is slower
+    // return x.toString() + "-" + y.toString();
+
+    // The following is slower
+    // return [x, y].join("-");
+  }
+
   Cell? _cell_at(int x, int y) {
-    return this._cells["$x-$y"];
+    final key = this._make_key(x, y);
+    return this._cells[key];
   }
 
   void _populate_cells() {
@@ -110,8 +122,9 @@ class World {
       throw LocationOccupied(x, y);
     }
 
+    final key = this._make_key(x, y);
     final cell = Cell(x, y, alive);
-    this._cells["$x-$y"] = cell;
+    this._cells[key] = cell;
     return true;
   }
 

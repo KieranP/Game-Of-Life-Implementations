@@ -74,6 +74,16 @@ type World(width: uint, height: uint) =
       |> ignore
     rendering.ToString()
 
+  member private this.make_key(x, y) =
+    // The following is slower
+    // $"{x}-{y}"
+
+    // The following is the fastest
+    x.ToString() + "-" + y.ToString()
+
+    // The following is slower
+    // String.concat "-" [x.ToString(); y.ToString()]
+
   member this.populate_cells() =
     let random = Random()
 
@@ -84,7 +94,8 @@ type World(width: uint, height: uint) =
         |> ignore
 
   member private this.cell_at(x, y): option<Cell> =
-    let ok, v = cells.TryGetValue($"{x}-{y}")
+    let key = this.make_key(x, y)
+    let ok, v = cells.TryGetValue(key)
     if ok then Some(v) else None
 
   member private this.add_cell(x, y, ?alive) =
@@ -94,8 +105,9 @@ type World(width: uint, height: uint) =
     if existing.IsSome then
       raise(LocationOccupied(x, y))
 
+    let key = this.make_key(x, y)
     let cell = new Cell(x, y, alive)
-    cells.Add($"{x}-{y}", cell)
+    cells.Add(key, cell)
     true
 
   member this.prepopulate_neighbours() =

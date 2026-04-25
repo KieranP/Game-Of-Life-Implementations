@@ -82,17 +82,27 @@ class world ~width ~height =
       done;
       Bytes.to_string rendering
 
+    method private make_key x y =
+      (* The following is slower *)
+      (* Printf.sprintf "%d-%d" x y *)
+
+      (* The following is slower *)
+      (* string_of_int x ^ "-" ^ string_of_int y *)
+
+      (* The following is the fastest *)
+      String.concat "-" [string_of_int x; string_of_int y]
+
     method private cell_at x y =
-      let key = string_of_int x ^ "-" ^ string_of_int y in
+      let key = self#make_key x y in
       Hashtbl.find_opt cells key
 
     method private add_cell x y ?(alive=false) () =
       let existing = self#cell_at x y in
       if Option.is_some existing then
-        raise (LocationOccupied (string_of_int x ^ "-" ^ string_of_int y));
+        raise (LocationOccupied (self#make_key x y));
 
+      let key = self#make_key x y in
       let cell = new Cell.cell x y ~alive () in
-      let key = string_of_int x ^ "-" ^ string_of_int y in
       Hashtbl.add cells key cell;
       true
 

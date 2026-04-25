@@ -1,2 +1,2 @@
 CompileFlags:
-  Add: [-xc++, -std=c++23]
+  Add: [-xc++, -std=c++26]

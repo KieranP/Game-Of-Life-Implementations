@@ -87,8 +87,20 @@ public class World(
     return rendering.toString()
   }
 
+  private fun make_key(x: Int, y: Int): String {
+    // The following is slower
+    // return "$x-$y"
+
+    // The following is the fastest
+    return x.toString() + "-" + y.toString()
+
+    // The following is slower
+    // return intArrayOf(x, y).joinToString("-")
+  }
+
   private fun cell_at(x: Int, y: Int): Cell? {
-    return cells["$x-$y"]
+    val key = make_key(x, y)
+    return cells[key]
   }
 
   private fun populate_cells() {
@@ -106,8 +118,9 @@ public class World(
       throw LocationOccupied(x, y)
     }
 
+    val key = make_key(x, y)
     val cell = Cell(x, y, alive)
-    cells.put("$x-$y", cell)
+    cells.put(key, cell)
     return true
   }
 

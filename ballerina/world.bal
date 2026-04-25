@@ -100,8 +100,20 @@ public class World {
     return string:'join("", ...rendering);
   }
 
+  private function make_key(int:Unsigned32 x, int:Unsigned32 y) returns string {
+    // The following is slower
+    // return string `${x}-${y}`;
+
+    // The following is the fastest
+    return x.toString() + "-" + y.toString();
+
+    // The following is slower
+    // string[] parts = [x.toString(), "-", y.toString()];
+    // return string:'join("", ...parts);
+  }
+
   private function cell_at(int:Unsigned32 x, int:Unsigned32 y) returns Cell? {
-    string key = x.toString() + "-" + y.toString();
+    string key = self.make_key(x, y);
     return self.cells[key];
   }
 
@@ -126,7 +138,7 @@ public class World {
     }
 
     Cell cell = new(x, y, alive);
-    string key = x.toString() + "-" + y.toString();
+    string key = self.make_key(x, y);
     self.cells[key] = cell;
     return true;
   }

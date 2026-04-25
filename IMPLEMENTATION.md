@@ -45,6 +45,7 @@ class World {
   public tick(): void // Or `dotick()` if `tick` clashes with variable name
   public render(): string
 
+  private make_key(x: UInt32, y: UInt32): string
   private cell_at(x: UInt32, y: UInt32): Cell
   private populate_cells(): void
   private add_cell(x: UInt32, y: UInt32, alive: Bool = false): bool
@@ -53,6 +54,34 @@ class World {
   private class LocationOccupied inherits Exception
 }
 ```
+
+#### make_key
+
+The `make_key` function should demonstrate several different ways of making the desired output. Comment out all but the fastest. Different approaches include:
+
+1. String Interpolation
+
+```
+"${x}-${y}"
+```
+
+2. String Concatenation
+
+```
+x + "-" + y
+```
+
+3. Array & Join
+
+```
+[x, "-", y].join
+```
+
+4. Other
+
+Some languages might support other approaches, such as writing to a stack buffer.
+
+#### render
 
 The `render` function should demonstrate several different ways of making the desired output. Comment out all but the fastest. Different approaches include:
 

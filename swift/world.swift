@@ -81,8 +81,20 @@ final public class World {
     // return rendering.joined()
   }
 
+  private func make_key(x: UInt32, y: UInt32) -> String {
+    // The following is the fastest
+    return "\(x)-\(y)"
+
+    // The following is slower
+    // return String(x) + "-" + String(y)
+
+    // The following is slower
+    // return [x, y].map(String.init).joined(separator: "-")
+  }
+
   private func cell_at(x: UInt32, y: UInt32) -> Cell? {
-    return cells["\(x)-\(y)"]
+    let key = make_key(x: x, y: y)
+    return cells[key]
   }
 
   private func populate_cells() throws(LocationOccupied) -> Void {
@@ -100,8 +112,9 @@ final public class World {
       throw LocationOccupied(x: x, y: y)
     }
 
+    let key = make_key(x: x, y: y)
     let cell = Cell(x: x, y: y, alive: alive)
-    cells["\(x)-\(y)"] = cell
+    cells[key] = cell
     return true
   }
 

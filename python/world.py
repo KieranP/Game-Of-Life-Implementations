@@ -41,8 +41,8 @@ class World:
   def render(self):
     # The following is slower
     # rendering = ''
-    # for y in list(range(self.height)):
-    #   for x in list(range(self.width)):
+    # for y in range(self.height):
+    #   for x in range(self.width):
     #     cell = self.cell_at(x, y)
     #     if cell is not None:
     #       rendering += cell.to_char()
@@ -51,20 +51,31 @@ class World:
 
     # The following is the fastest
     rendering = []
-    for y in list(range(self.height)):
-      for x in list(range(self.width)):
+    for y in range(self.height):
+      for x in range(self.width):
         cell = self.cell_at(x, y)
         if cell is not None:
           rendering.append(cell.to_char())
       rendering.append("\n")
     return ''.join(rendering)
 
+  def make_key(self, x, y):
+    # The following is slower
+    # return f"{x}-{y}"
+
+    # The following is the fastest
+    return str(x) + '-' + str(y)
+
+    # The following is slower
+    # return '-'.join([str(x), str(y)])
+
   def cell_at(self, x, y):
-    return self.cells.get(str(x)+'-'+str(y))
+    key = self.make_key(x, y)
+    return self.cells.get(key)
 
   def populate_cells(self):
-    for y in list(range(self.height)):
-      for x in list(range(self.width)):
+    for y in range(self.height):
+      for x in range(self.width):
         alive = (randint(0, 100) <= 20)
         self.add_cell(x, y, alive)
 
@@ -73,8 +84,9 @@ class World:
     if existing is not None:
       raise World.LocationOccupied(x, y)
 
+    key = self.make_key(x, y)
     cell = Cell(x, y, alive)
-    self.cells[str(x)+'-'+str(y)] = cell
+    self.cells[key] = cell
     return True
 
   def prepopulate_neighbours(self):

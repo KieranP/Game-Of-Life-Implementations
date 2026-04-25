@@ -72,8 +72,20 @@ function World:render()
   return table.concat(rendering)
 end
 
+function World:make_key(x, y)
+  -- The following is slower
+  -- return string.format("%d-%d", x, y)
+
+  -- The following is the fastest
+  return x..'-'..y
+
+  -- The following is slower
+  -- return table.concat({x, y}, '-')
+end
+
 function World:cell_at(x, y)
-  return self.cells[x..'-'..y]
+  local key = self:make_key(x, y)
+  return self.cells[key]
 end
 
 function World:populate_cells()
@@ -93,8 +105,9 @@ function World:add_cell(x, y, alive)
   local existing = self:cell_at(x, y)
   assert(not existing, "LocationOccupied("..x.."-"..y..")")
 
+  local key = self:make_key(x, y)
   local cell = Cell:new(x, y, alive)
-  self.cells[x..'-'..y] = cell
+  self.cells[key] = cell
   return true
 end
 

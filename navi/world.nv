@@ -100,8 +100,20 @@ impl World {
     return rendering.to_string();
   }
 
+  fn make_key(self, x: int, y: int): string {
+    // The following is the fastest
+    return `${x}-${y}`;
+
+    // The following is slower
+    // return x.to_string() + "-" + y.to_string();
+
+    // The following is slower
+    // return [x.to_string(), y.to_string()].join("-");
+  }
+
   fn cell_at(self, x: int, y: int): Cell? {
-    return self.cells.get(`${x}-${y}`);
+    const key = self.make_key(x, y);
+    return self.cells.get(key);
   }
 
   fn populate_cells(self) throws LocationOccupied {
@@ -119,8 +131,9 @@ impl World {
       throw LocationOccupied { x, y };
     }
 
+    const key = self.make_key(x, y);
     const cell = Cell.new(x, y, alive);
-    self.cells[`${x}-${y}`] = cell;
+    self.cells[key] = cell;
     return true;
   }
 

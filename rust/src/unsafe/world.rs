@@ -1,5 +1,4 @@
 use crate::cell::Cell;
-use rand::Rng;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
@@ -127,16 +126,39 @@ impl World {
         // String::from_utf8(buffer).unwrap()
     }
 
+    fn make_key(buf: &mut [u8; 24], x: u32, y: u32) -> &str {
+        // The following is slower
+        // format!("{x}-{y}")
+
+        // The following is slower
+        // vec![x.to_string(), y.to_string()].join("-")
+
+        // The following is the fastest
+        let mut pos = 0;
+        let mut x_buf = itoa::Buffer::new();
+        let x_str = x_buf.format(x);
+        buf[..x_str.len()].copy_from_slice(x_str.as_bytes());
+        pos += x_str.len();
+        buf[pos] = b'-';
+        pos += 1;
+        let mut y_buf = itoa::Buffer::new();
+        let y_str = y_buf.format(y);
+        buf[pos..pos + y_str.len()].copy_from_slice(y_str.as_bytes());
+        pos += y_str.len();
+        std::str::from_utf8(&buf[..pos]).unwrap()
+    }
+
     fn cell_at(&self, x: u32, y: u32) -> Option<&Cell> {
-        let key = format!("{}-{}", x, y);
-        self.cells.get(&key).map(|b| &**b)
+        let mut buf = [0u8; 24];
+        let key = Self::make_key(&mut buf, x, y);
+
+        self.cells.get(key).map(|b| &**b)
     }
 
     fn populate_cells(&mut self) {
-        let mut rng = rand::rng();
         for y in 0..self.height {
             for x in 0..self.width {
-                let alive = rng.random_bool(0.20);
+                let alive = rand::random_bool(0.20);
                 let _ = self.add_cell(x, y, alive);
             }
         }
@@ -148,7 +170,9 @@ impl World {
             panic!("{}", LocationOccupied(x, y));
         }
 
-        let key = format!("{}-{}", x, y);
+        let mut buf = [0u8; 24];
+        let key = Self::make_key(&mut buf, x, y).to_owned();
+
         let cell = Box::new(Cell::new(x, y, alive));
         self.cells.insert(key, cell);
         true

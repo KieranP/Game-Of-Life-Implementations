@@ -92,8 +92,20 @@ public class World {
     rendering.toString()
   }
 
+  private String make_key(int x, int y) {
+    // The following is slower
+    // "${x}-${y}"
+
+    // The following is the fastest
+    x + '-' + y
+
+    // The following is slower
+    // [x, y].join('-')
+  }
+
   private Cell cell_at(int x, int y) {
-    cells["${x}-${y}".toString()]
+    def key = make_key(x, y)
+    cells[key]
   }
 
   private void populate_cells() {
@@ -111,8 +123,9 @@ public class World {
       throw new LocationOccupied(x, y)
     }
 
+    def key = make_key(x, y)
     def cell = new Cell(x, y, alive)
-    cells["${x}-${y}".toString()] = cell
+    cells[key] = cell
     true
   }
 

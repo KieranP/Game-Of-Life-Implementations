@@ -84,8 +84,20 @@ defmodule World do
     # end)
   end
 
+  defp make_key(x, y) do
+    # The following is slower
+    # "#{x}-#{y}"
+
+    # The following is slower
+    # "#{x}" <> "-" <> "#{y}"
+
+    # The following is the fastest
+    Enum.join([x, y], "-")
+  end
+
   defp cell_at(world, x, y) do
-    Map.get(world.cells, "#{x}-#{y}")
+    key = make_key(x, y)
+    Map.get(world.cells, key)
   end
 
   defp populate_cells(world) do
@@ -106,8 +118,9 @@ defmodule World do
       raise LocationOccupied, x: x, y: y
     end
 
+    key = make_key(x, y)
     cell = Cell.new(x, y, alive)
-    world = put_in(world.cells["#{x}-#{y}"], cell)
+    world = put_in(world.cells[key], cell)
     {world, true}
   end
 
@@ -116,10 +129,10 @@ defmodule World do
       world ->
         neighbours =
           for set <- @directions, into: [] do
-            "#{cell.x + Enum.at(set, 0)}-#{cell.y + Enum.at(set, 1)}"
+            make_key(cell.x + Enum.at(set, 0), cell.y + Enum.at(set, 1))
           end
 
-        world = put_in(world.cells["#{cell.x}-#{cell.y}"].neighbours, neighbours)
+        world = put_in(world.cells[make_key(cell.x, cell.y)].neighbours, neighbours)
         world
     end
   end

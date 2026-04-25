@@ -1,5 +1,7 @@
 #include "cell.cpp"
 // #include <sstream>
+#include <charconv>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -89,9 +91,23 @@ class World {
       {-1, -1}, {0, -1}, {1, -1}, // below
     };
 
+    static string_view make_key(char (&buf)[24], uint32_t x, uint32_t y) {
+      // The following is slower
+      // snprintf(buf, 24, "%u-%u", x, y);
+      // return string_view(buf);
+
+      // The following is the fastest
+      auto [p1, _1] = to_chars(buf, buf + sizeof(buf), x);
+      *p1++ = '-';
+      auto [p2, _2] = to_chars(p1, buf + sizeof(buf), y);
+      return string_view(buf, p2 - buf);
+    }
+
     Cell* cell_at(uint32_t x, uint32_t y) {
-      auto key = to_string(x)+"-"+to_string(y);
-      auto it = cells.find(key);
+      char buf[24];
+      auto key = make_key(buf, x, y);
+
+      auto it = cells.find(string(key));
       return it != cells.end() ? it->second : nullptr;
     }
 
@@ -111,7 +127,9 @@ class World {
         throw LocationOccupied(x, y);
       }
 
-      auto key = to_string(x)+"-"+to_string(y);
+      char buf[24];
+      auto key = string(make_key(buf, x, y));
+
       auto cell = new Cell(x, y, alive);
       cells[key] = cell;
       return true;

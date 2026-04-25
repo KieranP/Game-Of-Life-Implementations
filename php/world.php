@@ -80,9 +80,21 @@ class World {
     // return join($rendering);
   }
 
+  private function make_key($x, $y) {
+    // The following is the fastest
+    return "$x-$y";
+
+    // The following is slower
+    // return $x . '-' . $y;
+
+    // The following is slower
+    // return implode('-', [$x, $y]);
+  }
+
   private function cell_at($x, $y) {
-    if (isset($this->cells["$x-$y"])) {
-      return $this->cells["$x-$y"];
+    $key = $this->make_key($x, $y);
+    if (isset($this->cells[$key])) {
+      return $this->cells[$key];
     }
   }
 
@@ -101,8 +113,9 @@ class World {
       throw new LocationOccupied($x, $y);
     }
 
+    $key = $this->make_key($x, $y);
     $cell = new Cell($x, $y, $alive);
-    $this->cells["$x-$y"] = $cell;
+    $this->cells[$key] = $cell;
     return true;
   }
 

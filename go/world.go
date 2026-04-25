@@ -96,7 +96,7 @@ func (world *World) render() string {
     for x := range(world.width) {
       cell, ok := world.cell_at(x, y)
       if ok {
-      	rendering.WriteRune(cell.to_char())
+        rendering.WriteRune(cell.to_char())
       }
     }
     rendering.WriteRune('\n')
@@ -104,9 +104,34 @@ func (world *World) render() string {
   return rendering.String()
 }
 
+func (world *World) make_key(buf []byte, x uint32, y uint32) int {
+  // The following is slower
+  // s := fmt.Sprintf("%d-%d", x, y)
+  // copy(buf, s)
+  // return len(s)
+
+  // The following is slower
+  // s := strconv.Itoa(int(x)) + "-" + strconv.Itoa(int(y))
+  // copy(buf, s)
+  // return len(s)
+
+  // The following is slower
+  // s := strings.Join([]string{strconv.Itoa(int(x)), strconv.Itoa(int(y))}, "-")
+  // copy(buf, s)
+  // return len(s)
+
+  // The following is the fastest
+  b := strconv.AppendUint(buf[:0], uint64(x), 10)
+  b = append(b, '-')
+  b = strconv.AppendUint(b, uint64(y), 10)
+  return len(b)
+}
+
 func (world *World) cell_at(x uint32, y uint32) (*Cell, bool) {
-  key := strconv.FormatUint(uint64(x), 10) +
-    "-" + strconv.FormatUint(uint64(y), 10)
+  var buf [24]byte
+  n := world.make_key(buf[:], x, y)
+  key := string(buf[:n])
+
   cell, ok := world.cells[key]
   return cell, ok
 }
@@ -126,9 +151,11 @@ func (world *World) add_cell(x uint32, y uint32, alive bool) bool {
     panic(LocationOccupied{ x: x, y: y })
   }
 
+  var buf [24]byte
+  n := world.make_key(buf[:], x, y)
+  key := string(buf[:n])
+
   cell := new_cell(x, y, alive)
-  key := strconv.FormatUint(uint64(x), 10) +
-    "-" + strconv.FormatUint(uint64(y), 10)
   world.cells[key] = cell
   return true
 }

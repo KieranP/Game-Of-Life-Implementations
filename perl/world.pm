@@ -79,8 +79,20 @@ sub render($self) {
   # join("", @rendering);
 }
 
+sub make_key($self, $x, $y) {
+  # The following is the fastest
+  "$x-$y";
+
+  # The following is slower
+  # $x . "-" . $y;
+
+  # The following is slower
+  # join("-", $x, $y);
+}
+
 sub cell_at($self, $x, $y) {
-  $self->{cells}{"$x-$y"};
+  my $key = $self->make_key($x, $y);
+  $self->{cells}{$key};
 }
 
 sub populate_cells($self) {
@@ -98,8 +110,9 @@ sub add_cell($self, $x, $y, $alive = false) {
     die "LocationOccupied($x-$y)";
   }
 
+  my $key = $self->make_key($x, $y);
   my $cell = Cell->new($x, $y, $alive);
-  $self->{cells}{"$x-$y"} = $cell;
+  $self->{cells}{$key} = $cell;
   true;
 }
 

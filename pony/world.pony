@@ -69,8 +69,15 @@ class World
     // end
     // String.join(rendering.values())
 
+  fun ref _make_key(x: U32, y: U32): String =>
+    // The following is the fastest
+    x.string() + "-" + y.string()
+
+    // The following is slower
+    // String.join([x.string(); "-"; y.string()].values())
+
   fun ref _cell_at(x: U32, y: U32): Cell ref ? =>
-    let key = x.string() + " " + y.string()
+    let key = _make_key(x, y)
     _cells(consume key)?
 
   fun ref populate_cells() =>
@@ -88,7 +95,7 @@ class World
       // Pony doesn't support runtime exceptions
     end
 
-    let key = x.string() + " " + y.string()
+    let key = _make_key(x, y)
     let cell = Cell(x, y, alive)
     _cells.insert(consume key, cell)
     true

@@ -90,8 +90,20 @@ class World(
     rendering.toString
   }
 
+  private def make_key(x: Int, y: Int): String = {
+    // The following is the fastest
+    s"$x-$y"
+
+    // The following is slower
+    // x.toString + "-" + y.toString
+
+    // The following is slower
+    // Seq(x, y).mkString("-")
+  }
+
   private def cell_at(x: Int, y: Int) = {
-    cells.get(s"$x-$y")
+    val key = make_key(x, y)
+    cells.get(key)
   }
 
   private def populate_cells = {
@@ -110,8 +122,9 @@ class World(
       throw new LocationOccupied(x, y)
     }
 
+    val key = make_key(x, y)
     val cell = new Cell(x, y, alive)
-    cells.put(s"$x-$y", cell)
+    cells.put(key, cell)
     true
   }
 

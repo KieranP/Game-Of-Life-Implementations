@@ -13,6 +13,10 @@ static const int DIRECTIONS[8][2] = {
 };
 
 static void make_key(char *buffer, uint32_t x, uint32_t y) {
+  // The following is slower
+  // snprintf(buffer, 24, "%u-%u", x, y);
+
+  // The following is the fastest
   auto ptr = int_to_str(buffer, x);
   *ptr++ = '-';
   ptr = int_to_str(ptr, y);
@@ -20,7 +24,7 @@ static void make_key(char *buffer, uint32_t x, uint32_t y) {
 }
 
 static Cell *cell_at(World *world, uint32_t x, uint32_t y) {
-  char key[32];
+  char key[24];
   make_key(key, x, y);
 
   return (Cell *)hashmap_get(world->cells, key);
@@ -33,7 +37,7 @@ static bool add_cell(World *world, uint32_t x, uint32_t y, bool alive) {
     exit(1);
   }
 
-  char key[32];
+  char key[24];
   make_key(key, x, y);
 
   auto cell = cell_new(x, y, alive);

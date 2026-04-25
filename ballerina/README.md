@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install bal
+brew install ballerina
 ```
 
 ## Build

@@ -87,8 +87,20 @@ class World
     end
   end
 
+  private def make_key(x : UInt32, y : UInt32) : String
+    # The following is slower
+    # "#{x}-#{y}"
+
+    # The following is the fastest
+    x.to_s + "-" + y.to_s
+
+    # The following is slower
+    # [x, y].join("-")
+  end
+
   private def cell_at(x : UInt32, y : UInt32)
-    @cells["#{x}-#{y}"]?
+    key = make_key(x, y)
+    @cells[key]?
   end
 
   private def populate_cells
@@ -106,8 +118,9 @@ class World
       raise LocationOccupied.new(x, y)
     end
 
+    key = make_key(x, y)
     cell = Cell.new(x, y, alive)
-    @cells["#{x}-#{y}"] = cell
+    @cells[key] = cell
     true
   end
 

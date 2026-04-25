@@ -90,8 +90,20 @@ class World
 
   private
 
+  def make_key(x, y)
+    # The following is the fastest
+    "#{x}-#{y}"
+
+    # The following is slower
+    # x.to_s + '-' + y.to_s
+
+    # The following is slower
+    # [x, y].join('-')
+  end
+
   def cell_at(x, y)
-    @cells["#{x}-#{y}"]
+    key = make_key(x, y)
+    @cells[key]
   end
 
   def populate_cells
@@ -109,8 +121,9 @@ class World
       raise LocationOccupied.new(x, y)
     end
 
+    key = make_key(x, y)
     cell = Cell.new(x, y, alive)
-    @cells["#{x}-#{y}"] = cell
+    @cells[key] = cell
     true
   end
 

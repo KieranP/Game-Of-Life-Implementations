@@ -4,6 +4,7 @@ include cell
 from random import rand
 import tables
 import ropes
+import strformat
 
 type
   LocationOccupied = object of ValueError
@@ -35,6 +36,7 @@ type
 proc initialize(self: World): World
 proc dotick(self: World)
 proc render(self: World): string
+proc make_key(self: World, x: uint32, y: uint32): string
 proc cell_at(self: World, x: uint32, y: uint32): Cell
 proc populate_cells(self: World)
 proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool
@@ -95,8 +97,18 @@ proc render(self: World): string =
   #   rendering.add("\n")
   # $rendering
 
+proc make_key(self: World, x: uint32, y: uint32): string =
+  # The following is slower
+  # fmt"{x}-{y}"
+
+  # The following is the fastest
+  $x & "-" & $y
+
+  # The following is slower
+  # join([$x, $y], "-")
+
 proc cell_at(self: World, x: uint32, y: uint32): Cell =
-  let key = $x & "-" & $y
+  let key = self.make_key(x, y)
   if self.cells.hasKey(key):
     return self.cells[key]
   else:
@@ -113,8 +125,8 @@ proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
   if existing != nil:
     raise newLocationOccupied(x, y)
 
+  let key = self.make_key(x, y)
   let cell = Cell(x: x, y: y, alive: alive)
-  let key = $x & "-" & $y
   self.cells[key] = cell
   true
 

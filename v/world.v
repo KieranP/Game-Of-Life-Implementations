@@ -101,8 +101,20 @@ pub fn (w World) render() string {
   return rendering.str()
 }
 
+fn (w World) make_key(x u32, y u32) string {
+  // The following is slower:
+  // return '${x}-${y}'
+
+  // The following is the fastest:
+  return x.str() + '-' + y.str()
+
+  // The following is slower:
+  // return [x.str(), y.str()].join('-')
+}
+
 fn (w World) cell_at(x u32, y u32) ?&Cell {
-  return w.cells['$x-$y'] or {
+  key := w.make_key(x, y)
+  return w.cells[key] or {
     return none
   }
 }
@@ -129,7 +141,8 @@ fn (mut w World) add_cell(x u32, y u32, alive bool) bool {
     alive: alive
   }
 
-  w.cells['$x-$y'] = cell
+  key := w.make_key(x, y)
+  w.cells[key] = cell
   return true
 }
 
