@@ -9,7 +9,7 @@ brew install ldc
 ## Build
 
 ```bash
-ldc2 -O3 --release -of=play *.d
+ldc2 -O3 --release --boundscheck=on -of=play *.d
 ```
 
 ## Run

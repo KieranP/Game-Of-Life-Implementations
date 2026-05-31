@@ -8,6 +8,12 @@ benchmark ruby play.rb
 
 echo ""
 
-echo -n "Ruby - CRuby (w/ JIT) - "
+echo -n "Ruby - CRuby (w/ YJIT) - "
 ruby --version | head -n 1
-benchmark ruby --jit play.rb
+benchmark ruby --yjit play.rb
+
+echo ""
+
+echo -n "Ruby - CRuby (w/ ZJIT) - "
+ruby --version | head -n 1
+benchmark ruby --zjit play.rb

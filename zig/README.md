@@ -9,7 +9,7 @@ brew install zig
 ## Build
 
 ```bash
-zig build-exe -O ReleaseFast play.zig
+zig build-exe -O ReleaseSafe play.zig
 ```
 
 ## Run

@@ -8,6 +8,12 @@ sample ruby play.rb
 
 echo ""
 
-echo -n "Ruby - CRuby (w/ JIT) - "
+echo -n "Ruby - CRuby (w/ YJIT) - "
 ruby --version | head -n 1
-sample ruby --jit play.rb
+sample ruby --yjit play.rb
+
+echo ""
+
+echo -n "Ruby - CRuby (w/ ZJIT) - "
+ruby --version | head -n 1
+sample ruby --zjit play.rb

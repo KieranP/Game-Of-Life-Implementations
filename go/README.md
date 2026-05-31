@@ -9,7 +9,7 @@ brew install go
 ## Build
 
 ```bash
-go build -ldflags="-s -w" -o play *.go
+go build -o play *.go
 ```
 
 ## Run

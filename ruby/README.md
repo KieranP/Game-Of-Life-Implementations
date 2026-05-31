@@ -18,10 +18,16 @@ brew install ruby jruby
 ruby play.rb
 ```
 
-### CRuby, with JIT
+### CRuby, with YJIT
 
 ```bash
-ruby --jit play.rb
+ruby --yjit play.rb
+```
+
+### CRuby, with ZJIT
+
+```bash
+ruby --zjit play.rb
 ```
 
 ### TruffleRuby
