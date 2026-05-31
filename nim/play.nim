@@ -1,6 +1,4 @@
-import std/[envvars, monotimes, times]
-import strutils
-from strformat import fmt
+import std/[envvars, monotimes, times, strutils, strformat]
 include world
 
 const WORLD_WIDTH = 150
@@ -13,7 +11,7 @@ type
 # and will error out if I dont. To to order the methods as I like, I need to
 # declare them ahead of time, known as "forward declaration".
 proc run(self: Play)
-proc f(self: Play, value: float): float
+func f(self: Play, value: float): float
 
 proc run(self: Play) =
   let world = World(
@@ -27,9 +25,9 @@ proc run(self: Play) =
     echo world.render()
 
   var total_tick = 0.0
-  var lowest_tick = high(float)
+  var lowest_tick = Inf
   var total_render = 0.0
-  var lowest_render = high(float)
+  var lowest_render = Inf
 
   while true:
     let tick_start = getMonoTime()
@@ -60,7 +58,7 @@ proc run(self: Play) =
     if not minimal:
       echo rendered
 
-proc f(self: Play, value: float): float =
+func f(self: Play, value: float): float =
   # nanoseconds -> milliseconds
   value / 1_000_000
 

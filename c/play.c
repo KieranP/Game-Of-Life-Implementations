@@ -1,8 +1,6 @@
 #include "lib/utils.h"
 #include "world.h"
-#include <limits.h>
 #include <math.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -12,14 +10,14 @@
 
 int main(void) {
   // Initialize the random seed generator
-  srand(time(NULL));
+  srand(time(nullptr));
 
   auto world = world_new(
     WORLD_WIDTH,
     WORLD_HEIGHT
   );
 
-  auto minimal = getenv("MINIMAL") != NULL;
+  auto minimal = getenv("MINIMAL") != nullptr;
 
   if (!minimal) {
     auto rendered = world_render(world);

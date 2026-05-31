@@ -10,12 +10,12 @@ exception LocationOccupied of x:uint * y:uint with
     sprintf "LocationOccupied(%d-%d)" this.x this.y
 
 type World(width: uint, height: uint) =
-  let cells = new Dictionary<string, Cell>()
+  let cells = Dictionary<string, Cell>()
 
   let DIRECTIONS = [
-    [-1; 1];  [0; 1];  [1; 1]; // above
-    [-1; 0];           [1; 0]; // sides
-    [-1; -1]; [0; -1]; [1; -1] // below
+    (-1, 1);  (0, 1);  (1, 1); // above
+    (-1, 0);           (1, 0); // sides
+    (-1, -1); (0, -1); (1, -1) // below
   ]
 
   member val tick = 0u with get,set
@@ -27,23 +27,23 @@ type World(width: uint, height: uint) =
     for cell in cell_values do
       let alive_neighbours = cell.alive_neighbours()
       if (not cell.alive && alive_neighbours = 3) then
-        cell.next_state <- true
+        cell.next_state <- Some true
       elif (alive_neighbours < 2 || alive_neighbours > 3) then
-        cell.next_state <- false
+        cell.next_state <- Some false
       else
-        cell.next_state <- cell.alive
+        cell.next_state <- Some cell.alive
 
     // Then execute the determined action for all cells
     for cell in cell_values do
-      cell.alive <- cell.next_state
+      cell.alive <- cell.next_state |> Option.defaultValue false
 
     this.tick <- this.tick + 1u
 
   member this.render() =
     // The following is slower
     // let mutable rendering = ""
-    // for y in [0u..height-1u] do
-    //   for x in [0u..width-1u] do
+    // for y in 0u..height-1u do
+    //   for x in 0u..width-1u do
     //     let cell = this.cell_at(x, y)
     //     if cell.IsSome then
     //       rendering <- rendering + string(cell.Value.to_char())
@@ -52,9 +52,9 @@ type World(width: uint, height: uint) =
 
     // The following is slower
     // let mutable rendering = []
-    // for y in [0u..height-1u] do
+    // for y in 0u..height-1u do
     //   rendering <- rendering @ [
-    //     for x in [0u..width-1u] do
+    //     for x in 0u..width-1u do
     //       let cell = this.cell_at(x, y)
     //       if cell.IsSome then
     //         cell.Value.to_char()
@@ -63,15 +63,13 @@ type World(width: uint, height: uint) =
 
     // The following is the fastest
     let render_size = int (width * height + height)
-    let rendering = new StringBuilder(render_size)
-    for y in [0u..height-1u] do
-      for x in [0u..width-1u] do
+    let rendering = StringBuilder(render_size)
+    for y in 0u..height-1u do
+      for x in 0u..width-1u do
         let cell = this.cell_at(x, y)
         if cell.IsSome then
-          rendering.Append(cell.Value.to_char())
-          |> ignore
-      rendering.Append('\n')
-      |> ignore
+          rendering.Append(cell.Value.to_char()) |> ignore
+      rendering.Append('\n') |> ignore
     rendering.ToString()
 
   member private this.make_key(x, y) =
@@ -87,16 +85,18 @@ type World(width: uint, height: uint) =
   member this.populate_cells() =
     let random = Random()
 
-    for y in [0u..height-1u] do
-      for x in [0u..width-1u] do
+    for y in 0u..height-1u do
+      for x in 0u..width-1u do
         let alive = random.NextDouble() <= 0.2
         this.add_cell(x, y, alive)
         |> ignore
 
-  member private this.cell_at(x, y): option<Cell> =
+  member private this.cell_at(x, y): Cell option =
     let key = this.make_key(x, y)
-    let ok, v = cells.TryGetValue(key)
-    if ok then Some(v) else None
+    cells.TryGetValue key
+    |> function
+    | true, v -> Some v
+    | _ -> None
 
   member private this.add_cell(x, y, ?alive) =
     let alive = defaultArg alive false
@@ -106,22 +106,22 @@ type World(width: uint, height: uint) =
       raise(LocationOccupied(x, y))
 
     let key = this.make_key(x, y)
-    let cell = new Cell(x, y, alive)
+    let cell = Cell(x, y, alive)
     cells.Add(key, cell)
     true
 
   member this.prepopulate_neighbours() =
     for cell in cells.Values do
-      let x = int(cell.x)
-      let y = int(cell.y)
+      let x = int cell.x
+      let y = int cell.y
 
-      for set in DIRECTIONS do
-        let nx = x + set[0]
-        let ny = y + set[1]
+      for (rel_x, rel_y) in DIRECTIONS do
+        let nx = x + rel_x
+        let ny = y + rel_y
 
         if nx >= 0 && ny >= 0 then
-          let ux = uint(nx)
-          let uy = uint(ny)
+          let ux = uint nx
+          let uy = uint ny
 
           if ux < width && uy < height then
             let neighbour = this.cell_at(ux, uy)

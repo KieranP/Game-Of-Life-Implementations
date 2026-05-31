@@ -1,9 +1,12 @@
 module hashmap_mod
-  use iso_c_binding
+  use iso_fortran_env, only: int32
   use cell_mod
   implicit none
   private
   public :: HashMap, CellPtr, hashmap_new, hashmap_put, hashmap_get, hashmap_get_all_values
+  public :: KEY_LEN
+
+  integer, parameter :: KEY_LEN = 32
 
   ! Start with the expected size of the hash table (150 * 40 = 6,000)
   ! Then round up to a power of two (2**ceil(log2(6000))) = 8,192
@@ -17,10 +20,10 @@ module hashmap_mod
   end type CellPtr
 
   type :: HashEntry
-    integer :: state
-    integer(c_int32_t) :: hash
-    character(len=32) :: key
-    type(Cell), pointer :: value
+    integer :: state = HASH_ENTRY_EMPTY
+    integer(int32) :: hash = 0
+    character(len=KEY_LEN) :: key = ''
+    type(Cell), pointer :: value => null()
   end type HashEntry
 
   type :: HashMap
@@ -31,18 +34,18 @@ module hashmap_mod
 
 contains
 
-  function hash_full(key) result(hash)
+  pure function hash_full(key) result(hash)
     character(len=*), intent(in) :: key
-    integer(c_int32_t) :: hash
+    integer(int32) :: hash
     integer :: i
-    integer(c_int32_t) :: byte_val
-    integer(c_int32_t), parameter :: FNV_OFFSET = int(z'811C9DC5', c_int32_t)
-    integer(c_int32_t), parameter :: FNV_PRIME = int(z'01000193', c_int32_t)
+    integer(int32) :: byte_val
+    integer(int32), parameter :: FNV_OFFSET = int(z'811C9DC5', kind=int32)
+    integer(int32), parameter :: FNV_PRIME = int(z'01000193', kind=int32)
 
     hash = FNV_OFFSET
 
     do i = 1, len_trim(key)
-      byte_val = ichar(key(i:i))
+      byte_val = iachar(key(i:i))
       hash = ieor(hash, byte_val)
       hash = hash * FNV_PRIME
     end do
@@ -50,23 +53,17 @@ contains
 
   function hashmap_new() result(map)
     type(HashMap) :: map
-    integer :: i
 
     map%capacity = HASH_TABLE_SIZE
     map%count = 0
     allocate(map%entries(map%capacity))
-
-    do i = 1, map%capacity
-      map%entries(i)%state = HASH_ENTRY_EMPTY
-      nullify(map%entries(i)%value)
-    end do
   end function hashmap_new
 
   subroutine hashmap_put(map, key, value)
     type(HashMap), intent(inout) :: map
     character(len=*), intent(in) :: key
     type(Cell), pointer, intent(in) :: value
-    integer(c_int32_t) :: hash
+    integer(int32) :: hash
     integer :: mask, idx, i
 
     hash = hash_full(key)
@@ -94,11 +91,11 @@ contains
     end do
   end subroutine hashmap_put
 
-  function hashmap_get(map, key) result(value)
+  pure function hashmap_get(map, key) result(value)
     type(HashMap), intent(in) :: map
     character(len=*), intent(in) :: key
     type(Cell), pointer :: value
-    integer(c_int32_t) :: hash
+    integer(int32) :: hash
     integer :: mask, idx, i
 
     nullify(value)

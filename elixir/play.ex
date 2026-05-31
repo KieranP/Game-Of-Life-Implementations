@@ -11,7 +11,7 @@ defmodule Play do
 
     minimal = System.get_env("MINIMAL") != nil
 
-    if !minimal do
+    if not minimal do
       IO.puts(World.render(world))
     end
 
@@ -20,13 +20,13 @@ defmodule Play do
     loop(world, minimal)
   end
 
-  def loop(world, minimal \\ false, total_tick \\ 0, lowest_tick \\ 9**9**9, total_render \\ 0, lowest_render \\ 9**9**9) do
+  def loop(world, minimal \\ false, total_tick \\ 0, lowest_tick \\ :infinity, total_render \\ 0, lowest_render \\ :infinity) do
     tick_start = System.monotonic_time()
     world = World.tick(world)
     tick_finish = System.monotonic_time()
     tick_time = tick_finish - tick_start
     total_tick = total_tick + tick_time
-    lowest_tick = Kernel.min(lowest_tick, tick_time)
+    lowest_tick = min(lowest_tick, tick_time)
     avg_tick = total_tick / world.tick
 
     render_start = System.monotonic_time()
@@ -34,10 +34,10 @@ defmodule Play do
     render_finish = System.monotonic_time()
     render_time = render_finish - render_start
     total_render = total_render + render_time
-    lowest_render = Kernel.min(lowest_render, render_time)
+    lowest_render = min(lowest_render, render_time)
     avg_render = total_render / world.tick
 
-    if !minimal do
+    if not minimal do
       IO.puts("\u001b[H\u001b[2J")
     end
 
@@ -54,7 +54,7 @@ defmodule Play do
       )
     )
 
-    if !minimal do
+    if not minimal do
       IO.puts(rendered)
     end
 

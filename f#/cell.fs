@@ -4,7 +4,7 @@ type Cell(x: uint, y: uint, ?alive: bool) =
   member val x = x
   member val y = y
   member val alive = defaultArg alive false with get,set
-  member val next_state = false with get,set
+  member val next_state: bool option = None with get,set
   member val neighbours: Cell list = [] with get,set
 
   member this.to_char() =

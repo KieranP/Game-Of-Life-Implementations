@@ -6,7 +6,7 @@ class LocationOccupied extends Error {
   }
 }
 
-const DIRECTIONS = [
+const DIRECTIONS: StaticArray<StaticArray<i32>> = [
   [-1, 1],  [0, 1],  [1, 1], // above
   [-1, 0],           [1, 0], // sides
   [-1, -1], [0, -1], [1, -1] // below
@@ -15,9 +15,9 @@ const DIRECTIONS = [
 export class World {
   public tick: u32 = 0
 
-  private width: u32
-  private height: u32
-  private cells: Map<string, Cell>
+  private readonly width: u32
+  private readonly height: u32
+  private readonly cells: Map<string, Cell>
 
   constructor(width: u32, height: u32) {
     this.width = width
@@ -69,7 +69,7 @@ export class World {
     // return rendering
 
     // The following is slower
-    // let rendering: string[] = []
+    // const rendering: string[] = []
     // for (let y: u32 = 0; y < this.height; y++) {
     //   for (let x: u32 = 0; x < this.width; x++) {
     //     const cell = this.cell_at(x, y)
@@ -82,8 +82,8 @@ export class World {
     // return rendering.join("")
 
     // The following is the fastest
-    let render_size = this.width * this.height + this.height
-    let rendering = new Array<string>(render_size)
+    const render_size = this.width * this.height + this.height
+    const rendering = new Array<string>(render_size)
     let idx = 0
     for (let y: u32 = 0; y < this.height; y++) {
       for (let x: u32 = 0; x < this.width; x++) {
@@ -105,7 +105,7 @@ export class World {
     // return x.toString() + "-" + y.toString()
 
     // The following is slower
-    // let parts: string[] = [x.toString(), "-", y.toString()]
+    // const parts: string[] = [x.toString(), "-", y.toString()]
     // return parts.join("")
   }
 
@@ -121,7 +121,7 @@ export class World {
   private populate_cells(): void {
     for (let y: u32 = 0; y < this.height; y++) {
       for (let x: u32 = 0; x < this.width; x++) {
-        const alive = (Math.random() <= 0.2)
+        const alive = Math.random() <= 0.2
         this.add_cell(x, y, alive)
       }
     }

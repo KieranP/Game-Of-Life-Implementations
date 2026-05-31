@@ -9,12 +9,7 @@ type Cell struct {
 }
 
 func new_cell(x uint32, y uint32, alive bool) *Cell {
-  var cell = new(Cell)
-  cell.x = x
-  cell.y = y
-  cell.alive = alive
-
-  return cell
+  return &Cell{x: x, y: y, alive: alive}
 }
 
 func (cell *Cell) to_char() rune {
@@ -38,7 +33,7 @@ func (cell *Cell) alive_neighbours() uint32 {
   // The following is slower
   // alive_neighbours := uint32(0)
   // count := len(cell.neighbours)
-  // for i := range(count) {
+  // for i := range count {
   //   neighbour := cell.neighbours[i]
   //   if neighbour.alive {
   //     alive_neighbours++

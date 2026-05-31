@@ -3,9 +3,9 @@ using Random
 
 mutable struct World
   tick::UInt64
-  width::UInt64
-  height::UInt64
-  cells::Dict{String, Cell}
+  const width::UInt64
+  const height::UInt64
+  const cells::Dict{String, Cell}
 
   function World(; width::UInt64, height::UInt64)
     world = new(0, width, height, Dict{String, Cell}())
@@ -25,14 +25,14 @@ function Base.showerror(io::IO, e::LocationOccupied)
 end
 
 const DIRECTIONS = [
-  [-1, 1],  [0, 1],  [1, 1],  # above
-  [-1, 0],           [1, 0],  # sides
-  [-1, -1], [0, -1], [1, -1], # below
+  (-1, 1),  (0, 1),  (1, 1),  # above
+  (-1, 0),           (1, 0),  # sides
+  (-1, -1), (0, -1), (1, -1), # below
 ]
 
 function world_tick(world::World)
   # First determine the action for all cells
-  for (_, cell) in world.cells
+  for cell in values(world.cells)
     alive_neighbours_count = cell_alive_neighbours(cell)
     if !cell.alive && alive_neighbours_count == 3
       cell.next_state = true
@@ -44,8 +44,8 @@ function world_tick(world::World)
   end
 
   # Then execute the determined action for all cells
-  for (_, cell) in world.cells
-    cell.alive = cell.next_state
+  for cell in values(world.cells)
+    cell.alive = something(cell.next_state, false)
   end
 
   world.tick += 1
@@ -89,7 +89,7 @@ function world_render(world::World)
         print(rendering, cell_to_char(cell))
       end
     end
-    print(rendering, "\n")
+    print(rendering, '\n')
   end
   String(take!(rendering))
 
@@ -130,7 +130,7 @@ end
 function world_populate_cells(world::World)
   for y in 0:(world.height - 1)
     for x in 0:(world.width - 1)
-      alive = (rand(0:100) <= 20)
+      alive = rand() <= 0.2
       world_add_cell(world, x, y, alive)
     end
   end
@@ -149,12 +149,11 @@ function world_add_cell(world::World, x::UInt64, y::UInt64, alive::Bool = false)
 end
 
 function world_prepopulate_neighbours(world::World)
-  for (_, cell) in world.cells
+  for cell in values(world.cells)
     x = cell.x
     y = cell.y
 
-    for direction in DIRECTIONS
-      rel_x, rel_y = direction
+    for (rel_x, rel_y) in DIRECTIONS
       nx = x + rel_x
       ny = y + rel_y
 

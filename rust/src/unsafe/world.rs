@@ -21,7 +21,7 @@ const DIRECTIONS: [(isize, isize); 8] = [
 pub struct LocationOccupied(u32, u32);
 impl Error for LocationOccupied {}
 impl fmt::Display for LocationOccupied {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "LocationOccupied({},{})", self.0, self.1)
     }
 }
@@ -50,22 +50,20 @@ impl World {
 
     pub fn tick(&mut self) {
         // First determine the action for all cells
-        for boxed in self.cells.values_mut() {
-            let cell: &mut Cell = &mut *boxed;
+        for cell in self.cells.values_mut() {
             let alive_neighbours = cell.alive_neighbours();
             if !cell.alive && alive_neighbours == 3 {
-                cell.next_state = true;
+                cell.next_state = Some(true);
             } else if alive_neighbours < 2 || alive_neighbours > 3 {
-                cell.next_state = false;
+                cell.next_state = Some(false);
             } else {
-                cell.next_state = cell.alive;
+                cell.next_state = Some(cell.alive);
             }
         }
 
         // Then execute the determined action for all cells
-        for boxed in self.cells.values_mut() {
-            let cell: &mut Cell = &mut *boxed;
-            cell.alive = cell.next_state;
+        for cell in self.cells.values_mut() {
+            cell.alive = cell.next_state.unwrap_or(false);
         }
 
         self.tick += 1;
@@ -152,7 +150,7 @@ impl World {
         let mut buf = [0u8; 24];
         let key = Self::make_key(&mut buf, x, y);
 
-        self.cells.get(key).map(|b| &**b)
+        self.cells.get(key).map(Box::as_ref)
     }
 
     fn populate_cells(&mut self) {
@@ -185,8 +183,8 @@ impl World {
         // (x,y) -> raw pointer for reference later.
         let ptrs: HashMap<(u32, u32), *const Cell> = self
             .cells
-            .iter()
-            .map(|(_k, v)| ((v.x, v.y), &**v as *const Cell))
+            .values()
+            .map(|v| ((v.x, v.y), &**v as *const Cell))
             .collect();
 
         for boxed in self.cells.values_mut() {

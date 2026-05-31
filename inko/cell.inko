@@ -2,7 +2,7 @@ type pub Cell {
   let pub @x: Int
   let pub @y: Int
   let pub mut @alive: Bool
-  let pub mut @next_state: Bool
+  let pub mut @next_state: Option[Bool]
   let pub @neighbours: Array[ref Cell]
 
   fn pub static new(x: Int, y: Int, alive: Bool) -> Cell {
@@ -10,7 +10,7 @@ type pub Cell {
       x: x,
       y: y,
       alive: alive,
-      next_state: false,
+      next_state: Option.None,
       neighbours: [],
     )
   }
@@ -23,7 +23,7 @@ type pub Cell {
     }
   }
 
-  fn pub mut alive_neighbours() -> Int {
+  fn pub alive_neighbours -> Int {
     # The following is slower
     # @neighbours
     #   .iter

@@ -9,7 +9,7 @@ class play =
         ~height:world_height
       in
 
-      let minimal = try ignore (Sys.getenv "MINIMAL"); true with Not_found -> false in
+      let minimal = Option.is_some (Sys.getenv_opt "MINIMAL") in
 
       if not minimal then
         print_endline (world#render);
@@ -25,7 +25,7 @@ class play =
         let tick_finish = Sys.time () in
         let tick_time = tick_finish -. tick_start in
         total_tick := !total_tick +. tick_time;
-        lowest_tick := min !lowest_tick tick_time;
+        lowest_tick := Float.min !lowest_tick tick_time;
         let avg_tick = !total_tick /. float_of_int world#tick in
 
         let render_start = Sys.time () in
@@ -33,7 +33,7 @@ class play =
         let render_finish = Sys.time () in
         let render_time = render_finish -. render_start in
         total_render := !total_render +. render_time;
-        lowest_render := min !lowest_render render_time;
+        lowest_render := Float.min !lowest_render render_time;
         let avg_render = !total_render /. float_of_int world#tick in
 
         if not minimal then

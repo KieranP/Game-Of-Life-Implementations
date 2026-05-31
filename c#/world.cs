@@ -5,19 +5,16 @@ using System.Collections.Generic;
 public class World {
   public uint tick = 0;
 
-  private uint width;
-  private uint height;
-  private Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
+  private readonly uint width;
+  private readonly uint height;
+  private readonly Dictionary<string, Cell> cells = [];
 
-  private class LocationOccupied : Exception {
-    public LocationOccupied(uint x, uint y) :
-      base($"LocationOccupied({x}-{y})") { }
-  }
+  private class LocationOccupied(uint x, uint y) : Exception($"LocationOccupied({x}-{y})");
 
-  private static readonly int[][] DIRECTIONS = [
-    [-1, 1],  [0, 1],  [1, 1], // above
-    [-1, 0],           [1, 0], // sides
-    [-1, -1], [0, -1], [1, -1] // below
+  private static readonly (int, int)[] DIRECTIONS = [
+    (-1, 1),  (0, 1),  (1, 1), // above
+    (-1, 0),           (1, 0), // sides
+    (-1, -1), (0, -1), (1, -1) // below
   ];
 
   public World(uint width, uint height) {
@@ -57,7 +54,7 @@ public class World {
     // for (var y = 0u; y < height; y++) {
     //   for (var x = 0u; x < width; x++) {
     //     var cell = cell_at(x, y);
-    //     if (cell != null) {
+    //     if (cell is not null) {
     //       rendering += cell.to_char();
     //     }
     //   }
@@ -70,7 +67,7 @@ public class World {
     // for (var y = 0u; y < height; y++) {
     //   for (var x = 0u; x < width; x++) {
     //     var cell = cell_at(x, y);
-    //     if (cell != null) {
+    //     if (cell is not null) {
     //       rendering.Add(cell.to_char().ToString());
     //     }
     //   }
@@ -84,7 +81,7 @@ public class World {
     for (var y = 0u; y < height; y++) {
       for (var x = 0u; x < width; x++) {
         var cell = cell_at(x, y);
-        if (cell != null) {
+        if (cell is not null) {
           rendering.Append(cell.to_char());
         }
       }
@@ -104,13 +101,10 @@ public class World {
     // return string.Join("-", x.ToString(), y.ToString());
   }
 
-  private Cell cell_at(uint x, uint y) {
+  private Cell? cell_at(uint x, uint y) {
     var key = make_key(x, y);
-    if (cells.TryGetValue(key, out Cell value)) {
-      return value;
-    } else {
-      return null;
-    }
+    cells.TryGetValue(key, out var value);
+    return value;
   }
 
   private void populate_cells() {
@@ -125,7 +119,7 @@ public class World {
 
   private bool add_cell(uint x, uint y, bool alive = false) {
     var existing = cell_at(x, y);
-    if (existing != null) {
+    if (existing is not null) {
       throw new LocationOccupied(x, y);
     }
 
@@ -140,9 +134,9 @@ public class World {
       var x = cell.x;
       var y = cell.y;
 
-      foreach (var set in DIRECTIONS) {
-        var nx = x + set[0];
-        var ny = y + set[1];
+      foreach (var (rel_x, rel_y) in DIRECTIONS) {
+        var nx = x + rel_x;
+        var ny = y + rel_y;
         if (nx < 0 || ny < 0) {
           continue; // Out of bounds
         }
@@ -154,7 +148,7 @@ public class World {
         }
 
         var neighbour = cell_at(ux, uy);
-        if (neighbour != null) {
+        if (neighbour is not null) {
           cell.neighbours.Add(neighbour);
         }
       }

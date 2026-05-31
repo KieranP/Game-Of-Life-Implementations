@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 public class World(
   private val width: Int,
   private val height: Int
@@ -11,9 +13,9 @@ public class World(
 
   companion object {
     private val DIRECTIONS = arrayOf(
-      intArrayOf(-1, 1),  intArrayOf(0, 1),  intArrayOf(1, 1), // above
-      intArrayOf(-1, 0),                     intArrayOf(1, 0), // sides
-      intArrayOf(-1, -1), intArrayOf(0, -1), intArrayOf(1, -1) // below
+      -1 to 1,  0 to 1,  1 to 1, // above
+      -1 to 0,           1 to 0, // sides
+      -1 to -1, 0 to -1, 1 to -1 // below
     )
   }
 
@@ -48,8 +50,8 @@ public class World(
   public fun render(): String {
     // The following is slower
     // var rendering = ""
-    // for (y in 0 until height) {
-    //   for (x in 0 until width) {
+    // for (y in 0..<height) {
+    //   for (x in 0..<width) {
     //     val cell = cell_at(x, y)
     //     if (cell != null) {
     //       rendering += cell.to_char()
@@ -61,8 +63,8 @@ public class World(
 
     // The following is slower
     // val rendering = ArrayList<String>();
-    // for (y in 0 until height) {
-    //   for (x in 0 until width) {
+    // for (y in 0..<height) {
+    //   for (x in 0..<width) {
     //     val cell = cell_at(x, y)
     //     if (cell != null) {
     //       rendering.add(cell.to_char().toString())
@@ -73,10 +75,10 @@ public class World(
     // return rendering.joinToString(separator = "");
 
     // The following is the fastest
-    var render_size = width * height + height
+    val render_size = width * height + height
     val rendering = StringBuilder(render_size)
-    for (y in 0 until height) {
-      for (x in 0 until width) {
+    for (y in 0..<height) {
+      for (x in 0..<width) {
         val cell = cell_at(x, y)
         if (cell != null) {
           rendering.append(cell.to_char())
@@ -104,9 +106,9 @@ public class World(
   }
 
   private fun populate_cells() {
-    for (y in 0 until height) {
-      for (x in 0 until width) {
-        val alive = (Math.random() <= 0.2)
+    for (y in 0..<height) {
+      for (x in 0..<width) {
+        val alive = Random.nextDouble() <= 0.2
         add_cell(x, y, alive)
       }
     }
@@ -120,7 +122,7 @@ public class World(
 
     val key = make_key(x, y)
     val cell = Cell(x, y, alive)
-    cells.put(key, cell)
+    cells[key] = cell
     return true
   }
 

@@ -1,7 +1,6 @@
 #ifndef CELL_H
 #define CELL_H
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #define MAX_NEIGHBOURS 8

@@ -4,5 +4,6 @@
     <OutputType>Exe</OutputType>
     <OutDir>bin</OutDir>
     <TargetFramework>net10.0</TargetFramework>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 </Project>

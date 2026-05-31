@@ -13,9 +13,9 @@ defmodule World do
   end
 
   @directions [
-    [-1, 1],  [0, 1],  [1, 1], # above
-    [-1, 0],           [1, 0], # sides
-    [-1, -1], [0, -1], [1, -1] # below
+    {-1, 1},  {0, 1},  {1, 1}, # above
+    {-1, 0},           {1, 0}, # sides
+    {-1, -1}, {0, -1}, {1, -1} # below
   ]
 
   def new(width: width, height: height) do
@@ -24,9 +24,9 @@ defmodule World do
       height: height
     }
 
-    world = populate_cells(world)
-    world = prepopulate_neighbours(world)
     world
+    |> populate_cells()
+    |> prepopulate_neighbours()
   end
 
   def tick(world) do
@@ -35,11 +35,11 @@ defmodule World do
         alive_neighbours = Cell.alive_neighbours(cell, world)
 
         cond do
-          !cell.alive && alive_neighbours == 3 ->
-            {key, %Cell{cell | alive: true}}
+          not cell.alive and alive_neighbours == 3 ->
+            {key, %{cell | alive: true}}
 
-          alive_neighbours < 2 || alive_neighbours > 3 ->
-            {key, %Cell{cell | alive: false}}
+          alive_neighbours < 2 or alive_neighbours > 3 ->
+            {key, %{cell | alive: false}}
 
           true ->
             {key, cell}
@@ -128,12 +128,11 @@ defmodule World do
     for {_key, cell} <- world.cells, reduce: world do
       world ->
         neighbours =
-          for set <- @directions, into: [] do
-            make_key(cell.x + Enum.at(set, 0), cell.y + Enum.at(set, 1))
+          for {rel_x, rel_y} <- @directions do
+            make_key(cell.x + rel_x, cell.y + rel_y)
           end
 
-        world = put_in(world.cells[make_key(cell.x, cell.y)].neighbours, neighbours)
-        world
+        put_in(world.cells[make_key(cell.x, cell.y)].neighbours, neighbours)
     end
   end
 end

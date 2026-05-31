@@ -21,23 +21,12 @@ CREATE TABLE neighbours (
 
 CREATE INDEX idx_neighbours_cell ON neighbours(cell_x, cell_y);
 
-WITH RECURSIVE
-  xs(x) AS (
-    SELECT 0
-    UNION ALL
-    SELECT x + 1 FROM xs WHERE x < 150 - 1
-  ),
-  ys(y) AS (
-    SELECT 0
-    UNION ALL
-    SELECT y + 1 FROM ys WHERE y < 40 - 1
-  )
 INSERT INTO cells (x, y, alive)
 SELECT
-  xs.x,
-  ys.y,
-  CASE WHEN (floor(random() * 100)::int) <= 20 THEN 1 ELSE 0 END
-FROM xs, ys;
+  gx,
+  gy,
+  CASE WHEN random(0, 99) <= 20 THEN 1 ELSE 0 END
+FROM generate_series(0, 149) gx, generate_series(0, 39) gy;
 
 INSERT INTO neighbours (cell_x, cell_y, neighbour_x, neighbour_y)
 SELECT

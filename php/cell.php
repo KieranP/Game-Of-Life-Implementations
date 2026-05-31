@@ -2,22 +2,20 @@
 
 error_reporting(E_ALL);
 
-class Cell {
-  public $x, $y, $alive, $next_state, $neighbours;
+final class Cell {
+  public function __construct(
+    public readonly int $x,
+    public readonly int $y,
+    public bool $alive = false,
+    public ?bool $next_state = null,
+    public array $neighbours = [],
+  ) {}
 
-  public function __construct($x, $y, $alive = false) {
-    $this->x = $x;
-    $this->y = $y;
-    $this->alive = $alive;
-    $this->next_state = null;
-    $this->neighbours = [];
-  }
-
-  public function to_char() {
+  public function to_char(): string {
     return $this->alive ? 'o' : ' ';
   }
 
-  public function alive_neighbours() {
+  public function alive_neighbours(): int {
     // The following is slower
     // return count(array_filter($this->neighbours, function($n) { return $n->alive; }));
 

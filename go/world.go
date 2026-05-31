@@ -2,20 +2,21 @@ package main
 
 import (
   "fmt"
-  "math/rand"
+  "math/rand/v2"
   "strconv"
   "strings"
 )
 
 type LocationOccupied struct {
-  x, y uint32
+  x uint32
+  y uint32
 }
 
 func (e LocationOccupied) Error() string {
   return fmt.Sprintf("LocationOccupied(%d-%d)", e.x, e.y)
 }
 
-var DIRECTIONS = [8][2]int{
+var DIRECTIONS = [...][2]int{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
@@ -29,10 +30,7 @@ type World struct {
 }
 
 func new_world(width uint32, height uint32) *World {
-  world := new(World)
-  world.width = width
-  world.height = height
-  world.cells = make(map[string]*Cell, width*height)
+  world := &World{width: width, height: height, cells: make(map[string]*Cell, width*height)}
 
   world.populate_cells()
   world.prepopulate_neighbours()
@@ -64,8 +62,8 @@ func (world *World) dotick() {
 func (world *World) render() string {
   // The following is slower
   // rendering := ""
-  // for y := range(world.height) {
-  //   for x := range(world.width) {
+  // for y := range world.height {
+  //   for x := range world.width {
   //     cell, ok := world.cell_at(x, y)
   //     if ok {
   //       rendering += string(cell.to_char())
@@ -77,8 +75,8 @@ func (world *World) render() string {
 
   // The following is slower
   // rendering := []string{}
-  // for y := range(world.height) {
-  //   for x := range(world.width) {
+  // for y := range world.height {
+  //   for x := range world.width {
   //     cell, ok := world.cell_at(x, y)
   //     if ok {
   //       rendering = append(rendering, string(cell.to_char()))
@@ -92,8 +90,8 @@ func (world *World) render() string {
   render_size := int(world.width * world.height + world.height)
   rendering := strings.Builder{}
   rendering.Grow(render_size)
-  for y := range(world.height) {
-    for x := range(world.width) {
+  for y := range world.height {
+    for x := range world.width {
       cell, ok := world.cell_at(x, y)
       if ok {
         rendering.WriteRune(cell.to_char())
@@ -137,9 +135,9 @@ func (world *World) cell_at(x uint32, y uint32) (*Cell, bool) {
 }
 
 func (world *World) populate_cells() {
-  for y := range(world.height) {
-    for x := range(world.width) {
-      alive := rand.Intn(100) <= 20
+  for y := range world.height {
+    for x := range world.width {
+      alive := rand.IntN(100) <= 20
       world.add_cell(x, y, alive)
     }
   }

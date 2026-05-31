@@ -3,8 +3,8 @@ import Foundation
 final public class World {
   public var tick: UInt32
 
-  private var width: UInt32
-  private var height: UInt32
+  private let width: UInt32
+  private let height: UInt32
   private var cells: [String: Cell]
 
   public struct LocationOccupied: Error, LocalizedError {
@@ -16,10 +16,10 @@ final public class World {
     }
   }
 
-  private static let DIRECTIONS: [[Int]] = [
-    [-1, 1],  [0, 1],  [1, 1], // above
-    [-1, 0],           [1, 0], // sides
-    [-1, -1], [0, -1], [1, -1] // below
+  private static let DIRECTIONS: [(Int, Int)] = [
+    (-1, 1),  (0, 1),  (1, 1), // above
+    (-1, 0),           (1, 0), // sides
+    (-1, -1), (0, -1), (1, -1) // below
   ]
 
   public init(width: UInt32, height: UInt32) throws(LocationOccupied) {
@@ -32,7 +32,7 @@ final public class World {
     prepopulate_neighbours()
   }
 
-  public func dotick() -> Void {
+  public func dotick() {
     // First determine the action for all cells
     for (_, cell) in cells {
       let alive_neighbours = cell.alive_neighbours()
@@ -58,9 +58,8 @@ final public class World {
     var rendering = ""
     for y in 0..<height {
       for x in 0..<width {
-        let cell = cell_at(x: x, y: y)
-        if cell != nil {
-          rendering += cell!.to_char()
+        if let cell = cell_at(x: x, y: y) {
+          rendering += cell.to_char()
         }
       }
       rendering += "\n"
@@ -71,9 +70,8 @@ final public class World {
     // var rendering: Array<String> = []
     // for y in 0..<height {
     //   for x in 0..<width {
-    //     let cell = cell_at(x: x, y: y)
-    //     if cell != nil {
-    //       rendering.append(cell!.to_char())
+    //     if let cell = cell_at(x: x, y: y) {
+    //       rendering.append(cell.to_char())
     //     }
     //   }
     //   rendering.append("\n")
@@ -97,10 +95,10 @@ final public class World {
     return cells[key]
   }
 
-  private func populate_cells() throws(LocationOccupied) -> Void {
+  private func populate_cells() throws(LocationOccupied) {
     for y in 0..<height {
       for x in 0..<width {
-        let alive = (Int(arc4random_uniform(100)) <= 20)
+        let alive = Int.random(in: 0..<100) <= 20
         _ = try add_cell(x: x, y: y, alive: alive)
       }
     }
@@ -118,14 +116,14 @@ final public class World {
     return true
   }
 
-  private func prepopulate_neighbours() -> Void {
+  private func prepopulate_neighbours() {
     for (_, cell) in cells {
       let x = Int(cell.x)
       let y = Int(cell.y)
 
-      for set in World.DIRECTIONS {
-        let nx = x + set[0]
-        let ny = y + set[1]
+      for (rel_x, rel_y) in World.DIRECTIONS {
+        let nx = x + rel_x
+        let ny = y + rel_y
         if nx < 0 || ny < 0 {
           continue // Out of bounds
         }
@@ -136,9 +134,8 @@ final public class World {
           continue // Out of bounds
         }
 
-        let neighbour = cell_at(x: ux, y: uy)
-        if neighbour != nil {
-          cell.neighbours.append(neighbour!)
+        if let neighbour = cell_at(x: ux, y: uy) {
+          cell.neighbours.append(neighbour)
         }
       }
     }

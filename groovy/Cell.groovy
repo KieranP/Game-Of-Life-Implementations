@@ -1,9 +1,9 @@
 class Cell {
-  public int x
-  public int y
+  public final int x
+  public final int y
   public boolean alive
   public Boolean next_state
-  public ArrayList<Cell> neighbours
+  public final List<Cell> neighbours
 
   public Cell(int x, int y, boolean alive = false) {
     this.x = x
@@ -22,7 +22,7 @@ class Cell {
     // neighbours.count { it.alive } as int
 
     // The following is the fastest
-    // def alive_neighbours = 0
+    // var alive_neighbours = 0
     // for (neighbour in neighbours) {
     //   if (neighbour.alive) {
     //     alive_neighbours++
@@ -31,10 +31,10 @@ class Cell {
     // alive_neighbours
 
     // The following is slower
-    def alive_neighbours = 0
-    def count = neighbours.size()
+    var alive_neighbours = 0
+    var count = neighbours.size()
     for (i in 0..<count) {
-      def neighbour = neighbours[i]
+      var neighbour = neighbours[i]
       if (neighbour.alive) {
         alive_neighbours++
       }

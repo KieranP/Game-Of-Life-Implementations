@@ -52,7 +52,7 @@ impl Play {
             );
 
             if !minimal {
-                print!("{}", rendered);
+                print!("{rendered}");
             }
         }
     }

@@ -23,7 +23,7 @@ const DIRECTIONS: [(isize, isize); 8] = [
 pub struct LocationOccupied(u32, u32);
 impl Error for LocationOccupied {}
 impl fmt::Display for LocationOccupied {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "LocationOccupied({},{})", self.0, self.1)
     }
 }
@@ -56,18 +56,18 @@ impl World {
             let mut cell = rc.borrow_mut();
             let alive_neighbours = cell.alive_neighbours();
             if !cell.alive && alive_neighbours == 3 {
-                cell.next_state = true;
+                cell.next_state = Some(true);
             } else if alive_neighbours < 2 || alive_neighbours > 3 {
-                cell.next_state = false;
+                cell.next_state = Some(false);
             } else {
-                cell.next_state = cell.alive;
+                cell.next_state = Some(cell.alive);
             }
         }
 
         // Then execute the determined action for all cells
         for rc in self.cells.values() {
             let mut cell = rc.borrow_mut();
-            cell.alive = cell.next_state;
+            cell.alive = cell.next_state.unwrap_or(false);
         }
 
         self.tick += 1;

@@ -1,12 +1,13 @@
-import std.algorithm : filter;
-import std.array;
+// import std.algorithm : filter;
+// import std.array;
+import std.typecons : Nullable;
 
 class Cell {
   public:
-    uint x;
-    uint y;
+    const uint x;
+    const uint y;
     bool alive;
-    bool next_state;
+    Nullable!bool next_state;
     Cell[] neighbours;
 
     this(uint x, uint y, bool alive = false) {

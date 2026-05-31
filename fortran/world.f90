@@ -60,7 +60,6 @@ contains
       c%alive = c%next_state
     end do
 
-    deallocate(cells)
     w%tick = w%tick + 1
   end subroutine world_tick
 
@@ -103,9 +102,9 @@ contains
     type(World), intent(in) :: w
     integer, intent(in) :: x, y
     type(Cell), pointer :: c
-    character(len=32) :: key
+    character(len=:), allocatable :: key
 
-    call make_key(x, y, key)
+    key = make_key(x, y)
     c => hashmap_get(w%cells, key)
   end function cell_at
 
@@ -118,7 +117,7 @@ contains
     do y = 0, w%height - 1
       do x = 0, w%width - 1
         call random_number(random)
-        alive = (random <= 0.2)
+        alive = random <= 0.2
         call add_cell(w, x, y, alive)
       end do
     end do
@@ -129,7 +128,7 @@ contains
     integer, intent(in) :: x, y
     logical, intent(in) :: alive
     type(Cell), pointer :: existing
-    character(len=32) :: key
+    character(len=:), allocatable :: key
 
     existing => cell_at(w, x, y)
     if (associated(existing)) then
@@ -137,7 +136,7 @@ contains
       stop 1
     end if
 
-    call make_key(x, y, key)
+    key = make_key(x, y)
     call hashmap_put(w%cells, key, cell_new(x, y, alive))
   end subroutine add_cell
 
@@ -154,7 +153,7 @@ contains
       x = c%x
       y = c%y
 
-      do d = 1, 8
+      do d = 1, size(DIRECTIONS, 2)
         nx = x + DIRECTIONS(1, d)
         ny = y + DIRECTIONS(2, d)
 
@@ -168,20 +167,20 @@ contains
         end if
       end do
     end do
-
-    deallocate(cells)
   end subroutine prepopulate_neighbours
 
-  subroutine make_key(x, y, key)
+  pure function make_key(x, y) result(key)
     integer, intent(in) :: x, y
-    character(len=32), intent(out) :: key
+    character(len=:), allocatable :: key
+    character(len=KEY_LEN) :: buffer
 
-    write(key, '(I0,A,I0)') x, '-', y
+    write(buffer, '(I0,A,I0)') x, '-', y
+    key = trim(buffer)
 
     ! character(len=16) :: x_str, y_str
     ! write(x_str, '(I0)') x
     ! write(y_str, '(I0)') y
     ! key = trim(x_str) // '-' // trim(y_str)
-  end subroutine make_key
+  end function make_key
 
 end module world_mod

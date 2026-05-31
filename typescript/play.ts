@@ -2,14 +2,12 @@ import { World } from './world.js'
 
 // @ts-expect-error Needed for Boa runtime
 globalThis.performance ??= {
-  now: () => {
-    return new Date().getTime();
-  },
+  now: () => Date.now(),
 }
 
 class Play {
-  static #WORLD_WIDTH = 150
-  static #WORLD_HEIGHT = 40
+  static readonly #WORLD_WIDTH = 150
+  static readonly #WORLD_HEIGHT = 40
 
   public static run() {
     const world = new World(
@@ -17,14 +15,10 @@ class Play {
       Play.#WORLD_HEIGHT,
     )
 
-    let minimal: boolean
-    if (typeof Deno === 'object') {
-      minimal = Deno.env.get('MINIMAL') != null
-    } else if (typeof process === 'object') {
-      minimal = process.env.MINIMAL != null
-    } else {
-      minimal = true
-    }
+    const minimal =
+      typeof Deno === 'object' ? Deno.env.get('MINIMAL') != null
+      : typeof process === 'object' ? process.env.MINIMAL != null
+      : true
 
     if (!minimal) {
       console.log(world.render())

@@ -31,18 +31,18 @@ type pub World {
     # First determine the action for all cells
     for (_, cell) in @cells.iter_mut {
       let alive_neighbours = cell.alive_neighbours()
-      if cell.alive == false and alive_neighbours == 3 {
-        cell.next_state = true
+      if !cell.alive and alive_neighbours == 3 {
+        cell.next_state = Option.Some(true)
       } else if alive_neighbours < 2 or alive_neighbours > 3 {
-        cell.next_state = false
+        cell.next_state = Option.Some(false)
       } else {
-        cell.next_state = cell.alive
+        cell.next_state = Option.Some(cell.alive)
       }
     }
 
     # Then execute the determined action for all cells
     for (_, cell) in @cells.iter_mut {
-      cell.alive = cell.next_state
+      cell.alive = cell.next_state.as_ref.or(false)
     }
 
     @tick += 1
@@ -51,61 +51,49 @@ type pub World {
   fn pub render -> String {
     # The following is slower
     # let mut rendering = ""
-    # let mut y = 0
-    # while y < @height {
-    #   let mut x = 0
-    #   while x < @width {
+    # for y in 0.until(@height) {
+    #   for x in 0.until(@width) {
     #     let cell = cell_at(x, y)
     #     if cell.some? {
     #       rendering += cell.get.to_char
     #     }
-    #     x += 1
     #   }
     #   rendering += "\n"
-    #   y += 1
     # }
     # rendering
 
     # The following is slower
     # let mut rendering = []
-    # let mut y = 0
-    # while y < @height {
-    #   let mut x = 0
-    #   while x < @width {
+    # for y in 0.until(@height) {
+    #   for x in 0.until(@width) {
     #     let cell = cell_at(x, y)
     #     if cell.some? {
     #       rendering.push(cell.get.to_char)
     #     }
-    #     x += 1
     #   }
     #   rendering.push("\n")
-    #   y += 1
     # }
     # String.join(rendering.iter, with: '')
 
     # The following is the fastest
     let rendering = StringBuffer.new
-    let mut y = 0
-    while y < @height {
-      let mut x = 0
-      while x < @width {
+    for y in 0.until(@height) {
+      for x in 0.until(@width) {
         let cell = cell_at(x, y)
         if cell.some? {
           rendering.push(cell.get.to_char)
         }
-        x += 1
       }
       rendering.push("\n")
-      y += 1
     }
     rendering.into_string
   }
 
   fn make_key(x: Int, y: Int) -> String {
-    # The following is the fastest
+    # The following is slower
     # "${x}-${y}"
 
-    # The following is slower
+    # The following is the fastest
     x.to_string + "-" + y.to_string
 
     # The following is slower
@@ -119,15 +107,11 @@ type pub World {
 
   fn mut populate_cells {
     let rng = Random.new
-    let mut y = 0
-    while y < @height {
-      let mut x = 0
-      while x < @width {
+    for y in 0.until(@height) {
+      for x in 0.until(@width) {
         let alive = rng.float <= 0.2
         add_cell(x, y, alive)
-        x += 1
       }
-      y += 1
     }
   }
 
@@ -149,8 +133,8 @@ type pub World {
       let y = cell.y
 
       for set in DIRECTIONS.iter {
-        let nx = x + set.get(0).get
-        let ny = y + set.get(1).get
+        let nx = x + set.get(0).or_panic
+        let ny = y + set.get(1).or_panic
         if nx < 0 or ny < 0 {
           next # Out of bounds
         }

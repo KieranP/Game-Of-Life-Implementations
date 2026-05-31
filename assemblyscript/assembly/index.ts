@@ -1,8 +1,8 @@
 import { World } from './world'
 
 class Play {
-  static WORLD_WIDTH: u32 = 150
-  static WORLD_HEIGHT: u32 = 40
+  static readonly WORLD_WIDTH: u32 = 150
+  static readonly WORLD_HEIGHT: u32 = 40
 
   public static run(): void {
     const world = new World(
@@ -10,8 +10,7 @@ class Play {
       Play.WORLD_HEIGHT,
     )
 
-    // TODO: Get this from environment
-    let minimal: bool = true
+    const minimal: bool = process.env.has('MINIMAL')
 
     if (!minimal) {
       console.log(world.render())
@@ -23,30 +22,30 @@ class Play {
     let lowest_render: f64 = 1e18
 
     while (true) {
-      let tick_start = performance.now()
+      const tick_start = performance.now()
       world.dotick()
-      let tick_finish = performance.now()
-      let tick_time = tick_finish - tick_start
+      const tick_finish = performance.now()
+      const tick_time = tick_finish - tick_start
       total_tick += tick_time
       if (tick_time < lowest_tick) lowest_tick = tick_time
-      let avg_tick = total_tick / world.tick
+      const avg_tick = total_tick / world.tick
 
-      let render_start = performance.now()
-      let rendered = world.render()
-      let render_finish = performance.now()
-      let render_time = render_finish - render_start
+      const render_start = performance.now()
+      const rendered = world.render()
+      const render_finish = performance.now()
+      const render_time = render_finish - render_start
       total_render += render_time
       if (render_time < lowest_render) lowest_render = render_time
-      let avg_render = total_render / world.tick
+      const avg_render = total_render / world.tick
 
       if (!minimal) {
         console.log("\u001b[H\u001b[2J")
       }
 
       console.log(
-        "#" + world.tick.toString()
-        + " - World Tick (L: " + Play._f(lowest_tick) + "; A: " + Play._f(avg_tick) + ")"
-        + " - Rendering (L: " + Play._f(lowest_render) + "; A: " + Play._f(avg_render) + ")"
+        `#${world.tick}`
+        + ` - World Tick (L: ${Play._f(lowest_tick)}; A: ${Play._f(avg_tick)})`
+        + ` - Rendering (L: ${Play._f(lowest_render)}; A: ${Play._f(avg_render)})`
       )
 
       if (!minimal) {
@@ -56,13 +55,10 @@ class Play {
   }
 
   private static _f(value: f64): string {
-    let rounded = Math.round(value * 1000.0) / 1000.0
-    let parts = rounded.toString().split('.')
+    const rounded = Math.round(value * 1000.0) / 1000.0
+    const parts = rounded.toString().split('.')
     const whole = parts[0]
-    let frac = parts.length > 1 ? parts[1] : "0"
-    while (frac.length < 3) {
-      frac = "0" + frac
-    }
+    const frac = (parts.length > 1 ? parts[1] : "0").padEnd(3, "0")
     return `${whole}.${frac}`
   }
 }

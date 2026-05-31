@@ -12,7 +12,7 @@ class Play {
       WORLD_HEIGHT,
     );
 
-    var minimal = Platform.environment["MINIMAL"] != null;
+    final minimal = Platform.environment["MINIMAL"] != null;
 
     if (!minimal) {
       print(world.render());
@@ -29,16 +29,16 @@ class Play {
     while(true) {
       stopwatch.reset();
       world.dotick();
-      final tick_time = stopwatch.elapsedMicroseconds / 1.0;
+      final tick_time = stopwatch.elapsedMicroseconds.toDouble();
       total_tick += tick_time;
-      lowest_tick = [lowest_tick, tick_time].reduce(min);
+      lowest_tick = min(lowest_tick, tick_time);
       final avg_tick = (total_tick / world.tick);
 
       stopwatch.reset();
       final rendered = world.render();
-      final render_time = stopwatch.elapsedMicroseconds / 1.0;
+      final render_time = stopwatch.elapsedMicroseconds.toDouble();
       total_render += render_time;
-      lowest_render = [lowest_render, render_time].reduce(min);
+      lowest_render = min(lowest_render, render_time);
       final avg_render = (total_render / world.tick);
 
       if (!minimal) {
@@ -46,8 +46,8 @@ class Play {
       }
 
       stdout.writeln(
-        "#${world.tick}" +
-        " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})" +
+        "#${world.tick}"
+        " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})"
         " - Rendering (L: ${_f(lowest_render)}, A: ${_f(avg_render)})"
       );
 
@@ -63,6 +63,6 @@ class Play {
   }
 }
 
-main() {
+void main() {
   Play.run();
 }

@@ -3,10 +3,9 @@ package main
 import "core:os"
 import "core:fmt"
 import "core:time"
-import "core:math"
 
-WORLD_WIDTH := u32(150)
-WORLD_HEIGHT := u32(40)
+WORLD_WIDTH :: u32(150)
+WORLD_HEIGHT :: u32(40)
 
 run :: proc() {
   world := new_world(
@@ -14,7 +13,7 @@ run :: proc() {
     height=WORLD_HEIGHT,
   )
 
-  minimal := os.get_env_alloc("MINIMAL", context.temp_allocator) != ""
+  minimal := os.get_env("MINIMAL", context.temp_allocator) != ""
 
   if !minimal {
     rendered := world_render(world)
@@ -27,7 +26,7 @@ run :: proc() {
   total_render: f64
   lowest_render := max(f64)
 
-  for true {
+  for {
     tick_start := time.tick_now()
     world_tick(world)
     tick_finish := time.tick_now()
@@ -66,7 +65,7 @@ run :: proc() {
 
 _f :: proc(value: f64) -> f64 {
   // nanoseconds -> milliseconds
-  return value / 1_000_000;
+  return value / 1_000_000
 }
 
 main :: proc() {

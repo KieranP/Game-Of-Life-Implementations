@@ -15,9 +15,9 @@ const DIRECTIONS = [
 export class World {
   tick = 0
 
-  #width: number
-  #height: number
-  #cells = new Map<string, Cell>()
+  readonly #width: number
+  readonly #height: number
+  readonly #cells = new Map<string, Cell>()
 
   constructor(width: number, height: number) {
     this.#width = width
@@ -31,7 +31,7 @@ export class World {
     // First determine the action for all cells
     for (const cell of this.#cells.values()) {
       const alive_neighbours = cell.alive_neighbours()
-      if (!cell.alive && alive_neighbours == 3) {
+      if (!cell.alive && alive_neighbours === 3) {
         cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
         cell.next_state = false
@@ -42,7 +42,7 @@ export class World {
 
     // Then execute the determined action for all cells
     for (const cell of this.#cells.values()) {
-      cell.alive = cell.next_state as boolean
+      cell.alive = cell.next_state ?? cell.alive
     }
 
     this.tick += 1
@@ -95,7 +95,7 @@ export class World {
   #populate_cells() {
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
-        const alive = (Math.random() <= 0.2)
+        const alive = Math.random() <= 0.2
         this.#add_cell(x, y, alive)
       }
     }

@@ -4,40 +4,41 @@ error_reporting(E_ALL);
 
 require_once 'cell.php';
 
-class LocationOccupied extends Exception {
-  public function __construct($x, $y) {
+final class LocationOccupied extends Exception {
+  public function __construct(
+    public readonly int $x,
+    public readonly int $y,
+  ) {
     parent::__construct("LocationOccupied($x-$y)");
   }
 }
 
-class World {
-  public $tick;
+final class World {
+  public int $tick = 0;
 
-  private $width, $height, $cells;
+  private array $cells = [];
 
-  private static $DIRECTIONS = [
-    [-1, 1],  [0, 1],  [1, 1], // above
-    [-1, 0],           [1, 0], // sides
-    [-1, -1], [0, -1], [1, -1] // below
+  private const array DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1],  // above
+    [-1, 0],           [1, 0],  // sides
+    [-1, -1], [0, -1], [1, -1], // below
   ];
 
-  public function __construct($width, $height) {
-    $this->tick = 0;
-    $this->width = $width;
-    $this->height = $height;
-    $this->cells = [];
-
+  public function __construct(
+    private readonly int $width,
+    private readonly int $height,
+  ) {
     $this->populate_cells();
     $this->prepopulate_neighbours();
   }
 
-  public function dotick() {
+  public function dotick(): void {
     // First determine the action for all cells
     foreach ($this->cells as $cell) {
       $alive_neighbours = $cell->alive_neighbours();
-      if (!$cell->alive && $alive_neighbours == 3) {
+      if (!$cell->alive && $alive_neighbours === 3) {
         $cell->next_state = true;
-      } else if ($alive_neighbours < 2 || $alive_neighbours > 3) {
+      } elseif ($alive_neighbours < 2 || $alive_neighbours > 3) {
         $cell->next_state = false;
       } else {
         $cell->next_state = $cell->alive;
@@ -52,7 +53,7 @@ class World {
     $this->tick += 1;
   }
 
-  public function render() {
+  public function render(): string {
     // The following is the fastest
     $rendering = '';
     for ($y = 0; $y < $this->height; $y++) {
@@ -80,7 +81,7 @@ class World {
     // return join($rendering);
   }
 
-  private function make_key($x, $y) {
+  private function make_key(int $x, int $y): string {
     // The following is the fastest
     return "$x-$y";
 
@@ -91,14 +92,12 @@ class World {
     // return implode('-', [$x, $y]);
   }
 
-  private function cell_at($x, $y) {
+  private function cell_at(int $x, int $y): ?Cell {
     $key = $this->make_key($x, $y);
-    if (isset($this->cells[$key])) {
-      return $this->cells[$key];
-    }
+    return $this->cells[$key] ?? null;
   }
 
-  private function populate_cells() {
+  private function populate_cells(): void {
     for ($y = 0; $y < $this->height; $y++) {
       for ($x = 0; $x < $this->width; $x++) {
         $alive = rand(0, 100) <= 20;
@@ -107,7 +106,7 @@ class World {
     }
   }
 
-  private function add_cell($x, $y, $alive = false) {
+  private function add_cell(int $x, int $y, bool $alive = false): bool {
     $existing = $this->cell_at($x, $y);
     if ($existing) {
       throw new LocationOccupied($x, $y);
@@ -119,14 +118,14 @@ class World {
     return true;
   }
 
-  private function prepopulate_neighbours() {
+  private function prepopulate_neighbours(): void {
     foreach ($this->cells as $cell) {
       $x = $cell->x;
       $y = $cell->y;
 
-      foreach (self::$DIRECTIONS as $set) {
-        $nx = $x + $set[0];
-        $ny = $y + $set[1];
+      foreach (self::DIRECTIONS as [$rel_x, $rel_y]) {
+        $nx = $x + $rel_x;
+        $ny = $y + $rel_y;
         if ($nx < 0 || $ny < 0) {
           continue; // Out of bounds
         }

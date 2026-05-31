@@ -1,18 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
+// using System.Linq;
 
-public class Cell {
-  public uint x;
-  public uint y;
-  public bool alive;
+public class Cell(uint x, uint y, bool alive = false) {
+  public readonly uint x = x;
+  public readonly uint y = y;
+  public bool alive = alive;
   public bool? next_state = null;
-  public List<Cell> neighbours = [];
-
-  public Cell(uint x, uint y, bool alive = false) {
-    this.x = x;
-    this.y = y;
-    this.alive = alive;
-  }
+  public readonly List<Cell> neighbours = [];
 
   public char to_char() {
     return this.alive ? 'o' : ' ';

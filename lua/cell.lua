@@ -1,11 +1,11 @@
-Cell = {}
+local Cell = {}
+Cell.__index = Cell
 
 function Cell:new(x, y, alive)
-  self.__index = self
   local cell = setmetatable({
     x = x,
     y = y,
-    alive = (alive or false),
+    alive = alive or false,
     next_state = nil,
     neighbours = {},
   }, self)
@@ -22,7 +22,7 @@ function Cell:alive_neighbours()
   -- local alive_neighbours = 0
   -- for index,neighbour in pairs(self.neighbours) do
   --   if neighbour.alive then
-  --     alive_neighbours = (alive_neighbours + 1)
+  --     alive_neighbours = alive_neighbours + 1
   --   end
   -- end
   -- return alive_neighbours
@@ -32,8 +32,10 @@ function Cell:alive_neighbours()
   for i = 1, #self.neighbours do
     local neighbour = self.neighbours[i]
     if neighbour.alive then
-      alive_neighbours = (alive_neighbours + 1)
+      alive_neighbours = alive_neighbours + 1
     end
   end
   return alive_neighbours
 end
+
+return Cell

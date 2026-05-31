@@ -1,15 +1,14 @@
 #include <algorithm>
+#include <optional>
 #include <vector>
-
-using namespace std;
 
 class Cell {
   public:
-    uint32_t x;
-    uint32_t y;
+    const uint32_t x;
+    const uint32_t y;
     bool alive;
-    bool next_state;
-    vector<Cell*> neighbours;
+    std::optional<bool> next_state;
+    std::vector<Cell*> neighbours;
 
     Cell(uint32_t x, uint32_t y, bool alive = false): x(x), y(y), alive(alive) { }
 
@@ -19,11 +18,7 @@ class Cell {
 
     uint32_t alive_neighbours() {
       // The following is the fastest
-      return count_if(
-        begin(neighbours),
-        end(neighbours),
-        [](auto *neighbour) { return neighbour->alive; }
-      );
+      return std::ranges::count_if(neighbours, [](auto* n) { return n->alive; });
 
       // The following is about the same speed
       // auto alive_neighbours = 0;

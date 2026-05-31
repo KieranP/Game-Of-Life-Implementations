@@ -6,8 +6,8 @@ import world;
 
 class Play {
   public:
-    static const auto WORLD_WIDTH = 150;
-    static const auto WORLD_HEIGHT = 40;
+    enum WORLD_WIDTH = 150;
+    enum WORLD_HEIGHT = 40;
 
     static void run() {
       auto world = new World(

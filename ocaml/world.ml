@@ -1,9 +1,9 @@
 exception LocationOccupied of string
 
 let directions = [|
-  [|-1; 1|];  [|0; 1|];  [|1; 1|];  (* above *)
-  [|-1; 0|];             [|1; 0|];  (* sides *)
-  [|-1; -1|]; [|0; -1|]; [|1; -1|]; (* below *)
+  (-1, 1);  (0, 1);  (1, 1);  (* above *)
+  (-1, 0);           (1, 0);  (* sides *)
+  (-1, -1); (0, -1); (1, -1); (* below *)
 |]
 
 class world ~width ~height =
@@ -34,8 +34,7 @@ class world ~width ~height =
 
       (* Then execute the determined action for all cells *)
       Hashtbl.iter (fun _ cell ->
-        if Option.is_some cell#next_state then
-          cell#set_alive (Option.get cell#next_state)
+        Option.iter cell#set_alive cell#next_state
       ) cells;
 
       tick <- tick + 1
@@ -46,8 +45,10 @@ class world ~width ~height =
       for y = 0 to height - 1 do
         for x = 0 to width - 1 do
           let cell = self#cell_at x y in
-          if Option.is_some cell then
-            rendering := !rendering ^ String.make 1 (Option.get cell)#to_char
+          (match cell with
+           | Some c ->
+             rendering := !rendering ^ String.make 1 c#to_char
+           | None -> ())
         done;
         rendering := !rendering ^ "\n"
       done;
@@ -58,8 +59,10 @@ class world ~width ~height =
       for y = 0 to height - 1 do
         for x = 0 to width - 1 do
           let cell = self#cell_at x y in
-          if Option.is_some cell then
-            rendering := String.make 1 (Option.get cell)#to_char :: !rendering
+          (match cell with
+           | Some c ->
+             rendering := String.make 1 c#to_char :: !rendering
+           | None -> ())
         done;
         rendering := "\n" :: !rendering
       done;
@@ -72,13 +75,14 @@ class world ~width ~height =
       for y = 0 to height - 1 do
         for x = 0 to width - 1 do
           let cell = self#cell_at x y in
-          if Option.is_some cell then begin
-            Bytes.set rendering !idx (Option.get cell)#to_char;
-            idx := !idx + 1
-          end
+          (match cell with
+           | Some c ->
+             Bytes.set rendering !idx c#to_char;
+             incr idx
+           | None -> ())
         done;
         Bytes.set rendering !idx '\n';
-        idx := !idx + 1
+        incr idx
       done;
       Bytes.to_string rendering
 
@@ -97,11 +101,10 @@ class world ~width ~height =
       Hashtbl.find_opt cells key
 
     method private add_cell x y ?(alive=false) () =
-      let existing = self#cell_at x y in
-      if Option.is_some existing then
-        raise (LocationOccupied (self#make_key x y));
-
       let key = self#make_key x y in
+      if Hashtbl.mem cells key then
+        raise (LocationOccupied key);
+
       let cell = new Cell.cell x y ~alive () in
       Hashtbl.add cells key cell;
       true
@@ -121,15 +124,14 @@ class world ~width ~height =
         let y = cell#y in
         let neighbours_list = ref [] in
 
-        Array.iter (fun dir ->
-          let nx = x + dir.(0) in
-          let ny = y + dir.(1) in
+        Array.iter (fun (rel_x, rel_y) ->
+          let nx = x + rel_x in
+          let ny = y + rel_y in
 
           if nx >= 0 && ny >= 0 then
             if nx < width && ny < height then
-              let neighbour = self#cell_at nx ny in
-              if Option.is_some neighbour then
-                neighbours_list := Option.get neighbour :: !neighbours_list
+              Option.iter (fun n -> neighbours_list := n :: !neighbours_list)
+                (self#cell_at nx ny)
         ) directions;
 
         cell#set_neighbours (Array.of_list !neighbours_list)

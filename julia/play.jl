@@ -1,6 +1,5 @@
 include("world.jl")
 using Printf
-using Dates
 
 const WORLD_WIDTH = UInt64(150)
 const WORLD_HEIGHT = UInt64(40)

@@ -15,5 +15,5 @@ scalac *.scala
 ## Run
 
 ```bash
-scala run -cp . -M Play
+scala run -cp . -M play
 ```

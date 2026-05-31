@@ -1,10 +1,10 @@
 import Foundation
 
-let WORLD_WIDTH = UInt32(150)
-let WORLD_HEIGHT = UInt32(40)
+let WORLD_WIDTH: UInt32 = 150
+let WORLD_HEIGHT: UInt32 = 40
 
-final private class Play {
-  public class func run() throws -> Void {
+private final class Play {
+  public class func run() throws {
     let world = try World(
       width: WORLD_WIDTH,
       height: WORLD_HEIGHT
@@ -16,10 +16,10 @@ final private class Play {
       print(world.render())
     }
 
-    var total_tick = Double(0)
-    var lowest_tick = Double(Int64.max)
-    var total_render = Double(0)
-    var lowest_render = Double(Int64.max)
+    var total_tick = 0.0
+    var lowest_tick = Double.greatestFiniteMagnitude
+    var total_render = 0.0
+    var lowest_render = Double.greatestFiniteMagnitude
 
     while true {
       let tick_start = ProcessInfo.processInfo.systemUptime
@@ -27,7 +27,7 @@ final private class Play {
       let tick_finish = ProcessInfo.processInfo.systemUptime
       let tick_time = (tick_finish - tick_start)
       total_tick += tick_time
-      lowest_tick = [lowest_tick, tick_time].min()!
+      lowest_tick = min(lowest_tick, tick_time)
       let avg_tick = (total_tick / Double(world.tick))
 
       let render_start = ProcessInfo.processInfo.systemUptime
@@ -35,7 +35,7 @@ final private class Play {
       let render_finish = ProcessInfo.processInfo.systemUptime
       let render_time = (render_finish - render_start)
       total_render += render_time
-      lowest_render = [lowest_render, render_time].min()!
+      lowest_render = min(lowest_render, render_time)
       let avg_render = (total_render / Double(world.tick))
 
       if !minimal {

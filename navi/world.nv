@@ -40,7 +40,7 @@ impl World {
 
   fn tick(self) {
     // First determine the action for all cells
-    for (let key, cell in self.cells) {
+    for (let cell in self.cells.values()) {
       let alive_neighbours = cell.alive_neighbours();
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true;
@@ -52,8 +52,8 @@ impl World {
     }
 
     // Then execute the determined action for all cells
-    for (let key, cell in self.cells) {
-      cell.alive = cell.next_state || false;
+    for (let cell in self.cells.values()) {
+      cell.alive = cell.next_state.unwrap_or(false);
     }
 
     self.tick += 1;
@@ -64,9 +64,8 @@ impl World {
     // let rendering = "";
     // for (let y in 0..self.height) {
     //   for (let x in 0..self.width) {
-    //     let cell = self.cell_at(x, y);
-    //     if (cell.is_some()) {
-    //       rendering += cell!.to_char().to_string();
+    //     if (let cell = self.cell_at(x, y)) {
+    //       rendering += cell.to_char().to_string();
     //     }
     //   }
     //   rendering += "\n";
@@ -77,9 +76,8 @@ impl World {
     // let rendering: [string] = [];
     // for (let y in 0..self.height) {
     //   for (let x in 0..self.width) {
-    //     let cell = self.cell_at(x, y);
-    //     if (cell.is_some()) {
-    //       rendering.push(cell!.to_char().to_string());
+    //     if (let cell = self.cell_at(x, y)) {
+    //       rendering.push(cell.to_char().to_string());
     //     }
     //   }
     //   rendering.push("\n");
@@ -90,9 +88,8 @@ impl World {
     let rendering = StringBuffer.new();
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
-        let cell = self.cell_at(x, y);
-        if (cell.is_some()) {
-          rendering.push(cell!.to_char());
+        if (let cell = self.cell_at(x, y)) {
+          rendering.push(cell.to_char());
         }
       }
       rendering.push('\n');
@@ -119,7 +116,7 @@ impl World {
   fn populate_cells(self) throws LocationOccupied {
     for (let y in 0..self.height) {
       for (let x in 0..self.width) {
-        let alive = (rand.float(0.0, 1.0) <= 0.2);
+        let alive = rand.float(0.0, 1.0) <= 0.2;
         try self.add_cell(x, y, alive);
       }
     }
@@ -138,7 +135,7 @@ impl World {
   }
 
   fn prepopulate_neighbours(self) {
-    for (let key, cell in self.cells) {
+    for (let cell in self.cells.values()) {
       const x = cell.x;
       const y = cell.y;
 
@@ -153,9 +150,8 @@ impl World {
           continue; // Out of bounds
         }
 
-        const neighbour = self.cell_at(nx, ny);
-        if (neighbour.is_some()) {
-          cell.neighbours.push(neighbour!);
+        if (let neighbour = self.cell_at(nx, ny)) {
+          cell.neighbours.push(neighbour);
         }
       }
     }

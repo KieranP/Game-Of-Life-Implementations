@@ -1,16 +1,16 @@
 require_relative 'world'
 
 class Play
-  @@WORLD_WIDTH  = 150
-  @@WORLD_HEIGHT = 40
+  WORLD_WIDTH  = 150
+  WORLD_HEIGHT = 40
 
   def self.run
     world = World.new(
-      width: @@WORLD_WIDTH,
-      height: @@WORLD_HEIGHT,
+      width: WORLD_WIDTH,
+      height: WORLD_HEIGHT,
     )
 
-    minimal = !!ENV['MINIMAL']
+    minimal = ENV.key?('MINIMAL')
 
     unless minimal
       puts world.render
@@ -21,7 +21,7 @@ class Play
     total_render = 0
     lowest_render = Float::INFINITY
 
-    while true
+    loop do
       tick_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       world.dotick
       tick_finish = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -42,7 +42,7 @@ class Play
         puts "\u001b[H\u001b[2J"
       end
 
-      puts sprintf(
+      puts format(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
         world.tick,
         _f(lowest_tick),

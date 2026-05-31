@@ -1,6 +1,4 @@
 #include "hashmap.h"
-#include <assert.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -24,18 +22,20 @@ static inline int fast_strcmp(const char *s1, const char *s2) {
 }
 
 HashMap *hashmap_new(void) {
-  auto map = (HashMap *)malloc(sizeof(HashMap));
+  HashMap *map = malloc(sizeof(*map));
   if (!map) {
-    return NULL;
+    return nullptr;
   }
 
-  auto capacity = (size_t)HASH_TABLE_SIZE;
-  assert((capacity & (capacity - 1)) == 0);
+  static_assert((HASH_TABLE_SIZE & (HASH_TABLE_SIZE - 1)) == 0,
+                "HASH_TABLE_SIZE must be a power of two");
+
+  auto capacity = HASH_TABLE_SIZE;
 
   map->entries = calloc(capacity, sizeof(HashEntry));
   if (!map->entries) {
     free(map);
-    return NULL;
+    return nullptr;
   }
 
   map->capacity = capacity;
@@ -89,7 +89,7 @@ bool hashmap_put(HashMap *map, const char *key, void *value) {
 
 void *hashmap_get(HashMap *map, const char *key) {
   if (!map || !key) {
-    return NULL;
+    return nullptr;
   }
 
   auto hash = hash_full(key);
@@ -107,21 +107,21 @@ void *hashmap_get(HashMap *map, const char *key) {
         idx = (idx + 1) & mask;
       }
     } else {
-      return NULL;
+      return nullptr;
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void **hashmap_get_all_values(HashMap *map) {
   if (!map) {
-    return NULL;
+    return nullptr;
   }
 
-  auto values = (void **)malloc(map->count * sizeof(void *));
+  void **values = malloc(map->count * sizeof(*values));
   if (!values) {
-    return NULL;
+    return nullptr;
   }
 
   auto j = 0;

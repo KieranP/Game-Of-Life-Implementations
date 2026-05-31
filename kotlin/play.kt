@@ -9,7 +9,7 @@ public class Play {
         height = WORLD_HEIGHT,
       )
 
-      var minimal = System.getenv("MINIMAL") != null;
+      val minimal = System.getenv("MINIMAL") != null
 
       if (!minimal) {
         println(world.render())
@@ -24,17 +24,17 @@ public class Play {
         val tick_start = System.nanoTime()
         world.dotick()
         val tick_finish = System.nanoTime()
-        val tick_time = (tick_finish - tick_start) / 1.0
+        val tick_time = (tick_finish - tick_start).toDouble()
         total_tick += tick_time
-        lowest_tick = Math.min(lowest_tick, tick_time)
+        lowest_tick = minOf(lowest_tick, tick_time)
         val avg_tick = (total_tick / world.tick)
 
         val render_start = System.nanoTime()
         val rendered = world.render()
         val render_finish = System.nanoTime()
-        val render_time = (render_finish - render_start) / 1.0
+        val render_time = (render_finish - render_start).toDouble()
         total_render += render_time
-        lowest_render = Math.min(lowest_render, render_time)
+        lowest_render = minOf(lowest_render, render_time)
         val avg_render = (total_render / world.tick)
 
         if (!minimal) {

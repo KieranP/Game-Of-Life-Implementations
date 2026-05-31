@@ -1,9 +1,9 @@
 public class Cell {
-  public int:Unsigned32 x;
-  public int:Unsigned32 y;
+  public final int:Unsigned32 x;
+  public final int:Unsigned32 y;
   public boolean alive;
-  public boolean next_state = false;
-  public Cell[] neighbours = [];
+  public boolean? next_state = null;
+  public final Cell[] neighbours = [];
 
   public function init(int:Unsigned32 x, int:Unsigned32 y, boolean alive = false) {
     self.x = x;
@@ -12,11 +12,7 @@ public class Cell {
   }
 
   public function to_char() returns string {
-    if self.alive {
-      return "o";
-    } else {
-      return " ";
-    }
+    return self.alive ? "o" : " ";
   }
 
   public function alive_neighbours() returns int:Unsigned32 {

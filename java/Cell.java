@@ -1,17 +1,17 @@
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 public class Cell {
-  public int x;
-  public int y;
+  public final int x;
+  public final int y;
   public boolean alive;
   public Boolean next_state;
-  public ArrayList<Cell> neighbours;
+  public final ArrayList<Cell> neighbours;
 
-  public Cell(int x, int y, boolean... args) {
+  public Cell(int x, int y, boolean alive) {
     this.x = x;
     this.y = y;
-    this.alive = args[0];
+    this.alive = alive;
     this.next_state = null;
     this.neighbours = new ArrayList<>();
   }

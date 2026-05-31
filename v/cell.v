@@ -4,16 +4,12 @@ pub:
   y u32
 pub mut:
   alive bool
-  next_state bool
+  next_state ?bool
   neighbours []&Cell
 }
 
 fn (self Cell) to_char() string {
-  if self.alive {
-    return 'o'
-  } else {
-    return ' '
-  }
+  return if self.alive { 'o' } else { ' ' }
 }
 
 fn (self Cell) alive_neighbours() u32 {

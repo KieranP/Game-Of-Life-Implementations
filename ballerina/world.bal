@@ -2,7 +2,7 @@ import ballerina/random;
 
 public type LocationOccupied distinct error;
 
-final int[][] DIRECTIONS = [
+final [int, int][] DIRECTIONS = [
   [-1, 1],  [0, 1],  [1, 1],  // above
   [-1, 0],           [1, 0],  // sides
   [-1, -1], [0, -1], [1, -1]  // below
@@ -10,9 +10,9 @@ final int[][] DIRECTIONS = [
 
 public class World {
   public int:Unsigned32 tick = 0;
-  private int:Unsigned32 width;
-  private int:Unsigned32 height;
-  private map<Cell> cells = {};
+  private final int:Unsigned32 width;
+  private final int:Unsigned32 height;
+  private final map<Cell> cells = {};
 
   public function init(int:Unsigned32 width, int:Unsigned32 height) returns error? {
     self.width = width;
@@ -36,7 +36,7 @@ public class World {
 
     // Then execute the determined action for all cells
     foreach Cell cell in self.cells {
-      cell.alive = cell.next_state;
+      cell.alive = cell.next_state ?: false;
     }
 
     self.tick = <int:Unsigned32>(self.tick + 1);
@@ -45,35 +45,27 @@ public class World {
   public function render() returns string {
     // The following is slower
     // string rendering = "";
-    // int:Unsigned32 y = 0;
-    // while y < self.height {
-    //   int:Unsigned32 x = 0;
-    //   while x < self.width {
-    //     Cell? cell = self.cell_at(x, y);
+    // foreach int y in 0 ..< self.height {
+    //   foreach int x in 0 ..< self.width {
+    //     Cell? cell = self.cell_at(<int:Unsigned32>x, <int:Unsigned32>y);
     //     if cell is Cell {
     //       rendering += cell.to_char();
     //     }
-    //     x = <int:Unsigned32>(x + 1);
     //   }
     //   rendering += "\n";
-    //   y = <int:Unsigned32>(y + 1);
     // }
     // return rendering;
 
     // The following is slower
     // string[] rendering = [];
-    // int:Unsigned32 y = 0;
-    // while y < self.height {
-    //   int:Unsigned32 x = 0;
-    //   while x < self.width {
-    //     Cell? cell = self.cell_at(x, y);
+    // foreach int y in 0 ..< self.height {
+    //   foreach int x in 0 ..< self.width {
+    //     Cell? cell = self.cell_at(<int:Unsigned32>x, <int:Unsigned32>y);
     //     if cell is Cell {
     //       rendering.push(cell.to_char());
     //     }
-    //     x = <int:Unsigned32>(x + 1);
     //   }
     //   rendering.push("\n");
-    //   y = <int:Unsigned32>(y + 1);
     // }
     // return string:'join("", ...rendering);
 
@@ -82,20 +74,16 @@ public class World {
     string[] rendering = [];
     rendering.setLength(render_size);
     int idx = 0;
-    int:Unsigned32 y = 0;
-    while y < self.height {
-      int:Unsigned32 x = 0;
-      while x < self.width {
-        Cell? cell = self.cell_at(x, y);
+    foreach int y in 0 ..< self.height {
+      foreach int x in 0 ..< self.width {
+        Cell? cell = self.cell_at(<int:Unsigned32>x, <int:Unsigned32>y);
         if cell is Cell {
           rendering[idx] = cell.to_char();
           idx += 1;
         }
-        x = <int:Unsigned32>(x + 1);
       }
       rendering[idx] = "\n";
       idx += 1;
-      y = <int:Unsigned32>(y + 1);
     }
     return string:'join("", ...rendering);
   }
@@ -118,16 +106,12 @@ public class World {
   }
 
   private function populate_cells() returns error? {
-    int:Unsigned32 y = 0;
-    while y < self.height {
-      int:Unsigned32 x = 0;
-      while x < self.width {
+    foreach int y in 0 ..< self.height {
+      foreach int x in 0 ..< self.width {
         int randValue = check random:createIntInRange(0, 100);
         boolean alive = randValue <= 20;
-        _ = check self.add_cell(x, y, alive);
-        x = <int:Unsigned32>(x + 1);
+        _ = check self.add_cell(<int:Unsigned32>x, <int:Unsigned32>y, alive);
       }
-      y = <int:Unsigned32>(y + 1);
     }
   }
 
@@ -148,9 +132,9 @@ public class World {
       int:Unsigned32 x = cell.x;
       int:Unsigned32 y = cell.y;
 
-      foreach int[] set in DIRECTIONS {
-        int nx = <int>x + set[0];
-        int ny = <int>y + set[1];
+      foreach var [rel_x, rel_y] in DIRECTIONS {
+        int nx = <int>x + rel_x;
+        int ny = <int>y + rel_y;
         if nx < 0 || ny < 0 {
           continue; // Out of bounds
         }

@@ -1,4 +1,3 @@
-use "random"
 use "time"
 use "format"
 
@@ -22,11 +21,9 @@ actor Main
     )
 
     for env_var in env.vars.values() do
-      try
-        if env_var.find("MINIMAL=")? == 0 then
-          minimal = true
-          break
-        end
+      if env_var.at("MINIMAL=") then
+        minimal = true
+        break
       end
     end
 
@@ -67,7 +64,7 @@ actor Main
     )
 
     if not minimal then
-      _env.out.write("" + rendered)
+      _env.out.write(rendered.clone())
     end
 
     tick()

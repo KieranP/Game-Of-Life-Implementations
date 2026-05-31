@@ -1,12 +1,12 @@
 mutable struct Cell
-  x::UInt64
-  y::UInt64
+  const x::UInt64
+  const y::UInt64
   alive::Bool
-  next_state::Bool
-  neighbours::Vector{Cell}
+  next_state::Union{Bool, Nothing}
+  const neighbours::Vector{Cell}
 
-  function Cell(x::UInt64, y::UInt64, alive = false)
-    new(x, y, alive, false, [])
+  function Cell(x::UInt64, y::UInt64, alive::Bool = false)
+    new(x, y, alive, nothing, Cell[])
   end
 end
 

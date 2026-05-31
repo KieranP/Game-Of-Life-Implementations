@@ -1,10 +1,10 @@
 using System;
-using System.Linq;
+// using System.Linq;
 using System.Diagnostics;
 
 public class Play {
-  private static readonly uint WORLD_WIDTH = 150;
-  private static readonly uint WORLD_HEIGHT = 40;
+  private const uint WORLD_WIDTH = 150;
+  private const uint WORLD_HEIGHT = 40;
 
   public static void Main(string[] args) {
     run();
@@ -16,7 +16,7 @@ public class Play {
       height: WORLD_HEIGHT
     );
 
-    var minimal = Environment.GetEnvironmentVariable("MINIMAL") != null;
+    var minimal = Environment.GetEnvironmentVariable("MINIMAL") is not null;
 
     if (!minimal) {
       Console.WriteLine(world.render());
@@ -49,12 +49,9 @@ public class Play {
       }
 
       Console.WriteLine(
-        "#{0} - World Tick (L: {1:f3}; A: {2:f3}) - Rendering (L: {3:f3}; A: {4:f3})",
-        world.tick,
-        _f(lowest_tick),
-        _f(avg_tick),
-        _f(lowest_render),
-        _f(avg_render)
+        $"#{world.tick}" +
+        $" - World Tick (L: {_f(lowest_tick):f3}; A: {_f(avg_tick):f3})" +
+        $" - Rendering (L: {_f(lowest_render):f3}; A: {_f(avg_render):f3})"
       );
 
       if (!minimal) {

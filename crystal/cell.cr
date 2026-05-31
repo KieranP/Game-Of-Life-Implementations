@@ -3,7 +3,7 @@ class Cell
          y : UInt32
 
   property alive : Bool,
-           next_state : (Bool | Nil) = nil,
+           next_state : Bool? = nil,
            neighbours : Array(Cell) = [] of Cell
 
   def initialize(@x : UInt32, @y : UInt32, @alive : Bool = false)

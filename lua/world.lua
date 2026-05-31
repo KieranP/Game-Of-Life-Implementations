@@ -1,15 +1,15 @@
-dofile('cell.lua')
+local Cell = require('cell')
 
-DIRECTIONS = {
+local DIRECTIONS = {
   {-1, 1},  {0, 1},  {1, 1}, -- above
   {-1, 0},           {1, 0}, -- sides
   {-1, -1}, {0, -1}, {1, -1} -- below
 }
 
-World = {}
+local World = {}
+World.__index = World
 
 function World:new(width, height)
-  self.__index = self
   local world = setmetatable({
     tick = 0,
     width = width,
@@ -25,7 +25,7 @@ end
 
 function World:dotick()
   -- First determine the action for all cells
-  for key,cell in pairs(self.cells) do
+  for _,cell in pairs(self.cells) do
     local alive_neighbours = cell:alive_neighbours()
     if not cell.alive and alive_neighbours == 3 then
       cell.next_state = true
@@ -37,11 +37,11 @@ function World:dotick()
   end
 
   -- Then execute the determined action for all cells
-  for key,cell in pairs(self.cells) do
+  for _,cell in pairs(self.cells) do
     cell.alive = cell.next_state
   end
 
-  self.tick = (self.tick + 1)
+  self.tick = self.tick + 1
 end
 
 function World:render()
@@ -58,16 +58,32 @@ function World:render()
   -- end
   -- return rendering
 
+  -- The following is slower
+  -- local rendering = {}
+  -- for y = 0, self.height-1 do
+  --   for x = 0, self.width-1 do
+  --     local cell = self:cell_at(x, y)
+  --     if cell then
+  --       table.insert(rendering, cell:to_char())
+  --     end
+  --   end
+  --   table.insert(rendering, "\n")
+  -- end
+  -- return table.concat(rendering)
+
   -- The following is the fastest
   local rendering = {}
+  local n = 0
   for y = 0, self.height-1 do
     for x = 0, self.width-1 do
       local cell = self:cell_at(x, y)
       if cell then
-        table.insert(rendering, cell:to_char())
+        n = n + 1
+        rendering[n] = cell:to_char()
       end
     end
-    table.insert(rendering, "\n")
+    n = n + 1
+    rendering[n] = "\n"
   end
   return table.concat(rendering)
 end
@@ -89,21 +105,21 @@ function World:cell_at(x, y)
 end
 
 function World:populate_cells()
-  math.randomseed(os.time())
+  math.randomseed()
 
   for y = 0, self.height-1 do
     for x = 0, self.width-1 do
-      local alive = (math.random() <= 0.2)
+      local alive = math.random() <= 0.2
       self:add_cell(x, y, alive)
     end
   end
 end
 
 function World:add_cell(x, y, alive)
-  alive = (alive or false)
+  alive = alive or false
 
   local existing = self:cell_at(x, y)
-  assert(not existing, "LocationOccupied("..x.."-"..y..")")
+  assert(not existing, string.format("LocationOccupied(%d-%d)", x, y))
 
   local key = self:make_key(x, y)
   local cell = Cell:new(x, y, alive)
@@ -112,16 +128,16 @@ function World:add_cell(x, y, alive)
 end
 
 function World:prepopulate_neighbours()
-  for key,cell in pairs(self.cells) do
+  for _,cell in pairs(self.cells) do
     local x = cell.x
     local y = cell.y
 
-    for index,set in ipairs(DIRECTIONS) do
+    for _,set in ipairs(DIRECTIONS) do
       local nx = x + set[1]
       local ny = y + set[2]
 
-      if (nx >= 0) and (ny >= 0) then
-        if (nx < self.width) and (ny < self.height) then
+      if nx >= 0 and ny >= 0 then
+        if nx < self.width and ny < self.height then
           local neighbour = self:cell_at(nx, ny)
           if neighbour then
             table.insert(cell.neighbours, neighbour)
@@ -131,3 +147,5 @@ function World:prepopulate_neighbours()
     end
   end
 end
+
+return World

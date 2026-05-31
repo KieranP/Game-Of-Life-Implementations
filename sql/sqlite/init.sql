@@ -7,7 +7,7 @@ CREATE TABLE cells (
   alive INTEGER NOT NULL DEFAULT 0,
   next_state INTEGER DEFAULT NULL,
   PRIMARY KEY (x, y)
-);
+) STRICT, WITHOUT ROWID;
 
 CREATE TABLE neighbours (
   cell_x INTEGER NOT NULL,
@@ -17,27 +17,16 @@ CREATE TABLE neighbours (
   PRIMARY KEY (cell_x, cell_y, neighbour_x, neighbour_y),
   FOREIGN KEY (cell_x, cell_y) REFERENCES cells(x, y),
   FOREIGN KEY (neighbour_x, neighbour_y) REFERENCES cells(x, y)
-);
+) STRICT, WITHOUT ROWID;
 
 CREATE INDEX idx_neighbours_cell ON neighbours(cell_x, cell_y);
 
-WITH RECURSIVE
-  xs(x) AS (
-    SELECT 0
-    UNION ALL
-    SELECT x + 1 FROM xs WHERE x < 150 - 1
-  ),
-  ys(y) AS (
-    SELECT 0
-    UNION ALL
-    SELECT y + 1 FROM ys WHERE y < 40 - 1
-  )
 INSERT INTO cells (x, y, alive)
 SELECT
-  xs.x,
-  ys.y,
+  gx.value,
+  gy.value,
   CASE WHEN (ABS(RANDOM()) % 100) <= 20 THEN 1 ELSE 0 END
-FROM xs, ys;
+FROM generate_series(0, 149) gx, generate_series(0, 39) gy;
 
 INSERT INTO neighbours (cell_x, cell_y, neighbour_x, neighbour_y)
 SELECT

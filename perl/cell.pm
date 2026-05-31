@@ -1,51 +1,45 @@
 use v5.40;
-use strict;
-use warnings;
-use builtin qw(false);
+use experimental 'class';
 
-package Cell;
+class Cell {
+  field $x :param :reader;
+  field $y :param :reader;
+  field $alive :param :reader :writer = false;
+  field $next_state :reader :writer;
+  field $neighbours :reader = [];
 
-sub new($class, $x, $y, $alive = false) {
-  my $self = {
-    x => $x,
-    y => $y,
-    alive => $alive,
-    next_state => undef,
-    neighbours => []
-  };
+  method add_neighbour($neighbour) {
+    push $neighbours->@*, $neighbour;
+  }
 
-  bless $self, $class;
+  method to_char() {
+    $alive ? 'o' : ' '
+  }
 
-  return $self;
-}
+  method alive_neighbours() {
+    # The following is the fastest
+    return grep { $_->alive } $neighbours->@*;
 
-sub to_char($self) {
-  $self->{alive} ? 'o' : ' '
-}
+    # The following is slower
+    # my $alive_neighbours = 0;
+    # foreach my $neighbour ($neighbours->@*) {
+    #   if ($neighbour->alive) {
+    #     $alive_neighbours += 1;
+    #   }
+    # }
+    # $alive_neighbours;
 
-sub alive_neighbours($self) {
-  # The following is the fastest
-  grep { $_->{alive} } @{$self->{neighbours}};
-
-  # The following is slower
-  # my $alive_neighbours = 0;
-  # foreach my $neighbour (@{$self->{neighbours}}) {
-  #   if ($neighbour->{alive}) {
-  #     $alive_neighbours += 1;
-  #   }
-  # }
-  # $alive_neighbours;
-
-  # The following is slower
-  # my $alive_neighbours = 0;
-  # my $count = @{$self->{neighbours}};
-  # for (my $i = 0; $i < $count; $i++) {
-  #   my $neighbour = $self->{neighbours}[$i];
-  #   if ($neighbour->{alive}) {
-  #     $alive_neighbours += 1;
-  #   }
-  # }
-  # $alive_neighbours;
+    # The following is slower
+    # my $alive_neighbours = 0;
+    # my $count = $neighbours->@*;
+    # for (my $i = 0; $i < $count; $i++) {
+    #   my $neighbour = $neighbours->[$i];
+    #   if ($neighbour->alive) {
+    #     $alive_neighbours += 1;
+    #   }
+    # }
+    # $alive_neighbours;
+  }
 }
 
 1;

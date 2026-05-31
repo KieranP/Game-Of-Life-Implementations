@@ -1,9 +1,11 @@
 import cell;
-import std.conv : to, toChars;
+import std.conv : toChars;
+// import std.conv : to;
 import std.algorithm.mutation : copy;
 import std.random : uniform01;
-import std.array : array, join;
+// import std.array : array, join;
 import std.format : format;
+import std.typecons : tuple, Tuple;
 
 class World {
   public:
@@ -32,7 +34,7 @@ class World {
 
       // Then execute the determined action for all cells
       foreach (ref cell; cells) {
-        cell.alive = cell.next_state;
+        cell.alive = cell.next_state.get;
       }
 
       tick += 1;
@@ -41,8 +43,8 @@ class World {
     auto render() {
       // The following is slower
       // string rendering = "";
-      // for (auto y = 0; y < height; y++) {
-      //   for (auto x = 0; x < width; x++) {
+      // foreach (y; 0 .. height) {
+      //   foreach (x; 0 .. width) {
       //     auto cell = cell_at(x, y);
       //     if (cell) {
       //       rendering ~= cell.to_char();
@@ -54,8 +56,8 @@ class World {
 
       // The following is slower
       // string[] rendering = [];
-      // for (auto y = 0; y < height; y++) {
-      //   for (auto x = 0; x < width; x++) {
+      // foreach (y; 0 .. height) {
+      //   foreach (x; 0 .. width) {
       //     auto cell = cell_at(x, y);
       //     if (cell) {
       //       rendering ~= to!string(cell.to_char());
@@ -69,8 +71,8 @@ class World {
       auto render_size = width * height + height;
       char[] rendering;
       rendering.reserve(render_size);
-      for (auto y = 0; y < height; y++) {
-        for (auto x = 0; x < width; x++) {
+      foreach (y; 0 .. height) {
+        foreach (x; 0 .. width) {
           auto cell = cell_at(x, y);
           if (cell) {
             rendering ~= cell.to_char();
@@ -82,17 +84,17 @@ class World {
     }
 
   private:
-    uint width;
-    uint height;
+    const uint width;
+    const uint height;
     Cell[string] cells;
 
     static class LocationOccupied: Exception {
       public:
         this(uint x, uint y) {
           this.x = x;
-          this.x = y;
+          this.y = y;
 
-          auto key = to!string(x)~"-"~to!string(y);
+          auto key = format!"%d-%d"(x, y);
           super("LocationOccupied("~key~")");
         }
 
@@ -100,10 +102,10 @@ class World {
         uint x, y;
     }
 
-    static immutable DIRECTIONS = [
-      [-1, 1],  [0, 1],  [1, 1],  // above
-      [-1, 0],           [1, 0],  // sides
-      [-1, -1], [0, -1], [1, -1], // below
+    static immutable Tuple!(int, "rel_x", int, "rel_y")[] DIRECTIONS = [
+      tuple(-1, 1),  tuple(0, 1),  tuple(1, 1),  // above
+      tuple(-1, 0),                tuple(1, 0),  // sides
+      tuple(-1, -1), tuple(0, -1), tuple(1, -1), // below
     ];
 
     static auto make_key(ref char[24] buf, int x, int y) {
@@ -135,10 +137,10 @@ class World {
     }
 
     auto populate_cells() {
-      for (auto y = 0; y < height; y++) {
-        for (auto x = 0; x < width; x++) {
+      foreach (y; 0 .. height) {
+        foreach (x; 0 .. width) {
           auto random = uniform01;
-          auto alive = (random <= 0.2);
+          auto alive = random <= 0.2;
           add_cell(x, y, alive);
         }
       }
@@ -164,8 +166,8 @@ class World {
         auto y = cell.y;
 
         foreach (ref set; DIRECTIONS) {
-          auto nx = x + set[0];
-          auto ny = y + set[1];
+          auto nx = x + set.rel_x;
+          auto ny = y + set.rel_y;
           if (nx < 0 || ny < 0) {
             continue; // Out of bounds
           }

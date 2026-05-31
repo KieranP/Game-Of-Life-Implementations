@@ -1,10 +1,10 @@
 require_relative 'cell'
-require 'stringio'
+# require 'stringio'
 
 class World
   attr_reader :tick
 
-  class LocationOccupied < Exception
+  class LocationOccupied < StandardError
     def initialize(x, y)
       super("LocationOccupied(#{x}-#{y})")
     end
@@ -14,7 +14,7 @@ class World
     [-1, 1],  [0, 1],  [1, 1], # above
     [-1, 0],           [1, 0], # sides
     [-1, -1], [0, -1], [1, -1] # below
-  ]
+  ].freeze
 
   def initialize(width:, height:)
     @tick = 0
@@ -50,41 +50,41 @@ class World
   def render
     # The following is slower
     # rendering = ""
-    # @height.times.each { |y|
-    #   @width.times.each { |x|
+    # @height.times do |y|
+    #   @width.times do |x|
     #     cell = cell_at(x, y)
     #     if cell
     #       rendering << cell.to_char
     #     end
-    #   }
+    #   end
     #   rendering << "\n"
-    # }
+    # end
     # rendering
 
     # The following is the fastest
     rendering = []
-    @height.times.each { |y|
-      @width.times.each { |x|
+    @height.times do |y|
+      @width.times do |x|
         cell = cell_at(x, y)
         if cell
           rendering << cell.to_char
         end
-      }
+      end
       rendering << "\n"
-    }
+    end
     rendering.join
 
     # The following is slower
     # rendering = StringIO.new
-    # @height.times.each { |y|
-    #   @width.times.each { |x|
+    # @height.times do |y|
+    #   @width.times do |x|
     #     cell = cell_at(x, y)
     #     if cell
     #       rendering << cell.to_char
     #     end
-    #   }
+    #   end
     #   rendering << "\n"
-    # }
+    # end
     # rendering.string
   end
 
@@ -109,7 +109,7 @@ class World
   def populate_cells
     @height.times do |y|
       @width.times do |x|
-        alive = (rand <= 0.2)
+        alive = rand <= 0.2
         add_cell(x, y, alive)
       end
     end
@@ -133,7 +133,7 @@ class World
       y = cell.y
 
       cell.neighbours =
-        DIRECTIONS.filter_map { |rel_x, rel_y|
+        DIRECTIONS.filter_map do |rel_x, rel_y|
           nx = x + rel_x
           ny = y + rel_y
           if nx < 0 || ny < 0
@@ -145,7 +145,7 @@ class World
           end
 
           cell_at(nx, ny)
-        }
+        end
     end
   end
 end

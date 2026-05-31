@@ -27,7 +27,7 @@ func run() {
   var total_render float64
   var lowest_render float64 = math.MaxFloat64
 
-  for true {
+  for {
     tick_start := time.Now()
     world.dotick()
     tick_finish := time.Now()
@@ -65,7 +65,7 @@ func run() {
 
 func _f(value float64) float64 {
   // nanoseconds -> milliseconds
-  return float64(value) / 1_000_000
+  return value / 1_000_000
 }
 
 func main() {

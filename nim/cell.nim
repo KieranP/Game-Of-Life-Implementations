@@ -1,6 +1,5 @@
-import options
-
-from sequtils import filter
+import std/options
+# from std/sequtils import filter
 
 type
   Cell = ref object
@@ -10,13 +9,13 @@ type
     next_state: Option[bool]
     neighbours: seq[Cell]
 
-proc to_char(self: Cell): string =
+func to_char(self: Cell): string =
   if self.alive:
     "o"
   else:
     " "
 
-proc alive_neighbours(self: Cell): uint32 =
+func alive_neighbours(self: Cell): uint32 =
   # The following is slower
   # uint32(
   #   filter(
@@ -26,14 +25,14 @@ proc alive_neighbours(self: Cell): uint32 =
   # )
 
   # The following is slower
-  # var alive_neighbours: uint32 = 0
+  # var alive_neighbours = 0'u32
   # for neighbour in self.neighbours:
   #   if neighbour.alive:
   #     alive_neighbours += 1
   # alive_neighbours
 
   # The following is the fastest
-  var alive_neighbours: uint32 = 0
+  var alive_neighbours = 0'u32
   let count = self.neighbours.len
   for i in 0..<count:
     let neighbour = self.neighbours[i]

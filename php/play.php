@@ -4,17 +4,17 @@ error_reporting(E_ALL);
 
 require_once 'world.php';
 
-class Play {
-  private static $WORLD_WIDTH = 150;
-  private static $WORLD_HEIGHT = 40;
+final class Play {
+  private const int WORLD_WIDTH = 150;
+  private const int WORLD_HEIGHT = 40;
 
-  public static function run() {
+  public static function run(): void {
     $world = new World(
-      width: self::$WORLD_WIDTH,
-      height: self::$WORLD_HEIGHT,
+      width: self::WORLD_WIDTH,
+      height: self::WORLD_HEIGHT,
     );
 
-    $minimal = getenv("MINIMAL") != null;
+    $minimal = getenv("MINIMAL") !== false;
 
     if (!$minimal) {
       echo $world->render();
@@ -46,7 +46,7 @@ class Play {
         echo "\u{001b}[H\u{001b}[2J";
       }
 
-      echo sprintf(
+      printf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
         $world->tick,
         self::_f($lowest_tick),
@@ -61,8 +61,8 @@ class Play {
     }
   }
 
-  private static function _f($value) {
-    # nanoseconds -> milliseconds
+  private static function _f(int|float $value): float {
+    // nanoseconds -> milliseconds
     return $value / 1_000_000;
   }
 }

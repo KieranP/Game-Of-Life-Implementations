@@ -1,7 +1,6 @@
 import os
 import time
 import math
-import arrays
 
 const world_width = 150
 const world_height = 40
@@ -19,9 +18,9 @@ fn run() {
   }
 
   mut total_tick := f64(0)
-  mut lowest_tick := math.max_f64
+  mut lowest_tick := math.inf(1)
   mut total_render := f64(0)
-  mut lowest_render := math.max_f64
+  mut lowest_render := math.inf(1)
 
   for {
     tick_start := time.sys_mono_now()
@@ -29,7 +28,7 @@ fn run() {
     tick_finish := time.sys_mono_now()
     tick_time := (tick_finish - tick_start)
     total_tick += tick_time
-    lowest_tick = arrays.min([lowest_tick, tick_time]) or { lowest_tick }
+    lowest_tick = math.min(lowest_tick, tick_time)
     avg_tick := (total_tick / world.tick)
 
     render_start := time.sys_mono_now()
@@ -37,7 +36,7 @@ fn run() {
     render_finish := time.sys_mono_now()
     render_time := (render_finish - render_start)
     total_render += render_time
-    lowest_render = arrays.min([lowest_render, render_time]) or { lowest_render }
+    lowest_render = math.min(lowest_render, render_time)
     avg_render := (total_render / world.tick)
 
     if !minimal {

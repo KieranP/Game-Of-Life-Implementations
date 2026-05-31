@@ -1,20 +1,20 @@
 import java.util.HashMap;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 
 public class World {
   public int tick;
 
-  private int width;
-  private int height;
-  private HashMap<String, Cell> cells;
+  private final int width;
+  private final int height;
+  private final HashMap<String, Cell> cells;
 
-  private class LocationOccupied extends Exception {
+  private static class LocationOccupied extends Exception {
     public LocationOccupied(int x, int y) {
-      super("LocationOccupied("+x+"-"+y+")");
+      super("LocationOccupied(%d-%d)".formatted(x, y));
     }
   }
 
-  private static final int[][] DIRECTIONS = new int[][]{
+  private static final int[][] DIRECTIONS = {
     {-1, 1},  {0, 1},  {1, 1},  // above
     {-1, 0},           {1, 0},  // sides
     {-1, -1}, {0, -1}, {1, -1}, // below
@@ -90,7 +90,7 @@ public class World {
           rendering.append(cell.to_char());
         }
       }
-      rendering.append("\n");
+      rendering.append('\n');
     }
     return rendering.toString();
   }
@@ -114,20 +114,20 @@ public class World {
   private void populate_cells() throws LocationOccupied {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-        var alive = (Math.random() <= 0.2);
+        var alive = Math.random() <= 0.2;
         add_cell(x, y, alive);
       }
     }
   }
 
-  private boolean add_cell(int x, int y, boolean... args) throws LocationOccupied {
+  private boolean add_cell(int x, int y, boolean alive) throws LocationOccupied {
     var existing = cell_at(x, y);
     if (existing != null) {
       throw new LocationOccupied(x, y);
     }
 
     var key = make_key(x, y);
-    var cell = new Cell(x, y, args[0]);
+    var cell = new Cell(x, y, alive);
     cells.put(key, cell);
     return true;
   }

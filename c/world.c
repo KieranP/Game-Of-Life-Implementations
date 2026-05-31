@@ -1,12 +1,10 @@
 #include "world.h"
 #include "cell.h"
 #include "lib/utils.h"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-static const int DIRECTIONS[8][2] = {
+static constexpr int DIRECTIONS[8][2] = {
     {-1, 1},  {0, 1},  {1, 1},  // above
     {-1, 0},  {1, 0},           // sides
     {-1, -1}, {0, -1}, {1, -1}, // below
@@ -27,7 +25,7 @@ static Cell *cell_at(World *world, uint32_t x, uint32_t y) {
   char key[24];
   make_key(key, x, y);
 
-  return (Cell *)hashmap_get(world->cells, key);
+  return hashmap_get(world->cells, key);
 }
 
 static bool add_cell(World *world, uint32_t x, uint32_t y, bool alive) {
@@ -48,8 +46,8 @@ static bool add_cell(World *world, uint32_t x, uint32_t y, bool alive) {
 static void populate_cells(World *world) {
   for (auto y = 0; y < world->height; y++) {
     for (auto x = 0; x < world->width; x++) {
-      auto random = (float)rand() / RAND_MAX;
-      auto alive = (random <= 0.2);
+      auto random = (double)rand() / RAND_MAX;
+      auto alive = random <= 0.2;
       add_cell(world, x, y, alive);
     }
   }
@@ -89,11 +87,8 @@ static void prepopulate_neighbours(World *world) {
 }
 
 World *world_new(uint32_t width, uint32_t height) {
-  auto world = (World *)malloc(sizeof(World));
-  world->width = width;
-  world->height = height;
-  world->tick = 0;
-  world->cells = hashmap_new();
+  World *world = malloc(sizeof(*world));
+  *world = (World){.width = width, .height = height, .cells = hashmap_new()};
 
   populate_cells(world);
   prepopulate_neighbours(world);

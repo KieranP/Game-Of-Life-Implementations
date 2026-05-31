@@ -1,11 +1,11 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
-const ArrayList = std.ArrayList;
+// const ArrayList = std.ArrayList;
 const StringHashMap = std.StringHashMap;
 const Io = std.Io;
 const Cell = @import("cell.zig").Cell;
 
-const DIRECTIONS = [8][2]i8{
+const DIRECTIONS = [_]struct { i8, i8 }{
     .{ -1, 1 }, .{ 0, 1 }, .{ 1, 1 }, // above
     .{ -1, 0 }, .{ 1, 0 }, // sides
     .{ -1, -1 }, .{ 0, -1 }, .{ 1, -1 }, // below
@@ -24,11 +24,7 @@ pub const World = struct {
 
     pub fn init(allocator: Allocator, io: Io, width: u32, height: u32) !*World {
         const world = try allocator.create(World);
-        world.allocator = allocator;
-        world.tick = 0;
-        world.width = width;
-        world.height = height;
-        world.cells = StringHashMap(*Cell).init(allocator);
+        world.* = .{ .allocator = allocator, .tick = 0, .width = width, .height = height, .cells = .init(allocator) };
 
         try world.populate_cells(io);
         try world.prepopulate_neighbours();
@@ -65,7 +61,7 @@ pub const World = struct {
         it = self.cells.valueIterator();
         while (it.next()) |val| {
             const cell = val.*;
-            cell.alive = cell.next_state;
+            cell.alive = cell.next_state.?;
         }
 
         self.tick += 1;
@@ -75,13 +71,11 @@ pub const World = struct {
         const render_size = self.width * self.height + self.height;
 
         // The following is about the same speed
-        // var rendering = ArrayList(u8){};
+        // var rendering = ArrayList(u8).empty;
         // try rendering.ensureTotalCapacity(self.allocator, render_size);
-        // var y: u32 = 0;
-        // while (y < self.height) : (y += 1) {
-        //     var x: u32 = 0;
-        //     while (x < self.width) : (x += 1) {
-        //         if (self.cell_at(x, y)) |cell| {
+        // for (0..self.height) |y| {
+        //     for (0..self.width) |x| {
+        //         if (self.cell_at(@intCast(x), @intCast(y))) |cell| {
         //             try rendering.append(self.allocator, cell.to_char());
         //         }
         //     }
@@ -92,11 +86,9 @@ pub const World = struct {
         // The following is the fastest
         const buffer = try self.allocator.alloc(u8, render_size);
         var idx: u32 = 0;
-        var y: u32 = 0;
-        while (y < self.height) : (y += 1) {
-            var x: u32 = 0;
-            while (x < self.width) : (x += 1) {
-                if (self.cell_at(x, y)) |cell| {
+        for (0..self.height) |y| {
+            for (0..self.width) |x| {
+                if (self.cell_at(@intCast(x), @intCast(y))) |cell| {
                     buffer[idx] = cell.to_char();
                 }
                 idx += 1;
@@ -128,13 +120,11 @@ pub const World = struct {
         var prng = std.Random.DefaultPrng.init(seed);
         const rng = prng.random();
 
-        var y: u32 = 0;
-        while (y < self.height) : (y += 1) {
-            var x: u32 = 0;
-            while (x < self.width) : (x += 1) {
+        for (0..self.height) |y| {
+            for (0..self.width) |x| {
                 const random = rng.intRangeAtMost(u8, 0, 100);
                 const alive = random <= 20;
-                _ = try self.add_cell(x, y, alive);
+                _ = try self.add_cell(@intCast(x), @intCast(y), alive);
             }
         }
     }
@@ -155,18 +145,19 @@ pub const World = struct {
     fn prepopulate_neighbours(self: *World) !void {
         var it = self.cells.valueIterator();
         while (it.next()) |cell| {
-            const x = @as(isize, @intCast(cell.*.x));
-            const y = @as(isize, @intCast(cell.*.y));
+            const x: isize = @intCast(cell.*.x);
+            const y: isize = @intCast(cell.*.y);
 
             for (DIRECTIONS) |direction| {
-                const nx = x + direction[0];
-                const ny = y + direction[1];
+                const rel_x, const rel_y = direction;
+                const nx = x + rel_x;
+                const ny = y + rel_y;
                 if (nx < 0 or ny < 0) {
                     continue; // Out of bounds
                 }
 
-                const ux = @as(u32, @intCast(nx));
-                const uy = @as(u32, @intCast(ny));
+                const ux: u32 = @intCast(nx);
+                const uy: u32 = @intCast(ny);
                 if (ux >= self.width or uy >= self.height) {
                     continue; // Out of bounds
                 }

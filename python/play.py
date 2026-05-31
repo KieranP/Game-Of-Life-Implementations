@@ -1,27 +1,28 @@
 from world import World
 from time import monotonic_ns
 from os import environ
+import math
 
 class Play:
   WORLD_WIDTH = 150
   WORLD_HEIGHT = 40
 
   @classmethod
-  def run(cls):
+  def run(cls) -> None:
     world = World(
       Play.WORLD_WIDTH,
       Play.WORLD_HEIGHT,
     )
 
-    minimal = environ.get("MINIMAL") is not None
+    minimal = "MINIMAL" in environ
 
     if not minimal:
       print(world.render())
 
     total_tick = 0
-    lowest_tick = float('inf')
+    lowest_tick = math.inf
     total_render = 0
-    lowest_render = float('inf')
+    lowest_render = math.inf
 
     while True:
       tick_start = monotonic_ns()
@@ -44,20 +45,16 @@ class Play:
         print("\u001b[H\u001b[2J")
 
       print(
-        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)" % (
-          world.tick,
-          cls._f(lowest_tick),
-          cls._f(avg_tick),
-          cls._f(lowest_render),
-          cls._f(avg_render)
-        )
+        f"#{world.tick}"
+        f" - World Tick (L: {Play._f(lowest_tick):.3f}; A: {Play._f(avg_tick):.3f})"
+        f" - Rendering (L: {Play._f(lowest_render):.3f}; A: {Play._f(avg_render):.3f})"
       )
 
       if not minimal:
         print(rendered)
 
-  @classmethod
-  def _f(cls, value):
+  @staticmethod
+  def _f(value: float) -> float:
     # nanoseconds -> milliseconds
     return value / 1_000_000
 

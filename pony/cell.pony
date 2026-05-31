@@ -1,12 +1,12 @@
-use "collections"
-use "itertools"
+// use "collections"
+// use "itertools"
 
 class Cell
   let x: U32
   let y: U32
   var alive: Bool
-  var next_state: Bool = false
-  var neighbours: Array[Cell ref] = []
+  var next_state: (Bool | None) = None
+  let neighbours: Array[Cell ref] = []
 
   new create(x': U32, y': U32, alive': Bool = false) =>
     x = x'
@@ -37,7 +37,7 @@ class Cell
 
     // The following is slower
     // var alive_count: U32 = 0
-    // var count = neighbours.size()
+    // let count = neighbours.size()
     // for i in Range(0, count) do
     //   try
     //     let neighbour = neighbours(i)?

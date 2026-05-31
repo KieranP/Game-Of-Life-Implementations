@@ -4,9 +4,8 @@ import "core:fmt"
 import "core:math/rand"
 import "core:strconv"
 import "core:strings"
-import "core:unicode/utf8"
 
-DIRECTIONS := [8][2]int{
+DIRECTIONS :: [8][2]int{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
@@ -20,9 +19,7 @@ World :: struct {
 }
 
 new_world :: proc(width: u32, height: u32) -> ^World {
-  world := new(World)
-  world.width = width
-  world.height = height
+  world := new_clone(World{width = width, height = height})
 
   world_populate_cells(world)
   world_prepopulate_neighbours(world)
@@ -45,7 +42,7 @@ world_tick :: proc(world: ^World) {
 
   // Then execute the determined action for all cells
   for _, cell in world.cells {
-    cell.alive = cell.next_state
+    cell.alive = cell.next_state.? or_else false
   }
 
   world.tick += 1
@@ -93,7 +90,7 @@ world_make_key :: proc(buf: []u8, x: u32, y: u32) -> string {
 }
 
 world_cell_at :: proc(world: ^World, x: u32, y: u32) -> (^Cell, bool) {
-  buf: [24]u8
+  buf: [24]u8 = ---
   key := world_make_key(buf[:], x, y)
 
   return world.cells[key]
@@ -102,7 +99,7 @@ world_cell_at :: proc(world: ^World, x: u32, y: u32) -> (^Cell, bool) {
 world_populate_cells :: proc(world: ^World) {
   for y in 0..<world.height {
     for x in 0..<world.width {
-      alive := (rand.float32() <= 0.2)
+      alive := rand.float32() <= 0.2
       world_add_cell(world, x, y, alive)
     }
   }
@@ -111,10 +108,10 @@ world_populate_cells :: proc(world: ^World) {
 world_add_cell :: proc(world: ^World, x: u32, y: u32, alive: bool = false) -> bool {
   _, ok := world_cell_at(world, x, y)
   if ok {
-    panic(fmt.aprintf("LocationOccupied(%d-%d)", x, y))
+    fmt.panicf("LocationOccupied(%d-%d)", x, y)
   }
 
-  buf: [24]u8
+  buf: [24]u8 = ---
   key := strings.clone(world_make_key(buf[:], x, y))
 
   cell := new_cell(x, y, alive)
@@ -130,7 +127,7 @@ world_prepopulate_neighbours :: proc(world: ^World) {
     for set in DIRECTIONS {
       nx := x + set[0]
       ny := y + set[1]
-      if (nx < 0 || ny < 0) {
+      if nx < 0 || ny < 0 {
         continue // Out of bounds
       }
 
@@ -140,10 +137,8 @@ world_prepopulate_neighbours :: proc(world: ^World) {
         continue // Out of bounds
       }
 
-      neighbour, ok := world_cell_at(world, ux, uy)
-      if ok {
-        append(&cell.neighbours, neighbour)
-      }
+      neighbour := world_cell_at(world, ux, uy) or_continue
+      append(&cell.neighbours, neighbour)
     }
   }
 }

@@ -3,6 +3,8 @@ module cell_mod
   private
   public :: Cell, NeighbourPtr, cell_new, cell_to_char, cell_alive_neighbours
 
+  integer, parameter :: MAX_NEIGHBOURS = 8
+
   type :: NeighbourPtr
     type(Cell), pointer :: ptr
   end type NeighbourPtr
@@ -29,11 +31,11 @@ contains
     new_cell%alive = alive
     new_cell%next_state = alive
     new_cell%neighbour_count = 0
-    allocate(new_cell%neighbours(8))
+    allocate(new_cell%neighbours(MAX_NEIGHBOURS))
   end function cell_new
 
-  function cell_to_char(c) result(ch)
-    type(Cell), pointer, intent(in) :: c
+  pure function cell_to_char(c) result(ch)
+    type(Cell), intent(in) :: c
     character(len=1) :: ch
 
     if (c%alive) then
@@ -44,7 +46,7 @@ contains
   end function cell_to_char
 
   function cell_alive_neighbours(c) result(alive_neighbours)
-    type(Cell), pointer, intent(in) :: c
+    type(Cell), intent(in) :: c
     type(NeighbourPtr) :: neighbour
     integer :: alive_neighbours
     integer :: i

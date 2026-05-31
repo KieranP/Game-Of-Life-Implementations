@@ -1,15 +1,17 @@
-class Cell:
-  def __init__(self, x, y, alive = False):
-    self.x = x
-    self.y = y
-    self.alive = alive
-    self.next_state = None
-    self.neighbours = []
+from dataclasses import dataclass, field
 
-  def to_char(self):
+@dataclass
+class Cell:
+  x: int
+  y: int
+  alive: bool = False
+  next_state: bool | None = None
+  neighbours: list["Cell"] = field(default_factory=list)
+
+  def to_char(self) -> str:
     return 'o' if self.alive else ' '
 
-  def alive_neighbours(self):
+  def alive_neighbours(self) -> int:
     # The following is slower
     # filter_alive = lambda neighbour: neighbour.alive
     # return len(list(filter(filter_alive, self.neighbours)))

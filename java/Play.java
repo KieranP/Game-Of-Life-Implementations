@@ -1,6 +1,6 @@
 public class Play {
-  private static int WORLD_WIDTH = 150;
-  private static int WORLD_HEIGHT = 40;
+  private static final int WORLD_WIDTH = 150;
+  private static final int WORLD_HEIGHT = 40;
 
   public static void main(String[] args) throws Exception {
     run();
@@ -45,8 +45,7 @@ public class Play {
       }
 
       System.out.println(
-        String.format(
-          "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)".formatted(
           world.tick,
           _f(lowest_tick),
           _f(avg_tick),

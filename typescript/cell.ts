@@ -1,15 +1,8 @@
 export class Cell {
-  x: number
-  y: number
-  alive: boolean
-  next_state: boolean | null = null
-  neighbours: Cell[] = []
+  next_state?: boolean
+  readonly neighbours: Cell[] = []
 
-  constructor(x: number, y: number, alive: boolean = false) {
-    this.x = x
-    this.y = y
-    this.alive = alive
-  }
+  constructor(public readonly x: number, public readonly y: number, public alive: boolean = false) {}
 
   to_char(): string {
     return (this.alive ? 'o' : ' ')

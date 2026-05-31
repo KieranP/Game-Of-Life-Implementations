@@ -26,7 +26,7 @@ class cell x y ?(alive = false) () =
       (* let alive_neighbours = ref 0 in
       Array.iter (fun neighbour ->
         if neighbour#alive then
-          alive_neighbours := !alive_neighbours + 1
+          incr alive_neighbours
       ) neighbours;
       !alive_neighbours *)
 
@@ -36,7 +36,7 @@ class cell x y ?(alive = false) () =
       for i = 0 to count - 1 do
         let neighbour = neighbours.(i) in
         if neighbour#alive then
-          alive_neighbours := !alive_neighbours + 1
+          incr alive_neighbours
       done;
       !alive_neighbours
   end

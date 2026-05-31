@@ -4,13 +4,13 @@ public class Cell(
   public var alive: Boolean = false
 ) {
   public var next_state: Boolean? = null
-  public var neighbours = ArrayList<Cell>()
+  public val neighbours = mutableListOf<Cell>()
 
-  fun to_char(): Char {
-    return if (this.alive) 'o' else ' '
+  public fun to_char(): Char {
+    return if (alive) 'o' else ' '
   }
 
-  fun alive_neighbours(): Int {
+  public fun alive_neighbours(): Int {
     // The following is slower
     // return this.neighbours.filter { it.alive }.size
 
@@ -25,8 +25,8 @@ public class Cell(
 
     // The following is the fastest
     var alive_neighbours = 0
-    var count = this.neighbours.size
-    for (i in 0 until count) {
+    val count = this.neighbours.size
+    for (i in 0..<count) {
       val neighbour = this.neighbours[i]
       if (neighbour.alive) {
         alive_neighbours++

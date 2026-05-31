@@ -14,9 +14,9 @@ class World
   end
 
   private DIRECTIONS = [
-    [-1, 1],  [0, 1],  [1, 1], # above
-    [-1, 0],           [1, 0], # sides
-    [-1, -1], [0, -1], [1, -1] # below
+    {-1, 1},  {0, 1},  {1, 1}, # above
+    {-1, 0},           {1, 0}, # sides
+    {-1, -1}, {0, -1}, {1, -1} # below
   ]
 
   def initialize(@width : UInt32, @height : UInt32)
@@ -39,7 +39,7 @@ class World
 
     # Then execute the determined action for all cells
     @cells.each_value do |cell|
-      cell.alive = !!cell.next_state
+      cell.alive = cell.next_state || false
     end
 
     @tick += 1
@@ -75,8 +75,8 @@ class World
     # The following is the fastest
     render_size = @width * @height + @height
     String.build(render_size) do |io|
-      @height.times.each { |y|
-        @width.times.each { |x|
+      @height.times { |y|
+        @width.times { |x|
           cell = cell_at(x, y)
           if cell
             io << cell.to_char
@@ -106,7 +106,7 @@ class World
   private def populate_cells
     @height.times do |y|
       @width.times do |x|
-        alive = (rand <= 0.2)
+        alive = rand <= 0.2
         add_cell(x, y, alive)
       end
     end
@@ -126,8 +126,8 @@ class World
 
   private def prepopulate_neighbours
     @cells.each_value do |cell|
-      x = Int64.new(cell.x)
-      y = Int64.new(cell.y)
+      x = cell.x.to_i64
+      y = cell.y.to_i64
 
       cell.neighbours =
         DIRECTIONS.compact_map do |(rel_x, rel_y)|
@@ -137,8 +137,8 @@ class World
             next # Out of bounds
           end
 
-          ux = UInt32.new(nx)
-          uy = UInt32.new(ny)
+          ux = nx.to_u32
+          uy = ny.to_u32
           if ux >= @width || uy >= @height
             next # Out of bounds
           end

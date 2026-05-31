@@ -1,14 +1,9 @@
 #include "cell.h"
-#include <stdbool.h>
 #include <stdlib.h>
 
 Cell *cell_new(uint32_t x, uint32_t y, bool alive) {
-  auto cell = (Cell *)malloc(sizeof(Cell));
-  cell->x = x;
-  cell->y = y;
-  cell->alive = alive;
-  cell->next_state = alive;
-  cell->neighbour_count = 0;
+  Cell *cell = malloc(sizeof(*cell));
+  *cell = (Cell){.x = x, .y = y, .alive = alive, .next_state = alive};
   return cell;
 }
 

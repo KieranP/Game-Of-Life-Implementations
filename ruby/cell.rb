@@ -14,7 +14,7 @@ class Cell
     @alive ? 'o' : ' '
   end
 
-  def alive_neighbours()
+  def alive_neighbours
     # The following is the fastest
     neighbours.count(&:alive)
 

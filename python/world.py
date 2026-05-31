@@ -3,27 +3,27 @@ from random import randint
 
 class World:
   class LocationOccupied(RuntimeError):
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int) -> None:
       super().__init__(f"LocationOccupied({x}-{y})")
 
   DIRECTIONS = [
-    [-1, 1],  [0, 1],  [1, 1], # above
-    [-1, 0],           [1, 0], # sides
-    [-1, -1], [0, -1], [1, -1] # below
+    (-1, 1),  (0, 1),  (1, 1), # above
+    (-1, 0),           (1, 0), # sides
+    (-1, -1), (0, -1), (1, -1) # below
   ]
 
-  def __init__(self, width, height):
+  def __init__(self, width: int, height: int) -> None:
     self.tick = 0
     self.width = width
     self.height = height
-    self.cells = {}
+    self.cells: dict[str, Cell] = {}
 
     self.populate_cells()
     self.prepopulate_neighbours()
 
-  def dotick(self):
+  def dotick(self) -> None:
     # First determine the action for all cells
-    for key,cell in self.cells.items():
+    for cell in self.cells.values():
       alive_neighbours = cell.alive_neighbours()
       if not cell.alive and alive_neighbours == 3:
         cell.next_state = True
@@ -33,12 +33,12 @@ class World:
         cell.next_state = cell.alive
 
     # Then execute the determined action for all cells
-    for key,cell in self.cells.items():
+    for cell in self.cells.values():
       cell.alive = cell.next_state
 
     self.tick += 1
 
-  def render(self):
+  def render(self) -> str:
     # The following is slower
     # rendering = ''
     # for y in range(self.height):
@@ -59,7 +59,7 @@ class World:
       rendering.append("\n")
     return ''.join(rendering)
 
-  def make_key(self, x, y):
+  def make_key(self, x: int, y: int) -> str:
     # The following is slower
     # return f"{x}-{y}"
 
@@ -69,17 +69,17 @@ class World:
     # The following is slower
     # return '-'.join([str(x), str(y)])
 
-  def cell_at(self, x, y):
+  def cell_at(self, x: int, y: int) -> Cell | None:
     key = self.make_key(x, y)
     return self.cells.get(key)
 
-  def populate_cells(self):
+  def populate_cells(self) -> None:
     for y in range(self.height):
       for x in range(self.width):
-        alive = (randint(0, 100) <= 20)
+        alive = randint(0, 100) <= 20
         self.add_cell(x, y, alive)
 
-  def add_cell(self, x, y, alive = False):
+  def add_cell(self, x: int, y: int, alive: bool = False) -> bool:
     existing = self.cell_at(x, y)
     if existing is not None:
       raise World.LocationOccupied(x, y)
@@ -89,12 +89,12 @@ class World:
     self.cells[key] = cell
     return True
 
-  def prepopulate_neighbours(self):
-    for key,cell in self.cells.items():
+  def prepopulate_neighbours(self) -> None:
+    for cell in self.cells.values():
       x = cell.x
       y = cell.y
 
-      for rel_x,rel_y in self.DIRECTIONS:
+      for rel_x, rel_y in self.DIRECTIONS:
         nx = x + rel_x
         ny = y + rel_y
         if nx < 0 or ny < 0:

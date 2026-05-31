@@ -1,30 +1,22 @@
 include cell
 
 # from strutils import join
-from random import rand
-import tables
-import ropes
-import strformat
+# import std/ropes
+import std/strformat
+from std/random import rand
+import std/tables
 
 type
   LocationOccupied = object of ValueError
-    x: uint32
-    y: uint32
 
-proc newLocationOccupied(x, y: uint32): ref LocationOccupied =
-  new(result)
-  result.x = x
-  result.y = y
-  result.msg = "LocationOccupied(" & $x & "-" & $y & ")"
-
-const DIRECTIONS: array[8, array[2, int]] = [
-  [-1, 1],  [0, 1],  [1, 1], # above
-  [-1, 0],           [1, 0], # sides
-  [-1, -1], [0, -1], [1, -1], # below
+const DIRECTIONS: array[8, (int, int)] = [
+  (-1, 1),  (0, 1),  (1, 1), # above
+  (-1, 0),           (1, 0), # sides
+  (-1, -1), (0, -1), (1, -1), # below
 ]
 
 type
-  World = ref object of RootObj
+  World = ref object
     tick: uint32
     width: uint32
     height: uint32
@@ -36,22 +28,20 @@ type
 proc initialize(self: World): World
 proc dotick(self: World)
 proc render(self: World): string
-proc make_key(self: World, x: uint32, y: uint32): string
-proc cell_at(self: World, x: uint32, y: uint32): Cell
+func make_key(self: World, x: uint32, y: uint32): string
+func cell_at(self: World, x: uint32, y: uint32): Cell
 proc populate_cells(self: World)
 proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool
 proc prepopulate_neighbours(self: World)
 
 proc initialize(self: World): World =
-  self.cells = initTable[string, Cell]()
-
   self.populate_cells()
   self.prepopulate_neighbours()
   self
 
 proc dotick(self: World) =
   # First determine the action for all cells
-  for key,cell in self.cells:
+  for cell in self.cells.values:
     let alive_neighbours = cell.alive_neighbours()
     if not cell.alive and alive_neighbours == 3:
       cell.next_state = some(true)
@@ -61,8 +51,8 @@ proc dotick(self: World) =
       cell.next_state = some(cell.alive)
 
   # Then execute the determined action for all cells
-  for key,cell in self.cells:
-    cell.alive = cell.next_state == some(true)
+  for cell in self.cells.values:
+    cell.alive = cell.next_state.get(false)
 
   self.tick += 1
 
@@ -97,7 +87,7 @@ proc render(self: World): string =
   #   rendering.add("\n")
   # $rendering
 
-proc make_key(self: World, x: uint32, y: uint32): string =
+func make_key(self: World, x: uint32, y: uint32): string =
   # The following is slower
   # fmt"{x}-{y}"
 
@@ -107,23 +97,20 @@ proc make_key(self: World, x: uint32, y: uint32): string =
   # The following is slower
   # join([$x, $y], "-")
 
-proc cell_at(self: World, x: uint32, y: uint32): Cell =
+func cell_at(self: World, x: uint32, y: uint32): Cell =
   let key = self.make_key(x, y)
-  if self.cells.hasKey(key):
-    return self.cells[key]
-  else:
-    discard
+  self.cells.getOrDefault(key)
 
 proc populate_cells(self: World) =
   for y in 0..<self.height:
     for x in 0..<self.width:
-      let alive = (rand(100) <= 20)
+      let alive = rand(100) <= 20
       discard self.add_cell(x, y, alive)
 
 proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
   let existing = self.cell_at(x, y)
   if existing != nil:
-    raise newLocationOccupied(x, y)
+    raise newException(LocationOccupied, fmt"LocationOccupied({x}-{y})")
 
   let key = self.make_key(x, y)
   let cell = Cell(x: x, y: y, alive: alive)
@@ -131,13 +118,13 @@ proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
   true
 
 proc prepopulate_neighbours(self: World) =
-  for key,cell in self.cells:
+  for cell in self.cells.values:
     let x = int(cell.x)
     let y = int(cell.y)
 
-    for coords in DIRECTIONS:
-      let nx = x + coords[0]
-      let ny = y + coords[1]
+    for (rel_x, rel_y) in DIRECTIONS:
+      let nx = x + rel_x
+      let ny = y + rel_y
       if nx < 0 or ny < 0:
         continue # Out of bounds
 

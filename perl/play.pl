@@ -1,6 +1,5 @@
 use v5.40;
-use strict;
-use warnings;
+use experimental 'builtin';
 
 use lib './';
 use world;
@@ -11,12 +10,12 @@ use constant WORLD_WIDTH => 150;
 use constant WORLD_HEIGHT => 40;
 
 sub run {
-  my $world = World->new({
+  my $world = World->new(
     width => WORLD_WIDTH,
     height => WORLD_HEIGHT,
-  });
+  );
 
-  my $minimal = $ENV{MINIMAL} != "";
+  my $minimal = length($ENV{MINIMAL} // '');
 
   if (!$minimal) {
     print $world->render();
@@ -29,12 +28,12 @@ sub run {
 
   while (1) {
     my $tick_start = clock_gettime(CLOCK_MONOTONIC);
-    $world->tick();
+    $world->dotick();
     my $tick_finish = clock_gettime(CLOCK_MONOTONIC);
     my $tick_time = ($tick_finish - $tick_start);
     $total_tick += $tick_time;
     $lowest_tick = min($lowest_tick, $tick_time);
-    my $avg_tick = $total_tick / $world->{tick};
+    my $avg_tick = $total_tick / $world->tick;
 
     my $render_start = clock_gettime(CLOCK_MONOTONIC);
     my $rendered = $world->render();
@@ -42,15 +41,15 @@ sub run {
     my $render_time = ($render_finish - $render_start);
     $total_render += $render_time;
     $lowest_render = min($lowest_render, $render_time);
-    my $avg_render = $total_render / $world->{tick};
+    my $avg_render = $total_render / $world->tick;
 
     if (!$minimal) {
       print "\033[0;0H\033[2J";
     }
 
-    print sprintf(
+    printf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
-      $world->{tick},
+      $world->tick,
       _f($lowest_tick),
       _f($avg_tick),
       _f($lowest_render),

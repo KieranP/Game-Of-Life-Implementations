@@ -1,38 +1,40 @@
+import static groovy.lang.Tuple.tuple
+
 public class World {
   public int tick
 
-  private int width
-  private int height
-  private HashMap<String, Cell> cells
+  private final int width
+  private final int height
+  private final Map<String, Cell> cells
 
-  private class LocationOccupied extends Exception {
+  private static class LocationOccupied extends Exception {
     public LocationOccupied(int x, int y) {
       super("LocationOccupied(${x}-${y})")
     }
   }
 
-  private static final int[][] DIRECTIONS = [
-    [-1, 1],  [0, 1],  [1, 1],  // above
-    [-1, 0],           [1, 0],  // sides
-    [-1, -1], [0, -1], [1, -1], // below
+  private static final List<Tuple2<Integer, Integer>> DIRECTIONS = [
+    tuple(-1, 1),  tuple(0, 1),  tuple(1, 1),  // above
+    tuple(-1, 0),                tuple(1, 0),  // sides
+    tuple(-1, -1), tuple(0, -1), tuple(1, -1), // below
   ]
 
   public World(int width, int height) {
     this.tick = 0
     this.width = width
     this.height = height
-    this.cells = [:]
+    this.cells = new HashMap<>()
 
     populate_cells()
     prepopulate_neighbours()
   }
 
   public void dotick() {
-    def cell_values = cells.values()
+    var cell_values = cells.values()
 
     // First determine the action for all cells
     for (cell in cell_values) {
-      def alive_neighbours = cell.alive_neighbours()
+      var alive_neighbours = cell.alive_neighbours()
       if (!cell.alive && alive_neighbours == 3) {
         cell.next_state = true
       } else if (alive_neighbours < 2 || alive_neighbours > 3) {
@@ -52,10 +54,10 @@ public class World {
 
   public String render() {
     // The following is slower
-    // def rendering = ""
+    // var rendering = ""
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
-    //     def cell = cell_at(x, y)
+    //     var cell = cell_at(x, y)
     //     if (cell) {
     //       rendering += cell.to_char()
     //     }
@@ -65,10 +67,10 @@ public class World {
     // rendering
 
     // The following is slower
-    // def rendering = []
+    // var rendering = []
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
-    //     def cell = cell_at(x, y)
+    //     var cell = cell_at(x, y)
     //     if (cell) {
     //       rendering.add(cell.to_char())
     //     }
@@ -78,11 +80,11 @@ public class World {
     // rendering.join("")
 
     // The following is the fastest
-    def render_size = width * height + height
-    def rendering = new StringBuilder(render_size)
+    var render_size = width * height + height
+    var rendering = new StringBuilder(render_size)
     for (y in 0..<height) {
       for (x in 0..<width) {
-        def cell = cell_at(x, y)
+        var cell = cell_at(x, y)
         if (cell) {
           rendering.append(cell.to_char())
         }
@@ -104,39 +106,40 @@ public class World {
   }
 
   private Cell cell_at(int x, int y) {
-    def key = make_key(x, y)
+    var key = make_key(x, y)
     cells[key]
   }
 
   private void populate_cells() {
     for (y in 0..<height) {
       for (x in 0..<width) {
-        def alive = (Math.random() <= 0.2)
+        var alive = Math.random() <= 0.2
         add_cell(x, y, alive)
       }
     }
   }
 
   private boolean add_cell(int x, int y, boolean alive = false) {
-    def existing = cell_at(x, y)
+    var existing = cell_at(x, y)
     if (existing) {
       throw new LocationOccupied(x, y)
     }
 
-    def key = make_key(x, y)
-    def cell = new Cell(x, y, alive)
+    var key = make_key(x, y)
+    var cell = new Cell(x, y, alive)
     cells[key] = cell
     true
   }
 
   private void prepopulate_neighbours() {
     for (cell in cells.values()) {
-      def x = cell.x
-      def y = cell.y
+      var x = cell.x
+      var y = cell.y
 
       for (set in DIRECTIONS) {
-        def nx = x + set[0]
-        def ny = y + set[1]
+        def (rel_x, rel_y) = set
+        var nx = x + rel_x
+        var ny = y + rel_y
         if (nx < 0 || ny < 0) {
           continue // Out of bounds
         }
@@ -145,7 +148,7 @@ public class World {
           continue // Out of bounds
         }
 
-        def neighbour = cell_at(nx, ny)
+        var neighbour = cell_at(nx, ny)
         if (neighbour) {
           cell.neighbours.add(neighbour)
         }

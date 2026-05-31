@@ -17,7 +17,7 @@ type Play {
     let stdout = Stdout.new
     let minimal = env.get('MINIMAL').ok?
 
-    if minimal == false {
+    if !minimal {
       stdout.print(world.render())
     }
 
@@ -43,19 +43,19 @@ type Play {
       lowest_render = min(lowest_render, render_time)
       let avg_render = total_render / world.tick.to_float
 
-      if minimal == false {
+      if !minimal {
         stdout.print("\u{001b}[H\u{001b}[2J")
       }
 
       let _ = stdout.print(
-        "#" + world.tick.to_string +
-        " - World Tick (L: " + _f(lowest_tick).round(3).to_string +
-        "; A: " + _f(avg_tick).round(3).to_string + ")" +
-        " - Rendering (L: " + _f(lowest_render).round(3).to_string +
-        "; A: " + _f(avg_render).round(3).to_string + ")"
+        "#${world.tick}" +
+          " - World Tick (L: ${_f(lowest_tick).round(3)}" +
+          "; A: ${_f(avg_tick).round(3)})" +
+          " - Rendering (L: ${_f(lowest_render).round(3)}" +
+          "; A: ${_f(avg_render).round(3)})"
       )
 
-      if minimal == false {
+      if !minimal {
         stdout.print(rendered)
       }
     }

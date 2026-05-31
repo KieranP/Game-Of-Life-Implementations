@@ -4,17 +4,12 @@ Cell :: struct {
   x: u32,
   y: u32,
   alive: bool,
-  next_state: bool,
+  next_state: Maybe(bool),
   neighbours: [dynamic]^Cell
 }
 
 new_cell :: proc(x: u32, y: u32, alive: bool) -> ^Cell {
-  cell := new(Cell)
-  cell.x = x
-  cell.y = y
-  cell.alive = alive
-
-  return cell
+  return new_clone(Cell{x = x, y = y, alive = alive})
 }
 
 cell_to_char :: proc(cell: ^Cell) -> u8 {

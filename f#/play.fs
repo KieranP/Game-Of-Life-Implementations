@@ -7,7 +7,7 @@ type Play =
   static let WORLD_HEIGHT = 40u
 
   static member run() =
-    let world = new World(
+    let world = World(
       width = WORLD_WIDTH,
       height = WORLD_HEIGHT
     )
@@ -32,7 +32,7 @@ type Play =
       let tick_time = Stopwatch.GetElapsedTime(tick_start, tick_finish).TotalNanoseconds
       total_tick <- total_tick + tick_time
       lowest_tick <- min lowest_tick tick_time
-      let avg_tick = (total_tick / float(world.tick))
+      let avg_tick = total_tick / float world.tick
 
       let render_start = Stopwatch.GetTimestamp()
       let rendered = world.render()
@@ -40,17 +40,17 @@ type Play =
       let render_time = Stopwatch.GetElapsedTime(render_start, render_finish).TotalNanoseconds
       total_render <- total_render + render_time
       lowest_render <- min lowest_render render_time
-      let avg_render = (total_render / float(world.tick))
+      let avg_render = total_render / float world.tick
 
       if not minimal then
         printf "\u001b[H\u001b[2J"
 
       printfn "#%i - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)"
         world.tick
-        (Play._f(lowest_tick))
-        (Play._f(avg_tick))
-        (Play._f(lowest_render))
-        (Play._f(avg_render))
+        (Play._f lowest_tick)
+        (Play._f avg_tick)
+        (Play._f lowest_render)
+        (Play._f avg_render)
 
       if not minimal then
         printfn "%s" rendered

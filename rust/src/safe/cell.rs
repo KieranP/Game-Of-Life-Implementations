@@ -5,7 +5,7 @@ pub struct Cell {
     pub x: u32,
     pub y: u32,
     pub alive: bool,
-    pub next_state: bool,
+    pub next_state: Option<bool>,
     pub neighbours: Vec<Weak<RefCell<Cell>>>,
 }
 
@@ -15,7 +15,7 @@ impl Cell {
             x,
             y,
             alive,
-            next_state: false,
+            next_state: None,
             neighbours: Vec::new(),
         }
     }

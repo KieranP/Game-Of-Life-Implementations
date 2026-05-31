@@ -1,14 +1,13 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
 // Start with the expected size of the hash table (150 * 40 = 6,000)
 // Then round up to a power of two (2**ceil(log2(6000))) = 8,192
 // Then double it in order to decrease hash collisions = 16,384
-#define HASH_TABLE_SIZE 16384
+constexpr size_t HASH_TABLE_SIZE = 16384;
 
 typedef enum { HASH_ENTRY_EMPTY = 0, HASH_ENTRY_OCCUPIED } HashEntryState;
 

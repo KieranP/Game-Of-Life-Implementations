@@ -1,140 +1,133 @@
 use v5.40;
-use strict;
-use warnings;
-use builtin qw(true false);
+use experimental 'class';
 
 use lib './';
 use cell;
 
-package World;
+class World {
+  field $width :param;
+  field $height :param;
+  field $tick :reader = 0;
+  field $cells = {};
 
-my $DIRECTIONS = [
-  [-1, 1],  [0, 1],  [1, 1], # above
-  [-1, 0],           [1, 0], # sides
-  [-1, -1], [0, -1], [1, -1] # below
-];
+  my $DIRECTIONS = [
+    [-1, 1],  [0, 1],  [1, 1], # above
+    [-1, 0],           [1, 0], # sides
+    [-1, -1], [0, -1], [1, -1] # below
+  ];
 
-sub new($class, $args) {
-  my $self = {
-    width => $args->{width},
-    height => $args->{height},
-    tick => 0,
-    cells => {}
-  };
-
-  bless $self, $class;
-
-  $self->populate_cells();
-  $self->prepopulate_neighbours();
-
-  return $self;
-}
-
-sub tick($self) {
-  # First determine the next state for all cells
-  foreach my $cell (values %{$self->{cells}}) {
-    my $alive_neighbours = $cell->alive_neighbours();
-    if (!$cell->{alive} && $alive_neighbours == 3) {
-      $cell->{next_state} = 1;
-    } elsif ($alive_neighbours < 2 || $alive_neighbours > 3) {
-      $cell->{next_state} = 0;
-    } else {
-      $cell->{next_state} = $cell->{alive};
-    }
+  ADJUST {
+    $self->populate_cells();
+    $self->prepopulate_neighbours();
   }
 
-  # Then execute the determined action for all cells
-  foreach my $cell (values %{$self->{cells}}) {
-    $cell->{alive} = $cell->{next_state};
-  }
-
-  $self->{tick} += 1;
-}
-
-sub render($self) {
-  # The following is the fastest
-  my $rendering = "";
-  for my $y ((0..$self->{height}-1)) {
-    for my $x ((0..$self->{width}-1)) {
-      my $cell = $self->cell_at($x, $y);
-      if ($cell) {
-        $rendering .= $cell->to_char();
+  method dotick() {
+    # First determine the next state for all cells
+    foreach my $cell (values $cells->%*) {
+      my $alive_neighbours = $cell->alive_neighbours();
+      if (!$cell->alive && $alive_neighbours == 3) {
+        $cell->set_next_state(1);
+      } elsif ($alive_neighbours < 2 || $alive_neighbours > 3) {
+        $cell->set_next_state(0);
+      } else {
+        $cell->set_next_state($cell->alive);
       }
     }
-    $rendering .= "\n";
+
+    # Then execute the determined action for all cells
+    foreach my $cell (values $cells->%*) {
+      $cell->set_alive($cell->next_state);
+    }
+
+    $tick += 1;
   }
-  $rendering;
 
-  # The following is slower
-  # my @rendering = ();
-  # for my $y ((0..$self->{height}-1)) {
-  #   for my $x ((0..$self->{width}-1)) {
-  #     my $cell = $self->cell_at($x, $y);
-  #     if ($cell) {
-  #       push(@rendering, $cell->to_char());
-  #     }
-  #   }
-  #   push(@rendering, "\n");
-  # }
-  # join("", @rendering);
-}
+  method render() {
+    # The following is the fastest
+    my $rendering = "";
+    for my $y ((0..$height-1)) {
+      for my $x ((0..$width-1)) {
+        my $cell = $self->cell_at($x, $y);
+        if ($cell) {
+          $rendering .= $cell->to_char();
+        }
+      }
+      $rendering .= "\n";
+    }
+    $rendering;
 
-sub make_key($self, $x, $y) {
-  # The following is the fastest
-  "$x-$y";
+    # The following is slower
+    # my @rendering = ();
+    # for my $y ((0..$height-1)) {
+    #   for my $x ((0..$width-1)) {
+    #     my $cell = $self->cell_at($x, $y);
+    #     if ($cell) {
+    #       push(@rendering, $cell->to_char());
+    #     }
+    #   }
+    #   push(@rendering, "\n");
+    # }
+    # join("", @rendering);
+  }
 
-  # The following is slower
-  # $x . "-" . $y;
+  method make_key($x, $y) {
+    # The following is the fastest
+    "$x-$y";
 
-  # The following is slower
-  # join("-", $x, $y);
-}
+    # The following is slower
+    # $x . "-" . $y;
 
-sub cell_at($self, $x, $y) {
-  my $key = $self->make_key($x, $y);
-  $self->{cells}{$key};
-}
+    # The following is slower
+    # join("-", $x, $y);
+  }
 
-sub populate_cells($self) {
-  for my $y ((0..$self->{height}-1)) {
-    for my $x ((0..$self->{width}-1)) {
-      my $alive = rand() <= 0.2;
-      $self->add_cell($x, $y, $alive);
+  method cell_at($x, $y) {
+    my $key = $self->make_key($x, $y);
+    $cells->{$key};
+  }
+
+  method populate_cells() {
+    for my $y ((0..$height-1)) {
+      for my $x ((0..$width-1)) {
+        my $alive = rand() <= 0.2;
+        $self->add_cell($x, $y, $alive);
+      }
     }
   }
-}
 
-sub add_cell($self, $x, $y, $alive = false) {
-  my $existing = $self->cell_at($x, $y);
-  if ($existing) {
-    die "LocationOccupied($x-$y)";
+  method add_cell($x, $y, $alive = false) {
+    my $existing = $self->cell_at($x, $y);
+    if ($existing) {
+      die "LocationOccupied($x-$y)";
+    }
+
+    my $key = $self->make_key($x, $y);
+    my $cell = Cell->new(x => $x, y => $y, alive => $alive);
+    $cells->{$key} = $cell;
+    true;
   }
 
-  my $key = $self->make_key($x, $y);
-  my $cell = Cell->new($x, $y, $alive);
-  $self->{cells}{$key} = $cell;
-  true;
-}
+  method prepopulate_neighbours() {
+    foreach my $cell (values $cells->%*) {
+      my $x = $cell->x;
+      my $y = $cell->y;
 
-sub prepopulate_neighbours($self) {
-  foreach my $cell (values %{$self->{cells}}) {
-    my $x = $cell->{x};
-    my $y = $cell->{y};
+      foreach my $set ($DIRECTIONS->@*) {
+        my ($rel_x, $rel_y) = $set->@*;
+        my $nx = $x + $rel_x;
+        my $ny = $y + $rel_y;
+        if ($nx < 0 || $ny < 0) {
+          next; # Out of bounds
+        }
 
-    foreach my $set (@{$DIRECTIONS}) {
-      my $nx = $x + @$set[0];
-      my $ny = $y + @$set[1];
-      if ($nx < 0 || $ny < 0) {
-        next; # Out of bounds
-      }
+        if ($nx >= $width || $ny >= $height) {
+          next; # Out of bounds
+        }
 
-      if ($nx >= $self->{width} || $ny >= $self->{height}) {
-        next; # Out of bounds
-      }
-
-      my $neighbour = $self->cell_at($nx, $ny);
-      if ($neighbour) {
-        push(@{$cell->{neighbours}}, $neighbour);
+        my $neighbour = $self->cell_at($nx, $ny);
+        if ($neighbour) {
+          $cell->add_neighbour($neighbour);
+        }
       }
     }
   }

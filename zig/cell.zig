@@ -6,16 +6,12 @@ pub const Cell = struct {
     x: u32,
     y: u32,
     alive: bool,
-    next_state: bool,
+    next_state: ?bool = null,
     neighbours: ArrayList(*Cell),
 
     pub fn init(allocator: Allocator, x: u32, y: u32, alive: bool) !*Cell {
         const cell = try allocator.create(Cell);
-        cell.x = x;
-        cell.y = y;
-        cell.alive = alive;
-        cell.next_state = false;
-        cell.neighbours = ArrayList(*Cell).empty;
+        cell.* = .{ .x = x, .y = y, .alive = alive, .neighbours = .empty };
         return cell;
     }
 

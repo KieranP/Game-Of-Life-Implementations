@@ -9,10 +9,10 @@ class World
   let _height: U32
   let _cells: Map[String, Cell ref] = _cells.create()
 
-  let _directions: Array[Array[ISize]] = [
-    [-1; 1];  [0; 1];  [1; 1]  // above
-    [-1; 0];           [1; 0]  // sides
-    [-1; -1]; [0; -1]; [1; -1] // below
+  let _directions: Array[(ISize, ISize)] = [
+    (-1, 1);  (0, 1);  (1, 1)  // above
+    (-1, 0);           (1, 0)  // sides
+    (-1, -1); (0, -1); (1, -1) // below
   ]
 
   new create(width: U32, height: U32) =>
@@ -24,7 +24,7 @@ class World
 
   fun ref dotick() =>
     // First determine the action for all cells
-    for (key, cell) in _cells.pairs() do
+    for cell in _cells.values() do
       let alive_neighbours = cell.alive_neighbours()
       if (not cell.alive) and (alive_neighbours == 3) then
         cell.next_state = true
@@ -36,19 +36,19 @@ class World
     end
 
     // Then execute the determined action for all cells
-    for (key, cell) in _cells.pairs() do
-      cell.alive = cell.next_state
+    for cell in _cells.values() do
+      cell.alive = try cell.next_state as Bool else false end
     end
 
     tick = tick + 1
 
   fun ref render(): String ref =>
     // The following is the fastest
-    var rendering = String()
+    let rendering = String(((_width * _height) + _height).usize())
     for y in Range[U32](0, _height) do
       for x in Range[U32](0, _width) do
         try
-          var cell = _cell_at(x, y)?
+          let cell = _cell_at(x, y)?
           rendering.append(cell.to_char())
         end
       end
@@ -57,11 +57,11 @@ class World
     rendering
 
     // The following is slower
-    // var rendering: Array[String] = []
+    // let rendering: Array[String] = []
     // for y in Range[U32](0, _height) do
     //   for x in Range[U32](0, _width) do
     //     try
-    //       var cell = _cell_at(x, y)?
+    //       let cell = _cell_at(x, y)?
     //       rendering.push(cell.to_char())
     //     end
     //   end
@@ -101,14 +101,15 @@ class World
     true
 
   fun ref prepopulate_neighbours() =>
-    for (key, cell) in _cells.pairs() do
+    for cell in _cells.values() do
       let x = cell.x.isize()
       let y = cell.y.isize()
 
       for set in _directions.values() do
         try
-          let nx = (x + set(0)?)
-          let ny = (y + set(1)?)
+          (let rel_x, let rel_y) = set
+          let nx = (x + rel_x)
+          let ny = (y + rel_y)
           if (nx < 0) or (ny < 0) then
             continue // Out of bounds
           end

@@ -1,43 +1,43 @@
-dofile('world.lua')
+local World = require('world')
 
-Play = {
+local Play = {
   WORLD_WIDTH = 150,
   WORLD_HEIGHT = 40,
 }
 
 function Play:run()
-  world = World:new(
+  local world = World:new(
     self.WORLD_WIDTH,
     self.WORLD_HEIGHT
   )
 
-  minimal = os.getenv("MINIMAL") ~= nil
+  local minimal = os.getenv("MINIMAL") ~= nil
 
   if not minimal then
     print(world:render())
   end
 
-  total_tick = 0
-  lowest_tick = math.huge
-  total_render = 0
-  lowest_render = math.huge
+  local total_tick = 0
+  local lowest_tick = math.huge
+  local total_render = 0
+  local lowest_render = math.huge
 
   while true do
-    tick_start = os.clock()
+    local tick_start = os.clock()
     world:dotick()
-    tick_finish = os.clock()
-    tick_time = (tick_finish - tick_start)
-    total_tick = (total_tick + tick_time)
+    local tick_finish = os.clock()
+    local tick_time = tick_finish - tick_start
+    total_tick = total_tick + tick_time
     lowest_tick = math.min(lowest_tick, tick_time)
-    avg_tick = (total_tick / world.tick)
+    local avg_tick = total_tick / world.tick
 
-    render_start = os.clock()
-    rendered = world:render()
-    render_finish = os.clock()
-    render_time = (render_finish - render_start)
-    total_render = (total_render + render_time)
+    local render_start = os.clock()
+    local rendered = world:render()
+    local render_finish = os.clock()
+    local render_time = render_finish - render_start
+    total_render = total_render + render_time
     lowest_render = math.min(lowest_render, render_time)
-    avg_render = (total_render / world.tick)
+    local avg_render = total_render / world.tick
 
     if not minimal then
       print("\u{001b}[H\u{001b}[2J")

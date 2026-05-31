@@ -21,7 +21,7 @@ struct World {
   width u32
   height u32
 mut:
-  cells map[string]&Cell = {}
+  cells map[string]&Cell
 pub mut:
   tick u32
 }
@@ -29,7 +29,7 @@ pub mut:
 pub fn new_world(width u32, height u32) World {
   mut w := World {
     width: width,
-    height: height
+    height: height,
   }
 
   w.populate_cells()
@@ -53,7 +53,7 @@ pub fn (mut w World) tick() {
 
   // Then execute the determined action for all cells
   for _, mut cell in w.cells {
-    cell.alive = cell.next_state
+    cell.alive = cell.next_state or { false }
   }
 
   w.tick++
@@ -132,13 +132,13 @@ fn (mut w World) populate_cells() {
 fn (mut w World) add_cell(x u32, y u32, alive bool) bool {
   existing := w.cell_at(x, y)
   if existing != none {
-    panic(IError(LocationOccupied{ x: x, y: y }))
+    panic(LocationOccupied{ x: x, y: y })
   }
 
   cell := &Cell {
     x: x,
     y: y,
-    alive: alive
+    alive: alive,
   }
 
   key := w.make_key(x, y)
