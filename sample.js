@@ -15,7 +15,7 @@ class RssSampler {
     command,
     commandArgs = [],
     timeoutSeconds = 30,
-    intervalMs = 1000,
+    intervalMs = 500,
   ) {
     this.command = command;
     this.commandArgs = commandArgs;
@@ -138,7 +138,7 @@ class RssSampler {
     const max = samples.length ? Math.max(...samples) : 0;
 
     return samples.map((sample, idx) => {
-      const ratio = sample / max;
+      const ratio = max > 0 ? sample / max : 0;
       const barLen = Math.round(ratio * 50);
       const is_max = sample === max;
       const bar = (is_max ? "*" : "=").repeat(Math.max(1, barLen));
