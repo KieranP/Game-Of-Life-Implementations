@@ -72,5 +72,5 @@ actor Main
   fun _f(value: F64): String =>
     // nanoseconds -> milliseconds
     Format.float[F64](
-      (value / 1_000_000.0) where prec = 3
+      (value / 1_000_000.0) where fmt = FormatFix, prec = 3
     )

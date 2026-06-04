@@ -100,7 +100,7 @@ final class World {
   private function populate_cells(): void {
     for ($y = 0; $y < $this->height; $y++) {
       for ($x = 0; $x < $this->width; $x++) {
-        $alive = rand(0, 100) <= 20;
+        $alive = rand(0, 99) < 20;
         $this->add_cell($x, $y, $alive);
       }
     }

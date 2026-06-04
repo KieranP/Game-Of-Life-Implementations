@@ -25,7 +25,7 @@ INSERT INTO cells (x, y, alive)
 SELECT
   gx.value,
   gy.value,
-  CASE WHEN (ABS(RANDOM()) % 100) <= 20 THEN 1 ELSE 0 END
+  CASE WHEN ABS(RANDOM() % 100) < 20 THEN 1 ELSE 0 END
 FROM generate_series(0, 149) gx, generate_series(0, 39) gy;
 
 INSERT INTO neighbours (cell_x, cell_y, neighbour_x, neighbour_y)

@@ -38,7 +38,9 @@ val WORLD_HEIGHT = 40
       print("[H[2J")
 
     println(
-      f"#${world.tick}%d - World Tick (L: ${_f(lowest_tick)}%.3f; A: ${_f(avg_tick)}%.3f) - Rendering (L: ${_f(lowest_render)}%.3f; A: ${_f(avg_render)}%.3f)"
+      f"#${world.tick}%d" +
+      f" - World Tick (L: ${_f(lowest_tick)}%.3f; A: ${_f(avg_tick)}%.3f)" +
+      f" - Rendering (L: ${_f(lowest_render)}%.3f; A: ${_f(avg_render)}%.3f)"
     )
 
     if !minimal then

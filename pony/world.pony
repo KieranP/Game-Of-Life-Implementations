@@ -84,7 +84,7 @@ class World
     let rand = Rand(Time.nanos())
     for y in Range[U32](0, _height) do
       for x in Range[U32](0, _width) do
-        let alive = rand.int(100) <= 20
+        let alive = rand.real() <= 0.2
         _add_cell(x, y, alive)
       end
     end

@@ -45,10 +45,12 @@ impl Play {
         print("\u{001b}[H\u{001b}[2J");
       }
 
-      println(
-        `#${world.tick} - `,
-        `World Tick (L: ${Play._f(lowest_tick)}; A: ${Play._f(avg_tick)}) - `,
-        `Rendering (L: ${Play._f(lowest_render)}; A: ${Play._f(avg_render)})`
+      // print instead of println, as println space-joins its values and the newline
+      print(
+        `#${world.tick}` +
+        ` - World Tick (L: ${Play._f(lowest_tick)}; A: ${Play._f(avg_tick)})` +
+        ` - Rendering (L: ${Play._f(lowest_render)}; A: ${Play._f(avg_render)})` +
+        "\n"
       );
 
       if (!minimal) {
@@ -57,9 +59,11 @@ impl Play {
     }
   }
 
-  fn _f(value: float): float {
-    // nanoseconds -> milliseconds
-    return ((value / 1_000_000.0) * 1_000.0).round() / 1_000.0;
+  fn _f(value: float): string {
+    // nanoseconds -> milliseconds, padded to 3 decimal places
+    let thousandths = (value / 1_000.0).round() as int;
+    let frac = `${thousandths % 1000}`;
+    return `${thousandths / 1000}.${"0".repeat(3 - frac.len())}${frac}`;
   }
 }
 

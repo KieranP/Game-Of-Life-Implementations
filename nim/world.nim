@@ -104,7 +104,7 @@ func cell_at(self: World, x: uint32, y: uint32): Cell =
 proc populate_cells(self: World) =
   for y in 0..<self.height:
     for x in 0..<self.width:
-      let alive = rand(100) <= 20
+      let alive = rand(1.0) <= 0.2
       discard self.add_cell(x, y, alive)
 
 proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =

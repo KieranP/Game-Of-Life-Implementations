@@ -46,7 +46,11 @@ class Play {
         io:print("\u{001b}[H\u{001b}[2J");
       }
 
-      io:println(string `#${world.tick} - World Tick (L: ${self._f(lowest_tick)}; A: ${self._f(avg_tick)}) - Rendering (L: ${self._f(lowest_render)}; A: ${self._f(avg_render)})`);
+      io:println(
+        string `#${world.tick}` +
+        string ` - World Tick (L: ${self._f(lowest_tick)}; A: ${self._f(avg_tick)})` +
+        string ` - Rendering (L: ${self._f(lowest_render)}; A: ${self._f(avg_render)})`
+      );
 
       if !minimal {
         io:print(rendered);
@@ -55,15 +59,8 @@ class Play {
   }
 
   function _f(float value) returns string {
-    // nanoseconds -> milliseconds
-    float milliseconds = value / 1000000.0;
-    string formatted = milliseconds.toString();
-    int? dotIndex = formatted.indexOf(".");
-    if dotIndex is int {
-      int endIndex = int:min(dotIndex + 4, formatted.length());
-      return formatted.substring(0, endIndex);
-    }
-    return formatted + ".000";
+    // nanoseconds -> milliseconds, padded to 3 decimal places
+    return (value / 1000000.0).toFixedString(3);
   }
 }
 

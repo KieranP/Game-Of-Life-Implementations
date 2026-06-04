@@ -105,7 +105,7 @@ defmodule World do
       world ->
         for x <- 0..(world.width - 1), reduce: world do
           world ->
-            alive = Enum.random(1..100) <= 20
+            alive = :rand.uniform() <= 0.2
             {world, _success} = add_cell(world, x, y, alive)
             world
         end

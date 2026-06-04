@@ -122,8 +122,7 @@ fn (w World) cell_at(x u32, y u32) ?&Cell {
 fn (mut w World) populate_cells() {
   for y in 0 .. w.height {
     for x in 0 .. w.width {
-      num := rand.intn(100) or { 0 }
-      alive := num <= 20
+      alive := rand.bernoulli(0.2) or { false }
       w.add_cell(x, y, alive)
     }
   }
@@ -132,7 +131,7 @@ fn (mut w World) populate_cells() {
 fn (mut w World) add_cell(x u32, y u32, alive bool) bool {
   existing := w.cell_at(x, y)
   if existing != none {
-    panic(LocationOccupied{ x: x, y: y })
+    panic(LocationOccupied{ x: x, y: y }.msg())
   }
 
   cell := &Cell {

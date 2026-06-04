@@ -137,7 +137,7 @@ func (world *World) cell_at(x uint32, y uint32) (*Cell, bool) {
 func (world *World) populate_cells() {
   for y := range world.height {
     for x := range world.width {
-      alive := rand.IntN(100) <= 20
+      alive := rand.Float64() <= 0.2
       world.add_cell(x, y, alive)
     }
   }

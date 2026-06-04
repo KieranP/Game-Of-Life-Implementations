@@ -113,7 +113,7 @@ class world ~width ~height =
       Random.self_init ();
       for y = 0 to height - 1 do
         for x = 0 to width - 1 do
-          let alive = Random.int 101 <= 20 in
+          let alive = Random.float 1.0 <= 0.2 in
           ignore (self#add_cell x y ~alive ())
         done
       done

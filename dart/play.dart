@@ -48,7 +48,7 @@ class Play {
       stdout.writeln(
         "#${world.tick}"
         " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})"
-        " - Rendering (L: ${_f(lowest_render)}, A: ${_f(avg_render)})"
+        " - Rendering (L: ${_f(lowest_render)}; A: ${_f(avg_render)})"
       );
 
       if (!minimal) {

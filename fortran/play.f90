@@ -56,16 +56,27 @@ program play
       write(*, '(A)') achar(27) // '[H' // achar(27) // '[2J'
     end if
 
-    write(*, '(A,I0,A,F5.3,A,F5.3,A,F5.3,A,F5.3,A)') &
+    write(*, '(A,I0,A)') &
       '#', w%tick, &
-      ' - World Tick (L: ', lowest_tick, &
-      '; A: ', avg_tick, &
-      ') - Rendering (L: ', lowest_render, &
-      '; A: ', avg_render, ')'
+      ' - World Tick (L: ' // f(lowest_tick) // '; A: ' // f(avg_tick) // ')' // &
+      ' - Rendering (L: ' // f(lowest_render) // '; A: ' // f(avg_render) // ')'
 
     if (.not. minimal) then
       write(*, '(A)') rendered
     end if
   end do
+
+contains
+
+  ! Fortran identifiers cannot start with an underscore,
+  ! so `f` instead of the conventional `_f`
+  function f(value) result(formatted)
+    real(real64), intent(in) :: value
+    character(len=:), allocatable :: formatted
+    character(len=32) :: buffer
+
+    write(buffer, '(F20.3)') value
+    formatted = trim(adjustl(buffer))
+  end function f
 
 end program play

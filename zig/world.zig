@@ -122,8 +122,8 @@ pub const World = struct {
 
         for (0..self.height) |y| {
             for (0..self.width) |x| {
-                const random = rng.intRangeAtMost(u8, 0, 100);
-                const alive = random <= 20;
+                const random = rng.float(f64);
+                const alive = random <= 0.2;
                 _ = try self.add_cell(@intCast(x), @intCast(y), alive);
             }
         }

@@ -25,7 +25,7 @@ INSERT INTO cells (x, y, alive)
 SELECT
   gx,
   gy,
-  CASE WHEN random(0, 99) <= 20 THEN 1 ELSE 0 END
+  CASE WHEN random() <= 0.2 THEN 1 ELSE 0 END
 FROM generate_series(0, 149) gx, generate_series(0, 39) gy;
 
 INSERT INTO neighbours (cell_x, cell_y, neighbour_x, neighbour_y)

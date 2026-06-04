@@ -98,7 +98,7 @@ final public class World {
   private func populate_cells() throws(LocationOccupied) {
     for y in 0..<height {
       for x in 0..<width {
-        let alive = Int.random(in: 0..<100) <= 20
+        let alive = Double.random(in: 0..<1) <= 0.2
         _ = try add_cell(x: x, y: y, alive: alive)
       }
     }

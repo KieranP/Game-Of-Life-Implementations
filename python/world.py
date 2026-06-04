@@ -1,5 +1,5 @@
 from cell import Cell
-from random import randint
+from random import random
 
 class World:
   class LocationOccupied(RuntimeError):
@@ -76,7 +76,7 @@ class World:
   def populate_cells(self) -> None:
     for y in range(self.height):
       for x in range(self.width):
-        alive = randint(0, 100) <= 20
+        alive = random() <= 0.2
         self.add_cell(x, y, alive)
 
   def add_cell(self, x: int, y: int, alive: bool = False) -> bool:

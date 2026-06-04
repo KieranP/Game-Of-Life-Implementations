@@ -108,8 +108,8 @@ public class World {
   private function populate_cells() returns error? {
     foreach int y in 0 ..< self.height {
       foreach int x in 0 ..< self.width {
-        int randValue = check random:createIntInRange(0, 100);
-        boolean alive = randValue <= 20;
+        float randValue = random:createDecimal();
+        boolean alive = randValue <= 0.2;
         _ = check self.add_cell(<int:Unsigned32>x, <int:Unsigned32>y, alive);
       }
     }
