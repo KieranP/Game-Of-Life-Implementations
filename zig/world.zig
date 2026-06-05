@@ -5,7 +5,7 @@ const StringHashMap = std.StringHashMap;
 const Io = std.Io;
 const Cell = @import("cell.zig").Cell;
 
-const DIRECTIONS = [_]struct { i8, i8 }{
+const directions = [_]struct { i8, i8 }{
     .{ -1, 1 }, .{ 0, 1 }, .{ 1, 1 }, // above
     .{ -1, 0 }, .{ 1, 0 }, // sides
     .{ -1, -1 }, .{ 0, -1 }, .{ 1, -1 }, // below
@@ -26,8 +26,8 @@ pub const World = struct {
         const world = try allocator.create(World);
         world.* = .{ .allocator = allocator, .tick = 0, .width = width, .height = height, .cells = .init(allocator) };
 
-        try world.populate_cells(io);
-        try world.prepopulate_neighbours();
+        try world.populateCells(io);
+        try world.prepopulateNeighbours();
 
         return world;
     }
@@ -42,12 +42,12 @@ pub const World = struct {
         self.cells.deinit();
     }
 
-    pub fn dotick(self: *World) void {
+    pub fn doTick(self: *World) void {
         // First determine the action for all cells
         var it = self.cells.valueIterator();
         while (it.next()) |val| {
             const cell = val.*;
-            const alive_neighbours = cell.alive_neighbours();
+            const alive_neighbours = cell.aliveNeighbours();
             if (!cell.alive and alive_neighbours == 3) {
                 cell.next_state = true;
             } else if (alive_neighbours < 2 or alive_neighbours > 3) {
@@ -75,8 +75,8 @@ pub const World = struct {
         // try rendering.ensureTotalCapacity(self.allocator, render_size);
         // for (0..self.height) |y| {
         //     for (0..self.width) |x| {
-        //         if (self.cell_at(@intCast(x), @intCast(y))) |cell| {
-        //             try rendering.append(self.allocator, cell.to_char());
+        //         if (self.cellAt(@intCast(x), @intCast(y))) |cell| {
+        //             try rendering.append(self.allocator, cell.toChar());
         //         }
         //     }
         //     try rendering.append(self.allocator, '\n');
@@ -88,8 +88,8 @@ pub const World = struct {
         var idx: u32 = 0;
         for (0..self.height) |y| {
             for (0..self.width) |x| {
-                if (self.cell_at(@intCast(x), @intCast(y))) |cell| {
-                    buffer[idx] = cell.to_char();
+                if (self.cellAt(@intCast(x), @intCast(y))) |cell| {
+                    buffer[idx] = cell.toChar();
                 }
                 idx += 1;
             }
@@ -99,7 +99,7 @@ pub const World = struct {
         return buffer;
     }
 
-    fn make_key(buf: *[24]u8, x: u32, y: u32) []const u8 {
+    fn makeKey(buf: *[24]u8, x: u32, y: u32) []const u8 {
         // The following is slower
         // return try std.fmt.allocPrint(allocator, "{d}-{d}", .{ x, y });
 
@@ -107,14 +107,14 @@ pub const World = struct {
         return std.fmt.bufPrint(buf, "{d}-{d}", .{ x, y }) catch unreachable;
     }
 
-    fn cell_at(self: *World, x: u32, y: u32) ?*Cell {
+    fn cellAt(self: *World, x: u32, y: u32) ?*Cell {
         var buf: [24]u8 = undefined;
-        const key = make_key(&buf, x, y);
+        const key = makeKey(&buf, x, y);
 
         return self.cells.get(key);
     }
 
-    fn populate_cells(self: *World, io: Io) !void {
+    fn populateCells(self: *World, io: Io) !void {
         const timestamp = Io.Timestamp.now(io, .awake);
         const seed: u64 = @truncate(@as(u96, @bitCast(timestamp.nanoseconds)));
         var prng = std.Random.DefaultPrng.init(seed);
@@ -124,31 +124,31 @@ pub const World = struct {
             for (0..self.width) |x| {
                 const random = rng.float(f64);
                 const alive = random <= 0.2;
-                _ = try self.add_cell(@intCast(x), @intCast(y), alive);
+                _ = try self.addCell(@intCast(x), @intCast(y), alive);
             }
         }
     }
 
-    fn add_cell(self: *World, x: u32, y: u32, alive: bool) !bool {
-        if (self.cell_at(x, y)) |_| {
+    fn addCell(self: *World, x: u32, y: u32, alive: bool) !bool {
+        if (self.cellAt(x, y)) |_| {
             return Errors.LocationOccupied;
         }
 
         var buf: [24]u8 = undefined;
-        const key = try self.allocator.dupe(u8, make_key(&buf, x, y));
+        const key = try self.allocator.dupe(u8, makeKey(&buf, x, y));
 
         const cell = try Cell.init(self.allocator, x, y, alive);
         try self.cells.put(key, cell);
         return true;
     }
 
-    fn prepopulate_neighbours(self: *World) !void {
+    fn prepopulateNeighbours(self: *World) !void {
         var it = self.cells.valueIterator();
         while (it.next()) |cell| {
             const x: isize = @intCast(cell.*.x);
             const y: isize = @intCast(cell.*.y);
 
-            for (DIRECTIONS) |direction| {
+            for (directions) |direction| {
                 const rel_x, const rel_y = direction;
                 const nx = x + rel_x;
                 const ny = y + rel_y;
@@ -162,7 +162,7 @@ pub const World = struct {
                     continue; // Out of bounds
                 }
 
-                if (self.cell_at(ux, uy)) |neighbour| {
+                if (self.cellAt(ux, uy)) |neighbour| {
                     try cell.*.neighbours.append(self.allocator, neighbour);
                 }
             }

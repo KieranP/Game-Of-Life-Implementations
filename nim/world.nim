@@ -9,7 +9,7 @@ import std/tables
 type
   LocationOccupied = object of ValueError
 
-const DIRECTIONS: array[8, (int, int)] = [
+const Directions: array[8, (int, int)] = [
   (-1, 1),  (0, 1),  (1, 1), # above
   (-1, 0),           (1, 0), # sides
   (-1, -1), (0, -1), (1, -1), # below
@@ -26,33 +26,33 @@ type
 # and will error out if I dont. To to order the methods as I like, I need to
 # declare them ahead of time, known as "forward declaration".
 proc initialize(self: World): World
-proc dotick(self: World)
+proc doTick(self: World)
 proc render(self: World): string
-func make_key(self: World, x: uint32, y: uint32): string
-func cell_at(self: World, x: uint32, y: uint32): Cell
-proc populate_cells(self: World)
-proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool
-proc prepopulate_neighbours(self: World)
+func makeKey(self: World, x: uint32, y: uint32): string
+func cellAt(self: World, x: uint32, y: uint32): Cell
+proc populateCells(self: World)
+proc addCell(self: World, x: uint32, y: uint32, alive: bool = false): bool
+proc prepopulateNeighbours(self: World)
 
 proc initialize(self: World): World =
-  self.populate_cells()
-  self.prepopulate_neighbours()
+  self.populateCells()
+  self.prepopulateNeighbours()
   self
 
-proc dotick(self: World) =
+proc doTick(self: World) =
   # First determine the action for all cells
   for cell in self.cells.values:
-    let alive_neighbours = cell.alive_neighbours()
-    if not cell.alive and alive_neighbours == 3:
-      cell.next_state = some(true)
-    elif alive_neighbours < 2 or alive_neighbours > 3:
-      cell.next_state = some(false)
+    let aliveNeighbours = cell.aliveNeighbours()
+    if not cell.alive and aliveNeighbours == 3:
+      cell.nextState = some(true)
+    elif aliveNeighbours < 2 or aliveNeighbours > 3:
+      cell.nextState = some(false)
     else:
-      cell.next_state = some(cell.alive)
+      cell.nextState = some(cell.alive)
 
   # Then execute the determined action for all cells
   for cell in self.cells.values:
-    cell.alive = cell.next_state.get(false)
+    cell.alive = cell.nextState.get(false)
 
   self.tick += 1
 
@@ -61,9 +61,9 @@ proc render(self: World): string =
   var rendering = ""
   for y in 0..<self.height:
     for x in 0..<self.width:
-      let cell = self.cell_at(x, y)
+      let cell = self.cellAt(x, y)
       if cell != nil:
-        rendering &= cell.to_char()
+        rendering &= cell.toChar()
     rendering &= "\n"
   rendering
 
@@ -71,9 +71,9 @@ proc render(self: World): string =
   # var rendering: seq[string] = @[]
   # for y in 0..<self.height:
   #   for x in 0..<self.width:
-  #     let cell = self.cell_at(x, y)
+  #     let cell = self.cellAt(x, y)
   #     if cell != nil:
-  #       rendering.add(cell.to_char())
+  #       rendering.add(cell.toChar())
   #   rendering.add("\n")
   # join(rendering, "")
 
@@ -81,13 +81,13 @@ proc render(self: World): string =
   # var rendering = rope("")
   # for y in 0..<self.height:
   #   for x in 0..<self.width:
-  #     let cell = self.cell_at(x, y)
+  #     let cell = self.cellAt(x, y)
   #     if cell != nil:
-  #       rendering.add(cell.to_char())
+  #       rendering.add(cell.toChar())
   #   rendering.add("\n")
   # $rendering
 
-func make_key(self: World, x: uint32, y: uint32): string =
+func makeKey(self: World, x: uint32, y: uint32): string =
   # The following is slower
   # fmt"{x}-{y}"
 
@@ -97,34 +97,34 @@ func make_key(self: World, x: uint32, y: uint32): string =
   # The following is slower
   # join([$x, $y], "-")
 
-func cell_at(self: World, x: uint32, y: uint32): Cell =
-  let key = self.make_key(x, y)
+func cellAt(self: World, x: uint32, y: uint32): Cell =
+  let key = self.makeKey(x, y)
   self.cells.getOrDefault(key)
 
-proc populate_cells(self: World) =
+proc populateCells(self: World) =
   for y in 0..<self.height:
     for x in 0..<self.width:
       let alive = rand(1.0) <= 0.2
-      discard self.add_cell(x, y, alive)
+      discard self.addCell(x, y, alive)
 
-proc add_cell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
-  let existing = self.cell_at(x, y)
+proc addCell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
+  let existing = self.cellAt(x, y)
   if existing != nil:
     raise newException(LocationOccupied, fmt"LocationOccupied({x}-{y})")
 
-  let key = self.make_key(x, y)
+  let key = self.makeKey(x, y)
   let cell = Cell(x: x, y: y, alive: alive)
   self.cells[key] = cell
   true
 
-proc prepopulate_neighbours(self: World) =
+proc prepopulateNeighbours(self: World) =
   for cell in self.cells.values:
     let x = int(cell.x)
     let y = int(cell.y)
 
-    for (rel_x, rel_y) in DIRECTIONS:
-      let nx = x + rel_x
-      let ny = y + rel_y
+    for (relX, relY) in Directions:
+      let nx = x + relX
+      let ny = y + relY
       if nx < 0 or ny < 0:
         continue # Out of bounds
 
@@ -133,6 +133,6 @@ proc prepopulate_neighbours(self: World) =
       if ux >= self.width or uy >= self.height:
         continue # Out of bounds
 
-      let neighbour = self.cell_at(ux, uy)
+      let neighbour = self.cellAt(ux, uy)
       if neighbour != nil:
         cell.neighbours.add(neighbour)

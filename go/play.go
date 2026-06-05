@@ -7,13 +7,13 @@ import (
   "time"
 )
 
-const WORLD_WIDTH = uint32(150)
-const WORLD_HEIGHT = uint32(40)
+const worldWidth = uint32(150)
+const worldHeight = uint32(40)
 
 func run() {
-  world := new_world(
-    WORLD_WIDTH,
-    WORLD_HEIGHT,
+  world := newWorld(
+    worldWidth,
+    worldHeight,
   )
 
   minimal := os.Getenv("MINIMAL") != ""
@@ -22,27 +22,27 @@ func run() {
     fmt.Print(world.render())
   }
 
-  var total_tick float64
-  var lowest_tick float64 = math.MaxFloat64
-  var total_render float64
-  var lowest_render float64 = math.MaxFloat64
+  var totalTick float64
+  var lowestTick float64 = math.MaxFloat64
+  var totalRender float64
+  var lowestRender float64 = math.MaxFloat64
 
   for {
-    tick_start := time.Now()
-    world.dotick()
-    tick_finish := time.Now()
-    tick_time := float64(tick_finish.Sub(tick_start).Nanoseconds())
-    total_tick += tick_time
-    lowest_tick = min(lowest_tick, tick_time)
-    avg_tick := total_tick / float64(world.tick)
+    tickStart := time.Now()
+    world.doTick()
+    tickFinish := time.Now()
+    tickTime := float64(tickFinish.Sub(tickStart).Nanoseconds())
+    totalTick += tickTime
+    lowestTick = min(lowestTick, tickTime)
+    avgTick := totalTick / float64(world.tick)
 
-    render_start := time.Now()
+    renderStart := time.Now()
     rendered := world.render()
-    render_finish := time.Now()
-    render_time := float64(render_finish.Sub(render_start).Nanoseconds())
-    total_render += render_time
-    lowest_render = min(lowest_render, render_time)
-    avg_render := total_render / float64(world.tick)
+    renderFinish := time.Now()
+    renderTime := float64(renderFinish.Sub(renderStart).Nanoseconds())
+    totalRender += renderTime
+    lowestRender = min(lowestRender, renderTime)
+    avgRender := totalRender / float64(world.tick)
 
     if !minimal {
       fmt.Print("\u001b[H\u001b[2J")
@@ -51,10 +51,10 @@ func run() {
     fmt.Printf(
       "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       world.tick,
-      _f(lowest_tick),
-      _f(avg_tick),
-      _f(lowest_render),
-      _f(avg_render),
+      _f(lowestTick),
+      _f(avgTick),
+      _f(lowestRender),
+      _f(avgRender),
     )
 
     if !minimal {

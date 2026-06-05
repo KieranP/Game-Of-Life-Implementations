@@ -7,7 +7,7 @@ class Cell {
     const uint x;
     const uint y;
     bool alive;
-    Nullable!bool next_state;
+    Nullable!bool nextState;
     Cell[] neighbours;
 
     this(uint x, uint y, bool alive = false) {
@@ -16,34 +16,34 @@ class Cell {
       this.alive = alive;
     }
 
-    auto to_char() {
+    auto toChar() {
       return alive ? 'o' : ' ';
     }
 
-    auto alive_neighbours() {
+    auto aliveNeighbours() {
       // The following is slower
       // return neighbours.filter!(
       //   neighbour => neighbour.alive
       // ).array.length;
 
       // The following is the fastest
-      auto alive_neighbours = 0;
+      auto aliveNeighbours = 0;
       foreach (ref neighbour; neighbours) {
         if (neighbour.alive) {
-          alive_neighbours++;
+          aliveNeighbours++;
         }
       }
-      return alive_neighbours;
+      return aliveNeighbours;
 
       // The following is about the same speed
-      // auto alive_neighbours = 0;
+      // auto aliveNeighbours = 0;
       // auto count = neighbours.length;
       // for (auto i = 0; i < count; i++) {
       //   auto neighbour = neighbours[i];
       //   if (neighbour.alive) {
-      //     alive_neighbours++;
+      //     aliveNeighbours++;
       //   }
       // }
-      // return alive_neighbours;
+      // return aliveNeighbours;
     }
 }

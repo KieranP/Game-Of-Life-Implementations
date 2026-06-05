@@ -16,27 +16,27 @@ class Play {
       console.log(world.render())
     }
 
-    let total_tick: f64 = 0.0
-    let lowest_tick: f64 = 1e18
-    let total_render: f64 = 0.0
-    let lowest_render: f64 = 1e18
+    let totalTick: f64 = 0.0
+    let lowestTick: f64 = 1e18
+    let totalRender: f64 = 0.0
+    let lowestRender: f64 = 1e18
 
     while (true) {
-      const tick_start = performance.now()
-      world.dotick()
-      const tick_finish = performance.now()
-      const tick_time = tick_finish - tick_start
-      total_tick += tick_time
-      if (tick_time < lowest_tick) lowest_tick = tick_time
-      const avg_tick = total_tick / world.tick
+      const tickStart = performance.now()
+      world.doTick()
+      const tickFinish = performance.now()
+      const tickTime = tickFinish - tickStart
+      totalTick += tickTime
+      if (tickTime < lowestTick) lowestTick = tickTime
+      const avgTick = totalTick / world.tick
 
-      const render_start = performance.now()
+      const renderStart = performance.now()
       const rendered = world.render()
-      const render_finish = performance.now()
-      const render_time = render_finish - render_start
-      total_render += render_time
-      if (render_time < lowest_render) lowest_render = render_time
-      const avg_render = total_render / world.tick
+      const renderFinish = performance.now()
+      const renderTime = renderFinish - renderStart
+      totalRender += renderTime
+      if (renderTime < lowestRender) lowestRender = renderTime
+      const avgRender = totalRender / world.tick
 
       if (!minimal) {
         console.log("\u001b[H\u001b[2J")
@@ -44,8 +44,8 @@ class Play {
 
       console.log(
         `#${world.tick}`
-        + ` - World Tick (L: ${Play._f(lowest_tick)}; A: ${Play._f(avg_tick)})`
-        + ` - Rendering (L: ${Play._f(lowest_render)}; A: ${Play._f(avg_render)})`
+        + ` - World Tick (L: ${Play._f(lowestTick)}; A: ${Play._f(avgTick)})`
+        + ` - Rendering (L: ${Play._f(lowestRender)}; A: ${Play._f(avgRender)})`
       )
 
       if (!minimal) {

@@ -19,11 +19,11 @@ pub const Cell = struct {
         self.neighbours.deinit(allocator);
     }
 
-    pub fn to_char(self: *const Cell) u8 {
+    pub fn toChar(self: *const Cell) u8 {
         return if (self.alive) 'o' else ' ';
     }
 
-    pub fn alive_neighbours(self: *const Cell) u32 {
+    pub fn aliveNeighbours(self: *const Cell) u32 {
         // The following is the fastest
         var alive_count: u32 = 0;
         for (self.neighbours.items) |neighbour| {

@@ -1,15 +1,15 @@
 (ns play
   (:require [world :as w]))
 
-(def WORLD_WIDTH 150)
-(def WORLD_HEIGHT 40)
+(def world-width 150)
+(def world-height 40)
 
 (defn _f [value]
   ;; nanoseconds -> milliseconds
   (/ value 1000000.0))
 
 (defn run []
-  (let [world (w/new-world WORLD_WIDTH WORLD_HEIGHT)
+  (let [world (w/new-world world-width world-height)
         minimal (some? (System/getenv "MINIMAL"))]
 
     (when-not minimal

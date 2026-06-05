@@ -18,29 +18,29 @@ class Play {
       io:print(world.render());
     }
 
-    float total_tick = 0.0;
-    float lowest_tick = float:Infinity;
-    float total_render = 0.0;
-    float lowest_render = float:Infinity;
+    float totalTick = 0.0;
+    float lowestTick = float:Infinity;
+    float totalRender = 0.0;
+    float lowestRender = float:Infinity;
 
     while true {
-      decimal tick_start = time:monotonicNow();
-      world.dotick();
-      decimal tick_finish = time:monotonicNow();
-      decimal tick_diff = tick_finish - tick_start;
-      float tick_time = <float>tick_diff * 1000000000.0;
-      total_tick += tick_time;
-      lowest_tick = float:min(lowest_tick, tick_time);
-      float avg_tick = total_tick / <float>world.tick;
+      decimal tickStart = time:monotonicNow();
+      world.doTick();
+      decimal tickFinish = time:monotonicNow();
+      decimal tickDiff = tickFinish - tickStart;
+      float tickTime = <float>tickDiff * 1000000000.0;
+      totalTick += tickTime;
+      lowestTick = float:min(lowestTick, tickTime);
+      float avgTick = totalTick / <float>world.tick;
 
-      decimal render_start = time:monotonicNow();
+      decimal renderStart = time:monotonicNow();
       string rendered = world.render();
-      decimal render_finish = time:monotonicNow();
-      decimal render_diff = render_finish - render_start;
-      float render_time = <float>render_diff * 1000000000.0;
-      total_render += render_time;
-      lowest_render = float:min(lowest_render, render_time);
-      float avg_render = total_render / <float>world.tick;
+      decimal renderFinish = time:monotonicNow();
+      decimal renderDiff = renderFinish - renderStart;
+      float renderTime = <float>renderDiff * 1000000000.0;
+      totalRender += renderTime;
+      lowestRender = float:min(lowestRender, renderTime);
+      float avgRender = totalRender / <float>world.tick;
 
       if !minimal {
         io:print("\u{001b}[H\u{001b}[2J");
@@ -48,8 +48,8 @@ class Play {
 
       io:println(
         string `#${world.tick}` +
-        string ` - World Tick (L: ${self._f(lowest_tick)}; A: ${self._f(avg_tick)})` +
-        string ` - Rendering (L: ${self._f(lowest_render)}; A: ${self._f(avg_render)})`
+        string ` - World Tick (L: ${self._f(lowestTick)}; A: ${self._f(avgTick)})` +
+        string ` - Rendering (L: ${self._f(lowestRender)}; A: ${self._f(avgRender)})`
       );
 
       if !minimal {

@@ -6,13 +6,13 @@ import world;
 
 class Play {
   public:
-    enum WORLD_WIDTH = 150;
-    enum WORLD_HEIGHT = 40;
+    enum worldWidth = 150;
+    enum worldHeight = 40;
 
     static void run() {
       auto world = new World(
-        width: WORLD_WIDTH,
-        height: WORLD_HEIGHT,
+        width: worldWidth,
+        height: worldHeight,
       );
 
       auto minimal = environment.get("MINIMAL") != null;
@@ -21,27 +21,27 @@ class Play {
         writeln(world.render());
       }
 
-      auto total_tick = 0.0;
-      auto lowest_tick = float.infinity;
-      auto total_render = 0.0;
-      auto lowest_render = float.infinity;
+      auto totalTick = 0.0;
+      auto lowestTick = float.infinity;
+      auto totalRender = 0.0;
+      auto lowestRender = float.infinity;
 
       while (true) {
-        auto tick_start = MonoTime.currTime;
-        world.dotick();
-        auto tick_finish = MonoTime.currTime;
-        auto tick_time = (tick_finish - tick_start).total!"nsecs";
-        total_tick += tick_time;
-        lowest_tick = min(lowest_tick, tick_time);
-        auto avg_tick = total_tick / world.tick;
+        auto tickStart = MonoTime.currTime;
+        world.doTick();
+        auto tickFinish = MonoTime.currTime;
+        auto tickTime = (tickFinish - tickStart).total!"nsecs";
+        totalTick += tickTime;
+        lowestTick = min(lowestTick, tickTime);
+        auto avgTick = totalTick / world.tick;
 
-        auto render_start = MonoTime.currTime;
+        auto renderStart = MonoTime.currTime;
         auto rendered = world.render();
-        auto render_finish = MonoTime.currTime;
-        auto render_time = (render_finish - render_start).total!"nsecs";
-        total_render += render_time;
-        lowest_render = min(lowest_render, render_time);
-        auto avg_render = total_render / world.tick;
+        auto renderFinish = MonoTime.currTime;
+        auto renderTime = (renderFinish - renderStart).total!"nsecs";
+        totalRender += renderTime;
+        lowestRender = min(lowestRender, renderTime);
+        auto avgRender = totalRender / world.tick;
 
         if (!minimal) {
           write("\u001b[H\u001b[2J");
@@ -50,10 +50,10 @@ class Play {
         writefln(
           "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
           world.tick,
-          _f(lowest_tick),
-          _f(avg_tick),
-          _f(lowest_render),
-          _f(avg_render),
+          _f(lowestTick),
+          _f(avgTick),
+          _f(lowestRender),
+          _f(avgRender),
         );
 
         if (!minimal) {

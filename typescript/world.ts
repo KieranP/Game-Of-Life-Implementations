@@ -23,26 +23,26 @@ export class World {
     this.#width = width
     this.#height = height
 
-    this.#populate_cells()
-    this.#prepopulate_neighbours()
+    this.#populateCells()
+    this.#prepopulateNeighbours()
   }
 
-  dotick(): void {
+  doTick(): void {
     // First determine the action for all cells
     for (const cell of this.#cells.values()) {
-      const alive_neighbours = cell.alive_neighbours()
-      if (!cell.alive && alive_neighbours === 3) {
-        cell.next_state = true
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false
+      const aliveNeighbours = cell.aliveNeighbours()
+      if (!cell.alive && aliveNeighbours === 3) {
+        cell.nextState = true
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.nextState = false
       } else {
-        cell.next_state = cell.alive
+        cell.nextState = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
     for (const cell of this.#cells.values()) {
-      cell.alive = cell.next_state ?? cell.alive
+      cell.alive = cell.nextState ?? cell.alive
     }
 
     this.tick += 1
@@ -53,9 +53,9 @@ export class World {
     let rendering = ''
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
-        const cell = this.#cell_at(x, y)
+        const cell = this.#cellAt(x, y)
         if (cell) {
-          rendering += cell.to_char()
+          rendering += cell.toChar()
         }
       }
       rendering += "\n"
@@ -66,9 +66,9 @@ export class World {
     // let rendering: Array<string> = []
     // for (let y = 0; y < this.#height; y++) {
     //   for (let x = 0; x < this.#width; x++) {
-    //     const cell = this.#cell_at(x, y)
+    //     const cell = this.#cellAt(x, y)
     //     if (cell) {
-    //       rendering.push(cell.to_char())
+    //       rendering.push(cell.toChar())
     //     }
     //   }
     //   rendering.push("\n")
@@ -76,7 +76,7 @@ export class World {
     // return rendering.join("")
   }
 
-  #make_key(x: number, y: number): string {
+  #makeKey(x: number, y: number): string {
     // The following is the fastest
     return `${x}-${y}`
 
@@ -87,40 +87,40 @@ export class World {
     // return [x, y].join("-")
   }
 
-  #cell_at(x: number, y: number) {
-    const key = this.#make_key(x, y)
+  #cellAt(x: number, y: number) {
+    const key = this.#makeKey(x, y)
     return this.#cells.get(key)
   }
 
-  #populate_cells() {
+  #populateCells() {
     for (let y = 0; y < this.#height; y++) {
       for (let x = 0; x < this.#width; x++) {
         const alive = Math.random() <= 0.2
-        this.#add_cell(x, y, alive)
+        this.#addCell(x, y, alive)
       }
     }
   }
 
-  #add_cell(x: number, y: number, alive: boolean = false) {
-    const existing = this.#cell_at(x, y)
+  #addCell(x: number, y: number, alive: boolean = false) {
+    const existing = this.#cellAt(x, y)
     if (existing) {
       throw new LocationOccupied(x, y)
     }
 
-    const key = this.#make_key(x, y)
+    const key = this.#makeKey(x, y)
     const cell = new Cell(x, y, alive)
     this.#cells.set(key, cell)
     return true
   }
 
-  #prepopulate_neighbours() {
+  #prepopulateNeighbours() {
     for (const cell of this.#cells.values()) {
       const x = cell.x
       const y = cell.y
 
-      for (const [rel_x, rel_y] of DIRECTIONS) {
-        const nx = x + rel_x
-        const ny = y + rel_y
+      for (const [relX, relY] of DIRECTIONS) {
+        const nx = x + relX
+        const ny = y + relY
         if (nx < 0 || ny < 0) {
           continue // Out of bounds
         }
@@ -129,7 +129,7 @@ export class World {
           continue // Out of bounds
         }
 
-        const neighbour = this.#cell_at(nx, ny)
+        const neighbour = this.#cellAt(nx, ny)
         if (neighbour) {
           cell.neighbours.push(neighbour)
         }

@@ -4,15 +4,15 @@ type Cell struct {
   x uint32
   y uint32
   alive bool
-  next_state bool
+  nextState bool
   neighbours []*Cell
 }
 
-func new_cell(x uint32, y uint32, alive bool) *Cell {
+func newCell(x uint32, y uint32, alive bool) *Cell {
   return &Cell{x: x, y: y, alive: alive}
 }
 
-func (cell *Cell) to_char() rune {
+func (cell *Cell) toChar() rune {
   if cell.alive {
     return 'o'
   } else {
@@ -20,24 +20,24 @@ func (cell *Cell) to_char() rune {
   }
 }
 
-func (cell *Cell) alive_neighbours() uint32 {
+func (cell *Cell) aliveNeighbours() uint32 {
   // The following is the fastest
-  alive_neighbours := uint32(0)
+  aliveNeighbours := uint32(0)
   for _, neighbour := range cell.neighbours {
     if neighbour.alive {
-      alive_neighbours++
+      aliveNeighbours++
     }
   }
-  return alive_neighbours
+  return aliveNeighbours
 
   // The following is slower
-  // alive_neighbours := uint32(0)
+  // aliveNeighbours := uint32(0)
   // count := len(cell.neighbours)
   // for i := range count {
   //   neighbour := cell.neighbours[i]
   //   if neighbour.alive {
-  //     alive_neighbours++
+  //     aliveNeighbours++
   //   }
   // }
-  // return alive_neighbours
+  // return aliveNeighbours
 }

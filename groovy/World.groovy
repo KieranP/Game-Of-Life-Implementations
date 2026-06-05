@@ -25,28 +25,28 @@ public class World {
     this.height = height
     this.cells = new HashMap<>()
 
-    populate_cells()
-    prepopulate_neighbours()
+    populateCells()
+    prepopulateNeighbours()
   }
 
-  public void dotick() {
-    var cell_values = cells.values()
+  public void doTick() {
+    var cellValues = cells.values()
 
     // First determine the action for all cells
-    for (cell in cell_values) {
-      var alive_neighbours = cell.alive_neighbours()
-      if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = true
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false
+    for (cell in cellValues) {
+      var aliveNeighbours = cell.aliveNeighbours()
+      if (!cell.alive && aliveNeighbours == 3) {
+        cell.nextState = true
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.nextState = false
       } else {
-        cell.next_state = cell.alive
+        cell.nextState = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
-    for (cell in cell_values) {
-      cell.alive = cell.next_state
+    for (cell in cellValues) {
+      cell.alive = cell.nextState
     }
 
     tick++
@@ -57,9 +57,9 @@ public class World {
     // var rendering = ""
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
-    //     var cell = cell_at(x, y)
+    //     var cell = cellAt(x, y)
     //     if (cell) {
-    //       rendering += cell.to_char()
+    //       rendering += cell.toChar()
     //     }
     //   }
     //   rendering += "\n"
@@ -70,9 +70,9 @@ public class World {
     // var rendering = []
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
-    //     var cell = cell_at(x, y)
+    //     var cell = cellAt(x, y)
     //     if (cell) {
-    //       rendering.add(cell.to_char())
+    //       rendering.add(cell.toChar())
     //     }
     //   }
     //   rendering.add("\n")
@@ -80,13 +80,13 @@ public class World {
     // rendering.join("")
 
     // The following is the fastest
-    var render_size = width * height + height
-    var rendering = new StringBuilder(render_size)
+    var renderSize = width * height + height
+    var rendering = new StringBuilder(renderSize)
     for (y in 0..<height) {
       for (x in 0..<width) {
-        var cell = cell_at(x, y)
+        var cell = cellAt(x, y)
         if (cell) {
-          rendering.append(cell.to_char())
+          rendering.append(cell.toChar())
         }
       }
       rendering.append("\n")
@@ -94,7 +94,7 @@ public class World {
     rendering.toString()
   }
 
-  private String make_key(int x, int y) {
+  private String makeKey(int x, int y) {
     // The following is slower
     // "${x}-${y}"
 
@@ -105,41 +105,41 @@ public class World {
     // [x, y].join('-')
   }
 
-  private Cell cell_at(int x, int y) {
-    var key = make_key(x, y)
+  private Cell cellAt(int x, int y) {
+    var key = makeKey(x, y)
     cells[key]
   }
 
-  private void populate_cells() {
+  private void populateCells() {
     for (y in 0..<height) {
       for (x in 0..<width) {
         var alive = Math.random() <= 0.2
-        add_cell(x, y, alive)
+        addCell(x, y, alive)
       }
     }
   }
 
-  private boolean add_cell(int x, int y, boolean alive = false) {
-    var existing = cell_at(x, y)
+  private boolean addCell(int x, int y, boolean alive = false) {
+    var existing = cellAt(x, y)
     if (existing) {
       throw new LocationOccupied(x, y)
     }
 
-    var key = make_key(x, y)
+    var key = makeKey(x, y)
     var cell = new Cell(x, y, alive)
     cells[key] = cell
     true
   }
 
-  private void prepopulate_neighbours() {
+  private void prepopulateNeighbours() {
     for (cell in cells.values()) {
       var x = cell.x
       var y = cell.y
 
       for (set in DIRECTIONS) {
-        def (rel_x, rel_y) = set
-        var nx = x + rel_x
-        var ny = y + rel_y
+        def (relX, relY) = set
+        var nx = x + relX
+        var ny = y + relY
         if (nx < 0 || ny < 0) {
           continue // Out of bounds
         }
@@ -148,7 +148,7 @@ public class World {
           continue // Out of bounds
         }
 
-        var neighbour = cell_at(nx, ny)
+        var neighbour = cellAt(nx, ny)
         if (neighbour) {
           cell.neighbours.add(neighbour)
         }

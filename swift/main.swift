@@ -1,13 +1,13 @@
 import Foundation
 
-let WORLD_WIDTH: UInt32 = 150
-let WORLD_HEIGHT: UInt32 = 40
+let worldWidth: UInt32 = 150
+let worldHeight: UInt32 = 40
 
 private final class Play {
   public class func run() throws {
     let world = try World(
-      width: WORLD_WIDTH,
-      height: WORLD_HEIGHT
+      width: worldWidth,
+      height: worldHeight
     )
 
     let minimal = ProcessInfo.processInfo.environment["MINIMAL"] != nil
@@ -16,27 +16,27 @@ private final class Play {
       print(world.render())
     }
 
-    var total_tick = 0.0
-    var lowest_tick = Double.greatestFiniteMagnitude
-    var total_render = 0.0
-    var lowest_render = Double.greatestFiniteMagnitude
+    var totalTick = 0.0
+    var lowestTick = Double.greatestFiniteMagnitude
+    var totalRender = 0.0
+    var lowestRender = Double.greatestFiniteMagnitude
 
     while true {
-      let tick_start = ProcessInfo.processInfo.systemUptime
-      world.dotick()
-      let tick_finish = ProcessInfo.processInfo.systemUptime
-      let tick_time = (tick_finish - tick_start)
-      total_tick += tick_time
-      lowest_tick = min(lowest_tick, tick_time)
-      let avg_tick = (total_tick / Double(world.tick))
+      let tickStart = ProcessInfo.processInfo.systemUptime
+      world.doTick()
+      let tickFinish = ProcessInfo.processInfo.systemUptime
+      let tickTime = (tickFinish - tickStart)
+      totalTick += tickTime
+      lowestTick = min(lowestTick, tickTime)
+      let avgTick = (totalTick / Double(world.tick))
 
-      let render_start = ProcessInfo.processInfo.systemUptime
+      let renderStart = ProcessInfo.processInfo.systemUptime
       let rendered = world.render()
-      let render_finish = ProcessInfo.processInfo.systemUptime
-      let render_time = (render_finish - render_start)
-      total_render += render_time
-      lowest_render = min(lowest_render, render_time)
-      let avg_render = (total_render / Double(world.tick))
+      let renderFinish = ProcessInfo.processInfo.systemUptime
+      let renderTime = (renderFinish - renderStart)
+      totalRender += renderTime
+      lowestRender = min(lowestRender, renderTime)
+      let avgRender = (totalRender / Double(world.tick))
 
       if !minimal {
         print("\u{001b}[H\u{001b}[2J")
@@ -46,10 +46,10 @@ private final class Play {
         String(
           format: "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
           world.tick,
-          _f(value: lowest_tick),
-          _f(value: avg_tick),
-          _f(value: lowest_render),
-          _f(value: avg_render)
+          _f(value: lowestTick),
+          _f(value: avgTick),
+          _f(value: lowestRender),
+          _f(value: avgRender)
         )
       )
 

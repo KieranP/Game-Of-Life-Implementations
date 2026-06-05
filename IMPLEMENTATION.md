@@ -10,6 +10,12 @@ Or if a language does not natively support classes, structs may be used.
 
 But for the most part, each implementation will be similar to the following.
 
+Identifier names below are canonical spellings; each implementation adapts their
+casing to its language's dominant convention (e.g. `alive_neighbours` becomes
+`aliveNeighbours` in camelCase languages, `alive-neighbours` in Clojure/Lisp).
+The `_f` helper keeps its name everywhere (`f` in Fortran, where leading
+underscores are illegal).
+
 ## File Structure
 
 - play.ext

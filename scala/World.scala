@@ -13,31 +13,31 @@ class World(
   private class LocationOccupied(x: Int, y: Int) extends
     Exception(s"LocationOccupied($x-$y)")
 
-  private val DIRECTIONS = Array(
+  private val Directions = Array(
     (-1, 1),  (0, 1),  (1, 1),  // above
     (-1, 0),           (1, 0),  // sides
     (-1, -1), (0, -1), (1, -1), // below
   )
 
-  populate_cells
-  prepopulate_neighbours
+  populateCells
+  prepopulateNeighbours
 
-  def dotick =
-    val cell_values = cells.values
+  def doTick =
+    val cellValues = cells.values
 
     // First determine the action for all cells
-    for cell <- cell_values do
-      val alive_neighbours = cell.alive_neighbours
-      if !cell.alive && alive_neighbours == 3 then
-        cell.next_state = Some(true)
-      else if alive_neighbours < 2 || alive_neighbours > 3 then
-        cell.next_state = Some(false)
+    for cell <- cellValues do
+      val aliveNeighbours = cell.aliveNeighbours
+      if !cell.alive && aliveNeighbours == 3 then
+        cell.nextState = Some(true)
+      else if aliveNeighbours < 2 || aliveNeighbours > 3 then
+        cell.nextState = Some(false)
       else
-        cell.next_state = Some(cell.alive)
+        cell.nextState = Some(cell.alive)
 
     // Then execute the determined action for all cells
-    for cell <- cell_values do
-      cell.alive = cell.next_state.contains(true)
+    for cell <- cellValues do
+      cell.alive = cell.nextState.contains(true)
 
     tick += 1
 
@@ -47,9 +47,9 @@ class World(
     // var (x, y) = (0, 0)
     // for y <- 0 until height do
     //   for x <- 0 until width do
-    //     val cell = cell_at(x, y)
+    //     val cell = cellAt(x, y)
     //     if cell != None then
-    //       rendering += cell.get.to_char
+    //       rendering += cell.get.toChar
     //   rendering += "\n"
     // rendering
 
@@ -58,24 +58,24 @@ class World(
     // var (x, y) = (0, 0)
     // for y <- 0 until height do
     //   for x <- 0 until width do
-    //     val cell = cell_at(x, y)
+    //     val cell = cellAt(x, y)
     //     if cell != None then
-    //       rendering += cell.get.to_char
+    //       rendering += cell.get.toChar
     //   rendering += "\n"
     // rendering.mkString("")
 
     // The following is the fastest
-    val render_size = width * height + height
-    val rendering = StringBuilder(render_size)
+    val renderSize = width * height + height
+    val rendering = StringBuilder(renderSize)
     for y <- 0 until height do
       for x <- 0 until width do
-        val cell = cell_at(x, y)
+        val cell = cellAt(x, y)
         if cell.isDefined then
-          rendering.append(cell.get.to_char)
+          rendering.append(cell.get.toChar)
       rendering.append("\n")
     rendering.toString
 
-  private def make_key(x: Int, y: Int): String =
+  private def makeKey(x: Int, y: Int): String =
     // The following is the fastest
     s"$x-$y"
 
@@ -85,37 +85,37 @@ class World(
     // The following is slower
     // Seq(x, y).mkString("-")
 
-  private def cell_at(x: Int, y: Int) =
-    val key = make_key(x, y)
+  private def cellAt(x: Int, y: Int) =
+    val key = makeKey(x, y)
     cells.get(key)
 
-  private def populate_cells =
+  private def populateCells =
     for y <- 0 until height do
       for x <- 0 until width do
         val alive = Random.nextFloat() <= 0.2
-        add_cell(x, y, alive)
+        addCell(x, y, alive)
 
-  private def add_cell(x: Int, y: Int, alive: Boolean = false) =
-    val existing = cell_at(x, y)
+  private def addCell(x: Int, y: Int, alive: Boolean = false) =
+    val existing = cellAt(x, y)
     if existing.isDefined then
       throw LocationOccupied(x, y)
 
-    val key = make_key(x, y)
+    val key = makeKey(x, y)
     val cell = Cell(x, y, alive)
     cells.put(key, cell)
     true
 
-  private def prepopulate_neighbours =
+  private def prepopulateNeighbours =
     for cell <- cells.values do
       val x = cell.x
       val y = cell.y
 
-      for (rel_x, rel_y) <- DIRECTIONS do
-        val nx = x + rel_x
-        val ny = y + rel_y
+      for (relX, relY) <- Directions do
+        val nx = x + relX
+        val ny = y + relY
 
         if nx >= 0 && ny >= 0 then
           if nx < width && ny < height then
-            val neighbour = cell_at(nx, ny)
+            val neighbour = cellAt(nx, ny)
             if neighbour.isDefined then
               cell.neighbours.append(neighbour.get)

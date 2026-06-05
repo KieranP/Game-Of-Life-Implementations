@@ -3,55 +3,55 @@ using System;
 using System.Diagnostics;
 
 public class Play {
-  private const uint WORLD_WIDTH = 150;
-  private const uint WORLD_HEIGHT = 40;
+  private const uint WorldWidth = 150;
+  private const uint WorldHeight = 40;
 
   public static void Main(string[] args) {
-    run();
+    Run();
   }
 
-  public static void run() {
+  public static void Run() {
     var world = new World(
-      width: WORLD_WIDTH,
-      height: WORLD_HEIGHT
+      width: WorldWidth,
+      height: WorldHeight
     );
 
     var minimal = Environment.GetEnvironmentVariable("MINIMAL") is not null;
 
     if (!minimal) {
-      Console.WriteLine(world.render());
+      Console.WriteLine(world.Render());
     }
 
-    var total_tick = 0.0;
-    var lowest_tick = double.MaxValue;
-    var total_render = 0.0;
-    var lowest_render = double.MaxValue;
+    var totalTick = 0.0;
+    var lowestTick = double.MaxValue;
+    var totalRender = 0.0;
+    var lowestRender = double.MaxValue;
 
     while (true) {
-      var tick_start = Stopwatch.GetTimestamp();
-      world.dotick();
-      var tick_finish = Stopwatch.GetTimestamp();
-      var tick_time = Stopwatch.GetElapsedTime(tick_start, tick_finish).TotalNanoseconds;
-      total_tick += tick_time;
-      lowest_tick = Math.Min(lowest_tick, tick_time);
-      var avg_tick = (total_tick / world.tick);
+      var tickStart = Stopwatch.GetTimestamp();
+      world.DoTick();
+      var tickFinish = Stopwatch.GetTimestamp();
+      var tickTime = Stopwatch.GetElapsedTime(tickStart, tickFinish).TotalNanoseconds;
+      totalTick += tickTime;
+      lowestTick = Math.Min(lowestTick, tickTime);
+      var avgTick = (totalTick / world.Tick);
 
-      var render_start = Stopwatch.GetTimestamp();
-      var rendered = world.render();
-      var render_finish = Stopwatch.GetTimestamp();
-      var render_time = Stopwatch.GetElapsedTime(render_start, render_finish).TotalNanoseconds;
-      total_render += render_time;
-      lowest_render = Math.Min(lowest_render, render_time);
-      var avg_render = (total_render / world.tick);
+      var renderStart = Stopwatch.GetTimestamp();
+      var rendered = world.Render();
+      var renderFinish = Stopwatch.GetTimestamp();
+      var renderTime = Stopwatch.GetElapsedTime(renderStart, renderFinish).TotalNanoseconds;
+      totalRender += renderTime;
+      lowestRender = Math.Min(lowestRender, renderTime);
+      var avgRender = (totalRender / world.Tick);
 
       if (!minimal) {
         Console.Write("\u001b[H\u001b[2J");
       }
 
       Console.WriteLine(
-        $"#{world.tick}" +
-        $" - World Tick (L: {_f(lowest_tick):f3}; A: {_f(avg_tick):f3})" +
-        $" - Rendering (L: {_f(lowest_render):f3}; A: {_f(avg_render):f3})"
+        $"#{world.Tick}" +
+        $" - World Tick (L: {_f(lowestTick):f3}; A: {_f(avgTick):f3})" +
+        $" - Rendering (L: {_f(lowestRender):f3}; A: {_f(avgRender):f3})"
       );
 
       if (!minimal) {

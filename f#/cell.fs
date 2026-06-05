@@ -1,32 +1,32 @@
 module Cell
 
 type Cell(x: uint, y: uint, ?alive: bool) =
-  member val x = x
-  member val y = y
-  member val alive = defaultArg alive false with get,set
-  member val next_state: bool option = None with get,set
-  member val neighbours: Cell list = [] with get,set
+  member val X = x
+  member val Y = y
+  member val Alive = defaultArg alive false with get,set
+  member val NextState: bool option = None with get,set
+  member val Neighbours: Cell list = [] with get,set
 
-  member this.to_char() =
-    if this.alive then 'o' else ' '
+  member this.ToChar() =
+    if this.Alive then 'o' else ' '
 
-  member this.alive_neighbours() =
+  member this.AliveNeighbours() =
     // The following is slower
-    // let alive_neighbours = List.filter (fun (n: Cell) -> n.alive) this.neighbours
-    // alive_neighbours.Length
+    // let aliveNeighbours = List.filter (fun (n: Cell) -> n.Alive) this.Neighbours
+    // aliveNeighbours.Length
 
     // The following is the fastest
-    let mutable alive_neighbours = 0
-    for neighbour in this.neighbours do
-      if neighbour.alive then
-        alive_neighbours <- alive_neighbours + 1
-    alive_neighbours
+    let mutable aliveNeighbours = 0
+    for neighbour in this.Neighbours do
+      if neighbour.Alive then
+        aliveNeighbours <- aliveNeighbours + 1
+    aliveNeighbours
 
     // The following is slower
-    // let mutable alive_neighbours = 0
-    // let count = this.neighbours.Length-1
+    // let mutable aliveNeighbours = 0
+    // let count = this.Neighbours.Length-1
     // for i in 0..count do
-    //   let neighbour = this.neighbours[i]
-    //   if neighbour.alive then
-    //     alive_neighbours <- alive_neighbours + 1
-    // alive_neighbours
+    //   let neighbour = this.Neighbours[i]
+    //   if neighbour.Alive then
+    //     aliveNeighbours <- aliveNeighbours + 1
+    // aliveNeighbours

@@ -15,27 +15,27 @@ public class Play {
         println(world.render())
       }
 
-      var total_tick = 0.0
-      var lowest_tick = Double.MAX_VALUE
-      var total_render = 0.0
-      var lowest_render = Double.MAX_VALUE
+      var totalTick = 0.0
+      var lowestTick = Double.MAX_VALUE
+      var totalRender = 0.0
+      var lowestRender = Double.MAX_VALUE
 
       while (true) {
-        val tick_start = System.nanoTime()
-        world.dotick()
-        val tick_finish = System.nanoTime()
-        val tick_time = (tick_finish - tick_start).toDouble()
-        total_tick += tick_time
-        lowest_tick = minOf(lowest_tick, tick_time)
-        val avg_tick = (total_tick / world.tick)
+        val tickStart = System.nanoTime()
+        world.doTick()
+        val tickFinish = System.nanoTime()
+        val tickTime = (tickFinish - tickStart).toDouble()
+        totalTick += tickTime
+        lowestTick = minOf(lowestTick, tickTime)
+        val avgTick = (totalTick / world.tick)
 
-        val render_start = System.nanoTime()
+        val renderStart = System.nanoTime()
         val rendered = world.render()
-        val render_finish = System.nanoTime()
-        val render_time = (render_finish - render_start).toDouble()
-        total_render += render_time
-        lowest_render = minOf(lowest_render, render_time)
-        val avg_render = (total_render / world.tick)
+        val renderFinish = System.nanoTime()
+        val renderTime = (renderFinish - renderStart).toDouble()
+        totalRender += renderTime
+        lowestRender = minOf(lowestRender, renderTime)
+        val avgRender = (totalRender / world.tick)
 
         if (!minimal) {
           print("\u001b[H\u001b[2J")
@@ -45,10 +45,10 @@ public class Play {
           String.format(
             "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
             world.tick,
-            _f(lowest_tick),
-            _f(avg_tick),
-            _f(lowest_render),
-            _f(avg_render)
+            _f(lowestTick),
+            _f(avgTick),
+            _f(lowestRender),
+            _f(avgRender)
           )
         )
 

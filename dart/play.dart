@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 class Play {
-  static const WORLD_WIDTH = 150;
-  static const WORLD_HEIGHT = 40;
+  static const worldWidth = 150;
+  static const worldHeight = 40;
 
   static void run() {
     final world = World(
-      WORLD_WIDTH,
-      WORLD_HEIGHT,
+      worldWidth,
+      worldHeight,
     );
 
     final minimal = Platform.environment["MINIMAL"] != null;
@@ -18,28 +18,28 @@ class Play {
       print(world.render());
     }
 
-    var total_tick = 0.0;
-    var lowest_tick = double.infinity;
-    var total_render = 0.0;
-    var lowest_render = double.infinity;
+    var totalTick = 0.0;
+    var lowestTick = double.infinity;
+    var totalRender = 0.0;
+    var lowestRender = double.infinity;
 
     final stopwatch = Stopwatch();
     stopwatch.start();
 
     while(true) {
       stopwatch.reset();
-      world.dotick();
-      final tick_time = stopwatch.elapsedMicroseconds.toDouble();
-      total_tick += tick_time;
-      lowest_tick = min(lowest_tick, tick_time);
-      final avg_tick = (total_tick / world.tick);
+      world.doTick();
+      final tickTime = stopwatch.elapsedMicroseconds.toDouble();
+      totalTick += tickTime;
+      lowestTick = min(lowestTick, tickTime);
+      final avgTick = (totalTick / world.tick);
 
       stopwatch.reset();
       final rendered = world.render();
-      final render_time = stopwatch.elapsedMicroseconds.toDouble();
-      total_render += render_time;
-      lowest_render = min(lowest_render, render_time);
-      final avg_render = (total_render / world.tick);
+      final renderTime = stopwatch.elapsedMicroseconds.toDouble();
+      totalRender += renderTime;
+      lowestRender = min(lowestRender, renderTime);
+      final avgRender = (totalRender / world.tick);
 
       if (!minimal) {
         stdout.write("\u001b[H\u001b[2J");
@@ -47,8 +47,8 @@ class Play {
 
       stdout.writeln(
         "#${world.tick}"
-        " - World Tick (L: ${_f(lowest_tick)}; A: ${_f(avg_tick)})"
-        " - Rendering (L: ${_f(lowest_render)}; A: ${_f(avg_render)})"
+        " - World Tick (L: ${_f(lowestTick)}; A: ${_f(avgTick)})"
+        " - Rendering (L: ${_f(lowestRender)}; A: ${_f(avgRender)})"
       );
 
       if (!minimal) {

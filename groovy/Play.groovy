@@ -18,27 +18,27 @@ class Play {
       println(world.render())
     }
 
-    var total_tick = 0.0
-    var lowest_tick = Double.MAX_VALUE
-    var total_render = 0.0
-    var lowest_render = Double.MAX_VALUE
+    var totalTick = 0.0
+    var lowestTick = Double.MAX_VALUE
+    var totalRender = 0.0
+    var lowestRender = Double.MAX_VALUE
 
     while (true) {
-      var tick_start = System.nanoTime()
-      world.dotick()
-      var tick_finish = System.nanoTime()
-      var tick_time = (tick_finish - tick_start) as double
-      total_tick += tick_time
-      lowest_tick = Math.min(lowest_tick, tick_time)
-      var avg_tick = (total_tick / world.tick) as double
+      var tickStart = System.nanoTime()
+      world.doTick()
+      var tickFinish = System.nanoTime()
+      var tickTime = (tickFinish - tickStart) as double
+      totalTick += tickTime
+      lowestTick = Math.min(lowestTick, tickTime)
+      var avgTick = (totalTick / world.tick) as double
 
-      var render_start = System.nanoTime()
+      var renderStart = System.nanoTime()
       var rendered = world.render()
-      var render_finish = System.nanoTime()
-      var render_time = (render_finish - render_start) as double
-      total_render += render_time
-      lowest_render = Math.min(lowest_render, render_time)
-      var avg_render = (total_render / world.tick) as double
+      var renderFinish = System.nanoTime()
+      var renderTime = (renderFinish - renderStart) as double
+      totalRender += renderTime
+      lowestRender = Math.min(lowestRender, renderTime)
+      var avgRender = (totalRender / world.tick) as double
 
       if (!minimal) {
         print("\u001b[H\u001b[2J")
@@ -47,10 +47,10 @@ class Play {
       printf(
         "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)%n",
         world.tick,
-        _f(lowest_tick),
-        _f(avg_tick),
-        _f(lowest_render),
-        _f(avg_render)
+        _f(lowestTick),
+        _f(avgTick),
+        _f(lowestRender),
+        _f(avgRender)
       )
 
       if (!minimal) {

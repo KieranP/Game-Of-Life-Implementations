@@ -24,31 +24,31 @@ export class World {
     this.height = height
     this.cells = new Map<string, Cell>()
 
-    this.populate_cells()
-    this.prepopulate_neighbours()
+    this.populateCells()
+    this.prepopulateNeighbours()
   }
 
-  public dotick(): void {
+  public doTick(): void {
     const cells = this.cells.values()
-    const cell_count = cells.length
+    const cellCount = cells.length
 
     // First determine the action for all cells
-    for (let i = 0; i < cell_count; i++) {
+    for (let i = 0; i < cellCount; i++) {
       const cell = cells.at(i)
-      const alive_neighbours = cell.alive_neighbours()
-      if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = true
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false
+      const aliveNeighbours = cell.aliveNeighbours()
+      if (!cell.alive && aliveNeighbours == 3) {
+        cell.nextState = true
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.nextState = false
       } else {
-        cell.next_state = cell.alive
+        cell.nextState = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
-    for (let i = 0; i < cell_count; i++) {
+    for (let i = 0; i < cellCount; i++) {
       const cell = cells.at(i)
-      cell.alive = cell.next_state
+      cell.alive = cell.nextState
     }
 
     this.tick += 1
@@ -59,9 +59,9 @@ export class World {
     // let rendering = ""
     // for (let y: u32 = 0; y < this.height; y++) {
     //   for (let x: u32 = 0; x < this.width; x++) {
-    //     const cell = this.cell_at(x, y)
+    //     const cell = this.cellAt(x, y)
     //     if (cell) {
-    //       rendering += cell.to_char()
+    //       rendering += cell.toChar()
     //     }
     //   }
     //   rendering += "\n"
@@ -72,9 +72,9 @@ export class World {
     // const rendering: string[] = []
     // for (let y: u32 = 0; y < this.height; y++) {
     //   for (let x: u32 = 0; x < this.width; x++) {
-    //     const cell = this.cell_at(x, y)
+    //     const cell = this.cellAt(x, y)
     //     if (cell) {
-    //       rendering.push(cell.to_char())
+    //       rendering.push(cell.toChar())
     //     }
     //   }
     //   rendering.push("\n")
@@ -82,14 +82,14 @@ export class World {
     // return rendering.join("")
 
     // The following is the fastest
-    const render_size = this.width * this.height + this.height
-    const rendering = new Array<string>(render_size)
+    const renderSize = this.width * this.height + this.height
+    const rendering = new Array<string>(renderSize)
     let idx = 0
     for (let y: u32 = 0; y < this.height; y++) {
       for (let x: u32 = 0; x < this.width; x++) {
-        const cell = this.cell_at(x, y)
+        const cell = this.cellAt(x, y)
         if (cell) {
-          rendering[idx++] = cell.to_char()
+          rendering[idx++] = cell.toChar()
         }
       }
       rendering[idx++] = "\n"
@@ -97,7 +97,7 @@ export class World {
     return rendering.join("")
   }
 
-  private static make_key(x: u32, y: u32): string {
+  private static makeKey(x: u32, y: u32): string {
     // The following is the fastest
     return `${x}-${y}`
 
@@ -109,8 +109,8 @@ export class World {
     // return parts.join("")
   }
 
-  private cell_at(x: u32, y: u32): Cell | null {
-    const key = World.make_key(x, y)
+  private cellAt(x: u32, y: u32): Cell | null {
+    const key = World.makeKey(x, y)
     if (this.cells.has(key)) {
       return this.cells.get(key)
     } else {
@@ -118,18 +118,18 @@ export class World {
     }
   }
 
-  private populate_cells(): void {
+  private populateCells(): void {
     for (let y: u32 = 0; y < this.height; y++) {
       for (let x: u32 = 0; x < this.width; x++) {
         const alive = Math.random() <= 0.2
-        this.add_cell(x, y, alive)
+        this.addCell(x, y, alive)
       }
     }
   }
 
-  private add_cell(x: u32, y: u32, alive: bool = false): bool {
-    const key = World.make_key(x, y)
-    const existing = this.cell_at(x, y)
+  private addCell(x: u32, y: u32, alive: bool = false): bool {
+    const key = World.makeKey(x, y)
+    const existing = this.cellAt(x, y)
     if (existing) {
       throw new LocationOccupied(key)
     }
@@ -139,11 +139,11 @@ export class World {
     return true
   }
 
-  private prepopulate_neighbours(): void {
+  private prepopulateNeighbours(): void {
     const cells = this.cells.values()
-    const cell_count = cells.length
+    const cellCount = cells.length
 
-    for (let i = 0; i < cell_count; i++) {
+    for (let i = 0; i < cellCount; i++) {
       const cell = cells.at(i)
       const x = cell.x
       const y = cell.y
@@ -160,7 +160,7 @@ export class World {
           continue // Out of bounds
         }
 
-        const neighbour = this.cell_at(nx, ny)
+        const neighbour = this.cellAt(nx, ny)
         if (neighbour) {
           cell.neighbours.push(neighbour)
         }

@@ -2,40 +2,40 @@ using System.Collections.Generic;
 // using System.Linq;
 
 public class Cell(uint x, uint y, bool alive = false) {
-  public readonly uint x = x;
-  public readonly uint y = y;
-  public bool alive = alive;
-  public bool? next_state = null;
-  public readonly List<Cell> neighbours = [];
+  public readonly uint X = x;
+  public readonly uint Y = y;
+  public bool Alive = alive;
+  public bool? NextState = null;
+  public readonly List<Cell> Neighbours = [];
 
-  public char to_char() {
-    return this.alive ? 'o' : ' ';
+  public char ToChar() {
+    return this.Alive ? 'o' : ' ';
   }
 
-  public uint alive_neighbours() {
+  public uint AliveNeighbours() {
     // The following is slower
-    // return (uint)this.neighbours.Where(
-    //   (neighbour) => neighbour.alive
+    // return (uint)this.Neighbours.Where(
+    //   (neighbour) => neighbour.Alive
     // ).ToList().Count;
 
     // The following is slower
-    // var alive_neighbours = 0u;
-    // foreach (var neighbour in this.neighbours) {
-    //   if (neighbour.alive) {
-    //     alive_neighbours++;
+    // var aliveNeighbours = 0u;
+    // foreach (var neighbour in this.Neighbours) {
+    //   if (neighbour.Alive) {
+    //     aliveNeighbours++;
     //   }
     // }
-    // return alive_neighbours;
+    // return aliveNeighbours;
 
     // The following is the fastest
-    var alive_neighbours = 0u;
-    var count = this.neighbours.Count;
+    var aliveNeighbours = 0u;
+    var count = this.Neighbours.Count;
     for (var i = 0; i < count; i++) {
-      var neighbour = this.neighbours[i];
-      if (neighbour.alive) {
-        alive_neighbours++;
+      var neighbour = this.Neighbours[i];
+      if (neighbour.Alive) {
+        aliveNeighbours++;
       }
     }
-    return alive_neighbours;
+    return aliveNeighbours;
   }
 }

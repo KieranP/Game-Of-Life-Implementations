@@ -26,28 +26,28 @@ public class World {
     this.height = height;
     this.cells = new HashMap<>();
 
-    populate_cells();
-    prepopulate_neighbours();
+    populateCells();
+    prepopulateNeighbours();
   }
 
-  public void dotick() {
-    var cell_values = cells.values();
+  public void doTick() {
+    var cellValues = cells.values();
 
     // First determine the action for all cells
-    for (var cell : cell_values) {
-      var alive_neighbours = cell.alive_neighbours();
-      if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = true;
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false;
+    for (var cell : cellValues) {
+      var aliveNeighbours = cell.aliveNeighbours();
+      if (!cell.alive && aliveNeighbours == 3) {
+        cell.nextState = true;
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.nextState = false;
       } else {
-        cell.next_state = cell.alive;
+        cell.nextState = cell.alive;
       }
     }
 
     // Then execute the determined action for all cells
-    for (var cell : cell_values) {
-      cell.alive = cell.next_state;
+    for (var cell : cellValues) {
+      cell.alive = cell.nextState;
     }
 
     tick++;
@@ -58,9 +58,9 @@ public class World {
     // var rendering = "";
     // for (var y = 0; y < height; y++) {
     //   for (var x = 0; x < width; x++) {
-    //     var cell = cell_at(x, y);
+    //     var cell = cellAt(x, y);
     //     if (cell != null) {
-    //       rendering += cell.to_char();
+    //       rendering += cell.toChar();
     //     }
     //   }
     //   rendering += "\n";
@@ -71,9 +71,9 @@ public class World {
     // var rendering = new ArrayList<String>();
     // for (var y = 0; y < height; y++) {
     //   for (var x = 0; x < width; x++) {
-    //     var cell = cell_at(x, y);
+    //     var cell = cellAt(x, y);
     //     if (cell != null) {
-    //       rendering.add(String.valueOf(cell.to_char()));
+    //       rendering.add(String.valueOf(cell.toChar()));
     //     }
     //   }
     //   rendering.add("\n");
@@ -81,13 +81,13 @@ public class World {
     // return String.join("", rendering);
 
     // The following is the fastest
-    var render_size = width * height + height;
-    var rendering = new StringBuilder(render_size);
+    var renderSize = width * height + height;
+    var rendering = new StringBuilder(renderSize);
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-        var cell = cell_at(x, y);
+        var cell = cellAt(x, y);
         if (cell != null) {
-          rendering.append(cell.to_char());
+          rendering.append(cell.toChar());
         }
       }
       rendering.append('\n');
@@ -95,7 +95,7 @@ public class World {
     return rendering.toString();
   }
 
-  private String make_key(int x, int y) {
+  private String makeKey(int x, int y) {
     // The following is slower
     // return String.format("%d-%d", x, y);
 
@@ -106,33 +106,33 @@ public class World {
     // return String.join("-", String.valueOf(x), String.valueOf(y));
   }
 
-  private Cell cell_at(int x, int y) {
-    var key = make_key(x, y);
+  private Cell cellAt(int x, int y) {
+    var key = makeKey(x, y);
     return cells.get(key);
   }
 
-  private void populate_cells() throws LocationOccupied {
+  private void populateCells() throws LocationOccupied {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         var alive = Math.random() <= 0.2;
-        add_cell(x, y, alive);
+        addCell(x, y, alive);
       }
     }
   }
 
-  private boolean add_cell(int x, int y, boolean alive) throws LocationOccupied {
-    var existing = cell_at(x, y);
+  private boolean addCell(int x, int y, boolean alive) throws LocationOccupied {
+    var existing = cellAt(x, y);
     if (existing != null) {
       throw new LocationOccupied(x, y);
     }
 
-    var key = make_key(x, y);
+    var key = makeKey(x, y);
     var cell = new Cell(x, y, alive);
     cells.put(key, cell);
     return true;
   }
 
-  private void prepopulate_neighbours() {
+  private void prepopulateNeighbours() {
     for (var cell : cells.values()) {
       var x = cell.x;
       var y = cell.y;
@@ -148,7 +148,7 @@ public class World {
           continue; // Out of bounds
         }
 
-        var neighbour = cell_at(nx, ny);
+        var neighbour = cellAt(nx, ny);
         if (neighbour != null) {
           cell.neighbours.add(neighbour);
         }

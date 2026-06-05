@@ -7,7 +7,7 @@
 (defn location-occupied-exception [x y]
   (ex-info (str "LocationOccupied(" x "-" y ")") {:x x :y y}))
 
-(def DIRECTIONS
+(def directions
   [[-1 1]  [0 1]  [1 1]  ; above
    [-1 0]         [1 0]  ; sides
    [-1 -1] [0 -1] [1 -1] ; below
@@ -138,7 +138,7 @@
                               (let [neighbour-key (make-key nx ny)]
                                 (when (get (:cells world) neighbour-key)
                                   neighbour-key))))))
-                      DIRECTIONS))]
+                      directions))]
        (assoc-in world [:cells key :neighbours] neighbours)))
    world
    (:cells world)))

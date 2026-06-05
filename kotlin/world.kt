@@ -20,28 +20,28 @@ public class World(
   }
 
   init {
-    populate_cells()
-    prepopulate_neighbours()
+    populateCells()
+    prepopulateNeighbours()
   }
 
-  public fun dotick() {
-    val cell_values = cells.values
+  public fun doTick() {
+    val cellValues = cells.values
 
     // First determine the action for all cells
-    for (cell in cell_values) {
-      val alive_neighbours = cell.alive_neighbours()
-      if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = true
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false
+    for (cell in cellValues) {
+      val aliveNeighbours = cell.aliveNeighbours()
+      if (!cell.alive && aliveNeighbours == 3) {
+        cell.nextState = true
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.nextState = false
       } else {
-        cell.next_state = cell.alive
+        cell.nextState = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
-    for (cell in cell_values) {
-      cell.alive = cell.next_state!!
+    for (cell in cellValues) {
+      cell.alive = cell.nextState!!
     }
 
     tick++
@@ -52,9 +52,9 @@ public class World(
     // var rendering = ""
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
-    //     val cell = cell_at(x, y)
+    //     val cell = cellAt(x, y)
     //     if (cell != null) {
-    //       rendering += cell.to_char()
+    //       rendering += cell.toChar()
     //     }
     //   }
     //   rendering += "\n"
@@ -65,9 +65,9 @@ public class World(
     // val rendering = ArrayList<String>();
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
-    //     val cell = cell_at(x, y)
+    //     val cell = cellAt(x, y)
     //     if (cell != null) {
-    //       rendering.add(cell.to_char().toString())
+    //       rendering.add(cell.toChar().toString())
     //     }
     //   }
     //   rendering.add("\n")
@@ -75,13 +75,13 @@ public class World(
     // return rendering.joinToString(separator = "");
 
     // The following is the fastest
-    val render_size = width * height + height
-    val rendering = StringBuilder(render_size)
+    val renderSize = width * height + height
+    val rendering = StringBuilder(renderSize)
     for (y in 0..<height) {
       for (x in 0..<width) {
-        val cell = cell_at(x, y)
+        val cell = cellAt(x, y)
         if (cell != null) {
-          rendering.append(cell.to_char())
+          rendering.append(cell.toChar())
         }
       }
       rendering.append("\n")
@@ -89,7 +89,7 @@ public class World(
     return rendering.toString()
   }
 
-  private fun make_key(x: Int, y: Int): String {
+  private fun makeKey(x: Int, y: Int): String {
     // The following is slower
     // return "$x-$y"
 
@@ -100,40 +100,40 @@ public class World(
     // return intArrayOf(x, y).joinToString("-")
   }
 
-  private fun cell_at(x: Int, y: Int): Cell? {
-    val key = make_key(x, y)
+  private fun cellAt(x: Int, y: Int): Cell? {
+    val key = makeKey(x, y)
     return cells[key]
   }
 
-  private fun populate_cells() {
+  private fun populateCells() {
     for (y in 0..<height) {
       for (x in 0..<width) {
         val alive = Random.nextDouble() <= 0.2
-        add_cell(x, y, alive)
+        addCell(x, y, alive)
       }
     }
   }
 
-  private fun add_cell(x: Int, y: Int, alive: Boolean = false): Boolean {
-    val existing = cell_at(x, y)
+  private fun addCell(x: Int, y: Int, alive: Boolean = false): Boolean {
+    val existing = cellAt(x, y)
     if (existing != null) {
       throw LocationOccupied(x, y)
     }
 
-    val key = make_key(x, y)
+    val key = makeKey(x, y)
     val cell = Cell(x, y, alive)
     cells[key] = cell
     return true
   }
 
-  private fun prepopulate_neighbours() {
+  private fun prepopulateNeighbours() {
     for (cell in cells.values) {
       val x = cell.x
       val y = cell.y
 
-      for ((rel_x, rel_y) in DIRECTIONS) {
-        val nx = x + rel_x
-        val ny = y + rel_y
+      for ((relX, relY) in DIRECTIONS) {
+        val nx = x + relX
+        val ny = y + relY
         if (nx < 0 || ny < 0) {
           continue // Out of bounds
         }
@@ -142,7 +142,7 @@ public class World(
           continue // Out of bounds
         }
 
-        val neighbour = cell_at(nx, ny)
+        val neighbour = cellAt(nx, ny)
         if (neighbour != null) {
           cell.neighbours.add(neighbour)
         }

@@ -34,12 +34,12 @@ class RssSampler {
     // If the sampler is interupted, also kill child process tree
     process.on("SIGINT", async () => {
       try {
-        await this.kill_tree();
+        await this.killTree();
       } catch (e) {
         console.error("Failed to kill child process tree on interupt:", e);
       }
 
-      this.stop_and_print();
+      this.stopAndPrint();
     });
 
     this.child = spawn(this.command, this.commandArgs, {
@@ -48,17 +48,17 @@ class RssSampler {
     });
 
     this.child.on("exit", () => {
-      this.stop_and_print();
+      this.stopAndPrint();
     });
 
     this.timeoutTimer = setTimeout(async () => {
       try {
-        await this.kill_tree();
+        await this.killTree();
       } catch (e) {
         console.error("Failed to kill child process tree on timeout:", e);
       }
 
-      this.stop_and_print();
+      this.stopAndPrint();
     }, this.timeoutSeconds * 1000);
 
     await this.tick();
@@ -72,7 +72,7 @@ class RssSampler {
     this.sampling = true;
 
     try {
-      const rss = await this.sample_rss();
+      const rss = await this.sampleRss();
       this.samples.push(rss);
     } catch (e) {
       console.error("Failed to sample rss:", e);
@@ -81,7 +81,7 @@ class RssSampler {
     }
   }
 
-  stop_and_print(exitCode = 0) {
+  stopAndPrint(exitCode = 0) {
     if (this.stopped) return;
     this.stopped = true;
 
@@ -102,18 +102,18 @@ class RssSampler {
     if (count === 0) {
       console.log("No successful RSS samples collected.\n");
     } else {
-      console.log(`Max RSS: ${this.format_bytes(max)}`);
+      console.log(`Max RSS: ${this.formatBytes(max)}`);
       console.log("");
 
-      const graph_lines = this.ascii_graph_for_samples(this.samples);
-      graph_lines.forEach((l) => console.log(l));
+      const graphLines = this.asciiGraphForSamples(this.samples);
+      graphLines.forEach((l) => console.log(l));
       console.log("");
     }
 
     process.exit(exitCode);
   }
 
-  async sample_rss() {
+  async sampleRss() {
     if (!this.child || !this.child.pid) return;
     const pid = this.child.pid;
 
@@ -127,27 +127,27 @@ class RssSampler {
     return values.reduce((acc, cur) => acc + cur.memory, 0);
   }
 
-  format_bytes(bytes) {
+  formatBytes(bytes) {
     if (bytes === null) return "N/A";
     if (bytes === 0) return "0 MB";
     const value = bytes / 1024 / 1024;
     return `${value.toFixed(2)} MB (${bytes} B)`;
   }
 
-  ascii_graph_for_samples(samples) {
+  asciiGraphForSamples(samples) {
     const max = samples.length ? Math.max(...samples) : 0;
 
     return samples.map((sample, idx) => {
       const ratio = max > 0 ? sample / max : 0;
       const barLen = Math.round(ratio * 50);
-      const is_max = sample === max;
-      const bar = (is_max ? "*" : "=").repeat(Math.max(1, barLen));
-      const label = this.format_bytes(sample);
+      const isMax = sample === max;
+      const bar = (isMax ? "*" : "=").repeat(Math.max(1, barLen));
+      const label = this.formatBytes(sample);
       return `${String(idx).padStart(3)}: ${bar} ${label}`;
     });
   }
 
-  async kill_tree() {
+  async killTree() {
     if (!this.child || !this.child.pid) return;
     const pid = this.child.pid;
 

@@ -3,35 +3,35 @@ public class Cell(
   public val y: Int,
   public var alive: Boolean = false
 ) {
-  public var next_state: Boolean? = null
+  public var nextState: Boolean? = null
   public val neighbours = mutableListOf<Cell>()
 
-  public fun to_char(): Char {
+  public fun toChar(): Char {
     return if (alive) 'o' else ' '
   }
 
-  public fun alive_neighbours(): Int {
+  public fun aliveNeighbours(): Int {
     // The following is slower
     // return this.neighbours.filter { it.alive }.size
 
     // The following is slower
-    // var alive_neighbours = 0
+    // var aliveNeighbours = 0
     // for (neighbour in this.neighbours) {
     //   if (neighbour.alive) {
-    //     alive_neighbours += 1
+    //     aliveNeighbours += 1
     //   }
     // }
-    // return alive_neighbours
+    // return aliveNeighbours
 
     // The following is the fastest
-    var alive_neighbours = 0
+    var aliveNeighbours = 0
     val count = this.neighbours.size
     for (i in 0..<count) {
       val neighbour = this.neighbours[i]
       if (neighbour.alive) {
-        alive_neighbours++
+        aliveNeighbours++
       }
     }
-    return alive_neighbours
+    return aliveNeighbours
   }
 }

@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 
 public class World {
-  public uint tick = 0;
+  public uint Tick = 0;
 
   private readonly uint width;
   private readonly uint height;
@@ -11,7 +11,7 @@ public class World {
 
   private class LocationOccupied(uint x, uint y) : Exception($"LocationOccupied({x}-{y})");
 
-  private static readonly (int, int)[] DIRECTIONS = [
+  private static readonly (int, int)[] Directions = [
     (-1, 1),  (0, 1),  (1, 1), // above
     (-1, 0),           (1, 0), // sides
     (-1, -1), (0, -1), (1, -1) // below
@@ -21,41 +21,41 @@ public class World {
     this.width = width;
     this.height = height;
 
-    populate_cells();
-    prepopulate_neighbours();
+    PopulateCells();
+    PrepopulateNeighbours();
   }
 
-  public void dotick() {
-    var cell_values = cells.Values;
+  public void DoTick() {
+    var cellValues = cells.Values;
 
     // First determine the action for all cells
-    foreach (var cell in cell_values) {
-      var alive_neighbours = cell.alive_neighbours();
-      if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = true;
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false;
+    foreach (var cell in cellValues) {
+      var aliveNeighbours = cell.AliveNeighbours();
+      if (!cell.Alive && aliveNeighbours == 3) {
+        cell.NextState = true;
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.NextState = false;
       } else {
-        cell.next_state = cell.alive;
+        cell.NextState = cell.Alive;
       }
     }
 
     // Then execute the determined action for all cells
-    foreach (var cell in cell_values) {
-      cell.alive = cell.next_state ?? false;
+    foreach (var cell in cellValues) {
+      cell.Alive = cell.NextState ?? false;
     }
 
-    tick++;
+    Tick++;
   }
 
-  public string render() {
+  public string Render() {
     // The following is slower
     // var rendering = "";
     // for (var y = 0u; y < height; y++) {
     //   for (var x = 0u; x < width; x++) {
-    //     var cell = cell_at(x, y);
+    //     var cell = CellAt(x, y);
     //     if (cell is not null) {
-    //       rendering += cell.to_char();
+    //       rendering += cell.ToChar();
     //     }
     //   }
     //   rendering += "\n";
@@ -66,9 +66,9 @@ public class World {
     // var rendering = new List<String>();
     // for (var y = 0u; y < height; y++) {
     //   for (var x = 0u; x < width; x++) {
-    //     var cell = cell_at(x, y);
+    //     var cell = CellAt(x, y);
     //     if (cell is not null) {
-    //       rendering.Add(cell.to_char().ToString());
+    //       rendering.Add(cell.ToChar().ToString());
     //     }
     //   }
     //   rendering.Add("\n");
@@ -76,13 +76,13 @@ public class World {
     // return String.Join("", rendering.ToArray());
 
     // The following is the fastest
-    var render_size = (int)(width * height + height);
-    var rendering = new StringBuilder(render_size);
+    var renderSize = (int)(width * height + height);
+    var rendering = new StringBuilder(renderSize);
     for (var y = 0u; y < height; y++) {
       for (var x = 0u; x < width; x++) {
-        var cell = cell_at(x, y);
+        var cell = CellAt(x, y);
         if (cell is not null) {
-          rendering.Append(cell.to_char());
+          rendering.Append(cell.ToChar());
         }
       }
       rendering.Append('\n');
@@ -90,7 +90,7 @@ public class World {
     return rendering.ToString();
   }
 
-  private string make_key(uint x, uint y) {
+  private string MakeKey(uint x, uint y) {
     // The following is slower
     // return $"{x}-{y}";
 
@@ -101,42 +101,42 @@ public class World {
     // return string.Join("-", x.ToString(), y.ToString());
   }
 
-  private Cell? cell_at(uint x, uint y) {
-    var key = make_key(x, y);
+  private Cell? CellAt(uint x, uint y) {
+    var key = MakeKey(x, y);
     cells.TryGetValue(key, out var value);
     return value;
   }
 
-  private void populate_cells() {
+  private void PopulateCells() {
     var random = new Random();
     for (var y = 0u; y < height; y++) {
       for (var x = 0u; x < width; x++) {
         var alive = random.NextDouble() <= 0.2;
-        add_cell(x, y, alive);
+        AddCell(x, y, alive);
       }
     }
   }
 
-  private bool add_cell(uint x, uint y, bool alive = false) {
-    var existing = cell_at(x, y);
+  private bool AddCell(uint x, uint y, bool alive = false) {
+    var existing = CellAt(x, y);
     if (existing is not null) {
       throw new LocationOccupied(x, y);
     }
 
-    var key = make_key(x, y);
+    var key = MakeKey(x, y);
     var cell = new Cell(x, y, alive);
     cells.Add(key, cell);
     return true;
   }
 
-  private void prepopulate_neighbours() {
+  private void PrepopulateNeighbours() {
     foreach (var cell in cells.Values) {
-      var x = cell.x;
-      var y = cell.y;
+      var x = cell.X;
+      var y = cell.Y;
 
-      foreach (var (rel_x, rel_y) in DIRECTIONS) {
-        var nx = x + rel_x;
-        var ny = y + rel_y;
+      foreach (var (relX, relY) in Directions) {
+        var nx = x + relX;
+        var ny = y + relY;
         if (nx < 0 || ny < 0) {
           continue; // Out of bounds
         }
@@ -147,9 +147,9 @@ public class World {
           continue; // Out of bounds
         }
 
-        var neighbour = cell_at(ux, uy);
+        var neighbour = CellAt(ux, uy);
         if (neighbour is not null) {
-          cell.neighbours.Add(neighbour);
+          cell.Neighbours.Add(neighbour);
         }
       }
     }

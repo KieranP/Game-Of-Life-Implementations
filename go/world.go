@@ -16,7 +16,7 @@ func (e LocationOccupied) Error() string {
   return fmt.Sprintf("LocationOccupied(%d-%d)", e.x, e.y)
 }
 
-var DIRECTIONS = [...][2]int{
+var directions = [...][2]int{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
@@ -29,31 +29,31 @@ type World struct {
   cells map[string]*Cell
 }
 
-func new_world(width uint32, height uint32) *World {
+func newWorld(width uint32, height uint32) *World {
   world := &World{width: width, height: height, cells: make(map[string]*Cell, width*height)}
 
-  world.populate_cells()
-  world.prepopulate_neighbours()
+  world.populateCells()
+  world.prepopulateNeighbours()
 
   return world
 }
 
-func (world *World) dotick() {
+func (world *World) doTick() {
   // First determine the action for all cells
   for _, cell := range world.cells {
-    alive_neighbours := cell.alive_neighbours()
-    if !cell.alive && alive_neighbours == 3 {
-      cell.next_state = true
-    } else if alive_neighbours < 2 || alive_neighbours > 3 {
-      cell.next_state = false
+    aliveNeighbours := cell.aliveNeighbours()
+    if !cell.alive && aliveNeighbours == 3 {
+      cell.nextState = true
+    } else if aliveNeighbours < 2 || aliveNeighbours > 3 {
+      cell.nextState = false
     } else {
-      cell.next_state = cell.alive
+      cell.nextState = cell.alive
     }
   }
 
   // Then execute the determined action for all cells
   for _, cell := range world.cells {
-    cell.alive = cell.next_state
+    cell.alive = cell.nextState
   }
 
   world.tick++
@@ -64,9 +64,9 @@ func (world *World) render() string {
   // rendering := ""
   // for y := range world.height {
   //   for x := range world.width {
-  //     cell, ok := world.cell_at(x, y)
+  //     cell, ok := world.cellAt(x, y)
   //     if ok {
-  //       rendering += string(cell.to_char())
+  //       rendering += string(cell.toChar())
   //     }
   //   }
   //   rendering += "\n"
@@ -77,9 +77,9 @@ func (world *World) render() string {
   // rendering := []string{}
   // for y := range world.height {
   //   for x := range world.width {
-  //     cell, ok := world.cell_at(x, y)
+  //     cell, ok := world.cellAt(x, y)
   //     if ok {
-  //       rendering = append(rendering, string(cell.to_char()))
+  //       rendering = append(rendering, string(cell.toChar()))
   //     }
   //   }
   //   rendering = append(rendering, "\n")
@@ -87,14 +87,14 @@ func (world *World) render() string {
   // return strings.Join(rendering, "")
 
   // The following is the fastest
-  render_size := int(world.width * world.height + world.height)
+  renderSize := int(world.width * world.height + world.height)
   rendering := strings.Builder{}
-  rendering.Grow(render_size)
+  rendering.Grow(renderSize)
   for y := range world.height {
     for x := range world.width {
-      cell, ok := world.cell_at(x, y)
+      cell, ok := world.cellAt(x, y)
       if ok {
-        rendering.WriteRune(cell.to_char())
+        rendering.WriteRune(cell.toChar())
       }
     }
     rendering.WriteRune('\n')
@@ -102,7 +102,7 @@ func (world *World) render() string {
   return rendering.String()
 }
 
-func (world *World) make_key(buf []byte, x uint32, y uint32) int {
+func (world *World) makeKey(buf []byte, x uint32, y uint32) int {
   // The following is slower
   // s := fmt.Sprintf("%d-%d", x, y)
   // copy(buf, s)
@@ -125,45 +125,45 @@ func (world *World) make_key(buf []byte, x uint32, y uint32) int {
   return len(b)
 }
 
-func (world *World) cell_at(x uint32, y uint32) (*Cell, bool) {
+func (world *World) cellAt(x uint32, y uint32) (*Cell, bool) {
   var buf [24]byte
-  n := world.make_key(buf[:], x, y)
+  n := world.makeKey(buf[:], x, y)
   key := string(buf[:n])
 
   cell, ok := world.cells[key]
   return cell, ok
 }
 
-func (world *World) populate_cells() {
+func (world *World) populateCells() {
   for y := range world.height {
     for x := range world.width {
       alive := rand.Float64() <= 0.2
-      world.add_cell(x, y, alive)
+      world.addCell(x, y, alive)
     }
   }
 }
 
-func (world *World) add_cell(x uint32, y uint32, alive bool) bool {
-  _, ok := world.cell_at(x, y)
+func (world *World) addCell(x uint32, y uint32, alive bool) bool {
+  _, ok := world.cellAt(x, y)
   if ok {
     panic(LocationOccupied{ x: x, y: y })
   }
 
   var buf [24]byte
-  n := world.make_key(buf[:], x, y)
+  n := world.makeKey(buf[:], x, y)
   key := string(buf[:n])
 
-  cell := new_cell(x, y, alive)
+  cell := newCell(x, y, alive)
   world.cells[key] = cell
   return true
 }
 
-func (world *World) prepopulate_neighbours() {
+func (world *World) prepopulateNeighbours() {
   for _, cell := range world.cells {
     x := int(cell.x)
     y := int(cell.y)
 
-    for _, set := range DIRECTIONS {
+    for _, set := range directions {
       nx := x + set[0]
       ny := y + set[1]
       if nx < 0 || ny < 0 {
@@ -176,7 +176,7 @@ func (world *World) prepopulate_neighbours() {
         continue // Out of bounds
       }
 
-      neighbour, ok := world.cell_at(ux, uy)
+      neighbour, ok := world.cellAt(ux, uy)
       if ok {
         cell.neighbours = append(cell.neighbours, neighbour)
       }

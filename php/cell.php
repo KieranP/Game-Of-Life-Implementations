@@ -7,36 +7,36 @@ final class Cell {
     public readonly int $x,
     public readonly int $y,
     public bool $alive = false,
-    public ?bool $next_state = null,
+    public ?bool $nextState = null,
     public array $neighbours = [],
   ) {}
 
-  public function to_char(): string {
+  public function toChar(): string {
     return $this->alive ? 'o' : ' ';
   }
 
-  public function alive_neighbours(): int {
+  public function aliveNeighbours(): int {
     // The following is slower
     // return count(array_filter($this->neighbours, function($n) { return $n->alive; }));
 
     // The following is the fastest
-    $alive_neighbours = 0;
+    $aliveNeighbours = 0;
     foreach ($this->neighbours as $neighbour) {
       if ($neighbour->alive) {
-        $alive_neighbours++;
+        $aliveNeighbours++;
       }
     }
-    return $alive_neighbours;
+    return $aliveNeighbours;
 
     // The following is slower
-    // $alive_neighbours = 0;
+    // $aliveNeighbours = 0;
     // $count = count($this->neighbours);
     // for ($i = 0; $i < $count; $i++) {
     //   $neighbour = $this->neighbours[$i];
     //   if ($neighbour->alive) {
-    //     $alive_neighbours++;
+    //     $aliveNeighbours++;
     //   }
     // }
-    // return $alive_neighbours;
+    // return $aliveNeighbours;
   }
 }

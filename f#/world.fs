@@ -12,41 +12,41 @@ exception LocationOccupied of x:uint * y:uint with
 type World(width: uint, height: uint) =
   let cells = Dictionary<string, Cell>()
 
-  let DIRECTIONS = [
+  let directions = [
     (-1, 1);  (0, 1);  (1, 1); // above
     (-1, 0);           (1, 0); // sides
     (-1, -1); (0, -1); (1, -1) // below
   ]
 
-  member val tick = 0u with get,set
+  member val Tick = 0u with get,set
 
-  member this.dotick() =
-    let cell_values = cells.Values
+  member this.DoTick() =
+    let cellValues = cells.Values
 
     // First determine the action for all cells
-    for cell in cell_values do
-      let alive_neighbours = cell.alive_neighbours()
-      if (not cell.alive && alive_neighbours = 3) then
-        cell.next_state <- Some true
-      elif (alive_neighbours < 2 || alive_neighbours > 3) then
-        cell.next_state <- Some false
+    for cell in cellValues do
+      let aliveNeighbours = cell.AliveNeighbours()
+      if (not cell.Alive && aliveNeighbours = 3) then
+        cell.NextState <- Some true
+      elif (aliveNeighbours < 2 || aliveNeighbours > 3) then
+        cell.NextState <- Some false
       else
-        cell.next_state <- Some cell.alive
+        cell.NextState <- Some cell.Alive
 
     // Then execute the determined action for all cells
-    for cell in cell_values do
-      cell.alive <- cell.next_state |> Option.defaultValue false
+    for cell in cellValues do
+      cell.Alive <- cell.NextState |> Option.defaultValue false
 
-    this.tick <- this.tick + 1u
+    this.Tick <- this.Tick + 1u
 
-  member this.render() =
+  member this.Render() =
     // The following is slower
     // let mutable rendering = ""
     // for y in 0u..height-1u do
     //   for x in 0u..width-1u do
-    //     let cell = this.cell_at(x, y)
+    //     let cell = this.CellAt(x, y)
     //     if cell.IsSome then
-    //       rendering <- rendering + string(cell.Value.to_char())
+    //       rendering <- rendering + string(cell.Value.ToChar())
     //   rendering <- rendering + "\n"
     // rendering
 
@@ -55,24 +55,24 @@ type World(width: uint, height: uint) =
     // for y in 0u..height-1u do
     //   rendering <- rendering @ [
     //     for x in 0u..width-1u do
-    //       let cell = this.cell_at(x, y)
+    //       let cell = this.CellAt(x, y)
     //       if cell.IsSome then
-    //         cell.Value.to_char()
+    //         cell.Value.ToChar()
     //   ] @ ['\n']
     // String.Concat(rendering)
 
     // The following is the fastest
-    let render_size = int (width * height + height)
-    let rendering = StringBuilder(render_size)
+    let renderSize = int (width * height + height)
+    let rendering = StringBuilder(renderSize)
     for y in 0u..height-1u do
       for x in 0u..width-1u do
-        let cell = this.cell_at(x, y)
+        let cell = this.CellAt(x, y)
         if cell.IsSome then
-          rendering.Append(cell.Value.to_char()) |> ignore
+          rendering.Append(cell.Value.ToChar()) |> ignore
       rendering.Append('\n') |> ignore
     rendering.ToString()
 
-  member private this.make_key(x, y) =
+  member private this.MakeKey(x, y) =
     // The following is slower
     // $"{x}-{y}"
 
@@ -82,48 +82,48 @@ type World(width: uint, height: uint) =
     // The following is slower
     // String.concat "-" [x.ToString(); y.ToString()]
 
-  member this.populate_cells() =
+  member this.PopulateCells() =
     let random = Random()
 
     for y in 0u..height-1u do
       for x in 0u..width-1u do
         let alive = random.NextDouble() <= 0.2
-        this.add_cell(x, y, alive)
+        this.AddCell(x, y, alive)
         |> ignore
 
-  member private this.cell_at(x, y): Cell option =
-    let key = this.make_key(x, y)
+  member private this.CellAt(x, y): Cell option =
+    let key = this.MakeKey(x, y)
     cells.TryGetValue key
     |> function
     | true, v -> Some v
     | _ -> None
 
-  member private this.add_cell(x, y, ?alive) =
+  member private this.AddCell(x, y, ?alive) =
     let alive = defaultArg alive false
 
-    let existing = this.cell_at(x, y)
+    let existing = this.CellAt(x, y)
     if existing.IsSome then
       raise(LocationOccupied(x, y))
 
-    let key = this.make_key(x, y)
+    let key = this.MakeKey(x, y)
     let cell = Cell(x, y, alive)
     cells.Add(key, cell)
     true
 
-  member this.prepopulate_neighbours() =
+  member this.PrepopulateNeighbours() =
     for cell in cells.Values do
-      let x = int cell.x
-      let y = int cell.y
+      let x = int cell.X
+      let y = int cell.Y
 
-      for (rel_x, rel_y) in DIRECTIONS do
-        let nx = x + rel_x
-        let ny = y + rel_y
+      for (relX, relY) in directions do
+        let nx = x + relX
+        let ny = y + relY
 
         if nx >= 0 && ny >= 0 then
           let ux = uint nx
           let uy = uint ny
 
           if ux < width && uy < height then
-            let neighbour = this.cell_at(ux, uy)
+            let neighbour = this.CellAt(ux, uy)
             if neighbour.IsSome then
-              cell.neighbours <- neighbour.Value :: cell.neighbours
+              cell.Neighbours <- neighbour.Value :: cell.Neighbours

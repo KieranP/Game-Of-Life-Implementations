@@ -4,11 +4,11 @@ const Io = std.Io;
 const World = @import("world.zig").World;
 
 pub const Play = struct {
-    const WORLD_WIDTH = 150;
-    const WORLD_HEIGHT = 40;
+    const world_width = 150;
+    const world_height = 40;
 
     pub fn run(allocator: Allocator, io: Io, minimal: bool) !void {
-        const world = try World.init(allocator, io, WORLD_WIDTH, WORLD_HEIGHT);
+        const world = try World.init(allocator, io, world_width, world_height);
         defer allocator.destroy(world);
         defer world.deinit();
 
@@ -27,7 +27,7 @@ pub const Play = struct {
 
         while (true) {
             const tick_start = Io.Timestamp.now(io, .awake);
-            world.dotick();
+            world.doTick();
             const tick_finish = Io.Timestamp.now(io, .awake);
             const tick_time: f64 = @floatFromInt(tick_finish.nanoseconds - tick_start.nanoseconds);
             total_tick += tick_time;

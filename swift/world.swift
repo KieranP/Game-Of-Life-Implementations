@@ -16,7 +16,7 @@ final public class World {
     }
   }
 
-  private static let DIRECTIONS: [(Int, Int)] = [
+  private static let directions: [(Int, Int)] = [
     (-1, 1),  (0, 1),  (1, 1), // above
     (-1, 0),           (1, 0), // sides
     (-1, -1), (0, -1), (1, -1) // below
@@ -28,26 +28,26 @@ final public class World {
     self.height = height
     self.cells = [:]
 
-    try populate_cells()
-    prepopulate_neighbours()
+    try populateCells()
+    prepopulateNeighbours()
   }
 
-  public func dotick() {
+  public func doTick() {
     // First determine the action for all cells
     for (_, cell) in cells {
-      let alive_neighbours = cell.alive_neighbours()
-      if !cell.alive && alive_neighbours == 3 {
-        cell.next_state = true
-      } else if alive_neighbours < 2 || alive_neighbours > 3 {
-        cell.next_state = false
+      let aliveNeighbours = cell.aliveNeighbours()
+      if !cell.alive && aliveNeighbours == 3 {
+        cell.nextState = true
+      } else if aliveNeighbours < 2 || aliveNeighbours > 3 {
+        cell.nextState = false
       } else {
-        cell.next_state = cell.alive
+        cell.nextState = cell.alive
       }
     }
 
     // Then execute the determined action for all cells
     for (_, cell) in cells {
-      cell.alive = cell.next_state ?? false
+      cell.alive = cell.nextState ?? false
     }
 
     tick += 1
@@ -58,8 +58,8 @@ final public class World {
     var rendering = ""
     for y in 0..<height {
       for x in 0..<width {
-        if let cell = cell_at(x: x, y: y) {
-          rendering += cell.to_char()
+        if let cell = cellAt(x: x, y: y) {
+          rendering += cell.toChar()
         }
       }
       rendering += "\n"
@@ -70,8 +70,8 @@ final public class World {
     // var rendering: Array<String> = []
     // for y in 0..<height {
     //   for x in 0..<width {
-    //     if let cell = cell_at(x: x, y: y) {
-    //       rendering.append(cell.to_char())
+    //     if let cell = cellAt(x: x, y: y) {
+    //       rendering.append(cell.toChar())
     //     }
     //   }
     //   rendering.append("\n")
@@ -79,7 +79,7 @@ final public class World {
     // return rendering.joined()
   }
 
-  private func make_key(x: UInt32, y: UInt32) -> String {
+  private func makeKey(x: UInt32, y: UInt32) -> String {
     // The following is the fastest
     return "\(x)-\(y)"
 
@@ -90,40 +90,40 @@ final public class World {
     // return [x, y].map(String.init).joined(separator: "-")
   }
 
-  private func cell_at(x: UInt32, y: UInt32) -> Cell? {
-    let key = make_key(x: x, y: y)
+  private func cellAt(x: UInt32, y: UInt32) -> Cell? {
+    let key = makeKey(x: x, y: y)
     return cells[key]
   }
 
-  private func populate_cells() throws(LocationOccupied) {
+  private func populateCells() throws(LocationOccupied) {
     for y in 0..<height {
       for x in 0..<width {
         let alive = Double.random(in: 0..<1) <= 0.2
-        _ = try add_cell(x: x, y: y, alive: alive)
+        _ = try addCell(x: x, y: y, alive: alive)
       }
     }
   }
 
-  private func add_cell(x: UInt32, y: UInt32, alive: Bool = false) throws(LocationOccupied) -> Bool {
-    let existing = cell_at(x: x, y: y)
+  private func addCell(x: UInt32, y: UInt32, alive: Bool = false) throws(LocationOccupied) -> Bool {
+    let existing = cellAt(x: x, y: y)
     if existing != nil {
       throw LocationOccupied(x: x, y: y)
     }
 
-    let key = make_key(x: x, y: y)
+    let key = makeKey(x: x, y: y)
     let cell = Cell(x: x, y: y, alive: alive)
     cells[key] = cell
     return true
   }
 
-  private func prepopulate_neighbours() {
+  private func prepopulateNeighbours() {
     for (_, cell) in cells {
       let x = Int(cell.x)
       let y = Int(cell.y)
 
-      for (rel_x, rel_y) in World.DIRECTIONS {
-        let nx = x + rel_x
-        let ny = y + rel_y
+      for (relX, relY) in World.directions {
+        let nx = x + relX
+        let ny = y + relY
         if nx < 0 || ny < 0 {
           continue // Out of bounds
         }
@@ -134,7 +134,7 @@ final public class World {
           continue // Out of bounds
         }
 
-        if let neighbour = cell_at(x: ux, y: uy) {
+        if let neighbour = cellAt(x: ux, y: uy) {
           cell.neighbours.append(neighbour)
         }
       }

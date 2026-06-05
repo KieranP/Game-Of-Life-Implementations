@@ -1,10 +1,10 @@
-val WORLD_WIDTH = 150
-val WORLD_HEIGHT = 40
+val WorldWidth = 150
+val WorldHeight = 40
 
 @main def play(): Unit =
   val world = World(
-    width = WORLD_WIDTH,
-    height = WORLD_HEIGHT,
+    width = WorldWidth,
+    height = WorldHeight,
   )
 
   val minimal = sys.env.contains("MINIMAL")
@@ -12,35 +12,35 @@ val WORLD_HEIGHT = 40
   if !minimal then
     println(world.render)
 
-  var total_tick = 0.0
-  var lowest_tick = Double.MaxValue
-  var total_render = 0.0
-  var lowest_render = Double.MaxValue
+  var totalTick = 0.0
+  var lowestTick = Double.MaxValue
+  var totalRender = 0.0
+  var lowestRender = Double.MaxValue
 
   while true do
-    val tick_start = System.nanoTime()
-    world.dotick
-    val tick_finish = System.nanoTime()
-    val tick_time = (tick_finish - tick_start).toDouble
-    total_tick += tick_time
-    lowest_tick = math.min(lowest_tick, tick_time)
-    val avg_tick = (total_tick / world.tick)
+    val tickStart = System.nanoTime()
+    world.doTick
+    val tickFinish = System.nanoTime()
+    val tickTime = (tickFinish - tickStart).toDouble
+    totalTick += tickTime
+    lowestTick = math.min(lowestTick, tickTime)
+    val avgTick = (totalTick / world.tick)
 
-    val render_start = System.nanoTime()
+    val renderStart = System.nanoTime()
     val rendered = world.render
-    val render_finish = System.nanoTime()
-    val render_time = (render_finish - render_start).toDouble
-    total_render += render_time
-    lowest_render = math.min(lowest_render, render_time)
-    val avg_render = (total_render / world.tick)
+    val renderFinish = System.nanoTime()
+    val renderTime = (renderFinish - renderStart).toDouble
+    totalRender += renderTime
+    lowestRender = math.min(lowestRender, renderTime)
+    val avgRender = (totalRender / world.tick)
 
     if !minimal then
       print("[H[2J")
 
     println(
       f"#${world.tick}%d" +
-      f" - World Tick (L: ${_f(lowest_tick)}%.3f; A: ${_f(avg_tick)}%.3f)" +
-      f" - Rendering (L: ${_f(lowest_render)}%.3f; A: ${_f(avg_render)}%.3f)"
+      f" - World Tick (L: ${_f(lowestTick)}%.3f; A: ${_f(avgTick)}%.3f)" +
+      f" - Rendering (L: ${_f(lowestRender)}%.3f; A: ${_f(avgRender)}%.3f)"
     )
 
     if !minimal then

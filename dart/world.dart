@@ -17,33 +17,33 @@ class World {
   final int _height;
   final Map<String, Cell> _cells = {};
 
-  static const List<(int, int)> _DIRECTIONS = [
+  static const List<(int, int)> _directions = [
     (-1, 1),  (0, 1),  (1, 1), // above
     (-1, 0),           (1, 0), // sides
     (-1, -1), (0, -1), (1, -1) // below
   ];
 
   World(this._width, this._height) {
-    _populate_cells();
-    _prepopulate_neighbours();
+    _populateCells();
+    _prepopulateNeighbours();
   }
 
-  void dotick() {
+  void doTick() {
     // First determine the action for all cells
     for (final cell in _cells.values) {
-      final alive_neighbours = cell.alive_neighbours();
-      if (!cell.alive && alive_neighbours == 3) {
-        cell.next_state = true;
-      } else if (alive_neighbours < 2 || alive_neighbours > 3) {
-        cell.next_state = false;
+      final aliveNeighbours = cell.aliveNeighbours();
+      if (!cell.alive && aliveNeighbours == 3) {
+        cell.nextState = true;
+      } else if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+        cell.nextState = false;
       } else {
-        cell.next_state = cell.alive;
+        cell.nextState = cell.alive;
       }
     }
 
     // Then execute the determined action for all cells
     for (final cell in _cells.values) {
-      cell.alive = cell.next_state ?? false;
+      cell.alive = cell.nextState ?? false;
     }
 
     tick += 1;
@@ -54,9 +54,9 @@ class World {
     // var rendering = '';
     // for (var y = 0; y < _height; y++) {
     //   for (var x = 0; x < _width; x++) {
-    //     final cell = _cell_at(x, y);
+    //     final cell = _cellAt(x, y);
     //     if (cell != null) {
-    //       rendering += cell.to_char();
+    //       rendering += cell.toChar();
     //     }
     //   }
     //   rendering += "\n";
@@ -67,9 +67,9 @@ class World {
     final rendering = <String>[];
     for (var y = 0; y < _height; y++) {
       for (var x = 0; x < _width; x++) {
-        final cell = _cell_at(x, y);
+        final cell = _cellAt(x, y);
         if (cell != null) {
-          rendering.add(cell.to_char());
+          rendering.add(cell.toChar());
         }
       }
       rendering.add("\n");
@@ -80,9 +80,9 @@ class World {
     // final rendering = StringBuffer();
     // for (var y = 0; y < _height; y++) {
     //   for (var x = 0; x < _width; x++) {
-    //     final cell = _cell_at(x, y);
+    //     final cell = _cellAt(x, y);
     //     if (cell != null) {
-    //       rendering.write(cell.to_char());
+    //       rendering.write(cell.toChar());
     //     }
     //   }
     //   rendering.write("\n");
@@ -90,7 +90,7 @@ class World {
     // return rendering.toString();
   }
 
-  String _make_key(int x, int y) {
+  String _makeKey(int x, int y) {
     // The following is the fastest
     return "$x-$y";
 
@@ -101,41 +101,41 @@ class World {
     // return [x, y].join("-");
   }
 
-  Cell? _cell_at(int x, int y) {
-    final key = _make_key(x, y);
+  Cell? _cellAt(int x, int y) {
+    final key = _makeKey(x, y);
     return _cells[key];
   }
 
-  void _populate_cells() {
+  void _populateCells() {
     final rng = Random();
     for (var y = 0; y < _height; y++) {
       for (var x = 0; x < _width; x++) {
         final alive = rng.nextDouble() <= 0.2;
-        _add_cell(x, y, alive);
+        _addCell(x, y, alive);
       }
     }
   }
 
-  bool _add_cell(int x, int y, [bool alive = false]) {
-    final existing = _cell_at(x, y);
+  bool _addCell(int x, int y, [bool alive = false]) {
+    final existing = _cellAt(x, y);
     if (existing != null) {
       throw LocationOccupied(x, y);
     }
 
-    final key = _make_key(x, y);
+    final key = _makeKey(x, y);
     final cell = Cell(x, y, alive);
     _cells[key] = cell;
     return true;
   }
 
-  void _prepopulate_neighbours() {
+  void _prepopulateNeighbours() {
     for (final cell in _cells.values) {
       final x = cell.x;
       final y = cell.y;
 
-      for (final (rel_x, rel_y) in _DIRECTIONS) {
-        final nx = x + rel_x;
-        final ny = y + rel_y;
+      for (final (relX, relY) in _directions) {
+        final nx = x + relX;
+        final ny = y + relY;
         if (nx < 0 || ny < 0) {
           continue; // Out of bounds
         }
@@ -144,7 +144,7 @@ class World {
           continue; // Out of bounds
         }
 
-        final neighbour = _cell_at(nx, ny);
+        final neighbour = _cellAt(nx, ny);
         if (neighbour != null) {
           cell.neighbours.add(neighbour);
         }
