@@ -4,7 +4,7 @@ This project contains nearly identical implementations of "[Conway's Game of Lif
 
 Each implementation is as identical in file structure, class/variable naming, and overall layout as possible to make comparison easier. As far as possible, no external dependencies are used, so that only the core language features are demonstrated.
 
-Each language's developer community may prefer different code styles (spaces vs tabs, snake_case vs camelCase, etc). For consistency and the easiest comparison, unless a language requires otherwise to compile/run, indentation uses two spaces, variable and function names are snake_case, class names are PascalCase, and constants are SCREAMING_SNAKE_CASE.
+Each language's developer community may prefer different code styles (spaces vs tabs, snake_case vs camelCase, etc). Naming follows each language's dominant community convention (official style guide or de-facto standard), with the canonical identifier names adapted accordingly (e.g. `alive_neighbours` becomes `aliveNeighbours` in camelCase languages). Where a language has no clear convention, variable and function names are snake_case, class names are PascalCase, and constants are SCREAMING_SNAKE_CASE. Unless a language requires otherwise to compile/run, indentation uses two spaces.
 
 ## Core Language Constructs
 
