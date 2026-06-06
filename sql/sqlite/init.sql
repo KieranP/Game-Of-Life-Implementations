@@ -21,12 +21,25 @@ CREATE TABLE neighbours (
 
 CREATE INDEX idx_neighbours_cell ON neighbours(cell_x, cell_y);
 
+-- generate_series is a CLI extension, not part of the SQLite library itself,
+-- so derive the coordinate ranges with recursive CTEs instead.
+WITH RECURSIVE
+  xs(x) AS (
+    SELECT 0
+    UNION ALL
+    SELECT x + 1 FROM xs WHERE x < 150 - 1
+  ),
+  ys(y) AS (
+    SELECT 0
+    UNION ALL
+    SELECT y + 1 FROM ys WHERE y < 40 - 1
+  )
 INSERT INTO cells (x, y, alive)
 SELECT
-  gx.value,
-  gy.value,
+  xs.x,
+  ys.y,
   CASE WHEN ABS(RANDOM() % 100) < 20 THEN 1 ELSE 0 END
-FROM generate_series(0, 149) gx, generate_series(0, 39) gy;
+FROM xs, ys;
 
 INSERT INTO neighbours (cell_x, cell_y, neighbour_x, neighbour_y)
 SELECT
@@ -39,3 +52,7 @@ INNER JOIN cells c2
   ON c2.x BETWEEN c1.x - 1 AND c1.x + 1
   AND c2.y BETWEEN c1.y - 1 AND c1.y + 1
   AND NOT (c2.x = c1.x AND c2.y = c1.y);
+
+-- Collect table statistics up front; a freshly created database has none
+-- until autoanalyze runs, leaving the first minute of ticks on bad plans.
+ANALYZE;

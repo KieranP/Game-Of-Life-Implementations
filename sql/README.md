@@ -3,12 +3,14 @@
 ## Install
 
 ```bash
-brew install sqlite3 postgresql
+brew install go sqlite3 postgresql
 ```
 
 ## Build
 
-(no build step required)
+```bash
+go build -o play .
+```
 
 ## Run
 
@@ -16,7 +18,7 @@ brew install sqlite3 postgresql
 
 ```bash
 DB_TYPE=sqlite \
-./play.sh
+./play
 ```
 
 ### PostgreSQL
@@ -28,12 +30,12 @@ PG_PORT=5432 \
 PG_USER=postgres \
 PG_PASSWORD=postgres \
 PG_DATABASE=gol \
-./play.sh
+./play
 ```
 
 ## Notes
 
-- No support for continuous loops; fallback to a shell script (see play.sh).
+- No support for continuous loops; fallback to a Go runner holding a single connection (see play.go).
 - No support for pointers/references (see `neighbours` in init.sql).
 - No support for native exceptions; emulated with the `PRIMARY KEY` constraint (see init.sql).
 - Set-based rather than imperative, so each tick is a single UPDATE across all cells (see tick.sql).

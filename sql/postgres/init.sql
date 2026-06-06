@@ -39,3 +39,7 @@ INNER JOIN cells c2
   ON c2.x BETWEEN c1.x - 1 AND c1.x + 1
   AND c2.y BETWEEN c1.y - 1 AND c1.y + 1
   AND NOT (c2.x = c1.x AND c2.y = c1.y);
+
+-- Collect table statistics up front; a freshly created database has none
+-- until autoanalyze runs, leaving the first minute of ticks on bad plans.
+ANALYZE;
