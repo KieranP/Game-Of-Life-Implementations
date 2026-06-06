@@ -23,3 +23,7 @@ lua play.lua
 ```bash
 luajit -O3 play.lua
 ```
+
+## Notes
+
+- No support for native exceptions; emulated with assert (see `World:add_cell`).

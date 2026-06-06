@@ -18,4 +18,6 @@ clojure -M play.clj
 
 ## Notes
 
-- Clojure's data structures are immutable, so cell.neighbours cannot point to the same memory space as the matching Cell in world.cells. Therefore, in this implementation, cell.neighbours is a list of Cell coordinates ("x-y") rather than pointers, and we need to refetch the neighbouring cells from world.cells when determining alive neighbours. Since one of the goals of this repo is to keep the various implementations as similar as possible, this limitation introduces a significant but unavoidable performance penalty compared to other languages.
+- No support for pointers/shared references (data is immutable); fallback to storing coordinate keys ("x-y") in `cell.neighbours` and refetching cells from `world.cells` — a significant performance penalty (see `alive-neighbours`).
+- No support for continuous loops; fallback to loop/recur (see `run` in play.clj).
+- No support for custom exception classes; emulated with `ex-info` (see `location-occupied-exception`).

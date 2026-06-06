@@ -17,3 +17,7 @@ v -prod -o play .
 ```bash
 ./play
 ```
+
+## Notes
+
+- No support for native exceptions; emulated with panic (see `World.add_cell`).

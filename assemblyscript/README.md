@@ -27,3 +27,8 @@ wasmer run build/release.wasm
 brew install wasmtime
 wasmtime run build/release.wasm
 ```
+
+## Notes
+
+- No support for optional/nullable booleans (see `Cell#nextState`).
+- No support for printf-style formatting (see `Play#_f`).

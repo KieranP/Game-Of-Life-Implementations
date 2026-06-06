@@ -17,3 +17,7 @@ zig build-exe -O ReleaseSafe play.zig
 ```bash
 ./play
 ```
+
+## Notes
+
+- No support for native exceptions; emulated with payload-less error values (see `World#addCell`).

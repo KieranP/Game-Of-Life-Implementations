@@ -17,3 +17,7 @@ javac *.java
 ```bash
 java Play
 ```
+
+## Notes
+
+- No support for unsigned integers; fallback to `int` (see `Cell#x`/`y`).

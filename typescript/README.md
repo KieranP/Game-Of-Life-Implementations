@@ -34,3 +34,7 @@ deno run --allow-env play.js
 brew install oven-sh/bun/bun
 bun run play.js
 ```
+
+## Notes
+
+- No support for integer types; fallback to `number` (a 64-bit float) (see `Cell#x`/`y`).

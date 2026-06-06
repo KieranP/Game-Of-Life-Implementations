@@ -17,3 +17,7 @@ dart compile exe -o play play.dart
 ```bash
 ./play
 ```
+
+## Notes
+
+- No support for unsigned integers; fallback to `int` (see `Cell#x`/`y`).

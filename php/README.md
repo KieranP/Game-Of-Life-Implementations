@@ -23,3 +23,7 @@ php play.php
 ```bash
 php -c jit.ini play.php
 ```
+
+## Notes
+
+- No support for unsigned integers; fallback to `int` (see `Cell#x`/`y`).

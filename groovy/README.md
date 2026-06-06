@@ -17,3 +17,7 @@ groovyc --compile-static *.groovy
 ```bash
 groovy Play
 ```
+
+## Notes
+
+- No support for unsigned integers; fallback to `int` (see `Cell#x`/`y`).

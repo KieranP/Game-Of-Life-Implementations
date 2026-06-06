@@ -17,3 +17,7 @@ ocamlopt -O3 -o play cell.ml world.ml play.ml
 ```bash
 ./play
 ```
+
+## Notes
+
+- No support for unsigned integers; fallback to `int` (see `cell#x`/`y`).
