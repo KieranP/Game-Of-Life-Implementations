@@ -21,17 +21,17 @@ defmodule Play do
   end
 
   def loop(world, minimal \\ false, total_tick \\ 0, lowest_tick \\ :infinity, total_render \\ 0, lowest_render \\ :infinity) do
-    tick_start = System.monotonic_time()
+    tick_start = System.monotonic_time(:nanosecond)
     world = World.tick(world)
-    tick_finish = System.monotonic_time()
+    tick_finish = System.monotonic_time(:nanosecond)
     tick_time = tick_finish - tick_start
     total_tick = total_tick + tick_time
     lowest_tick = min(lowest_tick, tick_time)
     avg_tick = total_tick / world.tick
 
-    render_start = System.monotonic_time()
+    render_start = System.monotonic_time(:nanosecond)
     rendered = World.render(world)
-    render_finish = System.monotonic_time()
+    render_finish = System.monotonic_time(:nanosecond)
     render_time = render_finish - render_start
     total_render = total_render + render_time
     lowest_render = min(lowest_render, render_time)

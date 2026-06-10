@@ -58,6 +58,8 @@ defmodule World do
             cell = cell_at(world, x, y)
             if cell do
               rendering <> Cell.to_char(cell)
+            else
+              rendering
             end
         end <> "\n"
     end

@@ -105,7 +105,7 @@ function World:cell_at(x, y)
 end
 
 function World:populate_cells()
-  math.randomseed()
+  math.randomseed(os.time())
 
   for y = 0, self.height-1 do
     for x = 0, self.width-1 do

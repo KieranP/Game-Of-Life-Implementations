@@ -26,7 +26,7 @@ impl Play {
 
     while(true) {
       const tick_start = DateTime.now_utc();
-      world.tick();
+      world.dotick();
       const tick_finish = DateTime.now_utc();
       const tick_time = tick_finish.sub(tick_start).nanoseconds();
       total_tick += tick_time;

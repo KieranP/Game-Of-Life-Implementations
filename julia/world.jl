@@ -150,8 +150,8 @@ end
 
 function world_prepopulate_neighbours(world::World)
   for cell in values(world.cells)
-    x = cell.x
-    y = cell.y
+    x = Int(cell.x)
+    y = Int(cell.y)
 
     for (rel_x, rel_y) in DIRECTIONS
       nx = x + rel_x
@@ -161,11 +161,13 @@ function world_prepopulate_neighbours(world::World)
         continue # Out of bounds
       end
 
-      if nx >= world.width || ny >= world.height
+      ux = UInt64(nx)
+      uy = UInt64(ny)
+      if ux >= world.width || uy >= world.height
         continue # Out of bounds
       end
 
-      neighbour = world_cell_at(world, nx, ny)
+      neighbour = world_cell_at(world, ux, uy)
       if neighbour !== nothing
         push!(cell.neighbours, neighbour)
       end

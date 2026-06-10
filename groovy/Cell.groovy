@@ -22,23 +22,23 @@ class Cell {
     // neighbours.count { it.alive } as int
 
     // The following is the fastest
-    // var aliveNeighbours = 0
-    // for (neighbour in neighbours) {
-    //   if (neighbour.alive) {
-    //     aliveNeighbours++
-    //   }
-    // }
-    // aliveNeighbours
-
-    // The following is slower
     var aliveNeighbours = 0
-    var count = neighbours.size()
-    for (i in 0..<count) {
-      var neighbour = neighbours[i]
+    for (neighbour in neighbours) {
       if (neighbour.alive) {
         aliveNeighbours++
       }
     }
     aliveNeighbours
+
+    // The following is slower
+    // var aliveNeighbours = 0
+    // var count = neighbours.size()
+    // for (i in 0..<count) {
+    //   var neighbour = neighbours[i]
+    //   if (neighbour.alive) {
+    //     aliveNeighbours++
+    //   }
+    // }
+    // aliveNeighbours
   }
 }

@@ -38,7 +38,7 @@ impl World {
     return world;
   }
 
-  fn tick(self) {
+  fn dotick(self) {
     // First determine the action for all cells
     for (let cell in self.cells.values()) {
       let alive_neighbours = cell.alive_neighbours();

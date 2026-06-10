@@ -3,7 +3,7 @@ include cell
 # from strutils import join
 # import std/ropes
 import std/strformat
-from std/random import rand
+from std/random import rand, randomize
 import std/tables
 
 type
@@ -102,6 +102,8 @@ func cellAt(self: World, x: uint32, y: uint32): Cell =
   self.cells.getOrDefault(key)
 
 proc populateCells(self: World) =
+  randomize()
+
   for y in 0..<self.height:
     for x in 0..<self.width:
       let alive = rand(1.0) <= 0.2

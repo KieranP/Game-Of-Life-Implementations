@@ -145,8 +145,8 @@ export class World {
 
     for (let i = 0; i < cellCount; i++) {
       const cell = cells.at(i)
-      const x = cell.x
-      const y = cell.y
+      const x = i32(cell.x)
+      const y = i32(cell.y)
 
       for (let j = 0; j < DIRECTIONS.length; j++) {
         const dir = DIRECTIONS[j]
@@ -156,11 +156,13 @@ export class World {
           continue // Out of bounds
         }
 
-        if (nx >= this.width || ny >= this.height) {
+        const ux = u32(nx)
+        const uy = u32(ny)
+        if (ux >= this.width || uy >= this.height) {
           continue // Out of bounds
         }
 
-        const neighbour = this.cellAt(nx, ny)
+        const neighbour = this.cellAt(ux, uy)
         if (neighbour) {
           cell.neighbours.push(neighbour)
         }

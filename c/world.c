@@ -77,7 +77,7 @@ static void prepopulate_neighbours(World *world) {
           continue; // Out of bounds
         }
 
-        auto neighbour = cell_at(world, nx, ny);
+        auto neighbour = cell_at(world, ux, uy);
         if (neighbour) {
           cell->neighbours[cell->neighbour_count++] = neighbour;
         }
