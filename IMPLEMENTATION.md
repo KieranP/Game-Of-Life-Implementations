@@ -126,6 +126,14 @@ rendering[idx] = cell.to_char()
 String(rendering)
 ```
 
+#### prepopulate_neighbours
+
+For each cell, store its in-bounds neighbours so they aren't recomputed every tick.
+
+Normally `cell.neighbours` holds references to the neighbouring `Cell`s. Languages
+without pointers/shared references (immutable data) store the neighbours'
+coordinate keys (`"x-y"`) instead, refetched from `world.cells` when counting.
+
 ### cell.ext
 
 ```

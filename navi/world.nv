@@ -8,7 +8,7 @@ struct LocationOccupied {
 
 impl Error for LocationOccupied {
   pub fn error(self): string {
-    return `LocationOccupied(${self.x},${self.y})`;
+    return `LocationOccupied(${self.x}-${self.y})`;
   }
 }
 

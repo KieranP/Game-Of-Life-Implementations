@@ -24,7 +24,7 @@ pub struct LocationOccupied(u32, u32);
 impl Error for LocationOccupied {}
 impl fmt::Display for LocationOccupied {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "LocationOccupied({},{})", self.0, self.1)
+        write!(f, "LocationOccupied({}-{})", self.0, self.1)
     }
 }
 

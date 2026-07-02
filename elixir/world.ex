@@ -130,8 +130,14 @@ defmodule World do
     for {_key, cell} <- world.cells, reduce: world do
       world ->
         neighbours =
-          for {rel_x, rel_y} <- @directions do
-            make_key(cell.x + rel_x, cell.y + rel_y)
+          for {rel_x, rel_y} <- @directions,
+              nx = cell.x + rel_x,
+              ny = cell.y + rel_y,
+              not (nx < 0 or ny < 0),
+              not (nx >= world.width or ny >= world.height),
+              key = make_key(nx, ny),
+              Map.has_key?(world.cells, key) do
+            key
           end
 
         put_in(world.cells[make_key(cell.x, cell.y)].neighbours, neighbours)

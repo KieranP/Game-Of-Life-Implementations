@@ -125,8 +125,14 @@ prepopulateNeighbours world =
   let newCells = Map.map
         (\cell ->
           let neighbours =
-                [ makeKey (fromIntegral (x cell) + relX) (fromIntegral (y cell) + relY)
+                [ key
                 | (relX, relY) <- directions
+                , let nx = fromIntegral (x cell) + relX
+                , let ny = fromIntegral (y cell) + relY
+                , not (nx < 0 || ny < 0)
+                , not (nx >= fromIntegral (width world) || ny >= fromIntegral (height world))
+                , let key = makeKey nx ny
+                , Map.member key (cells world)
                 ]
           -- force builds the keys now, so they aren't deferred into the first doTick
           in cell { neighbours = force neighbours })

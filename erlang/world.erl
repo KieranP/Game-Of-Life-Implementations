@@ -139,8 +139,14 @@ prepopulate_neighbours(World) ->
   Cells = maps:map(
     fun(_Key, Cell) ->
       Neighbours = [
-        make_key(Cell#cell.x + RelX, Cell#cell.y + RelY)
-        || {RelX, RelY} <- ?DIRECTIONS
+        Key
+        || {RelX, RelY} <- ?DIRECTIONS,
+           Nx <- [Cell#cell.x + RelX],
+           Ny <- [Cell#cell.y + RelY],
+           not (Nx < 0 orelse Ny < 0),
+           not (Nx >= World#world.width orelse Ny >= World#world.height),
+           Key <- [make_key(Nx, Ny)],
+           maps:is_key(Key, World#world.cells)
       ],
       Cell#cell{neighbours = Neighbours}
     end,

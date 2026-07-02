@@ -54,33 +54,28 @@ static void populate_cells(World *world) {
 }
 
 static void prepopulate_neighbours(World *world) {
-  for (auto y = 0; y < world->height; y++) {
-    for (auto x = 0; x < world->width; x++) {
-      auto cell = cell_at(world, x, y);
-      if (!cell) {
-        continue;
+  auto it = hashmap_iterator(world->cells);
+  while (hashmap_iterator_next(&it)) {
+    auto cell = (Cell *)it.value;
+    auto x = (int)cell->x;
+    auto y = (int)cell->y;
+
+    for (auto d = 0; d < 8; d++) {
+      auto nx = x + DIRECTIONS[d][0];
+      auto ny = y + DIRECTIONS[d][1];
+      if (nx < 0 || ny < 0) {
+        continue; // Out of bounds
       }
 
-      auto x = (int)cell->x;
-      auto y = (int)cell->y;
+      auto ux = (uint32_t)nx;
+      auto uy = (uint32_t)ny;
+      if (ux >= world->width || uy >= world->height) {
+        continue; // Out of bounds
+      }
 
-      for (auto d = 0; d < 8; d++) {
-        auto nx = x + DIRECTIONS[d][0];
-        auto ny = y + DIRECTIONS[d][1];
-        if (nx < 0 || ny < 0) {
-          continue; // Out of bounds
-        }
-
-        auto ux = (uint32_t)nx;
-        auto uy = (uint32_t)ny;
-        if (ux >= world->width || uy >= world->height) {
-          continue; // Out of bounds
-        }
-
-        auto neighbour = cell_at(world, ux, uy);
-        if (neighbour) {
-          cell->neighbours[cell->neighbour_count++] = neighbour;
-        }
+      auto neighbour = cell_at(world, ux, uy);
+      if (neighbour) {
+        cell->neighbours[cell->neighbour_count++] = neighbour;
       }
     }
   }

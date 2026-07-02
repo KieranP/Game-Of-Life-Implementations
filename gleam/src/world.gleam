@@ -1,4 +1,5 @@
 import cell.{type Cell, Cell}
+import gleam/bool
 import gleam/dict.{type Dict}
 import gleam/float
 import gleam/int
@@ -117,9 +118,15 @@ fn prepopulate_neighbours(world: World) -> World {
   let cells =
     dict.map_values(world.cells, fn(_key, cell) {
       let neighbours =
-        list.map(directions, fn(set) {
+        list.filter_map(directions, fn(set) {
           let #(rel_x, rel_y) = set
-          make_key(cell.x + rel_x, cell.y + rel_y)
+          let nx = cell.x + rel_x
+          let ny = cell.y + rel_y
+          use <- bool.guard(nx < 0 || ny < 0, Error(Nil))
+          use <- bool.guard(nx >= world.width || ny >= world.height, Error(Nil))
+          let key = make_key(nx, ny)
+          use <- bool.guard(!dict.has_key(world.cells, key), Error(Nil))
+          Ok(key)
         })
 
       Cell(..cell, neighbours: neighbours)
