@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Map;
 // import java.util.ArrayList;
 
 public class World {
@@ -6,7 +7,7 @@ public class World {
 
   private final int width;
   private final int height;
-  private final HashMap<String, Cell> cells;
+  private final Map<String, Cell> cells;
 
   private static class LocationOccupied extends Exception {
     public LocationOccupied(int x, int y) {

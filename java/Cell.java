@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 // import java.util.stream.Collectors;
 
 public class Cell {
@@ -6,7 +7,7 @@ public class Cell {
   public final int y;
   public boolean alive;
   public Boolean nextState;
-  public final ArrayList<Cell> neighbours;
+  public final List<Cell> neighbours;
 
   public Cell(int x, int y, boolean alive) {
     this.x = x;

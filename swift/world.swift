@@ -34,7 +34,7 @@ final public class World {
 
   public func doTick() {
     // First determine the action for all cells
-    for (_, cell) in cells {
+    for cell in cells.values {
       let aliveNeighbours = cell.aliveNeighbours()
       if !cell.alive && aliveNeighbours == 3 {
         cell.nextState = true
@@ -46,7 +46,7 @@ final public class World {
     }
 
     // Then execute the determined action for all cells
-    for (_, cell) in cells {
+    for cell in cells.values {
       cell.alive = cell.nextState ?? false
     }
 
@@ -117,7 +117,7 @@ final public class World {
   }
 
   private func prepopulateNeighbours() {
-    for (_, cell) in cells {
+    for cell in cells.values {
       let x = Int(cell.x)
       let y = Int(cell.y)
 

@@ -4,7 +4,7 @@ let worldWidth: UInt32 = 150
 let worldHeight: UInt32 = 40
 
 private final class Play {
-  public class func run() throws {
+  public static func run() throws {
     let world = try World(
       width: worldWidth,
       height: worldHeight
@@ -59,7 +59,7 @@ private final class Play {
     }
   }
 
-  private class func _f(value: Double) -> Double {
+  private static func _f(value: Double) -> Double {
     // seconds -> milliseconds
     return value * 1_000
   }
