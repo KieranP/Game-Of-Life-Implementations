@@ -2,6 +2,9 @@ defmodule Play do
   @world_width 150
   @world_height 40
 
+  @clear_screen "\x1b[?2026h\x1b[H\x1b[2J"
+  @show_screen "\x1b[?2026l"
+
   def run do
     world =
       World.new(
@@ -38,7 +41,7 @@ defmodule Play do
     avg_render = total_render / world.tick
 
     if not minimal do
-      IO.puts("\u001b[H\u001b[2J")
+      IO.write(@clear_screen)
     end
 
     IO.puts(
@@ -55,7 +58,7 @@ defmodule Play do
     )
 
     if not minimal do
-      IO.puts(rendered)
+      IO.puts(rendered <> @show_screen)
     end
 
     loop(world, minimal, total_tick, lowest_tick, total_render, lowest_render)

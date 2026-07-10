@@ -6,6 +6,9 @@ program play
   integer, parameter :: WORLD_WIDTH = 150
   integer, parameter :: WORLD_HEIGHT = 40
 
+  character(len=*), parameter :: CLEAR_SCREEN = achar(27) // '[?2026h' // achar(27) // '[H' // achar(27) // '[2J'
+  character(len=*), parameter :: SHOW_SCREEN = achar(27) // '[?2026l'
+
   type(World) :: w
   character(len=:), allocatable :: rendered
   logical :: minimal
@@ -53,7 +56,7 @@ program play
     avg_render = total_render / real(w%tick, real64)
 
     if (.not. minimal) then
-      write(*, '(A)') achar(27) // '[H' // achar(27) // '[2J'
+      write(*, '(A)', advance='no') CLEAR_SCREEN
     end if
 
     write(*, '(A,I0,A)') &
@@ -62,7 +65,7 @@ program play
       ' - Rendering (L: ' // f(lowest_render) // '; A: ' // f(avg_render) // ')'
 
     if (.not. minimal) then
-      write(*, '(A)') rendered
+      write(*, '(A)') rendered // SHOW_SCREEN
     end if
   end do
 

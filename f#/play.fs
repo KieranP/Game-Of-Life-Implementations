@@ -5,6 +5,8 @@ open System.Diagnostics
 type Play =
   static let worldWidth = 150u
   static let worldHeight = 40u
+  static let clearScreen = "\x1b[?2026h\x1b[H\x1b[2J"
+  static let showScreen = "\x1b[?2026l"
 
   static member Run() =
     let world = World(
@@ -43,7 +45,7 @@ type Play =
       let avgRender = totalRender / float world.Tick
 
       if not minimal then
-        printf "\u001b[H\u001b[2J"
+        printf "%s" clearScreen
 
       printfn "#%i - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)"
         world.Tick
@@ -53,7 +55,7 @@ type Play =
         (Play._f avgRender)
 
       if not minimal then
-        printfn "%s" rendered
+        printfn "%s%s" rendered showScreen
 
   static member private _f(value) =
     // nanoseconds -> milliseconds

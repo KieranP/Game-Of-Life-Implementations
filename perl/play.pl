@@ -8,6 +8,8 @@ use List::Util qw(min);
 
 use constant WORLD_WIDTH => 150;
 use constant WORLD_HEIGHT => 40;
+use constant CLEAR_SCREEN => "\x1b[?2026h\x1b[H\x1b[2J";
+use constant SHOW_SCREEN => "\x1b[?2026l";
 
 sub run {
   my $world = World->new(
@@ -44,7 +46,7 @@ sub run {
     my $avg_render = $total_render / $world->tick;
 
     if (!$minimal) {
-      print "\033[0;0H\033[2J";
+      print CLEAR_SCREEN;
     }
 
     printf(
@@ -57,8 +59,12 @@ sub run {
     );
 
     if (!$minimal) {
-      print $rendered;
+      print $rendered . SHOW_SCREEN;
     }
+
+    # stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+    # an explicit flush the terminal won't commit the synchronized update until the next tick.
+    STDOUT->flush();
   }
 }
 

@@ -8,6 +8,8 @@ globalThis.performance ??= {
 class Play {
   static readonly #WORLD_WIDTH = 150
   static readonly #WORLD_HEIGHT = 40
+  static readonly #CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
+  static readonly #SHOW_SCREEN = "\x1b[?2026l"
 
   public static run() {
     const world = new World(
@@ -47,7 +49,7 @@ class Play {
       const avgRender = (totalRender / world.tick)
 
       if (!minimal) {
-        console.log("\u001b[H\u001b[2J")
+        process.stdout.write(Play.#CLEAR_SCREEN)
       }
 
       console.log(
@@ -57,7 +59,7 @@ class Play {
       )
 
       if (!minimal) {
-        console.log(rendered)
+        console.log(rendered + Play.#SHOW_SCREEN)
       }
     }
   }

@@ -1,4 +1,5 @@
 use std::env;
+use std::io::{self, Write};
 use std::time::Instant;
 
 use crate::world::World;
@@ -8,6 +9,9 @@ pub struct Play;
 impl Play {
     const WORLD_WIDTH: u32 = 150;
     const WORLD_HEIGHT: u32 = 40;
+
+    const CLEAR_SCREEN: &str = "\x1b[?2026h\x1b[H\x1b[2J";
+    const SHOW_SCREEN: &str = "\x1b[?2026l";
 
     pub fn run() {
         let mut world = World::new(Self::WORLD_WIDTH, Self::WORLD_HEIGHT);
@@ -39,7 +43,7 @@ impl Play {
             let avg_render = total_render / world.tick as f64;
 
             if !minimal {
-                print!("\x1B[H\x1B[2J");
+                print!("{}", Self::CLEAR_SCREEN);
             }
 
             println!(
@@ -52,8 +56,12 @@ impl Play {
             );
 
             if !minimal {
-                print!("{rendered}");
+                print!("{rendered}{}", Self::SHOW_SCREEN);
             }
+
+            // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+            // an explicit flush the terminal won't commit the synchronized update until the next tick.
+            io::stdout().flush().unwrap();
         }
     }
 

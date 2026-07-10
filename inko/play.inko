@@ -6,6 +6,8 @@ import std.env
 
 let WORLD_WIDTH = 150
 let WORLD_HEIGHT = 40
+let CLEAR_SCREEN = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J"
+let SHOW_SCREEN = "\u{001b}[?2026l"
 
 type Play {
   fn static run() {
@@ -44,7 +46,7 @@ type Play {
       let avg_render = total_render / world.tick.to_float
 
       if !minimal {
-        stdout.print("\u{001b}[H\u{001b}[2J")
+        stdout.write(CLEAR_SCREEN)
       }
 
       let _ = stdout.print(
@@ -54,7 +56,7 @@ type Play {
       )
 
       if !minimal {
-        stdout.print(rendered)
+        stdout.print(rendered + SHOW_SCREEN)
       }
     }
   }

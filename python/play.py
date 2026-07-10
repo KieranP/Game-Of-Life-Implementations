@@ -6,6 +6,8 @@ import math
 class Play:
   WORLD_WIDTH = 150
   WORLD_HEIGHT = 40
+  CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
+  SHOW_SCREEN = "\x1b[?2026l"
 
   @classmethod
   def run(cls) -> None:
@@ -42,7 +44,7 @@ class Play:
       avg_render = (total_render / world.tick)
 
       if not minimal:
-        print("\u001b[H\u001b[2J")
+        print(Play.CLEAR_SCREEN, end="")
 
       print(
         f"#{world.tick}"
@@ -51,7 +53,7 @@ class Play:
       )
 
       if not minimal:
-        print(rendered)
+        print(rendered + Play.SHOW_SCREEN)
 
   @staticmethod
   def _f(value: float) -> float:

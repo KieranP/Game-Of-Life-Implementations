@@ -1,8 +1,11 @@
 use std.time.DateTime;
 use std.env;
+use std.io;
 
 const WORLD_WIDTH = 150;
 const WORLD_HEIGHT = 40;
+const CLEAR_SCREEN = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J";
+const SHOW_SCREEN = "\u{001b}[?2026l";
 
 struct Play {}
 
@@ -42,7 +45,7 @@ impl Play {
       const avg_render = (total_render as float / world.tick as float);
 
       if (!minimal) {
-        print("\u{001b}[H\u{001b}[2J");
+        print(CLEAR_SCREEN);
       }
 
       // print instead of println, as println space-joins its values and the newline
@@ -54,8 +57,12 @@ impl Play {
       );
 
       if (!minimal) {
-        println(rendered);
+        print(rendered + SHOW_SCREEN);
       }
+
+      // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+      // an explicit flush the terminal won't commit the synchronized update until the next tick.
+      try io.stdout().flush();
     }
   }
 

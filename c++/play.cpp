@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <chrono>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <limits>
@@ -10,6 +11,8 @@ class Play {
   public:
     static constexpr int WORLD_WIDTH = 150;
     static constexpr int WORLD_HEIGHT = 40;
+    static constexpr std::string_view CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J";
+    static constexpr std::string_view SHOW_SCREEN = "\x1b[?2026l";
 
     static void run() {
       auto world = World(
@@ -46,7 +49,7 @@ class Play {
         auto avg_render = total_render / world.tick;
 
         if (!minimal) {
-          std::print("\u001b[H\u001b[2J");
+          std::print("{}", CLEAR_SCREEN);
         }
 
         std::println(
@@ -59,8 +62,12 @@ class Play {
         );
 
         if (!minimal) {
-          std::print("{}", rendered);
+          std::print("{}{}", rendered, SHOW_SCREEN);
         }
+
+        // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+        // an explicit flush the terminal won't commit the synchronized update until the next tick.
+        std::fflush(stdout);
       }
     }
 

@@ -1,6 +1,8 @@
 public class Play {
   private static final int WORLD_WIDTH = 150;
   private static final int WORLD_HEIGHT = 40;
+  private static final String CLEAR_SCREEN = "\u001b[?2026h\u001b[H\u001b[2J";
+  private static final String SHOW_SCREEN = "\u001b[?2026l";
 
   public static void main(String[] args) throws Exception {
     run();
@@ -41,7 +43,7 @@ public class Play {
       var avgRender = (totalRender / world.tick);
 
       if (!minimal) {
-        System.out.print("\u001b[H\u001b[2J");
+        System.out.print(CLEAR_SCREEN);
       }
 
       System.out.println(
@@ -55,7 +57,7 @@ public class Play {
       );
 
       if (!minimal) {
-        System.out.print(rendered);
+        System.out.print(rendered + SHOW_SCREEN);
       }
     }
   }

@@ -1,6 +1,8 @@
 class Play {
   private static final int WORLD_WIDTH = 150
   private static final int WORLD_HEIGHT = 40
+  private static final String CLEAR_SCREEN = "\u001b[?2026h\u001b[H\u001b[2J"
+  private static final String SHOW_SCREEN = "\u001b[?2026l"
 
   public static void main(String[] args) {
     run()
@@ -41,7 +43,7 @@ class Play {
       var avgRender = (totalRender / world.tick) as double
 
       if (!minimal) {
-        print("\u001b[H\u001b[2J")
+        print(CLEAR_SCREEN)
       }
 
       printf(
@@ -54,7 +56,7 @@ class Play {
       )
 
       if (!minimal) {
-        print(rendered)
+        print(rendered + SHOW_SCREEN)
       }
     }
   }

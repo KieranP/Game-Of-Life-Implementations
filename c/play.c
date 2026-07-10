@@ -7,6 +7,8 @@
 
 #define WORLD_WIDTH 150
 #define WORLD_HEIGHT 40
+#define CLEAR_SCREEN "\x1b[?2026h\x1b[H\x1b[2J"
+#define SHOW_SCREEN "\x1b[?2026l"
 
 int main(void) {
   // Initialize the random seed generator
@@ -48,7 +50,7 @@ int main(void) {
     auto avg_render = total_render / world->tick;
 
     if (!minimal) {
-      printf("\033[H\033[2J");
+      printf(CLEAR_SCREEN);
     }
 
     printf(
@@ -61,8 +63,12 @@ int main(void) {
     );
 
     if (!minimal) {
-      printf("%s", rendered);
+      printf("%s" SHOW_SCREEN, rendered);
     }
+
+    // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+    // an explicit flush the terminal won't commit the synchronized update until the next tick.
+    fflush(stdout);
 
     free(rendered);
   }

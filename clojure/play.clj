@@ -3,6 +3,8 @@
 
 (def world-width 150)
 (def world-height 40)
+(def clear-screen "\u001b[?2026h\u001b[H\u001b[2J")
+(def show-screen "\u001b[?2026l")
 
 (defn _f [value]
   ;; nanoseconds -> milliseconds
@@ -38,7 +40,7 @@
             avg-render (/ total-render (:tick world))]
 
         (when-not minimal
-          (println "\u001b[H\u001b[2J"))
+          (print clear-screen))
 
         (println
          (format "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)"
@@ -49,7 +51,7 @@
                  (_f avg-render)))
 
         (when-not minimal
-          (println rendered))
+          (println (str rendered show-screen)))
 
         (recur world
                total-tick

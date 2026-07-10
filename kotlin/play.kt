@@ -2,6 +2,8 @@ public class Play {
   companion object {
     private const val WORLD_WIDTH: Int = 150
     private const val WORLD_HEIGHT: Int = 40
+    private const val CLEAR_SCREEN: String = "\u001b[?2026h\u001b[H\u001b[2J"
+    private const val SHOW_SCREEN: String = "\u001b[?2026l"
 
     public fun run() {
       val world = World(
@@ -38,7 +40,7 @@ public class Play {
         val avgRender = (totalRender / world.tick)
 
         if (!minimal) {
-          print("\u001b[H\u001b[2J")
+          print(CLEAR_SCREEN)
         }
 
         println(
@@ -53,7 +55,7 @@ public class Play {
         )
 
         if (!minimal) {
-          print(rendered)
+          print(rendered + SHOW_SCREEN)
         }
       }
     }

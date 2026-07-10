@@ -6,6 +6,8 @@ const World = @import("world.zig").World;
 pub const Play = struct {
     const world_width = 150;
     const world_height = 40;
+    const clear_screen = "\x1b[?2026h\x1b[H\x1b[2J";
+    const show_screen = "\x1b[?2026l";
 
     pub fn run(allocator: Allocator, io: Io, minimal: bool) !void {
         const world = try World.init(allocator, io, world_width, world_height);
@@ -44,7 +46,7 @@ pub const Play = struct {
             const avg_render = total_render / @as(f64, @floatFromInt(world.tick));
 
             if (!minimal) {
-                try stdout.writeStreamingAll(io, "\x1b[H\x1b[2J");
+                try stdout.writeStreamingAll(io, clear_screen);
             }
 
             const output = try std.fmt.allocPrint(
@@ -63,6 +65,7 @@ pub const Play = struct {
 
             if (!minimal) {
                 try stdout.writeStreamingAll(io, rendered);
+                try stdout.writeStreamingAll(io, show_screen);
             }
         }
     }

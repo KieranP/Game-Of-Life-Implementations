@@ -4,6 +4,8 @@ import ballerina/time;
 
 const int WORLD_WIDTH = 150;
 const int WORLD_HEIGHT = 40;
+const string CLEAR_SCREEN = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J";
+const string SHOW_SCREEN = "\u{001b}[?2026l";
 
 class Play {
   function run() returns error? {
@@ -43,7 +45,7 @@ class Play {
       float avgRender = totalRender / <float>world.tick;
 
       if !minimal {
-        io:print("\u{001b}[H\u{001b}[2J");
+        io:print(CLEAR_SCREEN);
       }
 
       io:println(
@@ -53,7 +55,7 @@ class Play {
       );
 
       if !minimal {
-        io:print(rendered);
+        io:print(rendered + SHOW_SCREEN);
       }
     }
   }

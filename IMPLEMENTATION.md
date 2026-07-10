@@ -29,6 +29,10 @@ class Play {
   private const WORLD_WIDTH: UInt32
   private const WORLD_HEIGHT: UInt32
 
+  // ANSI escape sequences, extracted from the render loop for readability.
+  private const CLEAR_SCREEN: String // begin synchronized update, cursor home, clear screen
+  private const SHOW_SCREEN: String  // end synchronized update
+
   public static run(): void
 
   private static _f(value: Float64): Float64 // Or Double

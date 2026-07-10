@@ -7,6 +7,8 @@ require_once 'world.php';
 final class Play {
   private const int WORLD_WIDTH = 150;
   private const int WORLD_HEIGHT = 40;
+  private const string CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J";
+  private const string SHOW_SCREEN = "\x1b[?2026l";
 
   public static function run(): void {
     $world = new World(
@@ -43,7 +45,7 @@ final class Play {
       $avgRender = $totalRender / $world->tick;
 
       if (!$minimal) {
-        echo "\u{001b}[H\u{001b}[2J";
+        echo self::CLEAR_SCREEN;
       }
 
       printf(
@@ -56,7 +58,7 @@ final class Play {
       );
 
       if (!$minimal) {
-        echo $rendered;
+        echo $rendered . self::SHOW_SCREEN;
       }
     }
   }

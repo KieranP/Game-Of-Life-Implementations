@@ -1,4 +1,4 @@
-import std.stdio : write, writeln, writefln;
+import std.stdio : write, writeln, writefln, stdout;
 import std.process : environment;
 import std.datetime : MonoTime;
 import std.algorithm.comparison : min;
@@ -8,6 +8,8 @@ class Play {
   public:
     enum worldWidth = 150;
     enum worldHeight = 40;
+    enum clearScreen = "\x1b[?2026h\x1b[H\x1b[2J";
+    enum showScreen = "\x1b[?2026l";
 
     static void run() {
       auto world = new World(
@@ -44,7 +46,7 @@ class Play {
         auto avgRender = totalRender / world.tick;
 
         if (!minimal) {
-          write("\u001b[H\u001b[2J");
+          write(clearScreen);
         }
 
         writefln(
@@ -57,8 +59,12 @@ class Play {
         );
 
         if (!minimal) {
-          write(rendered);
+          write(rendered, showScreen);
         }
+
+        // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+        // an explicit flush the terminal won't commit the synchronized update until the next tick.
+        stdout.flush();
       }
     }
 

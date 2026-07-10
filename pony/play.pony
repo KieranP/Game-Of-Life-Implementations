@@ -6,6 +6,9 @@ actor Main
   let world: World
   var minimal: Bool = false
 
+  let clear_screen: String = "\x1b[?2026h\x1b[H\x1b[2J"
+  let show_screen: String = "\x1b[?2026l"
+
   var _total_tick: F64 = 0
   var _lowest_tick: F64 = F64.max_value()
   var _total_render: F64 = 0
@@ -51,7 +54,7 @@ actor Main
     let avg_render = (_total_render / world.tick.f64())
 
     if not minimal then
-      _env.out.write("\u001b[H\u001b[2J")
+      _env.out.write(clear_screen)
     end
 
     // Pony does not have native string formatting (i.e. printf),
@@ -64,7 +67,7 @@ actor Main
     )
 
     if not minimal then
-      _env.out.write(rendered.clone())
+      _env.out.write(rendered.clone() + show_screen)
     end
 
     tick()

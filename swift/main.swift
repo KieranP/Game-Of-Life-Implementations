@@ -3,6 +3,9 @@ import Foundation
 let worldWidth: UInt32 = 150
 let worldHeight: UInt32 = 40
 
+let clearScreen = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J"
+let showScreen = "\u{001b}[?2026l"
+
 private final class Play {
   public static func run() throws {
     let world = try World(
@@ -39,7 +42,7 @@ private final class Play {
       let avgRender = (totalRender / Double(world.tick))
 
       if !minimal {
-        print("\u{001b}[H\u{001b}[2J")
+        print(clearScreen, terminator: "")
       }
 
       print(
@@ -54,8 +57,12 @@ private final class Play {
       )
 
       if !minimal {
-        print(rendered)
+        print(rendered, terminator: showScreen)
       }
+
+      // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+      // an explicit flush the terminal won't commit the synchronized update until the next tick.
+      fflush(stdout)
     }
   }
 

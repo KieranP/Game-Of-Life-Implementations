@@ -3,6 +3,8 @@ require_relative 'world'
 class Play
   WORLD_WIDTH  = 150
   WORLD_HEIGHT = 40
+  CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
+  SHOW_SCREEN  = "\x1b[?2026l"
 
   def self.run
     world = World.new(
@@ -39,7 +41,7 @@ class Play
       avg_render = (total_render / world.tick)
 
       unless minimal
-        puts "\u001b[H\u001b[2J"
+        print CLEAR_SCREEN
       end
 
       puts format(
@@ -52,7 +54,7 @@ class Play
       )
 
       unless minimal
-        puts rendered
+        puts rendered + SHOW_SCREEN
       end
     end
   end

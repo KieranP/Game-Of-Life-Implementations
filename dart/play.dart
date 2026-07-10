@@ -5,6 +5,8 @@ import 'dart:math';
 class Play {
   static const worldWidth = 150;
   static const worldHeight = 40;
+  static const clearScreen = "\x1b[?2026h\x1b[H\x1b[2J";
+  static const showScreen = "\x1b[?2026l";
 
   static void run() {
     final world = World(
@@ -42,7 +44,7 @@ class Play {
       final avgRender = (totalRender / world.tick);
 
       if (!minimal) {
-        stdout.write("\u001b[H\u001b[2J");
+        stdout.write(clearScreen);
       }
 
       stdout.writeln(
@@ -52,7 +54,7 @@ class Play {
       );
 
       if (!minimal) {
-        stdout.write(rendered);
+        stdout.write(rendered + showScreen);
       }
     }
   }

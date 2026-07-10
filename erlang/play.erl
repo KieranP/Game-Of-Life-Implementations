@@ -4,6 +4,9 @@
 -define(WORLD_WIDTH, 150).
 -define(WORLD_HEIGHT, 40).
 
+-define(CLEAR_SCREEN, "\x1b[?2026h\x1b[H\x1b[2J").
+-define(SHOW_SCREEN, "\x1b[?2026l").
+
 main(_) ->
   World = world:new(?WORLD_WIDTH, ?WORLD_HEIGHT),
 
@@ -28,7 +31,7 @@ loop(World, Minimal, TotalTick, LowestTick, TotalRender, LowestRender) ->
   AvgRender = NewTotalRender / world:tick(NewWorld),
 
   case Minimal of
-    false -> io:format("\e[H\e[2J~n");
+    false -> io:format(?CLEAR_SCREEN);
     true -> ok
   end,
 
@@ -44,7 +47,7 @@ loop(World, Minimal, TotalTick, LowestTick, TotalRender, LowestRender) ->
   ),
 
   case Minimal of
-    false -> io:format("~s~n", [Rendered]);
+    false -> io:format("~s" ?SHOW_SCREEN "~n", [Rendered]);
     true -> ok
   end,
 

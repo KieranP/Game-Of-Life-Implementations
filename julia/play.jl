@@ -3,6 +3,8 @@ using Printf
 
 const WORLD_WIDTH = UInt64(150)
 const WORLD_HEIGHT = UInt64(40)
+const CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
+const SHOW_SCREEN = "\x1b[?2026l"
 
 function play()
   world = World(;
@@ -39,7 +41,7 @@ function play()
     avg_render = (total_render / world.tick)
 
     if !minimal
-      print("\u001b[H\u001b[2J")
+      print(CLEAR_SCREEN)
     end
 
     @printf(
@@ -52,7 +54,7 @@ function play()
     )
 
     if !minimal
-      print(rendered)
+      print(rendered * SHOW_SCREEN)
     end
   end
 end

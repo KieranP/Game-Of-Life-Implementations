@@ -17,6 +17,12 @@ worldWidth = 150
 worldHeight :: Word32
 worldHeight = 40
 
+clearScreen :: String
+clearScreen = "\x1b[?2026h\x1b[H\x1b[2J"
+
+showScreen :: String
+showScreen = "\x1b[?2026l"
+
 run :: IO ()
 run = do
   world <- World.new worldWidth worldHeight
@@ -47,7 +53,7 @@ loop world minimal totalTick lowestTick totalRender lowestRender = do
   let avgRender = newTotalRender / fromIntegral (World.tick newWorld)
 
   unless minimal $
-    putStr "\ESC[H\ESC[2J"
+    putStr clearScreen
 
   printf "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n"
     (World.tick newWorld)
@@ -57,7 +63,7 @@ loop world minimal totalTick lowestTick totalRender lowestRender = do
     (_f avgRender)
 
   unless minimal $
-    putStrLn rendered
+    putStrLn (rendered ++ showScreen)
 
   loop newWorld minimal newTotalTick newLowestTick newTotalRender newLowestRender
 

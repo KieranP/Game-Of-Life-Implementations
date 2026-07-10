@@ -3,6 +3,8 @@ include world
 
 const WorldWidth = 150
 const WorldHeight = 40
+const ClearScreen = "\x1b[?2026h\x1b[H\x1b[2J"
+const ShowScreen = "\x1b[?2026l"
 
 type
   Play = ref object
@@ -47,7 +49,7 @@ proc run(self: Play) =
     let avgRender = (totalRender / world.tick.float)
 
     if not minimal:
-      echo "\u001b[H\u001b[2J"
+      stdout.write ClearScreen
 
     echo fmt"""
       #{world.tick} -
@@ -56,7 +58,7 @@ proc run(self: Play) =
     """.dedent().replace("\n", " ")
 
     if not minimal:
-      echo rendered
+      echo rendered & ShowScreen
 
 func f(self: Play, value: float): float =
   # nanoseconds -> milliseconds

@@ -1,5 +1,7 @@
 val WorldWidth = 150
 val WorldHeight = 40
+val ClearScreen = "\u001b[?2026h\u001b[H\u001b[2J"
+val ShowScreen = "\u001b[?2026l"
 
 @main def play(): Unit =
   val world = World(
@@ -35,7 +37,7 @@ val WorldHeight = 40
     val avgRender = (totalRender / world.tick)
 
     if !minimal then
-      print("[H[2J")
+      print(ClearScreen)
 
     println(
       f"#${world.tick}%d" +
@@ -44,7 +46,7 @@ val WorldHeight = 40
     )
 
     if !minimal then
-      print(rendered)
+      print(rendered + ShowScreen)
 
 def _f(value: Double) =
   // nanoseconds -> milliseconds

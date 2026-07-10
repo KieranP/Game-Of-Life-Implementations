@@ -6,6 +6,8 @@ import world.{type World}
 
 const world_width = 150
 const world_height = 40
+const clear_screen = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J"
+const show_screen = "\u{001b}[?2026l"
 
 pub fn main() {
   let world = world.new(world_width, world_height)
@@ -45,7 +47,7 @@ fn loop(
   let avg_render = total_render /. int.to_float(world.tick)
 
   case minimal {
-    False -> io.println("\u{001b}[H\u{001b}[2J")
+    False -> io.print(clear_screen)
     True -> Nil
   }
 
@@ -56,7 +58,7 @@ fn loop(
   )
 
   case minimal {
-    False -> io.println(rendered)
+    False -> io.println(rendered <> show_screen)
     True -> Nil
   }
 

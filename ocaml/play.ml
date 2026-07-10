@@ -2,6 +2,8 @@ class play =
   object (self)
     val world_width : int = 150
     val world_height : int = 40
+    val clear_screen = "\x1b[?2026h\x1b[H\x1b[2J"
+    val show_screen = "\x1b[?2026l"
 
     method run : unit =
       let world = new World.world
@@ -37,7 +39,7 @@ class play =
         let avg_render = !total_render /. float_of_int world#tick in
 
         if not minimal then
-          print_string "\027[H\027[2J";
+          print_string clear_screen;
 
         Printf.printf "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n"
           world#tick
@@ -47,8 +49,10 @@ class play =
           (self#_f avg_render);
 
         if not minimal then
-          print_string rendered;
+          print_string (rendered ^ show_screen);
 
+        (* stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+           an explicit flush the terminal won't commit the synchronized update until the next tick. *)
         flush stdout
       done
 

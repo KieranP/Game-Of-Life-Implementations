@@ -3,6 +3,8 @@
 
 static const NSUInteger WorldWidth = 150;
 static const NSUInteger WorldHeight = 40;
+#define CLEAR_SCREEN "\x1b[?2026h\x1b[H\x1b[2J"
+#define SHOW_SCREEN "\x1b[?2026l"
 
 @interface Play : NSObject
 + (void)run;
@@ -45,7 +47,7 @@ static const NSUInteger WorldHeight = 40;
       double avgRender = totalRender / (double)world.tick;
 
       if (!minimal) {
-        printf("\033[H\033[2J");
+        printf(CLEAR_SCREEN);
       }
 
       printf("#%lu - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
@@ -56,8 +58,12 @@ static const NSUInteger WorldHeight = 40;
              [self _f:avgRender]);
 
       if (!minimal) {
-        printf("%s", [rendered UTF8String]);
+        printf("%s" SHOW_SCREEN, [rendered UTF8String]);
       }
+
+      // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+      // an explicit flush the terminal won't commit the synchronized update until the next tick.
+      fflush(stdout);
     }
   }
 }

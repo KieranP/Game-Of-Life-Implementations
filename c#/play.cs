@@ -5,6 +5,8 @@ using System.Diagnostics;
 public class Play {
   private const uint WorldWidth = 150;
   private const uint WorldHeight = 40;
+  private const string ClearScreen = "\x1b[?2026h\x1b[H\x1b[2J";
+  private const string ShowScreen = "\x1b[?2026l";
 
   public static void Main(string[] args) {
     Run();
@@ -45,7 +47,7 @@ public class Play {
       var avgRender = (totalRender / world.Tick);
 
       if (!minimal) {
-        Console.Write("\u001b[H\u001b[2J");
+        Console.Write(ClearScreen);
       }
 
       Console.WriteLine(
@@ -55,7 +57,7 @@ public class Play {
       );
 
       if (!minimal) {
-        Console.WriteLine(rendered);
+        Console.WriteLine(rendered + ShowScreen);
       }
     }
   }

@@ -3,6 +3,8 @@ local World = require('world')
 local Play = {
   WORLD_WIDTH = 150,
   WORLD_HEIGHT = 40,
+  CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J",
+  SHOW_SCREEN = "\x1b[?2026l",
 }
 
 function Play:run()
@@ -40,7 +42,7 @@ function Play:run()
     local avg_render = total_render / world.tick
 
     if not minimal then
-      print("\u{001b}[H\u{001b}[2J")
+      io.write(self.CLEAR_SCREEN)
     end
 
     print(
@@ -55,7 +57,7 @@ function Play:run()
     )
 
     if not minimal then
-      print(rendered)
+      print(rendered .. self.SHOW_SCREEN)
     end
   end
 end

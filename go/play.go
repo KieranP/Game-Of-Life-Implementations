@@ -9,6 +9,8 @@ import (
 
 const worldWidth = uint32(150)
 const worldHeight = uint32(40)
+const clearScreen = "\x1b[?2026h\x1b[H\x1b[2J"
+const showScreen = "\x1b[?2026l"
 
 func run() {
   world := newWorld(
@@ -45,7 +47,7 @@ func run() {
     avgRender := totalRender / float64(world.tick)
 
     if !minimal {
-      fmt.Print("\u001b[H\u001b[2J")
+      fmt.Print(clearScreen)
     }
 
     fmt.Printf(
@@ -58,7 +60,7 @@ func run() {
     )
 
     if !minimal {
-      fmt.Print(rendered)
+      fmt.Print(rendered + showScreen)
     }
   }
 }

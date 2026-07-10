@@ -4,6 +4,8 @@ import math
 
 const world_width = 150
 const world_height = 40
+const clear_screen = '\x1b[?2026h\x1b[H\x1b[2J'
+const show_screen = '\x1b[?2026l'
 
 fn run() {
   mut world := new_world(
@@ -40,7 +42,7 @@ fn run() {
     avg_render := (total_render / world.tick)
 
     if !minimal {
-      print('\u001b[H\u001b[2J')
+      print(clear_screen)
     }
 
     println(
@@ -50,8 +52,12 @@ fn run() {
     )
 
     if !minimal {
-      print(rendered)
+      print(rendered + show_screen)
     }
+
+    // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
+    // an explicit flush the terminal won't commit the synchronized update until the next tick.
+    flush_stdout()
   }
 }
 

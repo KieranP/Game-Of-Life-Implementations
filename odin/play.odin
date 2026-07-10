@@ -6,6 +6,8 @@ import "core:time"
 
 WORLD_WIDTH :: u32(150)
 WORLD_HEIGHT :: u32(40)
+CLEAR_SCREEN :: "\x1b[?2026h\x1b[H\x1b[2J"
+SHOW_SCREEN :: "\x1b[?2026l"
 
 run :: proc() {
   world := new_world(
@@ -45,7 +47,7 @@ run :: proc() {
     avg_render := total_render / f64(world.tick)
 
     if !minimal {
-      fmt.print("\u001b[H\u001b[2J")
+      fmt.print(CLEAR_SCREEN)
     }
 
     fmt.printf(
@@ -58,7 +60,7 @@ run :: proc() {
     )
 
     if !minimal {
-      fmt.print(rendered)
+      fmt.print(rendered, SHOW_SCREEN)
     }
   }
 }
