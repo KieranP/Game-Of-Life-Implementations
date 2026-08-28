@@ -1,12 +1,11 @@
 import Foundation
 
-let worldWidth: UInt32 = 150
-let worldHeight: UInt32 = 40
-
-let clearScreen = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J"
-let showScreen = "\u{001b}[?2026l"
-
 private final class Play {
+  private static let worldWidth: UInt32 = 150
+  private static let worldHeight: UInt32 = 40
+  private static let clearScreen = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J"
+  private static let showScreen = "\u{001b}[?2026l"
+
   public static func run() throws {
     let world = try World(
       width: worldWidth,

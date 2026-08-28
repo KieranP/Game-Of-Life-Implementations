@@ -22,4 +22,4 @@ escript play.erl
 
 - No support for pointers/shared references (data is immutable); fallback to storing coordinate keys ("x-y") in `cell.neighbours` and refetching cells from `world.cells` — a significant performance penalty (see `cell:alive_neighbours`).
 - No support for continuous loops; fallback to recursive function calls (see `loop` in play.erl).
-- No support for custom exception classes; emulated with error tuples (see `world:add_cell`).
+- No support for custom exception classes; emulated with `erlang:error` (see `world:location_occupied`).

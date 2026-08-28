@@ -110,12 +110,15 @@ class World(
       val x = cell.x
       val y = cell.y
 
-      for (relX, relY) <- Directions do
-        val nx = x + relX
-        val ny = y + relY
-
-        if nx >= 0 && ny >= 0 then
-          if nx < width && ny < height then
-            val neighbour = cellAt(nx, ny)
-            if neighbour.isDefined then
-              cell.neighbours.append(neighbour.get)
+      cell.neighbours.appendAll(
+        Directions.flatMap { (relX, relY) =>
+          val nx = x + relX
+          val ny = y + relY
+          if nx < 0 || ny < 0 then
+            None // Out of bounds
+          else if nx >= width || ny >= height then
+            None // Out of bounds
+          else
+            cellAt(nx, ny)
+        }
+      )

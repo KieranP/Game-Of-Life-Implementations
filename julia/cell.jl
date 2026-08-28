@@ -18,7 +18,7 @@ function cell_alive_neighbours(cell::Cell)
   # The following is the fastest
   count(n -> n.alive, cell.neighbours)
 
-  # The following is about the same
+  # The following is about the same speed
   # alive_neighbours = 0
   # for neighbour in cell.neighbours
   #   if neighbour.alive

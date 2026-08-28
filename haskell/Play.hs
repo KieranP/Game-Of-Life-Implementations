@@ -23,6 +23,10 @@ clearScreen = "\x1b[?2026h\x1b[H\x1b[2J"
 showScreen :: String
 showScreen = "\x1b[?2026l"
 
+-- Haskell has no infinity literal or float max constant
+infinity :: Double
+infinity = 1 / 0
+
 run :: IO ()
 run = do
   world <- World.new worldWidth worldHeight
@@ -32,7 +36,7 @@ run = do
   unless minimal $
     putStrLn (World.render world)
 
-  loop world minimal 0 (1 / 0) 0 (1 / 0)
+  loop world minimal 0 infinity 0 infinity
 
 loop :: World -> Bool -> Double -> Double -> Double -> Double -> IO ()
 loop world minimal totalTick lowestTick totalRender lowestRender = do

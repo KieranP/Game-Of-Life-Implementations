@@ -109,7 +109,8 @@ World <- function(width, height) {
   }
 
   add_cell <- function(x, y, alive = FALSE) {
-    if (!is.null(cell_at(x, y))) {
+    existing <- cell_at(x, y)
+    if (!is.null(existing)) {
       stop(location_occupied(x, y))
     }
 

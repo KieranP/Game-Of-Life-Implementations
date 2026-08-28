@@ -6,7 +6,7 @@ const WORLD_HEIGHT = UInt64(40)
 const CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
 const SHOW_SCREEN = "\x1b[?2026l"
 
-function play()
+function run()
   world = World(;
     width=WORLD_WIDTH,
     height=WORLD_HEIGHT,
@@ -64,4 +64,4 @@ function _f(value::Float64)
   value / 1_000_000
 end
 
-play()
+run()

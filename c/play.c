@@ -10,6 +10,11 @@
 #define CLEAR_SCREEN "\x1b[?2026h\x1b[H\x1b[2J"
 #define SHOW_SCREEN "\x1b[?2026l"
 
+static double _f(double value) {
+  // nanoseconds -> milliseconds
+  return value / 1'000'000.0;
+}
+
 int main(void) {
   // Initialize the random seed generator
   srand(time(nullptr));
@@ -56,10 +61,10 @@ int main(void) {
     printf(
       "#%u - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
       world->tick,
-      to_ms(lowest_tick),
-      to_ms(avg_tick),
-      to_ms(lowest_render),
-      to_ms(avg_render)
+      _f(lowest_tick),
+      _f(avg_tick),
+      _f(lowest_render),
+      _f(avg_render)
     );
 
     if (!minimal) {

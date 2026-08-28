@@ -1,11 +1,10 @@
 source("world.r")
 
-CLEAR_SCREEN <- "\x1b[?2026h\x1b[H\x1b[2J"
-SHOW_SCREEN <- "\x1b[?2026l"
-
 Play <- list(
   WORLD_WIDTH = 150,
   WORLD_HEIGHT = 40,
+  CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J",
+  SHOW_SCREEN = "\x1b[?2026l",
 
   run = function() {
     world <- World(
@@ -42,7 +41,7 @@ Play <- list(
       avg_render <- (total_render / world$tick)
 
       if (!minimal) {
-        cat(CLEAR_SCREEN)
+        cat(Play$CLEAR_SCREEN)
       }
 
       cat(sprintf(
@@ -55,7 +54,7 @@ Play <- list(
       ))
 
       if (!minimal) {
-        cat(rendered, SHOW_SCREEN, sep = "")
+        cat(rendered, Play$SHOW_SCREEN, sep = "")
       }
     }
   },

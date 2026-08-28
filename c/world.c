@@ -3,11 +3,12 @@
 #include "lib/utils.h"
 #include <stdio.h>
 #include <stdlib.h>
+// #include <string.h>
 
 static constexpr int DIRECTIONS[8][2] = {
-    {-1, 1},  {0, 1},  {1, 1},  // above
-    {-1, 0},  {1, 0},           // sides
-    {-1, -1}, {0, -1}, {1, -1}, // below
+  {-1, 1},  {0, 1},  {1, 1},  // above
+  {-1, 0},           {1, 0},  // sides
+  {-1, -1}, {0, -1}, {1, -1}, // below
 };
 
 static void make_key(char *buffer, uint32_t x, uint32_t y) {
@@ -121,8 +122,37 @@ void world_tick(World *world) {
 char *world_render(World *world) {
   auto render_size = world->width * world->height + world->height + 1;
   auto rendering = (char *)malloc(render_size);
-  auto idx = 0;
 
+  // The following is slower
+  // rendering[0] = '\0';
+  // char one[2] = {'\0', '\0'};
+  // for (auto y = 0; y < world->height; y++) {
+  //   for (auto x = 0; x < world->width; x++) {
+  //     auto cell = cell_at(world, x, y);
+  //     if (cell) {
+  //       one[0] = cell_to_char(cell);
+  //       strncat(rendering, one, 1);
+  //     }
+  //   }
+  //   strncat(rendering, "\n", 1);
+  // }
+  // return rendering;
+
+  // The following is slower
+  // auto idx = 0;
+  // for (auto y = 0; y < world->height; y++) {
+  //   for (auto x = 0; x < world->width; x++) {
+  //     auto cell = cell_at(world, x, y);
+  //     if (cell) {
+  //       idx += snprintf(rendering + idx, render_size - idx, "%c", cell_to_char(cell));
+  //     }
+  //   }
+  //   idx += snprintf(rendering + idx, render_size - idx, "\n");
+  // }
+  // return rendering;
+
+  // The following is the fastest
+  auto idx = 0;
   for (auto y = 0; y < world->height; y++) {
     for (auto x = 0; x < world->width; x++) {
       auto cell = cell_at(world, x, y);

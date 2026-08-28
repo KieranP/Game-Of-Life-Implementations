@@ -25,23 +25,23 @@ pub const Cell = struct {
 
     pub fn aliveNeighbours(self: *const Cell) u32 {
         // The following is the fastest
-        var alive_count: u32 = 0;
+        var alive_neighbours: u32 = 0;
         for (self.neighbours.items) |neighbour| {
             if (neighbour.alive) {
-                alive_count += 1;
+                alive_neighbours += 1;
             }
         }
-        return alive_count;
+        return alive_neighbours;
 
         // The following is about the same speed
-        // var alive_count: u32 = 0;
+        // var alive_neighbours: u32 = 0;
         // const count = self.neighbours.items.len;
         // var i: u32 = 0;
         // while (i < count) : (i += 1) {
         //     if (self.neighbours.items[i].alive) {
-        //         alive_count += 1;
+        //         alive_neighbours += 1;
         //     }
         // }
-        // return alive_count;
+        // return alive_neighbours;
     }
 };

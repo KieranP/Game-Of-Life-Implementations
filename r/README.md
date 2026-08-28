@@ -6,6 +6,10 @@
 brew install r
 ```
 
+## Build
+
+(no build step required)
+
 ## Run
 
 ```bash

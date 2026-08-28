@@ -1,4 +1,4 @@
-# Typescript
+# TypeScript
 
 ## Install
 
@@ -14,11 +14,11 @@ tsc
 
 ## Run
 
-### Node
+### Bun
 
 ```bash
-brew install node
-node play.js
+brew install oven-sh/bun/bun
+bun run play.js
 ```
 
 ### Deno
@@ -28,11 +28,11 @@ brew install deno
 deno run --allow-env play.js
 ```
 
-### Bun
+### Node
 
 ```bash
-brew install oven-sh/bun/bun
-bun run play.js
+brew install node
+node play.js
 ```
 
 ## Notes

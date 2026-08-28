@@ -24,4 +24,5 @@ ghc -O2 -main-is Play.run Play.hs -o play
 
 - No support for pointers/shared references (data is immutable); fallback to storing coordinate keys ("x-y") in `cell.neighbours` and refetching cells from `world.cells` — a significant performance penalty (see `Cell.aliveNeighbours`).
 - No support for continuous loops; fallback to recursive function calls (see `Play.loop`).
+- No infinity literal or float max constant in the standard library; fallback to `1 / 0` (see `infinity` in Play.hs).
 - No support for random numbers in the standard library; fallback to the `random` package (see `World.populateCells`).

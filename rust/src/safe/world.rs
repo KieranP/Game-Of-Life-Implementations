@@ -5,18 +5,11 @@ use std::error::Error;
 use std::fmt;
 use std::rc::Rc;
 
+#[rustfmt::skip]
 const DIRECTIONS: [(isize, isize); 8] = [
-    // above
-    (-1, 1),
-    (0, 1),
-    (1, 1),
-    // sides
-    (-1, 0),
-    (1, 0),
-    // below
-    (-1, -1),
-    (0, -1),
-    (1, -1),
+    (-1, 1),  (0, 1),  (1, 1),  // above
+    (-1, 0),           (1, 0),  // sides
+    (-1, -1), (0, -1), (1, -1), // below
 ];
 
 #[derive(Debug)]

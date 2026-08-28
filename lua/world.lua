@@ -136,14 +136,20 @@ function World:prepopulate_neighbours()
       local nx = x + set[1]
       local ny = y + set[2]
 
-      if nx >= 0 and ny >= 0 then
-        if nx < self.width and ny < self.height then
-          local neighbour = self:cell_at(nx, ny)
-          if neighbour then
-            table.insert(cell.neighbours, neighbour)
-          end
-        end
+      if nx < 0 or ny < 0 then
+        goto continue -- Out of bounds
       end
+
+      if nx >= self.width or ny >= self.height then
+        goto continue -- Out of bounds
+      end
+
+      local neighbour = self:cell_at(nx, ny)
+      if neighbour then
+        table.insert(cell.neighbours, neighbour)
+      end
+
+      ::continue::
     end
   end
 end

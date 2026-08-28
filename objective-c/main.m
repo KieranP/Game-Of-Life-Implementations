@@ -69,7 +69,7 @@ static const NSUInteger WorldHeight = 40;
 }
 
 + (double)_f:(double)value {
-  // value is in seconds, convert to milliseconds
+  // seconds -> milliseconds
   return value * 1000.0;
 }
 

@@ -124,7 +124,8 @@ static NSArray<NSArray<NSNumber *> *> *Directions;
 }
 
 - (BOOL)addCellX:(NSUInteger)x y:(NSUInteger)y alive:(BOOL)alive {
-  if ([self cellAtX:x y:y] != nil) {
+  Cell *existing = [self cellAtX:x y:y];
+  if (existing != nil) {
     @throw [NSException exceptionWithName:@"LocationOccupied"
                                    reason:[NSString stringWithFormat:@"LocationOccupied(%lu-%lu)", (unsigned long)x, (unsigned long)y]
                                  userInfo:nil];

@@ -8,7 +8,7 @@ brew install lua luajit
 
 ## Build
 
-(No build step required)
+(no build step required)
 
 ## Run
 
@@ -26,4 +26,4 @@ luajit -O3 play.lua
 
 ## Notes
 
-- No support for native exceptions; emulated with assert (see `World:add_cell`).
+- No support for native exceptions; emulated with `assert` (see `World:add_cell`).

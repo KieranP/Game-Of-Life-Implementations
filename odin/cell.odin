@@ -1,5 +1,7 @@
 package main
 
+// import "core:slice"
+
 Cell :: struct {
   x: u32,
   y: u32,
@@ -17,6 +19,11 @@ cell_to_char :: proc(cell: ^Cell) -> u8 {
 }
 
 cell_alive_neighbours :: proc(cell: ^Cell) -> u32 {
+  // The following is about the same speed
+  // return u32(slice.count_proc(cell.neighbours[:], proc(neighbour: ^Cell) -> bool {
+  //   return neighbour.alive
+  // }))
+
   // The following is the fastest
   alive_neighbours := u32(0)
   for neighbour in cell.neighbours {

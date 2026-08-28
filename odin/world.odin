@@ -106,8 +106,8 @@ world_populate_cells :: proc(world: ^World) {
 }
 
 world_add_cell :: proc(world: ^World, x: u32, y: u32, alive: bool = false) -> bool {
-  _, ok := world_cell_at(world, x, y)
-  if ok {
+  existing, _ := world_cell_at(world, x, y)
+  if existing != nil {
     fmt.panicf("LocationOccupied(%d-%d)", x, y)
   }
 

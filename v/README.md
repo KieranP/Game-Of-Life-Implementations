@@ -1,4 +1,4 @@
-# V
+# VLang
 
 ## Install
 
@@ -20,4 +20,5 @@ v -prod -o play .
 
 ## Notes
 
-- No support for native exceptions; emulated with panic (see `World.add_cell`).
+- Identifiers cannot start with an underscore, so the `_f` helper is named `f` (see `f` in play.v).
+- No support for native exceptions; emulated with `panic` (see `World.add_cell`).

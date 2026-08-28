@@ -5,11 +5,13 @@ const StringHashMap = std.StringHashMap;
 const Io = std.Io;
 const Cell = @import("cell.zig").Cell;
 
+// zig fmt: off
 const directions = [_]struct { i8, i8 }{
-    .{ -1, 1 }, .{ 0, 1 }, .{ 1, 1 }, // above
-    .{ -1, 0 }, .{ 1, 0 }, // sides
+    .{ -1, 1 },  .{ 0, 1 },  .{ 1, 1 },  // above
+    .{ -1, 0 },              .{ 1, 0 },  // sides
     .{ -1, -1 }, .{ 0, -1 }, .{ 1, -1 }, // below
 };
+// zig fmt: on
 
 pub const Errors = error{
     LocationOccupied,
@@ -130,7 +132,8 @@ pub const World = struct {
     }
 
     fn addCell(self: *World, x: u32, y: u32, alive: bool) !bool {
-        if (self.cellAt(x, y)) |_| {
+        const existing = self.cellAt(x, y);
+        if (existing != null) {
             return Errors.LocationOccupied;
         }
 

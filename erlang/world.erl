@@ -126,13 +126,17 @@ add_cell(World, X, Y, Alive) ->
   Existing = cell_at(World, X, Y),
   case Existing of
     undefined -> ok;
-    _ -> erlang:error({location_occupied, X, Y})
+    _ -> location_occupied(X, Y)
   end,
 
   Key = make_key(X, Y),
   Cell = cell:new(X, Y, Alive),
   NewWorld = World#world{cells = maps:put(Key, Cell, World#world.cells)},
   {NewWorld, true}.
+
+-spec location_occupied(integer(), integer()) -> no_return().
+location_occupied(X, Y) ->
+  erlang:error(lists:flatten(io_lib:format("LocationOccupied(~B-~B)", [X, Y]))).
 
 -spec prepopulate_neighbours(world()) -> world().
 prepopulate_neighbours(World) ->

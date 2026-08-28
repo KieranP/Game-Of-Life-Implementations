@@ -51,6 +51,9 @@ contains
     integer :: alive_neighbours
     integer :: i
 
+    ! The following is slower
+    ! alive_neighbours = count([(c%neighbours(i)%ptr%alive, i = 1, c%neighbour_count)])
+
     ! The following is the fastest
     alive_neighbours = 0
     do i = 1, c%neighbour_count
@@ -59,6 +62,14 @@ contains
         alive_neighbours = alive_neighbours + 1
       end if
     end do
+
+    ! The following is about the same speed
+    ! alive_neighbours = 0
+    ! do i = 1, c%neighbour_count
+    !   if (c%neighbours(i)%ptr%alive) then
+    !     alive_neighbours = alive_neighbours + 1
+    !   end if
+    ! end do
   end function cell_alive_neighbours
 
 end module cell_mod

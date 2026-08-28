@@ -21,3 +21,4 @@ dart compile exe -o play play.dart
 ## Notes
 
 - No support for unsigned integers; fallback to `int` (see `Cell#x`/`y`).
+- No support for printf-style formatting (see `Play#_f`).

@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install ruby jruby
+brew install ruby
 ```
 
 ## Build
@@ -28,16 +28,4 @@ ruby --yjit play.rb
 
 ```bash
 ruby --zjit play.rb
-```
-
-### TruffleRuby
-
-```bash
-ruby play.rb
-```
-
-### JRuby
-
-```bash
-ruby play.rb
 ```

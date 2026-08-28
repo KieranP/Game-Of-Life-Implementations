@@ -22,7 +22,7 @@ class World {
   }
 
   method dotick() {
-    # First determine the next state for all cells
+    # First determine the action for all cells
     foreach my $cell (values $cells->%*) {
       my $alive_neighbours = $cell->alive_neighbours();
       if (!$cell->alive && $alive_neighbours == 3) {

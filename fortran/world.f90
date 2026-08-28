@@ -112,21 +112,22 @@ contains
     type(World), intent(inout) :: w
     integer :: x, y
     real :: random
-    logical :: alive
+    logical :: alive, success
 
     do y = 0, w%height - 1
       do x = 0, w%width - 1
         call random_number(random)
         alive = random <= 0.2
-        call add_cell(w, x, y, alive)
+        success = add_cell(w, x, y, alive)
       end do
     end do
   end subroutine populate_cells
 
-  subroutine add_cell(w, x, y, alive)
+  function add_cell(w, x, y, alive) result(added)
     type(World), intent(inout) :: w
     integer, intent(in) :: x, y
     logical, intent(in) :: alive
+    logical :: added
     type(Cell), pointer :: existing
     character(len=:), allocatable :: key
 
@@ -138,7 +139,8 @@ contains
 
     key = make_key(x, y)
     call hashmap_put(w%cells, key, cell_new(x, y, alive))
-  end subroutine add_cell
+    added = .true.
+  end function add_cell
 
   subroutine prepopulate_neighbours(w)
     type(World), intent(inout) :: w
@@ -157,8 +159,8 @@ contains
         nx = x + DIRECTIONS(1, d)
         ny = y + DIRECTIONS(2, d)
 
-        if (nx < 0 .or. ny < 0) cycle
-        if (nx >= w%width .or. ny >= w%height) cycle
+        if (nx < 0 .or. ny < 0) cycle ! Out of bounds
+        if (nx >= w%width .or. ny >= w%height) cycle ! Out of bounds
 
         neighbour => cell_at(w, nx, ny)
         if (associated(neighbour)) then
@@ -173,14 +175,16 @@ contains
     integer, intent(in) :: x, y
     character(len=:), allocatable :: key
     character(len=KEY_LEN) :: buffer
-
-    write(buffer, '(I0,A,I0)') x, '-', y
-    key = trim(buffer)
-
     ! character(len=16) :: x_str, y_str
+
+    ! The following is slower
     ! write(x_str, '(I0)') x
     ! write(y_str, '(I0)') y
     ! key = trim(x_str) // '-' // trim(y_str)
+
+    ! The following is the fastest
+    write(buffer, '(I0,A,I0)') x, '-', y
+    key = trim(buffer)
   end function make_key
 
 end module world_mod

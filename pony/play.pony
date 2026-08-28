@@ -6,6 +6,8 @@ actor Main
   let world: World
   var minimal: Bool = false
 
+  let world_width: U32 = 150
+  let world_height: U32 = 40
   let clear_screen: String = "\x1b[?2026h\x1b[H\x1b[2J"
   let show_screen: String = "\x1b[?2026l"
 
@@ -19,8 +21,8 @@ actor Main
 
     world = World(
       where
-      width = 150,
-      height = 40
+      width = world_width,
+      height = world_height
     )
 
     for env_var in env.vars.values() do
@@ -73,7 +75,7 @@ actor Main
     tick()
 
   fun _f(value: F64): String =>
-    // nanoseconds -> milliseconds
+    // nanoseconds -> milliseconds, padded to 3 decimal places
     Format.float[F64](
       (value / 1_000_000.0) where fmt = FormatFix, prec = 3
     )

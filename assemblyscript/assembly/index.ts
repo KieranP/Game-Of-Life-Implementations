@@ -19,9 +19,9 @@ class Play {
     }
 
     let totalTick: f64 = 0.0
-    let lowestTick: f64 = 1e18
+    let lowestTick: f64 = Infinity
     let totalRender: f64 = 0.0
-    let lowestRender: f64 = 1e18
+    let lowestRender: f64 = Infinity
 
     while (true) {
       const tickStart = performance.now()
@@ -57,6 +57,7 @@ class Play {
   }
 
   private static _f(value: f64): string {
+    // milliseconds -> no conversion needed, padded to 3 decimal places
     const rounded = Math.round(value * 1000.0) / 1000.0
     const parts = rounded.toString().split('.')
     const whole = parts[0]

@@ -115,15 +115,14 @@ type World(width: uint, height: uint) =
       let x = int cell.X
       let y = int cell.Y
 
-      for (relX, relY) in directions do
-        let nx = x + relX
-        let ny = y + relY
-
-        if nx >= 0 && ny >= 0 then
-          let ux = uint nx
-          let uy = uint ny
-
-          if ux < width && uy < height then
-            let neighbour = this.CellAt(ux, uy)
-            if neighbour.IsSome then
-              cell.Neighbours <- neighbour.Value :: cell.Neighbours
+      cell.Neighbours <-
+        directions
+        |> List.choose (fun (relX, relY) ->
+          let nx = x + relX
+          let ny = y + relY
+          if nx < 0 || ny < 0 then
+            None // Out of bounds
+          elif uint nx >= width || uint ny >= height then
+            None // Out of bounds
+          else
+            this.CellAt(uint nx, uint ny))

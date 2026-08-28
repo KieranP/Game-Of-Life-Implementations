@@ -3,15 +3,15 @@ import 'dart:io';
 import 'dart:math';
 
 class Play {
-  static const worldWidth = 150;
-  static const worldHeight = 40;
-  static const clearScreen = "\x1b[?2026h\x1b[H\x1b[2J";
-  static const showScreen = "\x1b[?2026l";
+  static const _worldWidth = 150;
+  static const _worldHeight = 40;
+  static const _clearScreen = "\x1b[?2026h\x1b[H\x1b[2J";
+  static const _showScreen = "\x1b[?2026l";
 
   static void run() {
     final world = World(
-      worldWidth,
-      worldHeight,
+      _worldWidth,
+      _worldHeight,
     );
 
     final minimal = Platform.environment["MINIMAL"] != null;
@@ -44,7 +44,7 @@ class Play {
       final avgRender = (totalRender / world.tick);
 
       if (!minimal) {
-        stdout.write(clearScreen);
+        stdout.write(_clearScreen);
       }
 
       stdout.writeln(
@@ -54,13 +54,13 @@ class Play {
       );
 
       if (!minimal) {
-        stdout.write(rendered + showScreen);
+        stdout.write(rendered + _showScreen);
       }
     }
   }
 
   static String _f(double value) {
-    // microseconds -> milliseconds
+    // microseconds -> milliseconds, padded to 3 decimal places
     return (value / 1_000).toStringAsFixed(3);
   }
 }

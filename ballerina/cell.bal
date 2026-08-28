@@ -16,6 +16,11 @@ public class Cell {
   }
 
   public function aliveNeighbours() returns int:Unsigned32 {
+    // The following is slower
+    // return <int:Unsigned32>self.neighbours.filter(
+    //   neighbour => neighbour.alive
+    // ).length();
+
     // The following is the fastest
     int:Unsigned32 aliveNeighbours = 0;
     foreach Cell neighbour in self.neighbours {

@@ -65,7 +65,7 @@ function world_render(world::World)
   # end
   # rendering
 
-  # The following is about the same
+  # The following is about the same speed
   # rendering = Char[]
   # render_size = world.width * world.height + world.height
   # sizehint!(rendering, render_size)
@@ -93,7 +93,7 @@ function world_render(world::World)
   end
   String(take!(rendering))
 
-  # The following is about the same
+  # The following is about the same speed
   # render_size = world.width * world.height + world.height
   # rendering = Vector{UInt8}(undef, render_size)
   # index = 1

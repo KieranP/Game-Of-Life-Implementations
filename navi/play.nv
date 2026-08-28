@@ -7,6 +7,9 @@ const WORLD_HEIGHT = 40;
 const CLEAR_SCREEN = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J";
 const SHOW_SCREEN = "\u{001b}[?2026l";
 
+// Navi has no infinity literal or float max constant
+const INFINITY: float = 1.0 / 0.0;
+
 struct Play {}
 
 impl Play {
@@ -23,9 +26,9 @@ impl Play {
     }
 
     let total_tick = 0;
-    let lowest_tick = 100_000_000.0;
+    let lowest_tick = INFINITY;
     let total_render = 0;
-    let lowest_render = 100_000_000.0;
+    let lowest_render = INFINITY;
 
     while(true) {
       const tick_start = DateTime.now_utc();

@@ -1,4 +1,9 @@
-exception LocationOccupied of string
+exception LocationOccupied of int * int
+
+let () =
+  Printexc.register_printer (function
+    | LocationOccupied (x, y) -> Some (Printf.sprintf "LocationOccupied(%d-%d)" x y)
+    | _ -> None)
 
 let directions = [|
   (-1, 1);  (0, 1);  (1, 1);  (* above *)
@@ -101,10 +106,11 @@ class world ~width ~height =
       Hashtbl.find_opt cells key
 
     method private add_cell x y ?(alive=false) () =
-      let key = self#make_key x y in
-      if Hashtbl.mem cells key then
-        raise (LocationOccupied key);
+      let existing = self#cell_at x y in
+      if Option.is_some existing then
+        raise (LocationOccupied (x, y));
 
+      let key = self#make_key x y in
       let cell = new Cell.cell x y ~alive () in
       Hashtbl.add cells key cell;
       true
@@ -122,18 +128,19 @@ class world ~width ~height =
       Hashtbl.iter (fun _ cell ->
         let x = cell#x in
         let y = cell#y in
-        let neighbours_list = ref [] in
+        let neighbours =
+          Array.to_list directions
+          |> List.filter_map (fun (rel_x, rel_y) ->
+            let nx = x + rel_x in
+            let ny = y + rel_y in
+            if nx < 0 || ny < 0 then
+              None (* Out of bounds *)
+            else if nx >= width || ny >= height then
+              None (* Out of bounds *)
+            else
+              self#cell_at nx ny)
+        in
 
-        Array.iter (fun (rel_x, rel_y) ->
-          let nx = x + rel_x in
-          let ny = y + rel_y in
-
-          if nx >= 0 && ny >= 0 then
-            if nx < width && ny < height then
-              Option.iter (fun n -> neighbours_list := n :: !neighbours_list)
-                (self#cell_at nx ny)
-        ) directions;
-
-        cell#set_neighbours (Array.of_list !neighbours_list)
+        cell#set_neighbours (Array.of_list neighbours)
       ) cells
   end

@@ -9,6 +9,9 @@ const world_height = 40
 const clear_screen = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J"
 const show_screen = "\u{001b}[?2026l"
 
+// Gleam has no infinity literal or float max constant
+const infinity = 9_999_999_999_999.0
+
 pub fn main() {
   let world = world.new(world_width, world_height)
 
@@ -19,7 +22,7 @@ pub fn main() {
     True -> Nil
   }
 
-  loop(world, minimal, 0.0, 9_999_999_999_999.0, 0.0, 9_999_999_999_999.0)
+  loop(world, minimal, 0.0, infinity, 0.0, infinity)
 }
 
 fn loop(

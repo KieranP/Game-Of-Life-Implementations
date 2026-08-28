@@ -73,6 +73,7 @@ class Play {
 
   private:
     static double _f(double value) {
+      // nanoseconds -> milliseconds
       return value / 1'000'000.0;
     }
 };

@@ -144,8 +144,8 @@ func (world *World) populateCells() {
 }
 
 func (world *World) addCell(x uint32, y uint32, alive bool) bool {
-  _, ok := world.cellAt(x, y)
-  if ok {
+  existing, _ := world.cellAt(x, y)
+  if existing != nil {
     panic(LocationOccupied{ x: x, y: y })
   }
 

@@ -28,7 +28,7 @@ fn run() {
     tick_start := time.sys_mono_now()
     world.tick()
     tick_finish := time.sys_mono_now()
-    tick_time := (tick_finish - tick_start)
+    tick_time := f64(tick_finish - tick_start)
     total_tick += tick_time
     lowest_tick = math.min(lowest_tick, tick_time)
     avg_tick := (total_tick / world.tick)
@@ -36,7 +36,7 @@ fn run() {
     render_start := time.sys_mono_now()
     rendered := world.render()
     render_finish := time.sys_mono_now()
-    render_time := (render_finish - render_start)
+    render_time := f64(render_finish - render_start)
     total_render += render_time
     lowest_render = math.min(lowest_render, render_time)
     avg_render := (total_render / world.tick)
