@@ -12,7 +12,7 @@ private final class Play {
       height: worldHeight
     )
 
-    let minimal = ProcessInfo.processInfo.environment["MINIMAL"] != nil
+    let minimal = ProcessInfo.processInfo.environment["MINIMAL"] == "1"
 
     if !minimal {
       print(world.render())
@@ -56,12 +56,8 @@ private final class Play {
       )
 
       if !minimal {
-        print(rendered, terminator: showScreen)
+        print(rendered + showScreen)
       }
-
-      // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-      // an explicit flush the terminal won't commit the synchronized update until the next tick.
-      fflush(stdout)
     }
   }
 

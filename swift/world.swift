@@ -7,11 +7,11 @@ final public class World {
   private let height: UInt32
   private var cells: [String: Cell]
 
-  public struct LocationOccupied: Error, LocalizedError {
+  public struct LocationOccupied: Error, CustomStringConvertible {
     let x: UInt32
     let y: UInt32
 
-    public var errorDescription: String? {
+    public var description: String {
       return "LocationOccupied(\(x)-\(y))"
     }
   }

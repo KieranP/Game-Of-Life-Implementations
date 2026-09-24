@@ -14,7 +14,7 @@ public class Play {
       WORLD_HEIGHT
     );
 
-    var minimal = System.getenv("MINIMAL") != null;
+    var minimal = "1".equals(System.getenv("MINIMAL"));
 
     if (!minimal) {
       System.out.println(world.render());
@@ -57,7 +57,7 @@ public class Play {
       );
 
       if (!minimal) {
-        System.out.print(rendered + SHOW_SCREEN);
+        System.out.println(rendered + SHOW_SCREEN);
       }
     }
   }

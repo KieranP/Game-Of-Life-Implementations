@@ -16,7 +16,7 @@ run :: proc() {
   )
   defer destroy_world(world)
 
-  minimal := os.get_env("MINIMAL", context.temp_allocator) != ""
+  minimal := os.get_env("MINIMAL", context.temp_allocator) == "1"
 
   if !minimal {
     rendered := world_render(world)
@@ -61,7 +61,7 @@ run :: proc() {
     )
 
     if !minimal {
-      fmt.print(rendered, SHOW_SCREEN)
+      fmt.println(rendered, SHOW_SCREEN, sep="")
     }
   }
 }

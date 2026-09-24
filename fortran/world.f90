@@ -102,12 +102,13 @@ contains
         c => cell_at(w, x, y)
         if (associated(c)) then
           rendering(idx:idx) = cell_to_char(c)
+          idx = idx + 1
         end if
-        idx = idx + 1
       end do
       rendering(idx:idx) = new_line('a')
       idx = idx + 1
     end do
+    rendering = rendering(1:idx - 1)
   end function world_render
 
   function cell_at(w, x, y) result(c)

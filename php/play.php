@@ -16,10 +16,10 @@ final class Play {
       height: self::WORLD_HEIGHT,
     );
 
-    $minimal = getenv("MINIMAL") !== false;
+    $minimal = getenv("MINIMAL") === "1";
 
     if (!$minimal) {
-      echo $world->render();
+      echo $world->render() . "\n";
     }
 
     $totalTick = 0;
@@ -58,7 +58,7 @@ final class Play {
       );
 
       if (!$minimal) {
-        echo $rendered . self::SHOW_SCREEN;
+        echo $rendered . self::SHOW_SCREEN . "\n";
       }
     }
   }

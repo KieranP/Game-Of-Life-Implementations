@@ -16,10 +16,10 @@ static const NSUInteger WorldHeight = 40;
   @autoreleasepool {
     World *world = [[World alloc] initWithWidth:WorldWidth height:WorldHeight];
 
-    BOOL minimal = (getenv("MINIMAL") != NULL);
+    BOOL minimal = [NSProcessInfo.processInfo.environment[@"MINIMAL"] isEqualToString:@"1"];
 
     if (!minimal) {
-      printf("%s", [[world render] UTF8String]);
+      printf("%s\n", [[world render] UTF8String]);
     }
 
     double totalTick = 0.0;
@@ -60,12 +60,8 @@ static const NSUInteger WorldHeight = 40;
                [self _f:avgRender]);
 
         if (!minimal) {
-          printf("%s" SHOW_SCREEN, [rendered UTF8String]);
+          printf("%s" SHOW_SCREEN "\n", [rendered UTF8String]);
         }
-
-        // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-        // an explicit flush the terminal won't commit the synchronized update until the next tick.
-        fflush(stdout);
       }
     }
   }

@@ -10,7 +10,7 @@
 main(_) ->
   World = world:new(?WORLD_WIDTH, ?WORLD_HEIGHT),
 
-  Minimal = os:getenv("MINIMAL") /= false,
+  Minimal = os:getenv("MINIMAL") =:= "1",
 
   case Minimal of
     false -> io:format("~s~n", [world:render(World)]);

@@ -26,10 +26,14 @@ actor Main
     )
 
     for env_var in env.vars.values() do
-      if env_var.at("MINIMAL=") then
+      if env_var == "MINIMAL=1" then
         minimal = true
         break
       end
+    end
+
+    if not minimal then
+      _env.out.print(world.render().clone())
     end
 
     tick()
@@ -69,7 +73,7 @@ actor Main
     )
 
     if not minimal then
-      _env.out.write(rendered.clone() + show_screen)
+      _env.out.print(rendered.clone() + show_screen)
     end
 
     tick()

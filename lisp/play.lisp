@@ -14,7 +14,7 @@
   (let ((world (make-instance 'World
                               :width WORLD-WIDTH
                               :height WORLD-HEIGHT))
-        (minimal (sb-ext:posix-getenv "MINIMAL"))
+        (minimal (equal (sb-ext:posix-getenv "MINIMAL") "1"))
         (total-tick 0)
         (lowest-tick sb-ext:double-float-positive-infinity)
         (total-render 0)

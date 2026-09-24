@@ -18,10 +18,10 @@ func run() {
     worldHeight,
   )
 
-  minimal := os.Getenv("MINIMAL") != ""
+  minimal := os.Getenv("MINIMAL") == "1"
 
   if !minimal {
-    fmt.Print(world.render())
+    fmt.Println(world.render())
   }
 
   var totalTick float64
@@ -60,7 +60,7 @@ func run() {
     )
 
     if !minimal {
-      fmt.Print(rendered + showScreen)
+      fmt.Println(rendered + showScreen)
     }
   }
 }

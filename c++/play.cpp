@@ -5,6 +5,7 @@
 #include <ctime>
 #include <limits>
 #include <print>
+#include <string_view>
 #include "world.cpp"
 
 class Play {
@@ -20,10 +21,11 @@ class Play {
         WORLD_HEIGHT
       );
 
-      auto minimal = std::getenv("MINIMAL") != nullptr;
+      auto minimal_env = std::getenv("MINIMAL");
+      auto minimal = minimal_env != nullptr && std::string_view(minimal_env) == "1";
 
       if (!minimal) {
-        std::print("{}", world.render());
+        std::println("{}", world.render());
       }
 
       auto total_tick = 0.0;
@@ -62,12 +64,8 @@ class Play {
         );
 
         if (!minimal) {
-          std::print("{}{}", rendered, SHOW_SCREEN);
+          std::println("{}{}", rendered, SHOW_SCREEN);
         }
-
-        // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-        // an explicit flush the terminal won't commit the synchronized update until the next tick.
-        std::fflush(stdout);
       }
     }
 

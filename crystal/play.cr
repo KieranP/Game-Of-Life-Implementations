@@ -12,10 +12,10 @@ class Play
       height: WORLD_HEIGHT,
     )
 
-    minimal = ENV["MINIMAL"]?
+    minimal = ENV["MINIMAL"]? == "1"
 
     unless minimal
-      puts world.render
+      print world.render, "\n"
     end
 
     total_tick = 0.0

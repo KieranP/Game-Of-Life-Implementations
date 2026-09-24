@@ -13,7 +13,7 @@ function Play:run()
     self.WORLD_HEIGHT
   )
 
-  local minimal = os.getenv("MINIMAL") ~= nil
+  local minimal = os.getenv("MINIMAL") == "1"
 
   if not minimal then
     print(world:render())

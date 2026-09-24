@@ -18,7 +18,7 @@ public class Play {
       height: WorldHeight
     );
 
-    var minimal = Environment.GetEnvironmentVariable("MINIMAL") is not null;
+    var minimal = Environment.GetEnvironmentVariable("MINIMAL") == "1";
 
     if (!minimal) {
       Console.WriteLine(world.Render());

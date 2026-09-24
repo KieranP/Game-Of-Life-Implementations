@@ -13,7 +13,7 @@ fn run() {
     world_height,
   )
 
-  minimal := os.getenv("MINIMAL") != ""
+  minimal := os.getenv("MINIMAL") == "1"
 
   if !minimal {
     println(world.render())
@@ -52,12 +52,8 @@ fn run() {
     )
 
     if !minimal {
-      print(rendered + show_screen)
+      println(rendered + show_screen)
     }
-
-    // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-    // an explicit flush the terminal won't commit the synchronized update until the next tick.
-    flush_stdout()
   }
 }
 

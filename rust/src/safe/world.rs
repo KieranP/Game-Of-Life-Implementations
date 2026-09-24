@@ -116,12 +116,13 @@ impl World {
         //         if let Some(rc) = self.cell_at(x, y) {
         //             let cell = rc.borrow();
         //             buffer[idx] = cell.to_char() as u8;
+        //             idx += 1;
         //         }
-        //         idx += 1;
         //     }
         //     buffer[idx] = b'\n';
         //     idx += 1;
         // }
+        // buffer.truncate(idx);
         // String::from_utf8(buffer).unwrap()
     }
 

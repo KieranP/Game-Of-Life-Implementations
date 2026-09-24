@@ -21,7 +21,7 @@ func run() {
 
   execSQL(db, initSQL)
 
-  minimal := os.Getenv("MINIMAL") != ""
+  minimal := os.Getenv("MINIMAL") == "1"
 
   if !minimal {
     fmt.Println(querySQL(db, renderSQL))
@@ -66,7 +66,7 @@ func run() {
     )
 
     if !minimal {
-      fmt.Print(rendered + showScreen)
+      fmt.Println(rendered + showScreen)
     }
   }
 }

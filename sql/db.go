@@ -61,17 +61,13 @@ func querySQL(db *sql.DB, query string) string {
   defer rows.Close()
 
   var builder strings.Builder
-  first := true
   for rows.Next() {
     var line string
     if err := rows.Scan(&line); err != nil {
       panic(err)
     }
-    if !first {
-      builder.WriteString("\n")
-    }
     builder.WriteString(line)
-    first = false
+    builder.WriteString("\n")
   }
   if err := rows.Err(); err != nil {
     panic(err)

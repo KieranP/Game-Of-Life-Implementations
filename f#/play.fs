@@ -17,7 +17,7 @@ type Play =
     world.PopulateCells()
     world.PrepopulateNeighbours()
 
-    let minimal = Environment.GetEnvironmentVariable("MINIMAL") <> null
+    let minimal = Environment.GetEnvironmentVariable("MINIMAL") = "1"
 
     if not minimal then
       printfn "%s" (world.Render())

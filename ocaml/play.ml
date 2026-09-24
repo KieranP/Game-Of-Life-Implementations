@@ -13,7 +13,7 @@ class play =
         ~height:world_height
       in
 
-      let minimal = Option.is_some (Sys.getenv_opt "MINIMAL") in
+      let minimal = Sys.getenv_opt "MINIMAL" = Some "1" in
 
       if not minimal then
         print_endline (world#render);
@@ -51,11 +51,7 @@ class play =
           (self#_f avg_render);
 
         if not minimal then
-          print_string (rendered ^ show_screen);
-
-        (* stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-           an explicit flush the terminal won't commit the synchronized update until the next tick. *)
-        flush stdout
+          print_endline (rendered ^ show_screen)
       done
 
     method private _f value =

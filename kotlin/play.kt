@@ -11,7 +11,7 @@ public class Play {
         height = WORLD_HEIGHT,
       )
 
-      val minimal = System.getenv("MINIMAL") != null
+      val minimal = System.getenv("MINIMAL") == "1"
 
       if (!minimal) {
         println(world.render())
@@ -55,7 +55,7 @@ public class Play {
         )
 
         if (!minimal) {
-          print(rendered + SHOW_SCREEN)
+          println(rendered + SHOW_SCREEN)
         }
       }
     }

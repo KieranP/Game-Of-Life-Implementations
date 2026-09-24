@@ -102,13 +102,13 @@ function world_render(world::World)
   #     cell = world_cell_at(world, x, y)
   #     if cell !== nothing
   #       rendering[index] = UInt8(cell_to_char(cell))
+  #       index += 1
   #     end
-  #     index += 1
   #   end
   #   rendering[index] = 0x0A
   #   index += 1
   # end
-  # String(rendering)
+  # String(resize!(rendering, index - 1))
 end
 
 function world_make_key(x::UInt64, y::UInt64)

@@ -14,10 +14,10 @@ class Play {
       WORLD_HEIGHT
     );
 
-    boolean minimal = os:getEnv("MINIMAL") != "";
+    boolean minimal = os:getEnv("MINIMAL") == "1";
 
     if !minimal {
-      io:print(world.render());
+      io:println(world.render());
     }
 
     float totalTick = 0.0;
@@ -55,7 +55,7 @@ class Play {
       );
 
       if !minimal {
-        io:print(rendered + SHOW_SCREEN);
+        io:println(rendered + SHOW_SCREEN);
       }
     }
   }

@@ -17,7 +17,7 @@ type Play {
     )
 
     let stdout = Stdout.new
-    let minimal = env.get('MINIMAL').ok?
+    let minimal = env.get('MINIMAL').or('') == '1'
 
     if !minimal {
       stdout.print(world.render())

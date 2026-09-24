@@ -12,10 +12,10 @@ Play <- list(
       height = Play$WORLD_HEIGHT
     )
 
-    minimal <- !is.na(Sys.getenv("MINIMAL", unset = NA))
+    minimal <- Sys.getenv("MINIMAL") == "1"
 
     if (!minimal) {
-      cat(world$render())
+      cat(world$render(), "\n", sep = "")
     }
 
     total_tick <- 0
@@ -54,7 +54,7 @@ Play <- list(
       ))
 
       if (!minimal) {
-        cat(rendered, Play$SHOW_SCREEN, sep = "")
+        cat(rendered, Play$SHOW_SCREEN, "\n", sep = "")
       }
     }
   },

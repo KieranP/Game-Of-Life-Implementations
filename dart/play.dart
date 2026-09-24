@@ -14,7 +14,7 @@ class Play {
       _worldHeight,
     );
 
-    final minimal = Platform.environment["MINIMAL"] != null;
+    final minimal = Platform.environment["MINIMAL"] == "1";
 
     if (!minimal) {
       print(world.render());
@@ -56,7 +56,7 @@ class Play {
       );
 
       if (!minimal) {
-        stdout.write(rendered + _showScreen);
+        stdout.writeln(rendered + _showScreen);
       }
     }
   }

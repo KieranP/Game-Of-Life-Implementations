@@ -12,7 +12,7 @@ class Play {
       Play.WORLD_HEIGHT,
     )
 
-    const minimal: bool = process.env.has('MINIMAL')
+    const minimal: bool = process.env.has('MINIMAL') && process.env.get('MINIMAL') == '1'
 
     if (!minimal) {
       console.log(world.render())

@@ -17,7 +17,7 @@ class Play {
         height: worldHeight,
       );
 
-      auto minimal = environment.get("MINIMAL") != null;
+      auto minimal = environment.get("MINIMAL") == "1";
 
       if (!minimal) {
         writeln(world.render());
@@ -59,12 +59,8 @@ class Play {
         );
 
         if (!minimal) {
-          write(rendered, showScreen);
+          writeln(rendered, showScreen);
         }
-
-        // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-        // an explicit flush the terminal won't commit the synchronized update until the next tick.
-        stdout.flush();
       }
     }
 

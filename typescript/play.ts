@@ -18,8 +18,8 @@ class Play {
     )
 
     const minimal =
-      typeof Deno === 'object' ? Deno.env.get('MINIMAL') != null
-      : typeof process === 'object' ? process.env.MINIMAL != null
+      typeof Deno === 'object' ? Deno.env.get('MINIMAL') == '1'
+      : typeof process === 'object' ? process.env.MINIMAL == '1'
       : true
 
     if (!minimal) {

@@ -12,7 +12,7 @@
 
 (defn run []
   (let [world (w/new-world world-width world-height)
-        minimal (some? (System/getenv "MINIMAL"))]
+        minimal (= (System/getenv "MINIMAL") "1")]
 
     (when-not minimal
       (println (w/render world)))

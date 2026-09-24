@@ -3,7 +3,6 @@ module Play (run) where
 import Control.DeepSeq (force)
 import Control.Exception (evaluate)
 import Control.Monad (unless)
-import Data.Maybe (isJust)
 import Data.Word (Word32)
 import GHC.Clock (getMonotonicTimeNSec)
 import System.Environment (lookupEnv)
@@ -31,7 +30,7 @@ run :: IO ()
 run = do
   world <- World.new worldWidth worldHeight
 
-  minimal <- isJust <$> lookupEnv "MINIMAL"
+  minimal <- (== Just "1") <$> lookupEnv "MINIMAL"
 
   unless minimal $
     putStrLn (World.render world)

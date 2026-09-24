@@ -14,7 +14,7 @@ class Play {
       WORLD_HEIGHT,
     )
 
-    var minimal = System.getenv("MINIMAL") != null
+    var minimal = System.getenv("MINIMAL") == "1"
 
     if (!minimal) {
       println(world.render())
@@ -56,7 +56,7 @@ class Play {
       )
 
       if (!minimal) {
-        print(rendered + SHOW_SCREEN)
+        println(rendered + SHOW_SCREEN)
       }
     }
   }

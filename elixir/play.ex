@@ -12,7 +12,7 @@ defmodule Play do
         height: @world_height
       )
 
-    minimal = System.get_env("MINIMAL") != nil
+    minimal = System.get_env("MINIMAL") == "1"
 
     if not minimal do
       IO.puts(World.render(world))

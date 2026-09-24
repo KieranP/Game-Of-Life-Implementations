@@ -26,7 +26,9 @@ pub const World = struct {
 
     pub fn init(allocator: Allocator, io: Io, width: u32, height: u32) !*World {
         const world = try allocator.create(World);
+        errdefer allocator.destroy(world);
         world.* = .{ .allocator = allocator, .tick = 0, .width = width, .height = height, .cells = .init(allocator) };
+        errdefer world.deinit();
 
         try world.populateCells(io);
         try world.prepopulateNeighbours();
@@ -92,13 +94,13 @@ pub const World = struct {
             for (0..self.width) |x| {
                 if (self.cellAt(@intCast(x), @intCast(y))) |cell| {
                     buffer[idx] = cell.toChar();
+                    idx += 1;
                 }
-                idx += 1;
             }
             buffer[idx] = '\n';
             idx += 1;
         }
-        return buffer;
+        return self.allocator.realloc(buffer, idx);
     }
 
     fn makeKey(buf: *[24]u8, x: u32, y: u32) []const u8 {
@@ -139,8 +141,10 @@ pub const World = struct {
 
         var buf: [24]u8 = undefined;
         const key = try self.allocator.dupe(u8, makeKey(&buf, x, y));
+        errdefer self.allocator.free(key);
 
         const cell = try Cell.init(self.allocator, x, y, alive);
+        errdefer self.allocator.destroy(cell);
         try self.cells.put(key, cell);
         return true;
     }

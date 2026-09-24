@@ -20,6 +20,7 @@ pub const Play = struct {
             const rendered = try world.render();
             defer allocator.free(rendered);
             try stdout.writeStreamingAll(io, rendered);
+            try stdout.writeStreamingAll(io, "\n");
         }
 
         var total_tick: f64 = 0;
@@ -65,7 +66,7 @@ pub const Play = struct {
 
             if (!minimal) {
                 try stdout.writeStreamingAll(io, rendered);
-                try stdout.writeStreamingAll(io, show_screen);
+                try stdout.writeStreamingAll(io, show_screen ++ "\n");
             }
         }
     }
@@ -79,7 +80,7 @@ pub const Play = struct {
 pub fn main(init: std.process.Init) !void {
     const allocator = init.gpa;
     const io = init.io;
-    const minimal = init.environ_map.contains("MINIMAL");
+    const minimal = std.mem.eql(u8, init.environ_map.get("MINIMAL") orelse "", "1");
 
     try Play.run(allocator, io, minimal);
 }

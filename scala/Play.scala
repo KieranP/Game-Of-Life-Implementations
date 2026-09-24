@@ -9,7 +9,7 @@ val ShowScreen = "\u001b[?2026l"
     height = WorldHeight,
   )
 
-  val minimal = sys.env.contains("MINIMAL")
+  val minimal = sys.env.get("MINIMAL").contains("1")
 
   if !minimal then
     println(world.render)
@@ -46,7 +46,7 @@ val ShowScreen = "\u001b[?2026l"
     )
 
     if !minimal then
-      print(rendered + ShowScreen)
+      println(rendered + ShowScreen)
 
 def _f(value: Double) =
   // nanoseconds -> milliseconds

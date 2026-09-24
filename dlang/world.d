@@ -162,8 +162,8 @@ class World {
 
     auto prepopulateNeighbours() {
       foreach (ref cell; cells) {
-        auto x = cell.x;
-        auto y = cell.y;
+        auto x = cast(int)cell.x;
+        auto y = cast(int)cell.y;
 
         foreach (ref set; directions) {
           auto nx = x + set.relX;

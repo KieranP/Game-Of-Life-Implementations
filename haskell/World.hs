@@ -10,7 +10,9 @@ import qualified Data.Map.Strict as Map
 import Data.Word (Word32)
 import System.Random (randomIO)
 
-data LocationOccupied = LocationOccupied Word32 Word32 deriving (Show)
+data LocationOccupied = LocationOccupied Word32 Word32
+instance Show LocationOccupied where
+  show (LocationOccupied x y) = "LocationOccupied(" ++ show x ++ "-" ++ show y ++ ")"
 instance Exception LocationOccupied
 
 data World = World

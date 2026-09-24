@@ -1,5 +1,4 @@
 use std::env;
-use std::io::{self, Write};
 use std::time::Instant;
 
 use crate::world::World;
@@ -16,10 +15,10 @@ impl Play {
     pub fn run() {
         let mut world = World::new(Self::WORLD_WIDTH, Self::WORLD_HEIGHT);
 
-        let minimal = env::var("MINIMAL").is_ok();
+        let minimal = env::var("MINIMAL").is_ok_and(|value| value == "1");
 
         if !minimal {
-            print!("{}", world.render());
+            println!("{}", world.render());
         }
 
         let mut total_tick: f64 = 0.0;
@@ -56,12 +55,8 @@ impl Play {
             );
 
             if !minimal {
-                print!("{rendered}{}", Self::SHOW_SCREEN);
+                println!("{rendered}{}", Self::SHOW_SCREEN);
             }
-
-            // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-            // an explicit flush the terminal won't commit the synchronized update until the next tick.
-            io::stdout().flush().unwrap();
         }
     }
 

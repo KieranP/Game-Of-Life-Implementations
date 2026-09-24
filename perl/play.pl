@@ -17,10 +17,10 @@ sub run {
     height => WORLD_HEIGHT,
   );
 
-  my $minimal = length($ENV{MINIMAL} // '');
+  my $minimal = ($ENV{MINIMAL} // '') eq '1';
 
   if (!$minimal) {
-    print $world->render();
+    print $world->render(), "\n";
   }
 
   my $total_tick = 0;
@@ -59,12 +59,8 @@ sub run {
     );
 
     if (!$minimal) {
-      print $rendered . SHOW_SCREEN;
+      print $rendered . SHOW_SCREEN . "\n";
     }
-
-    # stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-    # an explicit flush the terminal won't commit the synchronized update until the next tick.
-    STDOUT->flush();
   }
 }
 

@@ -12,10 +12,10 @@ function run()
     height=WORLD_HEIGHT,
   )
 
-  minimal = haskey(ENV, "MINIMAL")
+  minimal = get(ENV, "MINIMAL", "") == "1"
 
   if !minimal
-    print(world_render(world))
+    println(world_render(world))
   end
 
   total_tick = Float64(0)
@@ -54,7 +54,7 @@ function run()
     )
 
     if !minimal
-      print(rendered * SHOW_SCREEN)
+      println(rendered * SHOW_SCREEN)
     end
   end
 end

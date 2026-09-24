@@ -114,12 +114,13 @@ impl World {
         //         if let Some(cell) = self.cell_at(x, y) {
         //             let cell_char = unsafe { (*cell).to_char() };
         //             buffer[idx] = cell_char as u8;
+        //             idx += 1;
         //         }
-        //         idx += 1;
         //     }
         //     buffer[idx] = b'\n';
         //     idx += 1;
         // }
+        // buffer.truncate(idx);
         // String::from_utf8(buffer).unwrap()
     }
 

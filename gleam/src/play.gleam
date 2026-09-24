@@ -15,7 +15,7 @@ const infinity = 9_999_999_999_999.0
 pub fn main() {
   let world = world.new(world_width, world_height)
 
-  let minimal = is_env_set("MINIMAL")
+  let minimal = get_env("MINIMAL") == "1"
 
   case minimal {
     False -> io.println(world.render(world))
@@ -78,8 +78,8 @@ fn f(value: Float) -> String {
   whole <> "." <> string.pad_end(fraction, to: 3, with: "0")
 }
 
-@external(erlang, "play_ffi", "is_env_set")
-fn is_env_set(name: String) -> Bool
+@external(erlang, "play_ffi", "get_env")
+fn get_env(name: String) -> String
 
 @external(erlang, "play_ffi", "monotonic_time")
 fn monotonic_time() -> Int

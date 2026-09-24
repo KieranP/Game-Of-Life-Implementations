@@ -2,6 +2,17 @@ use "collections"
 use "random"
 use "time"
 
+class val LocationOccupied
+  let x: U32
+  let y: U32
+
+  new val create(x': U32, y': U32) =>
+    x = x'
+    y = y'
+
+  fun string(): String =>
+    "LocationOccupied(" + x.string() + "-" + y.string() + ")"
+
 class World
   var tick: U32 = 0
 
@@ -89,10 +100,14 @@ class World
       end
     end
 
-  fun ref _add_cell(x: U32, y: U32, alive: Bool = false): Bool =>
+  fun ref _add_cell(
+    x: U32,
+    y: U32,
+    alive: Bool = false
+  ): (Bool | LocationOccupied) =>
     try
       let existing = _cell_at(x, y)?
-      // Pony doesn't support runtime exceptions
+      return LocationOccupied(x, y)
     end
 
     let key = _make_key(x, y)

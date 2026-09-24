@@ -21,7 +21,7 @@ proc run(self: Play) =
     height: WorldHeight,
   ).initialize()
 
-  let minimal = getEnv("MINIMAL") != ""
+  let minimal = getEnv("MINIMAL") == "1"
 
   if not minimal:
     echo world.render()
@@ -55,7 +55,7 @@ proc run(self: Play) =
       #{world.tick} -
       World Tick (L: {self.f(lowestTick):.3f}; A: {self.f(avgTick):.3f}) -
       Rendering (L: {self.f(lowestRender):.3f}; A: {self.f(avgRender):.3f})
-    """.dedent().replace("\n", " ")
+    """.dedent().strip().replace("\n", " ")
 
     if not minimal:
       echo rendered & ShowScreen

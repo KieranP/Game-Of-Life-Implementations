@@ -55,7 +55,10 @@ render(World) ->
       Line = [
         begin
           Cell = cell_at(World, X, Y),
-          cell:to_char(Cell)
+          case Cell of
+            undefined -> [];
+            _ -> cell:to_char(Cell)
+          end
         end
         || X <- lists:seq(0, World#world.width - 1)
       ],
@@ -70,7 +73,10 @@ render(World) ->
   %%     Line = lists:foldl(
   %%       fun(X, LineAcc) ->
   %%         Cell = cell_at(World, X, Y),
-  %%         LineAcc ++ [cell:to_char(Cell)]
+  %%         case Cell of
+  %%           undefined -> LineAcc;
+  %%           _ -> LineAcc ++ [cell:to_char(Cell)]
+  %%         end
   %%       end,
   %%       [],
   %%       lists:seq(0, World#world.width - 1)

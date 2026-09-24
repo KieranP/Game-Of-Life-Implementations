@@ -16,7 +16,7 @@ class Play:
       Play.WORLD_HEIGHT,
     )
 
-    minimal = "MINIMAL" in environ
+    minimal = environ.get("MINIMAL") == "1"
 
     if not minimal:
       print(world.render())

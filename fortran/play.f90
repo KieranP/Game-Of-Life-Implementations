@@ -17,6 +17,7 @@ program play
   real(real64) :: tick_time, total_tick, lowest_tick, avg_tick
   integer(int64) :: render_start, render_finish
   real(real64) :: render_time, total_render, lowest_render, avg_render
+  character(len=2) :: minimal_value
   integer :: minimal_status
 
   call random_seed()
@@ -27,8 +28,8 @@ program play
     height=WORLD_HEIGHT &
   )
 
-  call get_environment_variable('MINIMAL', status=minimal_status)
-  minimal = (minimal_status == 0)
+  call get_environment_variable('MINIMAL', minimal_value, status=minimal_status)
+  minimal = (minimal_status == 0 .and. minimal_value == '1')
 
   if (.not. minimal) then
     rendered = world_render(w)

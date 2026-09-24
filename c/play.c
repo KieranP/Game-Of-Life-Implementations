@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #define WORLD_WIDTH 150
@@ -24,11 +25,12 @@ int main(void) {
     WORLD_HEIGHT
   );
 
-  auto minimal = getenv("MINIMAL") != nullptr;
+  auto minimal_env = getenv("MINIMAL");
+  auto minimal = minimal_env != nullptr && strcmp(minimal_env, "1") == 0;
 
   if (!minimal) {
     auto rendered = world_render(world);
-    printf("%s", rendered);
+    printf("%s\n", rendered);
     free(rendered);
   }
 
@@ -68,12 +70,8 @@ int main(void) {
     );
 
     if (!minimal) {
-      printf("%s" SHOW_SCREEN, rendered);
+      printf("%s" SHOW_SCREEN "\n", rendered);
     }
-
-    // stdout is buffered and the frame ends with SHOW_SCREEN (no trailing newline), so without
-    // an explicit flush the terminal won't commit the synchronized update until the next tick.
-    fflush(stdout);
 
     free(rendered);
   }
