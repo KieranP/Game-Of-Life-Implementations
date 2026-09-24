@@ -62,7 +62,7 @@ function benchmark_iterations {
     # tr converts pty \r\n endings and bare \r (progress spinners)
     # into newlines, so fragments can never splice into result lines
     output=$(run_pty env MINIMAL=1 timeout -s9 $TIMEOUT_SECS "$@" 2>&1 | tr '\r' '\n')
-    result=$(echo "$output" | grep -E '\)\s*$' | tail -n 1)
+    result=$(echo "$output" | grep -E 'World Tick \(.*\)\s*$' | tail -n 1)
 
     if [ -n "$result" ]; then
       echo "$result"

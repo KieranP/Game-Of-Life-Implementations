@@ -29,16 +29,18 @@ class Play {
     stopwatch.start();
 
     while(true) {
-      stopwatch.reset();
+      final tickStart = stopwatch.elapsedMicroseconds;
       world.doTick();
-      final tickTime = stopwatch.elapsedMicroseconds.toDouble();
+      final tickFinish = stopwatch.elapsedMicroseconds;
+      final tickTime = (tickFinish - tickStart).toDouble();
       totalTick += tickTime;
       lowestTick = min(lowestTick, tickTime);
       final avgTick = (totalTick / world.tick);
 
-      stopwatch.reset();
+      final renderStart = stopwatch.elapsedMicroseconds;
       final rendered = world.render();
-      final renderTime = stopwatch.elapsedMicroseconds.toDouble();
+      final renderFinish = stopwatch.elapsedMicroseconds;
+      final renderTime = (renderFinish - renderStart).toDouble();
       totalRender += renderTime;
       lowestRender = min(lowestRender, renderTime);
       final avgRender = (totalRender / world.tick);

@@ -36,6 +36,13 @@ static NSArray<NSArray<NSNumber *> *> *Directions;
   return self;
 }
 
+// Breaks the neighbour retain cycles so ARC can free the cells
+- (void)dealloc {
+  for (Cell *cell in [self.cells objectEnumerator]) {
+    [cell.neighbours removeAllObjects];
+  }
+}
+
 - (void)doTick {
   // First determine the action for all cells
   for (Cell *cell in [self.cells objectEnumerator]) {

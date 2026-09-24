@@ -1,9 +1,9 @@
 module hashmap_mod
-  use iso_fortran_env, only: int32
+  use iso_fortran_env, only: int64
   use cell_mod
   implicit none
   private
-  public :: HashMap, CellPtr, hashmap_new, hashmap_put, hashmap_get, hashmap_get_all_values
+  public :: HashMap, CellPtr, hashmap_new, hashmap_free, hashmap_put, hashmap_get, hashmap_get_all_values
   public :: KEY_LEN
 
   integer, parameter :: KEY_LEN = 32
@@ -21,7 +21,7 @@ module hashmap_mod
 
   type :: HashEntry
     integer :: state = HASH_ENTRY_EMPTY
-    integer(int32) :: hash = 0
+    integer(int64) :: hash = 0
     character(len=KEY_LEN) :: key = ''
     type(Cell), pointer :: value => null()
   end type HashEntry
@@ -36,18 +36,20 @@ contains
 
   pure function hash_full(key) result(hash)
     character(len=*), intent(in) :: key
-    integer(int32) :: hash
+    integer(int64) :: hash
     integer :: i
-    integer(int32) :: byte_val
-    integer(int32), parameter :: FNV_OFFSET = int(z'811C9DC5', kind=int32)
-    integer(int32), parameter :: FNV_PRIME = int(z'01000193', kind=int32)
+    integer(int64) :: byte_val
+    integer(int64), parameter :: FNV_OFFSET = int(z'811C9DC5', kind=int64)
+    integer(int64), parameter :: FNV_PRIME = int(z'01000193', kind=int64)
+    ! int32 overflow is undefined, so the 32-bit hash is computed in int64 and masked
+    integer(int64), parameter :: FNV_MASK = int(z'FFFFFFFF', kind=int64)
 
     hash = FNV_OFFSET
 
     do i = 1, len_trim(key)
       byte_val = iachar(key(i:i))
       hash = ieor(hash, byte_val)
-      hash = hash * FNV_PRIME
+      hash = iand(hash * FNV_PRIME, FNV_MASK)
     end do
   end function hash_full
 
@@ -59,16 +61,24 @@ contains
     allocate(map%entries(map%capacity))
   end function hashmap_new
 
+  ! Frees the entry table only; the caller owns the values
+  subroutine hashmap_free(map)
+    type(HashMap), intent(inout) :: map
+
+    deallocate(map%entries)
+    map%count = 0
+  end subroutine hashmap_free
+
   subroutine hashmap_put(map, key, value)
     type(HashMap), intent(inout) :: map
     character(len=*), intent(in) :: key
     type(Cell), pointer, intent(in) :: value
-    integer(int32) :: hash
+    integer(int64) :: hash
     integer :: mask, idx, i
 
     hash = hash_full(key)
     mask = map%capacity - 1
-    idx = iand(int(hash), mask) + 1
+    idx = int(iand(hash, int(mask, kind=int64))) + 1
 
     do i = 1, map%capacity
       associate(entry => map%entries(idx))
@@ -95,14 +105,14 @@ contains
     type(HashMap), intent(in) :: map
     character(len=*), intent(in) :: key
     type(Cell), pointer :: value
-    integer(int32) :: hash
+    integer(int64) :: hash
     integer :: mask, idx, i
 
     nullify(value)
 
     hash = hash_full(key)
     mask = map%capacity - 1
-    idx = iand(int(hash), mask) + 1
+    idx = int(iand(hash, int(mask, kind=int64))) + 1
 
     do i = 1, map%capacity
       associate(entry => map%entries(idx))

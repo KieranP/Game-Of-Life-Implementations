@@ -21,6 +21,16 @@ class World {
     $self->prepopulate_neighbours();
   }
 
+  # Breaks the neighbour reference cycles so Perl can free the cells
+  method DESTROY {
+    # At exit the cells may already be gone, and everything is freed anyway
+    return if ${^GLOBAL_PHASE} eq 'DESTRUCT';
+
+    foreach my $cell (values $cells->%*) {
+      $cell->neighbours->@* = ();
+    }
+  }
+
   method dotick() {
     # First determine the action for all cells
     foreach my $cell (values $cells->%*) {

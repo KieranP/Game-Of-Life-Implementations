@@ -12,6 +12,7 @@ typedef struct {
 } World;
 
 World *world_new(uint32_t width, uint32_t height);
+void world_free(World *world);
 void world_tick(World *world);
 char *world_render(World *world);
 

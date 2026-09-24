@@ -11,7 +11,7 @@ xcode-select --install
 ## Build
 
 ```bash
-clang -O3 -framework Foundation -o play *.m
+clang -O3 -fobjc-arc -framework Foundation -o play *.m
 ```
 
 ## Run
@@ -22,4 +22,5 @@ clang -O3 -framework Foundation -o play *.m
 
 ## Notes
 
-- Method arguments interleave into the selector name (see `-[World makeKeyWithX:y:]`).
+- Method arguments interleave into the selector name (see
+  `-[World makeKeyWithX:y:]`).

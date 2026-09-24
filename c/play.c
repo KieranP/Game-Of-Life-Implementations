@@ -77,4 +77,6 @@ int main(void) {
 
     free(rendered);
   }
+
+  world_free(world);
 }

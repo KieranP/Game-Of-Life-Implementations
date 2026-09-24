@@ -7,6 +7,8 @@ Cell *cell_new(uint32_t x, uint32_t y, bool alive) {
   return cell;
 }
 
+void cell_free(Cell *cell) { free(cell); }
+
 char cell_to_char(Cell *cell) { return cell->alive ? 'o' : ' '; }
 
 uint32_t cell_alive_neighbours(Cell *cell) {

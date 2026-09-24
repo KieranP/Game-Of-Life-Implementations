@@ -20,6 +20,7 @@ gcc -std=c23 -O3 -o play *.c lib/*.c
 
 ## Notes
 
-- No built-in HashMap, so a very basic implementation is included (see lib/hashmap.c).
+- No built-in HashMap, so a very basic implementation is included (see
+  lib/hashmap.c).
 - No support for native exceptions; emulated with `exit` (see `add_cell`).
 - No support for optional/nullable booleans (see `Cell.next_state`).

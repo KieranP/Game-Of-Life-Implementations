@@ -20,4 +20,5 @@ odin build . -o:speed --out=play
 
 ## Notes
 
-- No support for native exceptions; emulated with `panic` (see `world_add_cell`).
+- No support for native exceptions; emulated with `panic` (see
+  `world_add_cell`).

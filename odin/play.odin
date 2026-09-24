@@ -14,6 +14,7 @@ run :: proc() {
     width=WORLD_WIDTH,
     height=WORLD_HEIGHT,
   )
+  defer destroy_world(world)
 
   minimal := os.get_env("MINIMAL", context.temp_allocator) != ""
 

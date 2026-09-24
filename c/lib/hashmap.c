@@ -47,6 +47,17 @@ HashMap *hashmap_new(void) {
   return map;
 }
 
+// Frees the keys only; the caller owns the values
+void hashmap_free(HashMap *map) {
+  for (auto i = 0; i < map->capacity; ++i) {
+    if (map->entries[i].state == HASH_ENTRY_OCCUPIED) {
+      free(map->entries[i].key);
+    }
+  }
+  free(map->entries);
+  free(map);
+}
+
 bool hashmap_put(HashMap *map, const char *key, void *value) {
   if (!map || !key) {
     return false;

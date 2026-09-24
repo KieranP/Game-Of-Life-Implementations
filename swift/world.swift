@@ -32,6 +32,13 @@ final public class World {
     prepopulateNeighbours()
   }
 
+  // Breaks the neighbour retain cycles so ARC can free the cells
+  deinit {
+    for cell in cells.values {
+      cell.neighbours.removeAll()
+    }
+  }
+
   public func doTick() {
     // First determine the action for all cells
     for cell in cells.values {

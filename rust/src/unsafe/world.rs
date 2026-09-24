@@ -23,7 +23,7 @@ pub struct World {
     pub tick: u32,
     width: u32,
     height: u32,
-    cells: HashMap<String, Box<Cell>>,
+    cells: HashMap<String, *mut Cell>,
 }
 
 impl World {
@@ -43,7 +43,8 @@ impl World {
 
     pub fn tick(&mut self) {
         // First determine the action for all cells
-        for cell in self.cells.values_mut() {
+        for &ptr in self.cells.values() {
+            let cell = unsafe { &mut *ptr };
             let alive_neighbours = cell.alive_neighbours();
             if !cell.alive && alive_neighbours == 3 {
                 cell.next_state = Some(true);
@@ -55,7 +56,8 @@ impl World {
         }
 
         // Then execute the determined action for all cells
-        for cell in self.cells.values_mut() {
+        for &ptr in self.cells.values() {
+            let cell = unsafe { &mut *ptr };
             cell.alive = cell.next_state.unwrap_or(false);
         }
 
@@ -70,7 +72,8 @@ impl World {
         // for y in 0..self.height {
         //     for x in 0..self.width {
         //         if let Some(cell) = self.cell_at(x, y) {
-        //             rendering.push_str(&cell.to_char().to_string());
+        //             let cell_char = unsafe { (*cell).to_char() };
+        //             rendering.push_str(&cell_char.to_string());
         //         }
         //     }
         //     rendering.push('\n');
@@ -82,7 +85,8 @@ impl World {
         // for y in 0..self.height {
         //     for x in 0..self.width {
         //         if let Some(cell) = self.cell_at(x, y) {
-        //             rendering.push(cell.to_char());
+        //             let cell_char = unsafe { (*cell).to_char() };
+        //             rendering.push(cell_char);
         //         }
         //     }
         //     rendering.push('\n');
@@ -94,7 +98,8 @@ impl World {
         for y in 0..self.height {
             for x in 0..self.width {
                 if let Some(cell) = self.cell_at(x, y) {
-                    rendering.push(cell.to_char());
+                    let cell_char = unsafe { (*cell).to_char() };
+                    rendering.push(cell_char);
                 }
             }
             rendering.push('\n');
@@ -107,7 +112,8 @@ impl World {
         // for y in 0..self.height {
         //     for x in 0..self.width {
         //         if let Some(cell) = self.cell_at(x, y) {
-        //             buffer[idx] = cell.to_char() as u8;
+        //             let cell_char = unsafe { (*cell).to_char() };
+        //             buffer[idx] = cell_char as u8;
         //         }
         //         idx += 1;
         //     }
@@ -139,11 +145,11 @@ impl World {
         std::str::from_utf8(&buf[..pos]).unwrap()
     }
 
-    fn cell_at(&self, x: u32, y: u32) -> Option<&Cell> {
+    fn cell_at(&self, x: u32, y: u32) -> Option<*mut Cell> {
         let mut buf = [0u8; 24];
         let key = Self::make_key(&mut buf, x, y);
 
-        self.cells.get(key).map(Box::as_ref)
+        self.cells.get(key).copied()
     }
 
     fn populate_cells(&mut self) {
@@ -164,24 +170,14 @@ impl World {
         let mut buf = [0u8; 24];
         let key = Self::make_key(&mut buf, x, y).to_owned();
 
-        let cell = Box::new(Cell::new(x, y, alive));
+        let cell = Box::into_raw(Box::new(Cell::new(x, y, alive)));
         self.cells.insert(key, cell);
         true
     }
 
     fn prepopulate_neighbours(&mut self) {
-        // Cannot use self.cells.get inside of self.cells.values_mut() because
-        // Rust detects that the cell could changed in between those calls, and
-        // is therefore unsafe. Workaround by making a temporary map of
-        // (x,y) -> raw pointer for reference later.
-        let ptrs: HashMap<(u32, u32), *const Cell> = self
-            .cells
-            .values()
-            .map(|v| ((v.x, v.y), &**v as *const Cell))
-            .collect();
-
-        for boxed in self.cells.values_mut() {
-            let cell: &mut Cell = &mut *boxed;
+        for &ptr in self.cells.values() {
+            let cell = unsafe { &mut *ptr };
             let x = cell.x as isize;
             let y = cell.y as isize;
 
@@ -198,10 +194,19 @@ impl World {
                     continue; // Out of bounds
                 }
 
-                if let Some(ptr) = ptrs.get(&(ux, uy)) {
-                    cell.neighbours.push(*ptr);
+                if let Some(neighbour) = self.cell_at(ux, uy) {
+                    cell.neighbours.push(neighbour);
                 }
             }
+        }
+    }
+}
+
+// The cells come from Box::into_raw, so nothing else frees them
+impl Drop for World {
+    fn drop(&mut self) {
+        for &ptr in self.cells.values() {
+            drop(unsafe { Box::from_raw(ptr) });
         }
     }
 }

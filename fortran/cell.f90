@@ -1,7 +1,7 @@
 module cell_mod
   implicit none
   private
-  public :: Cell, NeighbourPtr, cell_new, cell_to_char, cell_alive_neighbours
+  public :: Cell, NeighbourPtr, cell_new, cell_free, cell_to_char, cell_alive_neighbours
 
   integer, parameter :: MAX_NEIGHBOURS = 8
 
@@ -33,6 +33,12 @@ contains
     new_cell%neighbour_count = 0
     allocate(new_cell%neighbours(MAX_NEIGHBOURS))
   end function cell_new
+
+  subroutine cell_free(c)
+    type(Cell), pointer, intent(inout) :: c
+
+    deallocate(c)
+  end subroutine cell_free
 
   pure function cell_to_char(c) result(ch)
     type(Cell), intent(in) :: c

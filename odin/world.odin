@@ -27,6 +27,15 @@ new_world :: proc(width: u32, height: u32) -> ^World {
   return world
 }
 
+destroy_world :: proc(world: ^World) {
+  for key, cell in world.cells {
+    delete(key)
+    destroy_cell(cell)
+  }
+  delete(world.cells)
+  free(world)
+}
+
 world_tick :: proc(world: ^World) {
   // First determine the action for all cells
   for _, cell in world.cells {

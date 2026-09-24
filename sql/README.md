@@ -35,7 +35,10 @@ PG_DATABASE=gol \
 
 ## Notes
 
-- Set-based rather than imperative, so each tick is a single `UPDATE` across all cells (see tick.sql).
+- Set-based rather than imperative, so each tick is a single `UPDATE` across all
+  cells (see tick.sql).
 - No support for pointers/references (see `neighbours` in init.sql).
-- No support for continuous loops; fallback to a Go runner holding a single connection (see play.go).
-- No support for native exceptions; emulated with the `PRIMARY KEY` constraint (see init.sql).
+- No support for continuous loops; fallback to a Go runner holding a single
+  connection (see play.go).
+- No support for native exceptions; emulated with the `PRIMARY KEY` constraint
+  (see init.sql).

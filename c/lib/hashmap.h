@@ -32,6 +32,7 @@ typedef struct {
 } HashMapIterator;
 
 HashMap *hashmap_new(void);
+void hashmap_free(HashMap *map);
 bool hashmap_put(HashMap *map, const char *key, void *value);
 void *hashmap_get(HashMap *map, const char *key);
 void **hashmap_get_all_values(HashMap *map);

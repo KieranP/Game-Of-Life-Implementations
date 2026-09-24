@@ -32,17 +32,17 @@ class Play {
       auto lowest_render = std::numeric_limits<double>::infinity();
 
       while(true) {
-        auto tick_start = std::chrono::high_resolution_clock::now();
+        auto tick_start = std::chrono::steady_clock::now();
         world.dotick();
-        auto tick_finish = std::chrono::high_resolution_clock::now();
+        auto tick_finish = std::chrono::steady_clock::now();
         auto tick_time = std::chrono::duration<double, std::nano>(tick_finish - tick_start).count();
         total_tick += tick_time;
         lowest_tick = std::min(lowest_tick, tick_time);
         auto avg_tick = total_tick / world.tick;
 
-        auto render_start = std::chrono::high_resolution_clock::now();
+        auto render_start = std::chrono::steady_clock::now();
         auto rendered = world.render();
-        auto render_finish = std::chrono::high_resolution_clock::now();
+        auto render_finish = std::chrono::steady_clock::now();
         auto render_time = std::chrono::duration<double, std::nano>(render_finish - render_start).count();
         total_render += render_time;
         lowest_render = std::min(lowest_render, render_time);

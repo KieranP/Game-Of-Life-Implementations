@@ -15,6 +15,7 @@ typedef struct Cell {
 } Cell;
 
 Cell *cell_new(uint32_t x, uint32_t y, bool alive);
+void cell_free(Cell *cell);
 char cell_to_char(Cell *cell);
 uint32_t cell_alive_neighbours(Cell *cell);
 

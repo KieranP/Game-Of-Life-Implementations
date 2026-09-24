@@ -14,6 +14,11 @@ new_cell :: proc(x: u32, y: u32, alive: bool) -> ^Cell {
   return new_clone(Cell{x = x, y = y, alive = alive})
 }
 
+destroy_cell :: proc(cell: ^Cell) {
+  delete(cell.neighbours)
+  free(cell)
+}
+
 cell_to_char :: proc(cell: ^Cell) -> u8 {
   return cell.alive ? 'o' : ' '
 }

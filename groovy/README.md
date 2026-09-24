@@ -8,14 +8,12 @@ brew install java groovy
 
 ## Build
 
-```bash
-groovyc --compile-static *.groovy
-```
+(no build step required)
 
 ## Run
 
 ```bash
-groovy Play
+groovy --compile-static Play
 ```
 
 ## Notes

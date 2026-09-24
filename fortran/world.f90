@@ -3,7 +3,7 @@ module world_mod
   use hashmap_mod
   implicit none
   private
-  public :: World, world_new, world_tick, world_render
+  public :: World, world_new, world_free, world_tick, world_render
 
   type :: World
     integer :: width
@@ -32,6 +32,18 @@ contains
     call populate_cells(w)
     call prepopulate_neighbours(w)
   end function world_new
+
+  subroutine world_free(w)
+    type(World), intent(inout) :: w
+    type(CellPtr), allocatable :: cells(:)
+    integer :: i
+
+    cells = hashmap_get_all_values(w%cells)
+    do i = 1, size(cells)
+      call cell_free(cells(i)%ptr)
+    end do
+    call hashmap_free(w%cells)
+  end subroutine world_free
 
   subroutine world_tick(w)
     type(World), intent(inout) :: w

@@ -20,4 +20,5 @@ nim c -d:release --passC:"-O3" play.nim
 
 ## Notes
 
-- Identifiers cannot start with an underscore, so the `_f` helper is named `f` (see `f` in play.nim).
+- Identifiers cannot start with an underscore, so the `_f` helper is named `f`
+  (see `f` in play.nim).

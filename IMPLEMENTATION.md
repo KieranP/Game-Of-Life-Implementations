@@ -2,9 +2,11 @@
 
 The following is a rough outline of how all implementations are written.
 
-Language constraints may force specific implementations to vary from what is below.
+Language constraints may force specific implementations to vary from what is
+below.
 
-For example, if a language does not support UInt32, then it may use Int32 instead.
+For example, if a language does not support UInt32, then it may use Int32
+instead.
 
 Or if a language does not natively support classes, structs may be used.
 
@@ -67,7 +69,8 @@ class World {
 
 #### make_key
 
-The `make_key` function should demonstrate several different ways of making the desired output. Comment out all but the fastest. Different approaches include:
+The `make_key` function should demonstrate several different ways of making the
+desired output. Comment out all but the fastest. Different approaches include:
 
 1. String Interpolation
 
@@ -89,11 +92,13 @@ x + "-" + y
 
 4. Other
 
-Some languages might support other approaches, such as writing to a stack buffer.
+Some languages might support other approaches, such as writing to a stack
+buffer.
 
 #### render
 
-The `render` function should demonstrate several different ways of making the desired output. Comment out all but the fastest. Different approaches include:
+The `render` function should demonstrate several different ways of making the
+desired output. Comment out all but the fastest. Different approaches include:
 
 1. String Concatenation
 
@@ -132,11 +137,13 @@ String(rendering)
 
 #### prepopulate_neighbours
 
-For each cell, store its in-bounds neighbours so they aren't recomputed every tick.
+For each cell, store its in-bounds neighbours so they aren't recomputed every
+tick.
 
-Normally `cell.neighbours` holds references to the neighbouring `Cell`s. Languages
-without pointers/shared references (immutable data) store the neighbours'
-coordinate keys (`"x-y"`) instead, refetched from `world.cells` when counting.
+Normally `cell.neighbours` holds references to the neighbouring `Cell`s.
+Languages without pointers/shared references (immutable data) store the
+neighbours' coordinate keys (`"x-y"`) instead, refetched from `world.cells` when
+counting.
 
 ### cell.ext
 
@@ -155,7 +162,9 @@ class Cell {
 }
 ```
 
-The `alive_neighbours` function should demonstrate several different ways of calculating the desired output. Comment out all but the fastest. Different approaches include:
+The `alive_neighbours` function should demonstrate several different ways of
+calculating the desired output. Comment out all but the fastest. Different
+approaches include:
 
 1. Lamdba/Anonymous Function
 

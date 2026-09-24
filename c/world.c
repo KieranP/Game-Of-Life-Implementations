@@ -92,6 +92,15 @@ World *world_new(uint32_t width, uint32_t height) {
   return world;
 }
 
+void world_free(World *world) {
+  auto it = hashmap_iterator(world->cells);
+  while (hashmap_iterator_next(&it)) {
+    cell_free((Cell *)it.value);
+  }
+  hashmap_free(world->cells);
+  free(world);
+}
+
 void world_tick(World *world) {
   auto cells = (Cell **)hashmap_get_all_values(world->cells);
   auto cell_count = world->cells->count;

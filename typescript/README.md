@@ -37,4 +37,5 @@ node play.js
 
 ## Notes
 
-- No support for integer types; fallback to `number` (a 64-bit float) (see `Cell#x`/`y`).
+- No support for integer types; fallback to `number` (a 64-bit float) (see
+  `Cell#x`/`y`).

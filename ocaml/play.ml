@@ -1,3 +1,5 @@
+module Timestamp = Runtime_events.Timestamp
+
 class play =
   object (self)
     val world_width : int = 150
@@ -22,18 +24,18 @@ class play =
       let lowest_render = ref Float.infinity in
 
       while true do
-        let tick_start = Sys.time () in
+        let tick_start = Timestamp.(to_int64 (get_current ())) in
         world#dotick;
-        let tick_finish = Sys.time () in
-        let tick_time = tick_finish -. tick_start in
+        let tick_finish = Timestamp.(to_int64 (get_current ())) in
+        let tick_time = Int64.to_float (Int64.sub tick_finish tick_start) in
         total_tick := !total_tick +. tick_time;
         lowest_tick := Float.min !lowest_tick tick_time;
         let avg_tick = !total_tick /. float_of_int world#tick in
 
-        let render_start = Sys.time () in
+        let render_start = Timestamp.(to_int64 (get_current ())) in
         let rendered = world#render in
-        let render_finish = Sys.time () in
-        let render_time = render_finish -. render_start in
+        let render_finish = Timestamp.(to_int64 (get_current ())) in
+        let render_time = Int64.to_float (Int64.sub render_finish render_start) in
         total_render := !total_render +. render_time;
         lowest_render := Float.min !lowest_render render_time;
         let avg_render = !total_render /. float_of_int world#tick in
@@ -57,8 +59,8 @@ class play =
       done
 
     method private _f value =
-      (* seconds -> milliseconds *)
-      value *. 1_000.0
+      (* nanoseconds -> milliseconds *)
+      value /. 1_000_000.0
   end;;
 
 let () =

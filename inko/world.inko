@@ -1,4 +1,5 @@
 import cell (Cell)
+import std.drop (Drop)
 import std.rand (Random)
 import std.string (StringBuffer)
 
@@ -148,6 +149,15 @@ type pub World {
           cell.neighbours.push(neighbour.get)
         }
       }
+    }
+  }
+}
+
+# Breaks the neighbour reference cycles so Inko can drop the cells
+impl Drop for World {
+  fn mut drop {
+    for (_, cell) in @cells.iter_mut {
+      cell.neighbours.clear
     }
   }
 }
