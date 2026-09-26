@@ -88,7 +88,7 @@ world_render :: proc(world: ^World) -> string {
 
 world_make_key :: proc(buf: []u8, x: u32, y: u32) -> string {
   // The following is slower
-  // return fmt.tprintf("%d-%d", x, y)
+  // return fmt.bprintf(buf, "%d-%d", x, y)
 
   // The following is the fastest
   n := len(strconv.write_uint(buf[:], u64(x), 10))

@@ -81,10 +81,8 @@ contains
     integer :: x, y, idx, render_size, i
     character(len=:), allocatable :: rendering
 
-    render_size = w%width * w%height + w%height
-    allocate(character(len=render_size) :: rendering)
-
     ! The following is slower
+    ! rendering = ''
     ! do y = 0, w%height - 1
     !   do x = 0, w%width - 1
     !     c => cell_at(w, x, y)
@@ -96,6 +94,8 @@ contains
     ! end do
 
     ! The following is the fastest
+    render_size = w%width * w%height + w%height
+    allocate(character(len=render_size) :: rendering)
     idx = 1
     do y = 0, w%height - 1
       do x = 0, w%width - 1

@@ -30,7 +30,7 @@ impl Cell {
         //     .iter()
         //     .filter_map(|weak| weak.upgrade())
         //     .filter(|rc| rc.borrow().alive)
-        //     .count()
+        //     .count() as u32
 
         // The following is the fastest
         let mut alive_neighbours = 0;

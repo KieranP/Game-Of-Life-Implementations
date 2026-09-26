@@ -105,7 +105,10 @@ pub const World = struct {
 
     fn makeKey(buf: *[24]u8, x: u32, y: u32) []const u8 {
         // The following is slower
-        // return try std.fmt.allocPrint(allocator, "{d}-{d}", .{ x, y });
+        // const key = std.fmt.allocPrint(std.heap.smp_allocator, "{d}-{d}", .{ x, y }) catch unreachable;
+        // defer std.heap.smp_allocator.free(key);
+        // @memcpy(buf[0..key.len], key);
+        // return buf[0..key.len];
 
         // The following is the fastest
         return std.fmt.bufPrint(buf, "{d}-{d}", .{ x, y }) catch unreachable;

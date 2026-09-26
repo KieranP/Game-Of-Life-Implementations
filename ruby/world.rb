@@ -49,7 +49,7 @@ class World
 
   def render
     # The following is slower
-    # rendering = ""
+    # rendering = +""
     # @height.times do |y|
     #   @width.times do |x|
     #     cell = cell_at(x, y)

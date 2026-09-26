@@ -90,7 +90,8 @@
             (incf idx))))
       (setf (char rendering idx) #\Newline)
       (incf idx))
-    rendering))
+    rendering)
+  )
 
 (defmethod make-key ((world World) x y)
   ;; The following is the fastest

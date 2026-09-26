@@ -22,9 +22,10 @@ class Cell
 
   fun alive_neighbours(): U32 =>
     // The following is slower
-    // Iter[Cell](neighbours.values())
-    //   .filter({(cell) => cell.alive })
+    // Iter[Cell box](neighbours.values())
+    //   .filter({(cell: Cell box): Bool => cell.alive })
     //   .count()
+    //   .u32()
 
     // The following is the fastest
     var alive_count: U32 = 0

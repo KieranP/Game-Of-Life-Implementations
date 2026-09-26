@@ -126,10 +126,14 @@ impl World {
 
     fn make_key(buf: &mut [u8; 24], x: u32, y: u32) -> &str {
         // The following is slower
-        // format!("{x}-{y}")
+        // let key = format!("{x}-{y}");
+        // buf[..key.len()].copy_from_slice(key.as_bytes());
+        // std::str::from_utf8(&buf[..key.len()]).unwrap()
 
         // The following is slower
-        // vec![x.to_string(), y.to_string()].join("-")
+        // let key = vec![x.to_string(), y.to_string()].join("-");
+        // buf[..key.len()].copy_from_slice(key.as_bytes());
+        // std::str::from_utf8(&buf[..key.len()]).unwrap()
 
         // The following is the fastest
         let mut pos = 0;
