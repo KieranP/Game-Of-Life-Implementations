@@ -12,10 +12,6 @@ pub type World {
   World(width: Int, height: Int, tick: Int, cells: Dict(String, Cell))
 }
 
-pub type LocationOccupied {
-  LocationOccupied(x: Int, y: Int)
-}
-
 const directions = [
   #(-1, 1),  #(0, 1),  #(1, 1), // above
   #(-1, 0),            #(1, 0), // sides
@@ -90,26 +86,23 @@ fn populate_cells(world: World) -> World {
   int.range(0, world.height, world, fn(world, y) {
     int.range(0, world.width, world, fn(world, x) {
       let alive = float.random() <=. 0.2
-      let assert Ok(world) = add_cell(world, x, y, alive)
-      world
+      add_cell(world, x, y, alive)
     })
   })
 }
 
-fn add_cell(
-  world: World,
-  x: Int,
-  y: Int,
-  alive: Bool,
-) -> Result(World, LocationOccupied) {
+fn add_cell(world: World, x: Int, y: Int, alive: Bool) -> World {
   let existing = cell_at(world, x, y)
   case existing {
-    Ok(_) -> Error(LocationOccupied(x: x, y: y))
+    Ok(_) ->
+      panic as {
+        "LocationOccupied(" <> int.to_string(x) <> "-" <> int.to_string(y) <> ")"
+      }
     Error(_) -> {
       let key = make_key(x, y)
       let new_cell = cell.new(x, y, alive)
       let new_cells = dict.insert(world.cells, key, new_cell)
-      Ok(World(..world, cells: new_cells))
+      World(..world, cells: new_cells)
     }
   }
 }

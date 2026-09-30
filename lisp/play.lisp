@@ -6,9 +6,18 @@
 (defparameter CLEAR-SCREEN (format nil "~c[?2026h~c[H~c[2J" #\Escape #\Escape #\Escape))
 (defparameter SHOW-SCREEN (format nil "~c[?2026l" #\Escape))
 
+;; SBCL exports CLOCK_MONOTONIC only on macOS; on Linux its id is 1
+(defparameter CLOCK-MONOTONIC #+linux 1 #-linux sb-unix:clock-monotonic)
+
+(defun monotonic-time ()
+  ;; Not get-internal-real-time, which reads CLOCK_MONOTONIC_COARSE on Linux
+  (multiple-value-bind (seconds nanoseconds)
+      (sb-unix:clock-gettime CLOCK-MONOTONIC)
+    (+ (* seconds 1000000000) nanoseconds)))
+
 (defun _f (value)
-  ;; internal time units -> milliseconds
-  (/ (* value 1000) (float internal-time-units-per-second 0d0)))
+  ;; nanoseconds -> milliseconds
+  (/ value 1000000d0))
 
 (defun run ()
   (let ((world (make-instance 'World
@@ -24,16 +33,16 @@
       (format t "~a~%" (render world)))
 
     (loop
-      (let* ((tick-start (get-internal-real-time))
-             (tick-finish (progn (dotick world) (get-internal-real-time)))
+      (let* ((tick-start (monotonic-time))
+             (tick-finish (progn (dotick world) (monotonic-time)))
              (tick-time (- tick-finish tick-start)))
         (incf total-tick tick-time)
         (setf lowest-tick (min lowest-tick tick-time))
         (let ((avg-tick (/ total-tick (tick world))))
 
-          (let* ((render-start (get-internal-real-time))
+          (let* ((render-start (monotonic-time))
                  (rendered (render world))
-                 (render-finish (get-internal-real-time))
+                 (render-finish (monotonic-time))
                  (render-time (- render-finish render-start)))
             (incf total-render render-time)
             (setf lowest-render (min lowest-render render-time))

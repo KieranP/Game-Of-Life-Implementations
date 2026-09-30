@@ -58,19 +58,26 @@ function benchmark_iterations {
     LOOP_COUNT=3
   fi
 
+  errors=$(mktemp)
+  trap 'rm -f "$errors"' EXIT
+
   for i in $(seq 1 $LOOP_COUNT); do
     # tr converts pty \r\n endings and bare \r (progress spinners)
-    # into newlines, so fragments can never splice into result lines
-    output=$(run_pty env MINIMAL=1 timeout -s9 $TIMEOUT_SECS "$@" 2>&1 | tr '\r' '\n')
+    # into newlines, so fragments can never splice into result lines.
+    # stderr goes to a file, as the pty would merge it into the output.
+    output=$(run_pty env MINIMAL=1 timeout -s9 $TIMEOUT_SECS \
+      bash -c 'exec "$@" 2>>"$0"' "$errors" "$@" | tr '\r' '\n')
     result=$(echo "$output" | grep -E 'World Tick \(.*\)\s*$' | tail -n 1)
 
     if [ -n "$result" ]; then
       echo "$result"
     else
-      echo "!! no benchmark result captured; last output was:" >&2
+      echo "!! no benchmark result captured" >&2
       echo "$output" | grep . | tail -n 3 >&2
     fi
   done
+
+  print_stderr "$errors"
 }
 
 function benchmark_memory {
@@ -80,15 +87,26 @@ function benchmark_memory {
     TIMEOUT_SECS=30
   fi
 
-  output=$(MINIMAL=1 node ../sample.js $TIMEOUT_SECS "$@" 2>&1)
+  errors=$(mktemp)
+  trap 'rm -f "$errors"' EXIT
+  output=$(MINIMAL=1 node ../sample.js $TIMEOUT_SECS "$@" 2>"$errors")
   result=$(echo "$output" | grep "Max RSS")
 
   if [ -n "$result" ]; then
     echo "$result"
   else
-    echo "!! no memory result captured; last output was:" >&2
+    echo "!! no memory result captured" >&2
     echo "$output" | grep . | tail -n 3 >&2
   fi
+
+  print_stderr "$errors"
+}
+
+# Show each distinct stderr line once (runtime warnings, crashes) and remove
+# the file. Repeated runs would otherwise print the same warning each time.
+function print_stderr {
+  tr '\r' '\n' < "$1" | awk 'NF && !seen[$0]++ { print "!! stderr: " $0 }' >&2
+  rm -f "$1"
 }
 
 # Run a command attached to a pseudo-TTY so runtimes line-buffer stdout,

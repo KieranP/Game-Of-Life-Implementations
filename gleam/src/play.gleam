@@ -70,12 +70,12 @@ fn loop(
 
 fn f(value: Float) -> String {
   // nanoseconds -> milliseconds, padded to 3 decimal places
-  let assert Ok(#(whole, fraction)) =
-    float.to_precision(value /. 1_000_000.0, 3)
-    |> float.to_string()
-    |> string.split_once(".")
+  // (float.to_string prints 1000.0 as "1.0e3", so format from an Int)
+  let microseconds = float.round(value /. 1000.0)
+  let whole = int.to_string(microseconds / 1000)
+  let fraction = int.to_string(microseconds % 1000)
 
-  whole <> "." <> string.pad_end(fraction, to: 3, with: "0")
+  whole <> "." <> string.pad_start(fraction, to: 3, with: "0")
 }
 
 @external(erlang, "play_ffi", "get_env")

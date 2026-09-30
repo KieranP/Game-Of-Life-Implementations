@@ -2,6 +2,13 @@
 
 source ../helpers.sh
 
+# The sampler sees only the Go client, not the PostgreSQL backend that holds
+# the world, so its Max RSS would understate memory
+if [ "${MODE}" = "memory" ]; then
+  echo "SQL - skipped, memory mode not applicable"
+  exit 0
+fi
+
 compile go build -o play .
 
 echo -n "SQL - SQLite - "

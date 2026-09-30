@@ -1,10 +1,8 @@
 import { Cell } from './cell'
 
-class LocationOccupied extends Error {
-  constructor(message: string) {
-    super(`LocationOccupied(${message})`)
-  }
-}
+// AssemblyScript aborts with the first constructor argument as the message,
+// so the full message is built at the throw site
+class LocationOccupied extends Error {}
 
 const DIRECTIONS: StaticArray<StaticArray<i32>> = [
   [-1, 1],  [0, 1],  [1, 1], // above
@@ -131,7 +129,7 @@ export class World {
     const key = World.makeKey(x, y)
     const existing = this.cellAt(x, y)
     if (existing) {
-      throw new LocationOccupied(key)
+      throw new LocationOccupied(`LocationOccupied(${key})`)
     }
 
     const cell = new Cell(x, y, alive)

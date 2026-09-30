@@ -43,12 +43,13 @@ class play =
         if not minimal then
           print_string clear_screen;
 
-        Printf.printf "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n"
-          world#tick
-          (self#_f !lowest_tick)
-          (self#_f avg_tick)
-          (self#_f !lowest_render)
-          (self#_f avg_render);
+        print_endline
+          (Printf.sprintf "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)"
+            world#tick
+            (self#_f !lowest_tick)
+            (self#_f avg_tick)
+            (self#_f !lowest_render)
+            (self#_f avg_render));
 
         if not minimal then
           print_endline (rendered ^ show_screen)

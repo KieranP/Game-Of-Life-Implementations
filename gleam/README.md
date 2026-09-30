@@ -28,7 +28,7 @@ gleam run
   `cell.alive_neighbours`).
 - No support for continuous loops; fallback to recursive function calls (see
   `loop` in play.gleam).
-- No support for native exceptions; emulated with `Result` error values (see
+- No support for native exceptions; emulated with `panic` (see
   `world.add_cell`).
 - No support for unsigned integers; fallback to `Int` (see `cell.x`/`y`).
 - No support for printf-style formatting (see `f` in play.gleam).
