@@ -87,9 +87,13 @@ function benchmark_memory {
     TIMEOUT_SECS=30
   fi
 
+  if [ ! ../sample -nt ../sample.rs ]; then
+    compile rustc -O --edition 2024 -o ../sample ../sample.rs
+  fi
+
   errors=$(mktemp)
   trap 'rm -f "$errors"' EXIT
-  output=$(MINIMAL=1 node ../sample.js $TIMEOUT_SECS "$@" 2>"$errors")
+  output=$(MINIMAL=1 ../sample $TIMEOUT_SECS "$@" 2>"$errors")
   result=$(echo "$output" | grep "Max RSS")
 
   if [ -n "$result" ]; then
