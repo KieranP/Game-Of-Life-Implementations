@@ -143,11 +143,12 @@ contains
     logical :: added
     type(Cell), pointer :: existing
     character(len=:), allocatable :: key
+    character(len=64) :: message
 
     existing => cell_at(w, x, y)
     if (associated(existing)) then
-      write(*, '(A,I0,A,I0,A)') 'LocationOccupied(', x, '-', y, ')'
-      stop 1
+      write(message, '(A,I0,A,I0,A)') 'LocationOccupied(', x, '-', y, ')'
+      error stop trim(message)
     end if
 
     key = make_key(x, y)

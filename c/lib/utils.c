@@ -11,31 +11,22 @@ double get_time_ns(void) {
 // Return the minimum of two doubles
 double min_double(double a, double b) { return a < b ? a : b; }
 
-// Fast integer to string conversion without using sprintf/snprintf
+// Fast unsigned integer to string conversion without using sprintf/snprintf
 // Writes the string representation of num into buf
 // Returns pointer to the end of the written string (not null-terminated)
 // This allows efficient chaining of multiple conversions
-char *int_to_str(char *buf, int num) {
+char *int_to_str(char *buf, uint32_t num) {
   if (num == 0) {
     *buf++ = '0';
     return buf;
   }
 
-  char temp[12];
+  char temp[10];
   auto i = 0;
-  auto is_negative = num < 0;
-
-  if (is_negative) {
-    num = -num;
-  }
 
   while (num > 0) {
     temp[i++] = '0' + (num % 10);
     num /= 10;
-  }
-
-  if (is_negative) {
-    *buf++ = '-';
   }
 
   while (i > 0) {

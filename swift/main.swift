@@ -46,7 +46,7 @@ private final class Play {
 
       print(
         String(
-          format: "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
+          format: "#%u - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)",
           world.tick,
           _f(value: lowestTick),
           _f(value: avgTick),

@@ -20,12 +20,12 @@ main(_) ->
   loop(World, Minimal, 0, infinity, 0, infinity).
 
 loop(World, Minimal, TotalTick, LowestTick, TotalRender, LowestRender) ->
-  {TickTime, NewWorld} = timer:tc(world, dotick, [World]),
+  {TickTime, NewWorld} = timer:tc(world, dotick, [World], nanosecond),
   NewTotalTick = TotalTick + TickTime,
   NewLowestTick = min(LowestTick, TickTime),
   AvgTick = NewTotalTick / world:tick(NewWorld),
 
-  {RenderTime, Rendered} = timer:tc(world, render, [NewWorld]),
+  {RenderTime, Rendered} = timer:tc(world, render, [NewWorld], nanosecond),
   NewTotalRender = TotalRender + RenderTime,
   NewLowestRender = min(LowestRender, RenderTime),
   AvgRender = NewTotalRender / world:tick(NewWorld),
@@ -54,5 +54,5 @@ loop(World, Minimal, TotalTick, LowestTick, TotalRender, LowestRender) ->
   loop(NewWorld, Minimal, NewTotalTick, NewLowestTick, NewTotalRender, NewLowestRender).
 
 '_f'(Value) ->
-  %% microseconds -> milliseconds
-  Value / 1000.
+  %% nanoseconds -> milliseconds
+  Value / 1_000_000.

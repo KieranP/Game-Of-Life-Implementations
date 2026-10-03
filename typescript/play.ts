@@ -1,10 +1,5 @@
 import { World } from './world.js'
 
-// @ts-expect-error Needed for Boa runtime
-globalThis.performance ??= {
-  now: () => Date.now(),
-}
-
 class Play {
   static readonly #WORLD_WIDTH = 150
   static readonly #WORLD_HEIGHT = 40
@@ -17,10 +12,7 @@ class Play {
       Play.#WORLD_HEIGHT,
     )
 
-    const minimal =
-      typeof Deno === 'object' ? Deno.env.get('MINIMAL') == '1'
-      : typeof process === 'object' ? process.env.MINIMAL == '1'
-      : true
+    const minimal = process.env.MINIMAL == '1'
 
     if (!minimal) {
       console.log(world.render())

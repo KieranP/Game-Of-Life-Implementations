@@ -1,3 +1,6 @@
+-- Wrap in same transaction to reduce commit overhead
+BEGIN;
+
 -- Only alive cells contribute to neighbour counts and the neighbours relation
 -- is symmetric, so scatter +1 from each alive cell (~20% of the board) instead
 -- of counting per cell, and only write rows whose state actually changes.
@@ -27,3 +30,5 @@ WHERE cells.x = nc.x AND cells.y = nc.y
 UPDATE cells
 SET alive = next_state
 WHERE alive <> next_state;
+
+COMMIT;

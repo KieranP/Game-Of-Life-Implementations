@@ -2,6 +2,10 @@ use "collections"
 use "random"
 use "time"
 
+use @fprintf[I32](stream: Pointer[U8] tag, fmt: Pointer[U8] tag, ...)
+use @pony_os_stderr[Pointer[U8]]()
+use @exit[None](status: I32)
+
 class val LocationOccupied
   let x: U32
   let y: U32
@@ -104,10 +108,12 @@ class World
     x: U32,
     y: U32,
     alive: Bool = false
-  ): (Bool | LocationOccupied) =>
+  ): Bool =>
     try
       let existing = _cell_at(x, y)?
-      return LocationOccupied(x, y)
+      let occupied = LocationOccupied(x, y)
+      @fprintf(@pony_os_stderr(), "%s\n".cstring(), occupied.string().cstring())
+      @exit(1)
     end
 
     let key = _make_key(x, y)
