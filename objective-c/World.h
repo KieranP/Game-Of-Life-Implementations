@@ -3,9 +3,9 @@
 
 @interface World : NSObject
 
-@property (nonatomic, assign) NSUInteger tick;
+@property (nonatomic, assign, readonly) uint32_t tick;
 
-- (instancetype)initWithWidth:(NSUInteger)width height:(NSUInteger)height;
+- (instancetype)initWithWidth:(uint32_t)width height:(uint32_t)height;
 - (void)doTick;
 - (NSString *)render;
 

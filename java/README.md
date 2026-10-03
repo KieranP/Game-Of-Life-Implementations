@@ -3,7 +3,8 @@
 ## Install
 
 ```bash
-brew install java
+brew install openjdk
+export PATH="$(brew --prefix openjdk)/bin:$PATH"
 ```
 
 ## Build

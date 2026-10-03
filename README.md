@@ -46,6 +46,16 @@ https://docs.google.com/spreadsheets/d/1XF2xgN_T3FIeFjJ4iqM1NvcvMG6Zz3ytyJXbvEDV
 
 [![Feature Comparison Spreadsheet](/features.png)](https://github.com/KieranP/Game-Of-Life-Implementations/blob/master/features.png)
 
+## Running the Benchmarks
+
+Install each implementation's dependencies (see its README.md), plus
+`coreutils` for `timeout`, and `rust` for memory mode's `rustc`:
+
+```
+brew install coreutils rust
+./benchmark.sh [iterations|memory] [folder1,folder2,...]
+```
+
 ## Speed Results (by # iterations in 30 seconds)
 
 **Note:** Because the implementations are as similar as possible, the runtime of

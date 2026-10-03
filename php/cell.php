@@ -3,12 +3,13 @@
 error_reporting(E_ALL);
 
 final class Cell {
+  public ?bool $nextState = null;
+  public array $neighbours = [];
+
   public function __construct(
     public readonly int $x,
     public readonly int $y,
     public bool $alive = false,
-    public ?bool $nextState = null,
-    public array $neighbours = [],
   ) {}
 
   public function toChar(): string {

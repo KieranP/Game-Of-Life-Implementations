@@ -13,20 +13,20 @@ type Cell(x: uint, y: uint, ?alive: bool) =
   member this.AliveNeighbours() =
     // The following is slower
     // let aliveNeighbours = List.filter (fun (n: Cell) -> n.Alive) this.Neighbours
-    // aliveNeighbours.Length
+    // uint aliveNeighbours.Length
 
     // The following is the fastest
-    let mutable aliveNeighbours = 0
+    let mutable aliveNeighbours = 0u
     for neighbour in this.Neighbours do
       if neighbour.Alive then
-        aliveNeighbours <- aliveNeighbours + 1
+        aliveNeighbours <- aliveNeighbours + 1u
     aliveNeighbours
 
     // The following is slower
-    // let mutable aliveNeighbours = 0
-    // let count = this.Neighbours.Length-1
-    // for i in 0..count do
+    // let mutable aliveNeighbours = 0u
+    // let count = this.Neighbours.Length
+    // for i in 0..count-1 do
     //   let neighbour = this.Neighbours[i]
     //   if neighbour.Alive then
-    //     aliveNeighbours <- aliveNeighbours + 1
+    //     aliveNeighbours <- aliveNeighbours + 1u
     // aliveNeighbours

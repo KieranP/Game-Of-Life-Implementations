@@ -13,7 +13,7 @@
     :initform nil
     :accessor next-state)
    (neighbours
-    :initform nil
+    :initform (vector)
     :accessor neighbours)))
 
 (defmethod to-char ((cell Cell))

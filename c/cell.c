@@ -1,8 +1,13 @@
 #include "cell.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 Cell *cell_new(uint32_t x, uint32_t y, bool alive) {
   Cell *cell = malloc(sizeof(*cell));
+  if (!cell) {
+    fprintf(stderr, "Out of memory\n");
+    exit(1);
+  }
   *cell = (Cell){.x = x, .y = y, .alive = alive, .next_state = alive};
   return cell;
 }

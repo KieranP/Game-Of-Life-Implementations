@@ -122,8 +122,8 @@ type pub World {
       panic("LocationOccupied(${x}-${y})")
     }
 
-    let key = make_key(x, y)
     let cell = Cell.new(x, y, alive)
+    let key = make_key(x, y)
     @cells.set(key, cell)
     true
   }

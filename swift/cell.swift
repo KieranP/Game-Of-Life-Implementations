@@ -22,7 +22,7 @@ final public class Cell {
     return UInt32(neighbours.count(where: \.alive))
 
     // The following is slower
-    // var aliveNeighbours = UInt32(0);
+    // var aliveNeighbours = UInt32(0)
     // for neighbour in neighbours {
     //   if neighbour.alive {
     //     aliveNeighbours += 1

@@ -13,7 +13,7 @@ class Cell(
 
   def aliveNeighbours =
     // The following is slower
-    // neighbours.filter(_.alive).length
+    // neighbours.count(_.alive)
 
     // The following is slower
     // var aliveNeighbours = 0

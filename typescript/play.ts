@@ -23,7 +23,7 @@ class Play {
     let totalRender = 0
     let lowestRender = Infinity
 
-    while(true) {
+    while (true) {
       const tickStart = performance.now()
       world.doTick()
       const tickFinish = performance.now()

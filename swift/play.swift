@@ -1,5 +1,6 @@
 import Foundation
 
+@main
 private final class Play {
   private static let worldWidth: UInt32 = 150
   private static let worldHeight: UInt32 = 40
@@ -19,9 +20,9 @@ private final class Play {
     }
 
     var totalTick = 0.0
-    var lowestTick = Double.greatestFiniteMagnitude
+    var lowestTick = Double.infinity
     var totalRender = 0.0
-    var lowestRender = Double.greatestFiniteMagnitude
+    var lowestRender = Double.infinity
 
     while true {
       let tickStart = ProcessInfo.processInfo.systemUptime
@@ -65,6 +66,8 @@ private final class Play {
     // seconds -> milliseconds
     return value * 1_000
   }
-}
 
-try Play.run()
+  public static func main() throws {
+    try run()
+  }
+}

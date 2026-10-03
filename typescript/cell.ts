@@ -25,7 +25,7 @@ export class Cell {
 
     // The following is slower
     // let aliveNeighbours = 0
-    // let count = this.neighbours.length
+    // const count = this.neighbours.length
     // for (let i = 0; i < count; i++) {
     //   const neighbour = this.neighbours[i]
     //   if (neighbour?.alive) {

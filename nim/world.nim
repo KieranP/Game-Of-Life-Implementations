@@ -2,7 +2,6 @@ include cell
 
 # from strutils import join
 # import std/ropes
-import std/strformat
 from std/random import rand, randomize
 import std/tables
 
@@ -23,7 +22,7 @@ type
     cells: Table[string, Cell]
 
 # By default, Nim requires methods be declared before they are used elsewhere
-# and will error out if I dont. To to order the methods as I like, I need to
+# and will error out if I don't. To order the methods as I like, I need to
 # declare them ahead of time, known as "forward declaration".
 proc initialize(self: World): World
 proc doTick(self: World)
@@ -114,8 +113,8 @@ proc addCell(self: World, x: uint32, y: uint32, alive: bool = false): bool =
   if existing != nil:
     raise newException(LocationOccupied, fmt"LocationOccupied({x}-{y})")
 
-  let key = self.makeKey(x, y)
   let cell = Cell(x: x, y: y, alive: alive)
+  let key = self.makeKey(x, y)
   self.cells[key] = cell
   true
 

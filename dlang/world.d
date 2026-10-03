@@ -34,7 +34,7 @@ class World {
 
       // Then execute the determined action for all cells
       foreach (ref cell; cells) {
-        cell.alive = cell.nextState.get;
+        cell.alive = cell.nextState.get(false);
       }
 
       tick += 1;
@@ -108,7 +108,7 @@ class World {
       tuple(-1, -1), tuple(0, -1), tuple(1, -1), // below
     ];
 
-    static auto makeKey(ref char[24] buf, int x, int y) {
+    static auto makeKey(ref char[24] buf, uint x, uint y) {
       // The following is slower
       // return format("%d-%d", x, y);
 
@@ -129,7 +129,7 @@ class World {
       return buf[0..pos];
     }
 
-    auto cellAt(int x, int y) {
+    auto cellAt(uint x, uint y) {
       char[24] buf;
       auto key = cast(string)makeKey(buf, x, y);
 
@@ -146,16 +146,16 @@ class World {
       }
     }
 
-    auto addCell(int x, int y, bool alive = false) {
+    auto addCell(uint x, uint y, bool alive = false) {
       auto existing = cellAt(x, y);
       if (existing) {
         throw new LocationOccupied(x, y);
       }
 
+      auto cell = new Cell(x, y, alive);
+
       char[24] buf;
       auto key = cast(string)makeKey(buf, x, y).dup;
-
-      auto cell = new Cell(x, y, alive);
       cells[key] = cell;
       return true;
     }
@@ -172,11 +172,13 @@ class World {
             continue; // Out of bounds
           }
 
-          if (nx >= width || ny >= height) {
+          auto ux = cast(uint)nx;
+          auto uy = cast(uint)ny;
+          if (ux >= width || uy >= height) {
             continue; // Out of bounds
           }
 
-          auto neighbour = cellAt(nx, ny);
+          auto neighbour = cellAt(ux, uy);
           if (neighbour) {
             cell.neighbours ~= neighbour;
           }

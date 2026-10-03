@@ -2,7 +2,7 @@
 
 @implementation Cell
 
-- (instancetype)initWithX:(NSUInteger)x y:(NSUInteger)y alive:(BOOL)alive {
+- (instancetype)initWithX:(uint32_t)x y:(uint32_t)y alive:(BOOL)alive {
   self = [super init];
   if (self) {
     _x = x;
@@ -18,7 +18,7 @@
   return self.alive ? @"o" : @" ";
 }
 
-- (NSUInteger)aliveNeighbours {
+- (uint32_t)aliveNeighbours {
   // The following is slower
   // NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(Cell *cell, NSDictionary *bindings) {
   //   return cell.alive;
@@ -26,7 +26,7 @@
   // return [[self.neighbours filteredArrayUsingPredicate:predicate] count];
 
   // The following is the fastest
-  NSUInteger aliveNeighbours = 0;
+  uint32_t aliveNeighbours = 0;
   for (Cell *neighbour in self.neighbours) {
     if (neighbour.alive) {
       aliveNeighbours++;
@@ -35,7 +35,7 @@
   return aliveNeighbours;
 
   // The following is slower
-  // NSUInteger aliveNeighbours = 0;
+  // uint32_t aliveNeighbours = 0;
   // NSUInteger count = [self.neighbours count];
   // for (NSUInteger i = 0; i < count; i++) {
   //   Cell *neighbour = self.neighbours[i];

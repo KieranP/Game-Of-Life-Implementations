@@ -2,8 +2,10 @@
 
 ## Install
 
+On macOS, `gcc` runs Apple clang, included in the Xcode Command Line Tools:
+
 ```bash
-brew install gcc
+xcode-select --install
 ```
 
 ## Build

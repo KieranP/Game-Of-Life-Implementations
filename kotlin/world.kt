@@ -41,7 +41,7 @@ public class World(
 
     // Then execute the determined action for all cells
     for (cell in cellValues) {
-      cell.alive = cell.nextState!!
+      cell.alive = cell.nextState ?: false
     }
 
     tick++
@@ -62,7 +62,7 @@ public class World(
     // return rendering
 
     // The following is slower
-    // val rendering = ArrayList<String>();
+    // val rendering = ArrayList<String>()
     // for (y in 0..<height) {
     //   for (x in 0..<width) {
     //     val cell = cellAt(x, y)
@@ -72,7 +72,7 @@ public class World(
     //   }
     //   rendering.add("\n")
     // }
-    // return rendering.joinToString(separator = "");
+    // return rendering.joinToString(separator = "")
 
     // The following is the fastest
     val renderSize = width * height + height
@@ -84,7 +84,7 @@ public class World(
           rendering.append(cell.toChar())
         }
       }
-      rendering.append("\n")
+      rendering.append('\n')
     }
     return rendering.toString()
   }
@@ -120,8 +120,8 @@ public class World(
       throw LocationOccupied(x, y)
     }
 
-    val key = makeKey(x, y)
     val cell = Cell(x, y, alive)
+    val key = makeKey(x, y)
     cells[key] = cell
     return true
   }

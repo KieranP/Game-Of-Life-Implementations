@@ -1,10 +1,11 @@
-import 'cell.dart';
 import 'dart:math';
 
-class LocationOccupied implements Exception {
+import 'cell.dart';
+
+class _LocationOccupied implements Exception {
   final int _x, _y;
 
-  LocationOccupied(this._x, this._y);
+  _LocationOccupied(this._x, this._y);
 
   @override
   String toString() => 'LocationOccupied($_x-$_y)';
@@ -119,11 +120,11 @@ class World {
   bool _addCell(int x, int y, [bool alive = false]) {
     final existing = _cellAt(x, y);
     if (existing != null) {
-      throw LocationOccupied(x, y);
+      throw _LocationOccupied(x, y);
     }
 
-    final key = _makeKey(x, y);
     final cell = Cell(x, y, alive);
+    final key = _makeKey(x, y);
     _cells[key] = cell;
     return true;
   }

@@ -8,11 +8,11 @@ pub mut:
   neighbours []&Cell
 }
 
-fn (self Cell) to_char() string {
+pub fn (self Cell) to_char() string {
   return if self.alive { 'o' } else { ' ' }
 }
 
-fn (self Cell) alive_neighbours() u32 {
+pub fn (self Cell) alive_neighbours() u32 {
   // The following is the fastest
   return u32(self.neighbours.count(it.alive))
 
@@ -23,7 +23,7 @@ fn (self Cell) alive_neighbours() u32 {
   //   }).len
   // )
 
-  // The following is about the same speed
+  // The following is slower
   // mut alive_neighbours := u32(0)
   // for _, neighbour in self.neighbours {
   //   if neighbour.alive {

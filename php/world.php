@@ -14,7 +14,7 @@ final class LocationOccupied extends Exception {
 }
 
 final class World {
-  public int $tick = 0;
+  public private(set) int $tick = 0;
 
   private array $cells = [];
 
@@ -98,9 +98,10 @@ final class World {
   }
 
   private function populateCells(): void {
+    $randomizer = new Random\Randomizer();
     for ($y = 0; $y < $this->height; $y++) {
       for ($x = 0; $x < $this->width; $x++) {
-        $alive = rand(0, 99) < 20;
+        $alive = $randomizer->nextFloat() <= 0.2;
         $this->addCell($x, $y, $alive);
       }
     }
@@ -112,8 +113,8 @@ final class World {
       throw new LocationOccupied($x, $y);
     }
 
-    $key = $this->makeKey($x, $y);
     $cell = new Cell($x, $y, $alive);
+    $key = $this->makeKey($x, $y);
     $this->cells[$key] = $cell;
     return true;
   }

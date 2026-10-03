@@ -4,16 +4,16 @@ from os import environ
 import math
 
 class Play:
-  WORLD_WIDTH = 150
-  WORLD_HEIGHT = 40
-  CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
-  SHOW_SCREEN = "\x1b[?2026l"
+  _WORLD_WIDTH = 150
+  _WORLD_HEIGHT = 40
+  _CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
+  _SHOW_SCREEN = "\x1b[?2026l"
 
   @classmethod
   def run(cls) -> None:
     world = World(
-      Play.WORLD_WIDTH,
-      Play.WORLD_HEIGHT,
+      Play._WORLD_WIDTH,
+      Play._WORLD_HEIGHT,
     )
 
     minimal = environ.get("MINIMAL") == "1"
@@ -44,7 +44,7 @@ class Play:
       avg_render = (total_render / world.tick)
 
       if not minimal:
-        print(Play.CLEAR_SCREEN, end="")
+        print(Play._CLEAR_SCREEN, end="")
 
       print(
         f"#{world.tick}"
@@ -53,7 +53,7 @@ class Play:
       )
 
       if not minimal:
-        print(rendered + Play.SHOW_SCREEN)
+        print(rendered + Play._SHOW_SCREEN)
 
   @staticmethod
   def _f(value: float) -> float:

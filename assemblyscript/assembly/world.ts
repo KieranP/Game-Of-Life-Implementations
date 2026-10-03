@@ -95,7 +95,7 @@ export class World {
     return rendering.join("")
   }
 
-  private static makeKey(x: u32, y: u32): string {
+  private makeKey(x: u32, y: u32): string {
     // The following is the fastest
     return `${x}-${y}`
 
@@ -108,7 +108,7 @@ export class World {
   }
 
   private cellAt(x: u32, y: u32): Cell | null {
-    const key = World.makeKey(x, y)
+    const key = this.makeKey(x, y)
     if (this.cells.has(key)) {
       return this.cells.get(key)
     } else {
@@ -126,13 +126,13 @@ export class World {
   }
 
   private addCell(x: u32, y: u32, alive: bool = false): bool {
-    const key = World.makeKey(x, y)
     const existing = this.cellAt(x, y)
     if (existing) {
-      throw new LocationOccupied(`LocationOccupied(${key})`)
+      throw new LocationOccupied(`LocationOccupied(${x}-${y})`)
     }
 
     const cell = new Cell(x, y, alive)
+    const key = this.makeKey(x, y)
     this.cells.set(key, cell)
     return true
   }

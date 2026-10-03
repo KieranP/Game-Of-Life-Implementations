@@ -8,12 +8,15 @@ brew install elixir
 
 ## Build
 
-(no build step required)
+```bash
+rm -f *.beam
+elixirc cell.ex world.ex
+```
 
 ## Run
 
 ```bash
-rm *.beam; elixirc *.ex
+elixir play.ex
 ```
 
 ## Notes

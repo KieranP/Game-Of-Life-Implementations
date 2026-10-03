@@ -14,9 +14,16 @@ cargo build --release
 
 ## Run
 
+### Safe, with Rc/RefCell (slower)
+
 ```bash
-./target/release/play-safe   # (Slower/Safe: uses runtime Rc/RefCell)
-./target/release/play-unsafe # (Faster/Unsafe; uses raw memory pointers)
+./target/release/play-safe
+```
+
+### Unsafe, with raw pointers (faster)
+
+```bash
+./target/release/play-unsafe
 ```
 
 ## Notes

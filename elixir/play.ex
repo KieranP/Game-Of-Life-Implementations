@@ -20,10 +20,10 @@ defmodule Play do
 
     # Elixir doesn't have continuous loops (i.e. while(true) {}),
     # so we need to use recursive function calls instead
-    loop(world, minimal)
+    loop(world, minimal, 0, :infinity, 0, :infinity)
   end
 
-  def loop(world, minimal \\ false, total_tick \\ 0, lowest_tick \\ :infinity, total_render \\ 0, lowest_render \\ :infinity) do
+  defp loop(world, minimal, total_tick, lowest_tick, total_render, lowest_render) do
     tick_start = System.monotonic_time(:nanosecond)
     world = World.tick(world)
     tick_finish = System.monotonic_time(:nanosecond)
@@ -46,7 +46,7 @@ defmodule Play do
 
     IO.puts(
       :io_lib.format(
-        "#~.B - World Tick (L: ~.3f; A: ~.3f) - Rendering (L: ~.3f; A: ~.3f)",
+        "#~B - World Tick (L: ~.3f; A: ~.3f) - Rendering (L: ~.3f; A: ~.3f)",
         [
           world.tick,
           _f(lowest_tick),
@@ -64,7 +64,7 @@ defmodule Play do
     loop(world, minimal, total_tick, lowest_tick, total_render, lowest_render)
   end
 
-  def _f(value) do
+  defp _f(value) do
     # nanoseconds -> milliseconds
     value / 1_000_000
   end

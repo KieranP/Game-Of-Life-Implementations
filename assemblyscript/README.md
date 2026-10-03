@@ -3,6 +3,7 @@
 ## Install
 
 ```bash
+brew install node
 npm install
 ```
 
@@ -30,5 +31,7 @@ wasmtime run build/release.wasm
 
 ## Notes
 
+- No support for native exceptions; emulated with `throw`, which aborts (see
+  `World#addCell`).
 - No support for optional/nullable booleans (see `Cell#nextState`).
 - No support for printf-style formatting (see `Play#_f`).

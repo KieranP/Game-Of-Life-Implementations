@@ -22,7 +22,8 @@ ponyc -b play
 
 - Locals cannot reuse an enclosing method's name, so `alive_neighbours`
   accumulates into `alive_count` (see `Cell#alive_neighbours`).
-- No support for continuous loops (actor-based); fallback to a recursive
-  behaviour (see `Main#tick`).
+- Actors only collect garbage between behaviours, so a `while true` loop would
+  never free memory; fallback to a recursive behaviour (see `Play#_tick`).
 - No support for native exceptions; emulated with `exit` (see `World#_add_cell`).
-- No support for printf-style formatting (see `Main#_f`).
+- No support for printf-style formatting (see `Play#_f`).
+- No public infinity constant; fallback to `1 / 0` (see `Play#_lowest_tick`).

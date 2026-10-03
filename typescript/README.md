@@ -39,3 +39,4 @@ node play.js
 
 - No support for integer types; fallback to `number` (a 64-bit float) (see
   `Cell#x`/`y`).
+- No support for printf-style formatting (see `Play#_f`).

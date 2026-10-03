@@ -8,6 +8,9 @@
 -define(SHOW_SCREEN, "\x1b[?2026l").
 
 main(_) ->
+  run().
+
+run() ->
   World = world:new(?WORLD_WIDTH, ?WORLD_HEIGHT),
 
   Minimal = os:getenv("MINIMAL") =:= "1",

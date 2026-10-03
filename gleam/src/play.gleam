@@ -13,6 +13,10 @@ const show_screen = "\u{001b}[?2026l"
 const infinity = 9_999_999_999_999.0
 
 pub fn main() {
+  run()
+}
+
+pub fn run() {
   let world = world.new(world_width, world_height)
 
   let minimal = get_env("MINIMAL") == "1"
@@ -39,7 +43,7 @@ fn loop(
   let tick_time = int.to_float(tick_finish - tick_start)
   let total_tick = total_tick +. tick_time
   let lowest_tick = float.min(lowest_tick, tick_time)
-  let avg_tick = total_tick /. int.to_float(world.tick)
+  let avg_tick = total_tick /. int.to_float(world.tick(world))
 
   let render_start = monotonic_time()
   let rendered = world.render(world)
@@ -47,7 +51,7 @@ fn loop(
   let render_time = int.to_float(render_finish - render_start)
   let total_render = total_render +. render_time
   let lowest_render = float.min(lowest_render, render_time)
-  let avg_render = total_render /. int.to_float(world.tick)
+  let avg_render = total_render /. int.to_float(world.tick(world))
 
   case minimal {
     False -> io.print(clear_screen)
@@ -55,7 +59,7 @@ fn loop(
   }
 
   io.println(
-    "#" <> int.to_string(world.tick)
+    "#" <> int.to_string(world.tick(world))
     <> " - World Tick (L: " <> f(lowest_tick) <> "; A: " <> f(avg_tick) <> ")"
     <> " - Rendering (L: " <> f(lowest_render) <> "; A: " <> f(avg_render) <> ")",
   )

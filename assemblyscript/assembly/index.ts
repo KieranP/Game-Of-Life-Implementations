@@ -1,10 +1,10 @@
 import { World } from './world'
 
 class Play {
-  static readonly WORLD_WIDTH: u32 = 150
-  static readonly WORLD_HEIGHT: u32 = 40
-  static readonly CLEAR_SCREEN: string = "\x1b[?2026h\x1b[H\x1b[2J"
-  static readonly SHOW_SCREEN: string = "\x1b[?2026l"
+  private static readonly WORLD_WIDTH: u32 = 150
+  private static readonly WORLD_HEIGHT: u32 = 40
+  private static readonly CLEAR_SCREEN: string = "\x1b[?2026h\x1b[H\x1b[2J"
+  private static readonly SHOW_SCREEN: string = "\x1b[?2026l"
 
   public static run(): void {
     const world = new World(
@@ -29,7 +29,7 @@ class Play {
       const tickFinish = performance.now()
       const tickTime = tickFinish - tickStart
       totalTick += tickTime
-      if (tickTime < lowestTick) lowestTick = tickTime
+      lowestTick = Math.min(lowestTick, tickTime)
       const avgTick = totalTick / world.tick
 
       const renderStart = performance.now()
@@ -37,7 +37,7 @@ class Play {
       const renderFinish = performance.now()
       const renderTime = renderFinish - renderStart
       totalRender += renderTime
-      if (renderTime < lowestRender) lowestRender = renderTime
+      lowestRender = Math.min(lowestRender, renderTime)
       const avgRender = totalRender / world.tick
 
       if (!minimal) {
@@ -61,8 +61,11 @@ class Play {
     const rounded = Math.round(value * 1000.0) / 1000.0
     const parts = rounded.toString().split('.')
     const whole = parts[0]
-    const frac = (parts.length > 1 ? parts[1] : "0").padEnd(3, "0")
-    return `${whole}.${frac}`
+    let frac = "0"
+    if (parts.length > 1) {
+      frac = parts[1]
+    }
+    return `${whole}.${frac.padEnd(3, "0")}`
   }
 }
 

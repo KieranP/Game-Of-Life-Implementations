@@ -1,13 +1,13 @@
 -module(world).
 -include("cell.hrl").
 
--export([new/2, dotick/1, render/1, cells/1, tick/1]).
+-export([new/2, dotick/1, render/1, tick/1]).
 -export_type([world/0]).
 
 -record(world, {
+  tick = 0 :: integer(),
   width :: integer(),
   height :: integer(),
-  tick = 0 :: integer(),
   cells = #{} :: #{string() => cell()}
 }).
 -type world() :: #world{}.
@@ -32,7 +32,7 @@ new(Width, Height) ->
 dotick(World) ->
   Cells = maps:map(
     fun(_Key, Cell) ->
-      AliveNeighbours = cell:alive_neighbours(Cell, World),
+      AliveNeighbours = cell:alive_neighbours(Cell, World#world.cells),
       if
         not Cell#cell.alive andalso AliveNeighbours =:= 3 ->
           Cell#cell{alive = true};
@@ -87,9 +87,6 @@ render(World) ->
   %%   lists:seq(0, World#world.height - 1)
   %% ).
 
--spec cells(world()) -> #{string() => cell()}.
-cells(#world{cells = Cells}) -> Cells.
-
 -spec tick(world()) -> integer().
 tick(#world{tick = Tick}) -> Tick.
 
@@ -135,8 +132,8 @@ add_cell(World, X, Y, Alive) ->
     _ -> location_occupied(X, Y)
   end,
 
-  Key = make_key(X, Y),
   Cell = cell:new(X, Y, Alive),
+  Key = make_key(X, Y),
   NewWorld = World#world{cells = maps:put(Key, Cell, World#world.cells)},
   {NewWorld, true}.
 

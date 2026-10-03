@@ -1,8 +1,8 @@
 include("world.jl")
 using Printf
 
-const WORLD_WIDTH = UInt64(150)
-const WORLD_HEIGHT = UInt64(40)
+const WORLD_WIDTH = UInt32(150)
+const WORLD_HEIGHT = UInt32(40)
 const CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
 const SHOW_SCREEN = "\x1b[?2026l"
 
@@ -19,9 +19,9 @@ function run()
   end
 
   total_tick = Float64(0)
-  lowest_tick = typemax(Float64)
+  lowest_tick = Inf
   total_render = Float64(0)
-  lowest_render = typemax(Float64)
+  lowest_render = Inf
 
   while true
     tick_start = time_ns()

@@ -20,4 +20,4 @@ Rscript play.r
 
 - Identifiers cannot start with an underscore, so the `_f` helper is named `f`
   (see `f` in play.r).
-- No support for unsigned integers; fallback to `numeric` (see `cell$x`/`y`).
+- No support for unsigned integers; fallback to `integer` (see `cell$x`/`y`).

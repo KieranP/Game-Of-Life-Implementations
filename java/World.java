@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 // import java.util.ArrayList;
 
 public class World {
@@ -48,7 +49,7 @@ public class World {
 
     // Then execute the determined action for all cells
     for (var cell : cellValues) {
-      cell.alive = cell.nextState;
+      cell.alive = Objects.requireNonNullElse(cell.nextState, false);
     }
 
     tick++;
@@ -127,8 +128,8 @@ public class World {
       throw new LocationOccupied(x, y);
     }
 
-    var key = makeKey(x, y);
     var cell = new Cell(x, y, alive);
+    var key = makeKey(x, y);
     cells.put(key, cell);
     return true;
   }

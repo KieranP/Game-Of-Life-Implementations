@@ -2,6 +2,13 @@
 import scala.collection.mutable.HashMap
 import scala.util.Random
 
+object World:
+  private val Directions = Array(
+    (-1, 1),  (0, 1),  (1, 1),  // above
+    (-1, 0),           (1, 0),  // sides
+    (-1, -1), (0, -1), (1, -1), // below
+  )
+
 class World(
   private val width: Int,
   private val height: Int,
@@ -12,12 +19,6 @@ class World(
 
   private class LocationOccupied(x: Int, y: Int) extends
     Exception(s"LocationOccupied($x-$y)")
-
-  private val Directions = Array(
-    (-1, 1),  (0, 1),  (1, 1),  // above
-    (-1, 0),           (1, 0),  // sides
-    (-1, -1), (0, -1), (1, -1), // below
-  )
 
   populateCells
   prepopulateNeighbours
@@ -44,22 +45,20 @@ class World(
   def render =
     // The following is slower
     // var rendering = ""
-    // var (x, y) = (0, 0)
     // for y <- 0 until height do
     //   for x <- 0 until width do
     //     val cell = cellAt(x, y)
-    //     if cell != None then
+    //     if cell.isDefined then
     //       rendering += cell.get.toChar
     //   rendering += "\n"
     // rendering
 
     // The following is slower
-    // var rendering = ArrayBuffer[String]()
-    // var (x, y) = (0, 0)
+    // val rendering = ArrayBuffer[String]()
     // for y <- 0 until height do
     //   for x <- 0 until width do
     //     val cell = cellAt(x, y)
-    //     if cell != None then
+    //     if cell.isDefined then
     //       rendering += cell.get.toChar
     //   rendering += "\n"
     // rendering.mkString("")
@@ -92,7 +91,7 @@ class World(
   private def populateCells =
     for y <- 0 until height do
       for x <- 0 until width do
-        val alive = Random.nextFloat() <= 0.2
+        val alive = Random.nextDouble() <= 0.2
         addCell(x, y, alive)
 
   private def addCell(x: Int, y: Int, alive: Boolean = false) =
@@ -100,8 +99,8 @@ class World(
     if existing.isDefined then
       throw LocationOccupied(x, y)
 
-    val key = makeKey(x, y)
     val cell = Cell(x, y, alive)
+    val key = makeKey(x, y)
     cells.put(key, cell)
     true
 
@@ -111,7 +110,7 @@ class World(
       val y = cell.y
 
       cell.neighbours.appendAll(
-        Directions.flatMap { (relX, relY) =>
+        World.Directions.flatMap { (relX, relY) =>
           val nx = x + relX
           val ny = y + relY
           if nx < 0 || ny < 0 then

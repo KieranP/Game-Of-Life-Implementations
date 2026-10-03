@@ -121,8 +121,8 @@ function World:add_cell(x, y, alive)
   local existing = self:cell_at(x, y)
   assert(not existing, string.format("LocationOccupied(%d-%d)", x, y))
 
-  local key = self:make_key(x, y)
   local cell = Cell:new(x, y, alive)
+  local key = self:make_key(x, y)
   self.cells[key] = cell
   return true
 end

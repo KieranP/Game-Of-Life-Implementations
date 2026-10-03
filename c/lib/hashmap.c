@@ -21,16 +21,18 @@ static inline int fast_strcmp(const char *s1, const char *s2) {
   return (unsigned char)*s1 - (unsigned char)*s2;
 }
 
-HashMap *hashmap_new(void) {
+// Doubles the expected count to decrease hash collisions, then rounds up to a
+// power of two for masking (150 * 40 = 6,000 gives 16,384)
+HashMap *hashmap_new(size_t expected_count) {
   HashMap *map = malloc(sizeof(*map));
   if (!map) {
     return nullptr;
   }
 
-  static_assert((HASH_TABLE_SIZE & (HASH_TABLE_SIZE - 1)) == 0,
-                "HASH_TABLE_SIZE must be a power of two");
-
-  auto capacity = HASH_TABLE_SIZE;
+  auto capacity = (size_t)1;
+  while (capacity < expected_count * 2) {
+    capacity *= 2;
+  }
 
   map->entries = calloc(capacity, sizeof(HashEntry));
   if (!map->entries) {
@@ -40,6 +42,7 @@ HashMap *hashmap_new(void) {
 
   map->capacity = capacity;
   map->count = 0;
+  map->values = nullptr;
   for (auto i = 0; i < capacity; ++i) {
     map->entries[i].state = HASH_ENTRY_EMPTY;
   }
@@ -55,13 +58,50 @@ void hashmap_free(HashMap *map) {
     }
   }
   free(map->entries);
+  free(map->values);
   free(map);
+}
+
+// Doubles the table, reusing each entry's stored hash
+static bool hashmap_grow(HashMap *map) {
+  auto capacity = map->capacity * 2;
+  HashEntry *entries = calloc(capacity, sizeof(HashEntry));
+  if (!entries) {
+    return false;
+  }
+
+  auto mask = capacity - 1;
+  for (auto i = 0; i < map->capacity; ++i) {
+    auto entry = map->entries[i];
+    if (entry.state == HASH_ENTRY_OCCUPIED) {
+      auto idx = (size_t)entry.hash & mask;
+      while (entries[idx].state == HASH_ENTRY_OCCUPIED) {
+        idx = (idx + 1) & mask;
+      }
+      entries[idx] = entry;
+    }
+  }
+
+  free(map->entries);
+  map->entries = entries;
+  map->capacity = capacity;
+  return true;
 }
 
 bool hashmap_put(HashMap *map, const char *key, void *value) {
   if (!map || !key) {
     return false;
   }
+
+  // Past half full, probe chains lengthen and a full table drops inserts
+  if ((map->count + 1) * 2 > map->capacity) {
+    if (!hashmap_grow(map)) {
+      return false;
+    }
+  }
+
+  free(map->values);
+  map->values = nullptr;
 
   auto hash = hash_full(key);
   auto capacity = map->capacity;
@@ -125,9 +165,14 @@ void *hashmap_get(HashMap *map, const char *key) {
   return nullptr;
 }
 
+// The map owns the returned array, which stays valid until the next put
 void **hashmap_get_all_values(HashMap *map) {
   if (!map) {
     return nullptr;
+  }
+
+  if (map->values) {
+    return map->values;
   }
 
   void **values = malloc(map->count * sizeof(*values));
@@ -142,29 +187,6 @@ void **hashmap_get_all_values(HashMap *map) {
     }
   }
 
+  map->values = values;
   return values;
 }
-
-HashMapIterator hashmap_iterator(HashMap *map) {
-  HashMapIterator it;
-  it._map = map;
-  it._index = 0;
-  return it;
-}
-
-bool hashmap_iterator_next(HashMapIterator *it) {
-  auto map = it->_map;
-  while (it->_index < map->capacity) {
-    auto i = it->_index;
-    it->_index++;
-    if (map->entries[i].state == HASH_ENTRY_OCCUPIED) {
-      auto entry = map->entries[i];
-      it->key = entry.key;
-      it->value = entry.value;
-      return true;
-    }
-  }
-  return false;
-}
-
-void hashmap_iterator_reset(HashMapIterator *it) { it->_index = 0; }

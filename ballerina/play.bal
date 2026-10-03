@@ -2,13 +2,13 @@ import ballerina/io;
 import ballerina/os;
 import ballerina/time;
 
-const int WORLD_WIDTH = 150;
-const int WORLD_HEIGHT = 40;
+const int:Unsigned32 WORLD_WIDTH = 150;
+const int:Unsigned32 WORLD_HEIGHT = 40;
 const string CLEAR_SCREEN = "\u{001b}[?2026h\u{001b}[H\u{001b}[2J";
 const string SHOW_SCREEN = "\u{001b}[?2026l";
 
 class Play {
-  function run() returns error? {
+  public function run() returns error? {
     World world = check new(
       WORLD_WIDTH,
       WORLD_HEIGHT
@@ -30,7 +30,7 @@ class Play {
       world.doTick();
       decimal tickFinish = time:monotonicNow();
       decimal tickDiff = tickFinish - tickStart;
-      float tickTime = <float>tickDiff * 1000000000.0;
+      float tickTime = <float>tickDiff;
       totalTick += tickTime;
       lowestTick = float:min(lowestTick, tickTime);
       float avgTick = totalTick / <float>world.tick;
@@ -39,7 +39,7 @@ class Play {
       string rendered = world.render();
       decimal renderFinish = time:monotonicNow();
       decimal renderDiff = renderFinish - renderStart;
-      float renderTime = <float>renderDiff * 1000000000.0;
+      float renderTime = <float>renderDiff;
       totalRender += renderTime;
       lowestRender = float:min(lowestRender, renderTime);
       float avgRender = totalRender / <float>world.tick;
@@ -60,9 +60,9 @@ class Play {
     }
   }
 
-  function _f(float value) returns string {
-    // nanoseconds -> milliseconds, padded to 3 decimal places
-    return (value / 1000000.0).toFixedString(3);
+  private function _f(float value) returns string {
+    // seconds -> milliseconds, padded to 3 decimal places
+    return (value * 1000.0).toFixedString(3);
   }
 }
 

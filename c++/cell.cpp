@@ -20,7 +20,7 @@ class Cell {
       // The following is the fastest
       return std::ranges::count_if(neighbours, [](auto* n) { return n->alive; });
 
-      // The following is about the same speed
+      // The following is slower
       // auto alive_neighbours = 0;
       // for (auto& neighbour : neighbours) {
       //   if (neighbour->alive) {
@@ -29,7 +29,7 @@ class Cell {
       // }
       // return alive_neighbours;
 
-      // The following is about the same speed
+      // The following is slower
       // auto alive_neighbours = 0;
       // auto count = neighbours.size();
       // for (auto i = 0; i < count; i++) {

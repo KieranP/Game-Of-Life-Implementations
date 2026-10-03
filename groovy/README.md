@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install java groovy
+brew install groovy
 ```
 
 ## Build

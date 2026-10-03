@@ -8,8 +8,8 @@ import gleam/string
 
 // import gleam/string_tree // used by the slower render variant
 
-pub type World {
-  World(width: Int, height: Int, tick: Int, cells: Dict(String, Cell))
+pub opaque type World {
+  World(tick: Int, width: Int, height: Int, cells: Dict(String, Cell))
 }
 
 const directions = [
@@ -19,11 +19,15 @@ const directions = [
 ]
 
 pub fn new(width: Int, height: Int) -> World {
-  let world = World(width: width, height: height, tick: 0, cells: dict.new())
+  let world = World(tick: 0, width: width, height: height, cells: dict.new())
 
   world
   |> populate_cells()
   |> prepopulate_neighbours()
+}
+
+pub fn tick(world: World) -> Int {
+  world.tick
 }
 
 pub fn dotick(world: World) -> World {
@@ -86,12 +90,13 @@ fn populate_cells(world: World) -> World {
   int.range(0, world.height, world, fn(world, y) {
     int.range(0, world.width, world, fn(world, x) {
       let alive = float.random() <=. 0.2
-      add_cell(world, x, y, alive)
+      let #(world, _success) = add_cell(world, x, y, alive)
+      world
     })
   })
 }
 
-fn add_cell(world: World, x: Int, y: Int, alive: Bool) -> World {
+fn add_cell(world: World, x: Int, y: Int, alive: Bool) -> #(World, Bool) {
   let existing = cell_at(world, x, y)
   case existing {
     Ok(_) ->
@@ -99,10 +104,10 @@ fn add_cell(world: World, x: Int, y: Int, alive: Bool) -> World {
         "LocationOccupied(" <> int.to_string(x) <> "-" <> int.to_string(y) <> ")"
       }
     Error(_) -> {
-      let key = make_key(x, y)
       let new_cell = cell.new(x, y, alive)
+      let key = make_key(x, y)
       let new_cells = dict.insert(world.cells, key, new_cell)
-      World(..world, cells: new_cells)
+      #(World(..world, cells: new_cells), True)
     }
   }
 }

@@ -87,7 +87,7 @@ x + "-" + y
 3. Array & Join
 
 ```
-[x, "-", y].join
+[x, y].join("-")
 ```
 
 4. Other
@@ -145,6 +145,22 @@ Languages without pointers/shared references (immutable data) store the
 neighbours' coordinate keys (`"x-y"`) instead, refetched from `world.cells` when
 counting.
 
+#### add_cell
+
+Raise `LocationOccupied` if `cell_at(x, y)` finds a cell, then create the cell,
+then make the key just before inserting it into `cells`.
+
+```
+existing = cell_at(x, y)
+if existing
+  raise LocationOccupied(x, y)
+
+cell = Cell.new(x, y, alive)
+key = make_key(x, y)
+cells[key] = cell
+true
+```
+
 ### cell.ext
 
 ```
@@ -166,7 +182,7 @@ The `alive_neighbours` function should demonstrate several different ways of
 calculating the desired output. Comment out all but the fastest. Different
 approaches include:
 
-1. Lamdba/Anonymous Function
+1. Lambda/Anonymous Function
 
 ```
 neighbours.count(&:alive)

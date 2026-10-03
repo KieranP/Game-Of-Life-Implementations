@@ -1,6 +1,6 @@
 import static groovy.lang.Tuple.tuple
 
-public class World {
+class World {
   public int tick
 
   private final int width
@@ -125,8 +125,8 @@ public class World {
       throw new LocationOccupied(x, y)
     }
 
-    var key = makeKey(x, y)
     var cell = new Cell(x, y, alive)
+    var key = makeKey(x, y)
     cells[key] = cell
     true
   }

@@ -33,7 +33,7 @@ pub const Cell = struct {
         }
         return alive_neighbours;
 
-        // The following is about the same speed
+        // The following is slower
         // var alive_neighbours: u32 = 0;
         // const count = self.neighbours.items.len;
         // var i: u32 = 0;

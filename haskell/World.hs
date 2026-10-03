@@ -5,6 +5,7 @@ import qualified Cell
 import Control.DeepSeq (force)
 import Control.Exception (Exception, throwIO)
 import Control.Monad (foldM)
+import Data.Int (Int32)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Word (Word32)
@@ -22,7 +23,7 @@ data World = World
   , cells :: !(Map String Cell)
   } deriving (Show)
 
-directions :: [(Int, Int)]
+directions :: [(Int32, Int32)]
 directions =
   [ (-1, 1),  (0, 1),  (1, 1),  -- above
     (-1, 0),           (1, 0),  -- sides
@@ -79,7 +80,7 @@ render world =
     | y <- [0 .. height world - 1]
     ]
 
-makeKey :: Int -> Int -> String
+makeKey :: Word32 -> Word32 -> String
 makeKey x y =
   -- The following is slower
   -- show x ++ "-" ++ show y
@@ -92,7 +93,7 @@ makeKey x y =
 
 cellAt :: World -> Word32 -> Word32 -> Maybe Cell
 cellAt world x y =
-  let key = makeKey (fromIntegral x) (fromIntegral y)
+  let key = makeKey x y
   in Map.lookup key (cells world)
 
 populateCells :: World -> IO World
@@ -117,8 +118,8 @@ addCell world x y alive = do
     Just _ -> throwIO (LocationOccupied x y)
     Nothing -> return ()
 
-  let key = makeKey (fromIntegral x) (fromIntegral y)
   let cell = Cell.new x y alive
+  let key = makeKey x y
   let newWorld = world { cells = Map.insert key cell (cells world) }
   return (newWorld, True)
 
@@ -132,8 +133,10 @@ prepopulateNeighbours world =
                 , let nx = fromIntegral (x cell) + relX
                 , let ny = fromIntegral (y cell) + relY
                 , not (nx < 0 || ny < 0)
-                , not (nx >= fromIntegral (width world) || ny >= fromIntegral (height world))
-                , let key = makeKey nx ny
+                , let ux = fromIntegral nx
+                , let uy = fromIntegral ny
+                , not (ux >= width world || uy >= height world)
+                , let key = makeKey ux uy
                 , Map.member key (cells world)
                 ]
           -- force builds the keys now, so they aren't deferred into the first doTick

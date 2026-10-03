@@ -1,6 +1,6 @@
 import ballerina/random;
 
-public type LocationOccupied distinct error;
+type LocationOccupied distinct error;
 
 final [int, int][] DIRECTIONS = [
   [-1, 1],  [0, 1],  [1, 1],  // above

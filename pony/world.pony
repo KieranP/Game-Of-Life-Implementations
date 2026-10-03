@@ -6,7 +6,7 @@ use @fprintf[I32](stream: Pointer[U8] tag, fmt: Pointer[U8] tag, ...)
 use @pony_os_stderr[Pointer[U8]]()
 use @exit[None](status: I32)
 
-class val LocationOccupied
+class val _LocationOccupied
   let x: U32
   let y: U32
 
@@ -34,8 +34,8 @@ class World
     _width = width
     _height = height
 
-    populate_cells()
-    prepopulate_neighbours()
+    _populate_cells()
+    _prepopulate_neighbours()
 
   fun ref dotick() =>
     // First determine the action for all cells
@@ -95,7 +95,7 @@ class World
     let key = _make_key(x, y)
     _cells(consume key)?
 
-  fun ref populate_cells() =>
+  fun ref _populate_cells() =>
     let rand = Rand(Time.nanos())
     for y in Range[U32](0, _height) do
       for x in Range[U32](0, _width) do
@@ -111,17 +111,17 @@ class World
   ): Bool =>
     try
       let existing = _cell_at(x, y)?
-      let occupied = LocationOccupied(x, y)
+      let occupied = _LocationOccupied(x, y)
       @fprintf(@pony_os_stderr(), "%s\n".cstring(), occupied.string().cstring())
       @exit(1)
     end
 
-    let key = _make_key(x, y)
     let cell = Cell(x, y, alive)
+    let key = _make_key(x, y)
     _cells.insert(consume key, cell)
     true
 
-  fun ref prepopulate_neighbours() =>
+  fun ref _prepopulate_neighbours() =>
     for cell in _cells.values() do
       let x = cell.x.isize()
       let y = cell.y.isize()

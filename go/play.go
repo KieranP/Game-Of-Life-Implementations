@@ -25,9 +25,9 @@ func run() {
   }
 
   var totalTick float64
-  var lowestTick float64 = math.MaxFloat64
+  var lowestTick float64 = math.Inf(1)
   var totalRender float64
-  var lowestRender float64 = math.MaxFloat64
+  var lowestRender float64 = math.Inf(1)
 
   for {
     tickStart := time.Now()

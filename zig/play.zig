@@ -4,8 +4,8 @@ const Io = std.Io;
 const World = @import("world.zig").World;
 
 pub const Play = struct {
-    const world_width = 150;
-    const world_height = 40;
+    const world_width: u32 = 150;
+    const world_height: u32 = 40;
     const clear_screen = "\x1b[?2026h\x1b[H\x1b[2J";
     const show_screen = "\x1b[?2026l";
 
@@ -24,9 +24,9 @@ pub const Play = struct {
         }
 
         var total_tick: f64 = 0;
-        var lowest_tick = std.math.floatMax(f64);
+        var lowest_tick = std.math.inf(f64);
         var total_render: f64 = 0;
-        var lowest_render = std.math.floatMax(f64);
+        var lowest_render = std.math.inf(f64);
 
         while (true) {
             const tick_start = Io.Timestamp.now(io, .awake);

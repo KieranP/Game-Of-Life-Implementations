@@ -1,8 +1,8 @@
 defmodule World do
   defstruct [
-    :width,
-    :height,
     tick: 0,
+    width: nil,
+    height: nil,
     cells: %{}
   ]
 
@@ -32,7 +32,7 @@ defmodule World do
   def tick(world) do
     cells =
       for {key, cell} <- world.cells, into: %{} do
-        alive_neighbours = Cell.alive_neighbours(cell, world)
+        alive_neighbours = Cell.alive_neighbours(cell, world.cells)
 
         cond do
           not cell.alive and alive_neighbours == 3 ->
@@ -120,8 +120,8 @@ defmodule World do
       raise LocationOccupied, x: x, y: y
     end
 
-    key = make_key(x, y)
     cell = Cell.new(x, y, alive)
+    key = make_key(x, y)
     world = put_in(world.cells[key], cell)
     {world, true}
   end
@@ -140,7 +140,8 @@ defmodule World do
             key
           end
 
-        put_in(world.cells[make_key(cell.x, cell.y)].neighbours, neighbours)
+        key = make_key(cell.x, cell.y)
+        put_in(world.cells[key].neighbours, neighbours)
     end
   end
 end

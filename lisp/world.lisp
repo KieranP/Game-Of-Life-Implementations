@@ -123,8 +123,8 @@
     (when existing
       (error 'LocationOccupied :x x :y y)))
 
-  (let ((key (make-key world x y))
-        (cell (make-instance 'Cell :x x :y y :alive alive)))
+  (let ((cell (make-instance 'Cell :x x :y y :alive alive))
+        (key (make-key world x y)))
     (setf (gethash key (cells world)) cell)
     t))
 

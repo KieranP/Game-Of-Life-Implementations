@@ -1,5 +1,4 @@
-// import std.algorithm : filter;
-// import std.array;
+// import std.algorithm : count;
 import std.typecons : Nullable;
 
 class Cell {
@@ -22,12 +21,12 @@ class Cell {
 
     auto aliveNeighbours() {
       // The following is slower
-      // return neighbours.filter!(
+      // return cast(uint)neighbours.count!(
       //   neighbour => neighbour.alive
-      // ).array.length;
+      // );
 
       // The following is the fastest
-      auto aliveNeighbours = 0;
+      auto aliveNeighbours = 0u;
       foreach (ref neighbour; neighbours) {
         if (neighbour.alive) {
           aliveNeighbours++;
@@ -35,8 +34,8 @@ class Cell {
       }
       return aliveNeighbours;
 
-      // The following is about the same speed
-      // auto aliveNeighbours = 0;
+      // The following is slower
+      // auto aliveNeighbours = 0u;
       // auto count = neighbours.length;
       // for (auto i = 0; i < count; i++) {
       //   auto neighbour = neighbours[i];

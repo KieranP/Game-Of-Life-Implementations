@@ -1,72 +1,75 @@
 use v5.42;
-use experimental 'builtin';
+use experimental qw(builtin class);
 
 use lib './';
 use world;
-use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
-use List::Util qw(min);
 
-use constant WORLD_WIDTH => 150;
-use constant WORLD_HEIGHT => 40;
-use constant CLEAR_SCREEN => "\x1b[?2026h\x1b[H\x1b[2J";
-use constant SHOW_SCREEN => "\x1b[?2026l";
+class Play {
+  use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
+  use List::Util qw(min);
 
-sub run {
-  my $world = World->new(
-    width => WORLD_WIDTH,
-    height => WORLD_HEIGHT,
-  );
+  use constant WORLD_WIDTH => 150;
+  use constant WORLD_HEIGHT => 40;
+  use constant CLEAR_SCREEN => "\x1b[?2026h\x1b[H\x1b[2J";
+  use constant SHOW_SCREEN => "\x1b[?2026l";
 
-  my $minimal = ($ENV{MINIMAL} // '') eq '1';
-
-  if (!$minimal) {
-    print $world->render(), "\n";
-  }
-
-  my $total_tick = 0;
-  my $lowest_tick = builtin::inf;
-  my $total_render = 0;
-  my $lowest_render = builtin::inf;
-
-  while (1) {
-    my $tick_start = clock_gettime(CLOCK_MONOTONIC);
-    $world->dotick();
-    my $tick_finish = clock_gettime(CLOCK_MONOTONIC);
-    my $tick_time = ($tick_finish - $tick_start);
-    $total_tick += $tick_time;
-    $lowest_tick = min($lowest_tick, $tick_time);
-    my $avg_tick = $total_tick / $world->tick;
-
-    my $render_start = clock_gettime(CLOCK_MONOTONIC);
-    my $rendered = $world->render();
-    my $render_finish = clock_gettime(CLOCK_MONOTONIC);
-    my $render_time = ($render_finish - $render_start);
-    $total_render += $render_time;
-    $lowest_render = min($lowest_render, $render_time);
-    my $avg_render = $total_render / $world->tick;
-
-    if (!$minimal) {
-      print CLEAR_SCREEN;
-    }
-
-    printf(
-      "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
-      $world->tick,
-      _f($lowest_tick),
-      _f($avg_tick),
-      _f($lowest_render),
-      _f($avg_render)
+  sub run {
+    my $world = World->new(
+      width => WORLD_WIDTH,
+      height => WORLD_HEIGHT,
     );
 
+    my $minimal = ($ENV{MINIMAL} // '') eq '1';
+
     if (!$minimal) {
-      print $rendered . SHOW_SCREEN . "\n";
+      print $world->render(), "\n";
     }
+
+    my $total_tick = 0;
+    my $lowest_tick = builtin::inf;
+    my $total_render = 0;
+    my $lowest_render = builtin::inf;
+
+    while (1) {
+      my $tick_start = clock_gettime(CLOCK_MONOTONIC);
+      $world->dotick();
+      my $tick_finish = clock_gettime(CLOCK_MONOTONIC);
+      my $tick_time = ($tick_finish - $tick_start);
+      $total_tick += $tick_time;
+      $lowest_tick = min($lowest_tick, $tick_time);
+      my $avg_tick = $total_tick / $world->tick;
+
+      my $render_start = clock_gettime(CLOCK_MONOTONIC);
+      my $rendered = $world->render();
+      my $render_finish = clock_gettime(CLOCK_MONOTONIC);
+      my $render_time = ($render_finish - $render_start);
+      $total_render += $render_time;
+      $lowest_render = min($lowest_render, $render_time);
+      my $avg_render = $total_render / $world->tick;
+
+      if (!$minimal) {
+        print CLEAR_SCREEN;
+      }
+
+      printf(
+        "#%d - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
+        $world->tick,
+        _f($lowest_tick),
+        _f($avg_tick),
+        _f($lowest_render),
+        _f($avg_render)
+      );
+
+      if (!$minimal) {
+        print $rendered . SHOW_SCREEN . "\n";
+      }
+    }
+  }
+
+  sub _f($value) {
+    # seconds -> milliseconds
+    $value * 1_000;
   }
 }
 
-sub _f($value) {
-  # seconds -> milliseconds
-  $value * 1_000;
-}
-
-run();
+Play->run();

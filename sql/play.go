@@ -29,15 +29,14 @@ func run() {
 
   tickCount := 0
   var totalTick float64
-  var lowestTick float64 = math.MaxFloat64
+  var lowestTick float64 = math.Inf(1)
   var totalRender float64
-  var lowestRender float64 = math.MaxFloat64
+  var lowestRender float64 = math.Inf(1)
 
   for {
-    tickCount++
-
     tickStart := time.Now()
     execSQL(db, tickSQL)
+    tickCount++
     tickFinish := time.Now()
     tickTime := float64(tickFinish.Sub(tickStart).Nanoseconds())
     totalTick += tickTime

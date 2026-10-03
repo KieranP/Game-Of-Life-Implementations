@@ -3,6 +3,6 @@
 source ../helpers.sh
 
 echo -n "Odin - "
-odin version | head -n 1
+odin version | awk '{print $NF}'
 compile odin build . -o:speed --out=play
 benchmark ./play

@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install java kotlin
+brew install kotlin
 ```
 
 ## Build
@@ -17,3 +17,8 @@ kotlinc *.kt
 ```bash
 kotlin PlayKt
 ```
+
+## Notes
+
+- `UInt` is much slower (render ~40%, as `toString` goes through
+  `Integer.toUnsignedString`); fallback to `Int` (see `Cell#x`/`y`).

@@ -11,7 +11,7 @@ const DIRECTIONS: [(isize, isize); 8] = [
 ];
 
 #[derive(Debug)]
-pub struct LocationOccupied(u32, u32);
+struct LocationOccupied(u32, u32);
 impl Error for LocationOccupied {}
 impl fmt::Display for LocationOccupied {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -67,7 +67,7 @@ impl World {
     pub fn render(&self) -> String {
         let render_size = (self.width * self.height + self.height) as usize;
 
-        // The following is the slowest
+        // The following is slower
         // let mut rendering = String::new();
         // for y in 0..self.height {
         //     for x in 0..self.width {
@@ -131,6 +131,11 @@ impl World {
         // std::str::from_utf8(&buf[..key.len()]).unwrap()
 
         // The following is slower
+        // let key = x.to_string() + "-" + &y.to_string();
+        // buf[..key.len()].copy_from_slice(key.as_bytes());
+        // std::str::from_utf8(&buf[..key.len()]).unwrap()
+
+        // The following is slower
         // let key = vec![x.to_string(), y.to_string()].join("-");
         // buf[..key.len()].copy_from_slice(key.as_bytes());
         // std::str::from_utf8(&buf[..key.len()]).unwrap()
@@ -172,10 +177,10 @@ impl World {
             panic!("{}", LocationOccupied(x, y));
         }
 
+        let cell = Box::into_raw(Box::new(Cell::new(x, y, alive)));
+
         let mut buf = [0u8; 24];
         let key = Self::make_key(&mut buf, x, y).to_owned();
-
-        let cell = Box::into_raw(Box::new(Cell::new(x, y, alive)));
         self.cells.insert(key, cell);
         true
     }

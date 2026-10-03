@@ -13,21 +13,21 @@ class Cell
     @alive ? "o" : " "
   end
 
-  def alive_neighbours
+  def alive_neighbours : UInt32
     # The following is the fastest
-    neighbours.count(&.alive)
+    neighbours.count(&.alive).to_u32
 
-    # The following is about the same speed
-    # alive_neighbours = 0
+    # The following is slower
+    # alive_neighbours = 0_u32
     # neighbours.each do |neighbour|
     #   alive_neighbours += 1 if neighbour.alive
     # end
     # alive_neighbours
 
     # The following is slower
-    # alive_neighbours = 0
-    # count = neighbours.size-1
-    # 0.upto(count) do |i|
+    # alive_neighbours = 0_u32
+    # count = neighbours.size
+    # (0...count).each do |i|
     #   neighbour = neighbours[i]
     #   alive_neighbours += 1 if neighbour.alive
     # end

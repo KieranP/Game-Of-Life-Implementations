@@ -7,7 +7,7 @@ final public class World {
   private let height: UInt32
   private var cells: [String: Cell]
 
-  public struct LocationOccupied: Error, CustomStringConvertible {
+  private struct LocationOccupied: Error, CustomStringConvertible {
     let x: UInt32
     let y: UInt32
 
@@ -22,7 +22,7 @@ final public class World {
     (-1, -1), (0, -1), (1, -1) // below
   ]
 
-  public init(width: UInt32, height: UInt32) throws(LocationOccupied) {
+  public init(width: UInt32, height: UInt32) throws {
     self.tick = 0
     self.width = width
     self.height = height
@@ -61,17 +61,17 @@ final public class World {
   }
 
   public func render() -> String {
-    // The following is the fastest
-    var rendering = ""
-    for y in 0..<height {
-      for x in 0..<width {
-        if let cell = cellAt(x: x, y: y) {
-          rendering += cell.toChar()
-        }
-      }
-      rendering += "\n"
-    }
-    return rendering
+    // The following is slower
+    // var rendering = ""
+    // for y in 0..<height {
+    //   for x in 0..<width {
+    //     if let cell = cellAt(x: x, y: y) {
+    //       rendering += cell.toChar()
+    //     }
+    //   }
+    //   rendering += "\n"
+    // }
+    // return rendering
 
     // The following is slower
     // var rendering: Array<String> = []
@@ -84,6 +84,36 @@ final public class World {
     //   rendering.append("\n")
     // }
     // return rendering.joined()
+
+    // The following is slower
+    // let renderSize = Int(width * height + height)
+    // var rendering = ""
+    // rendering.reserveCapacity(renderSize)
+    // for y in 0..<height {
+    //   for x in 0..<width {
+    //     if let cell = cellAt(x: x, y: y) {
+    //       rendering += cell.toChar()
+    //     }
+    //   }
+    //   rendering += "\n"
+    // }
+    // return rendering
+
+    // The following is the fastest
+    let renderSize = Int(width * height + height)
+    var rendering = [UInt8](repeating: 0, count: renderSize)
+    var idx = 0
+    for y in 0..<height {
+      for x in 0..<width {
+        if let cell = cellAt(x: x, y: y) {
+          rendering[idx] = cell.toChar().utf8.first!
+          idx += 1
+        }
+      }
+      rendering[idx] = UInt8(ascii: "\n")
+      idx += 1
+    }
+    return String(decoding: rendering[..<idx], as: UTF8.self)
   }
 
   private func makeKey(x: UInt32, y: UInt32) -> String {
@@ -117,8 +147,8 @@ final public class World {
       throw LocationOccupied(x: x, y: y)
     }
 
-    let key = makeKey(x: x, y: y)
     let cell = Cell(x: x, y: y, alive: alive)
+    let key = makeKey(x: x, y: y)
     cells[key] = cell
     return true
   }

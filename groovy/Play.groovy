@@ -20,10 +20,10 @@ class Play {
       println(world.render())
     }
 
-    var totalTick = 0.0
-    var lowestTick = Double.MAX_VALUE
-    var totalRender = 0.0
-    var lowestRender = Double.MAX_VALUE
+    var totalTick = 0.0d
+    var lowestTick = Double.POSITIVE_INFINITY
+    var totalRender = 0.0d
+    var lowestRender = Double.POSITIVE_INFINITY
 
     while (true) {
       var tickStart = System.nanoTime()

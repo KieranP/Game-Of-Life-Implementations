@@ -4,10 +4,10 @@
 
 (defrecord World [tick width height cells])
 
-(defn location-occupied-exception [x y]
+(defn- location-occupied-exception [x y]
   (ex-info (str "LocationOccupied(" x "-" y ")") {:x x :y y}))
 
-(def directions
+(def ^:private directions
   [[-1 1]  [0 1]  [1 1]  ; above
    [-1 0]         [1 0]  ; sides
    [-1 -1] [0 -1] [1 -1] ; below
@@ -27,7 +27,7 @@
         (persistent!
          (reduce-kv
           (fn [acc key cell]
-            (let [alive-neighbours (c/alive-neighbours cell world)]
+            (let [alive-neighbours (c/alive-neighbours cell (:cells world))]
               (cond
                 (and (not (:alive cell))
                      (= alive-neighbours 3))
@@ -122,8 +122,8 @@
    (let [existing (cell-at world x y)]
      (if existing
        (throw (location-occupied-exception x y))
-       (let [key (make-key x y)
-             cell (c/new-cell x y alive)]
+       (let [cell (c/new-cell x y alive)
+             key (make-key x y)]
          [(assoc-in world [:cells key] cell) true])))))
 
 (defn- prepopulate-neighbours [world]

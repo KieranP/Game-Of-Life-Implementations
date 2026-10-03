@@ -149,11 +149,11 @@ func (world *World) addCell(x uint32, y uint32, alive bool) bool {
     panic(LocationOccupied{ x: x, y: y })
   }
 
+  cell := newCell(x, y, alive)
+
   var buf [24]byte
   n := world.makeKey(buf[:], x, y)
   key := string(buf[:n])
-
-  cell := newCell(x, y, alive)
   world.cells[key] = cell
   return true
 }

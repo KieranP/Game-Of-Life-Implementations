@@ -2,11 +2,16 @@ package main
 
 import "core:os"
 import "core:fmt"
+import "core:math"
 import "core:time"
 
+@(private="file")
 WORLD_WIDTH :: u32(150)
+@(private="file")
 WORLD_HEIGHT :: u32(40)
+@(private="file")
 CLEAR_SCREEN :: "\x1b[?2026h\x1b[H\x1b[2J"
+@(private="file")
 SHOW_SCREEN :: "\x1b[?2026l"
 
 run :: proc() {
@@ -25,9 +30,9 @@ run :: proc() {
   }
 
   total_tick: f64
-  lowest_tick := max(f64)
+  lowest_tick := math.INF_F64
   total_render: f64
-  lowest_render := max(f64)
+  lowest_render := math.INF_F64
 
   for {
     tick_start := time.tick_now()
@@ -66,6 +71,7 @@ run :: proc() {
   }
 }
 
+@(private="file")
 _f :: proc(value: f64) -> f64 {
   // nanoseconds -> milliseconds
   return value / 1_000_000

@@ -3,7 +3,9 @@
 ## Install
 
 ```bash
-brew install go sqlite3 postgresql
+brew install go postgresql@18
+brew services start postgresql@18
+$(brew --prefix postgresql@18)/bin/createuser -s postgres
 ```
 
 ## Build
@@ -35,9 +37,9 @@ PG_DATABASE=gol \
 
 ## Notes
 
-- Set-based rather than imperative, so each tick is a single `UPDATE` across all
-  cells (see tick.sql).
-- No support for pointers/references (see `neighbours` in init.sql).
+- Set-based rather than imperative, so each tick is three `UPDATE`s (reset,
+  scatter, flip) rather than a loop over cells (see tick.sql).
+- No support for pointers/shared references (see `neighbours` in init.sql).
 - No support for continuous loops; fallback to a Go runner holding a single
   connection (see play.go).
 - No support for native exceptions; emulated with the `PRIMARY KEY` constraint

@@ -1,5 +1,5 @@
 defmodule Cell do
-  defstruct [:x, :y, :alive, :neighbours]
+  defstruct [:x, :y, :alive, neighbours: []]
 
   def new(x, y, alive \\ false) do
     %Cell{
@@ -13,8 +13,8 @@ defmodule Cell do
     if cell.alive, do: "o", else: " "
   end
 
-  def alive_neighbours(cell, world) do
-    neighbours = Map.take(world.cells, cell.neighbours)
+  def alive_neighbours(cell, cells) do
+    neighbours = Map.take(cells, cell.neighbours)
 
     # The following is slower
     # Enum.count(neighbours, fn {_key, neighbour} ->

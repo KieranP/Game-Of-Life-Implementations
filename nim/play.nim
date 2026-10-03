@@ -1,8 +1,8 @@
 import std/[envvars, monotimes, times, strutils, strformat]
 include world
 
-const WorldWidth = 150
-const WorldHeight = 40
+const WorldWidth = 150'u32
+const WorldHeight = 40'u32
 const ClearScreen = "\x1b[?2026h\x1b[H\x1b[2J"
 const ShowScreen = "\x1b[?2026l"
 
@@ -10,7 +10,7 @@ type
   Play = ref object
 
 # By default, Nim requires methods be declared before they are used elsewhere
-# and will error out if I dont. To to order the methods as I like, I need to
+# and will error out if I don't. To order the methods as I like, I need to
 # declare them ahead of time, known as "forward declaration".
 proc run(self: Play)
 func f(self: Play, value: float): float

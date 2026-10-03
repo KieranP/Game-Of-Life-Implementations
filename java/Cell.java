@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-// import java.util.stream.Collectors;
 
 public class Cell {
   public final int x;
@@ -23,10 +22,9 @@ public class Cell {
 
   public int aliveNeighbours() {
     // The following is slower
-    // return this.neighbours.stream().
+    // return (int) this.neighbours.stream().
     //   filter(neighbour -> neighbour.alive).
-    //   collect(Collectors.toList()).
-    //   size();
+    //   count();
 
     // The following is slower
     // var aliveNeighbours = 0;

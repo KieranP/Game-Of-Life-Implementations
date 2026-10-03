@@ -5,6 +5,7 @@ class Play
   WORLD_HEIGHT = 40
   CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
   SHOW_SCREEN  = "\x1b[?2026l"
+  private_constant :WORLD_WIDTH, :WORLD_HEIGHT, :CLEAR_SCREEN, :SHOW_SCREEN
 
   def self.run
     world = World.new(

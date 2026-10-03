@@ -110,8 +110,8 @@ class world ~width ~height =
       if Option.is_some existing then
         raise (LocationOccupied (x, y));
 
-      let key = self#make_key x y in
       let cell = new Cell.cell x y ~alive () in
+      let key = self#make_key x y in
       Hashtbl.add cells key cell;
       true
 

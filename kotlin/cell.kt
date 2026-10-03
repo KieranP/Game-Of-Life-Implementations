@@ -12,7 +12,7 @@ public class Cell(
 
   public fun aliveNeighbours(): Int {
     // The following is slower
-    // return this.neighbours.filter { it.alive }.size
+    // return this.neighbours.count { it.alive }
 
     // The following is slower
     // var aliveNeighbours = 0

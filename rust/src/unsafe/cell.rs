@@ -40,7 +40,7 @@ impl Cell {
         }
         alive_neighbours
 
-        // The following is about the same speed
+        // The following is slower
         // let mut alive_neighbours = 0;
         // let count = self.neighbours.len();
         // for i in 0..count {

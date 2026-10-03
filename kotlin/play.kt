@@ -18,9 +18,9 @@ public class Play {
       }
 
       var totalTick = 0.0
-      var lowestTick = Double.MAX_VALUE
+      var lowestTick = Double.POSITIVE_INFINITY
       var totalRender = 0.0
-      var lowestRender = Double.MAX_VALUE
+      var lowestRender = Double.POSITIVE_INFINITY
 
       while (true) {
         val tickStart = System.nanoTime()

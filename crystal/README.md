@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install crystal-lang
+brew install crystal
 ```
 
 ## Build

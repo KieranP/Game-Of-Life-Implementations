@@ -2,14 +2,14 @@
 
 @interface Cell : NSObject
 
-@property (nonatomic, assign) NSUInteger x;
-@property (nonatomic, assign) NSUInteger y;
+@property (nonatomic, assign, readonly) uint32_t x;
+@property (nonatomic, assign, readonly) uint32_t y;
 @property (nonatomic, assign) BOOL alive;
 @property (nonatomic, strong) NSNumber *nextState;
 @property (nonatomic, strong) NSMutableArray<Cell *> *neighbours;
 
-- (instancetype)initWithX:(NSUInteger)x y:(NSUInteger)y alive:(BOOL)alive;
+- (instancetype)initWithX:(uint32_t)x y:(uint32_t)y alive:(BOOL)alive;
 - (NSString *)toChar;
-- (NSUInteger)aliveNeighbours;
+- (uint32_t)aliveNeighbours;
 
 @end

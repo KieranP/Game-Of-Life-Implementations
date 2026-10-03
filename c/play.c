@@ -6,8 +6,8 @@
 #include <string.h>
 #include <time.h>
 
-#define WORLD_WIDTH 150
-#define WORLD_HEIGHT 40
+static constexpr uint32_t WORLD_WIDTH = 150;
+static constexpr uint32_t WORLD_HEIGHT = 40;
 #define CLEAR_SCREEN "\x1b[?2026h\x1b[H\x1b[2J"
 #define SHOW_SCREEN "\x1b[?2026l"
 
@@ -16,10 +16,7 @@ static double _f(double value) {
   return value / 1'000'000.0;
 }
 
-int main(void) {
-  // Initialize the random seed generator
-  srand(time(nullptr));
-
+void run(void) {
   auto world = world_new(
     WORLD_WIDTH,
     WORLD_HEIGHT
@@ -77,4 +74,11 @@ int main(void) {
   }
 
   world_free(world);
+}
+
+int main(void) {
+  // Initialize the random seed generator
+  srand(time(nullptr));
+
+  run();
 }

@@ -15,6 +15,7 @@ class World
     [-1, 0],           [1, 0], # sides
     [-1, -1], [0, -1], [1, -1] # below
   ].freeze
+  private_constant :LocationOccupied, :DIRECTIONS
 
   def initialize(width:, height:)
     @tick = 0
@@ -121,8 +122,8 @@ class World
       raise LocationOccupied.new(x, y)
     end
 
-    key = make_key(x, y)
     cell = Cell.new(x, y, alive)
+    key = make_key(x, y)
     @cells[key] = cell
     true
   end

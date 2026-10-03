@@ -14,9 +14,9 @@ public class Cell(uint x, uint y, bool alive = false) {
 
   public uint AliveNeighbours() {
     // The following is slower
-    // return (uint)this.Neighbours.Where(
+    // return (uint)this.Neighbours.Count(
     //   (neighbour) => neighbour.Alive
-    // ).ToList().Count;
+    // );
 
     // The following is slower
     // var aliveNeighbours = 0u;

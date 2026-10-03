@@ -46,10 +46,10 @@ class World
   end
 
   def render
-    # This following is slower
+    # The following is slower
     # rendering = ""
-    # @height.times.each { |y|
-    #   @width.times.each { |x|
+    # @height.times { |y|
+    #   @width.times { |x|
     #     cell = cell_at(x, y)
     #     if cell
     #       rendering += cell.to_char
@@ -61,8 +61,8 @@ class World
 
     # The following is slower
     # rendering = [] of String
-    # @height.times.each { |y|
-    #   @width.times.each { |x|
+    # @height.times { |y|
+    #   @width.times { |x|
     #     cell = cell_at(x, y)
     #     if cell
     #       rendering << cell.to_char
@@ -118,8 +118,8 @@ class World
       raise LocationOccupied.new(x, y)
     end
 
-    key = make_key(x, y)
     cell = Cell.new(x, y, alive)
+    key = make_key(x, y)
     @cells[key] = cell
     true
   end

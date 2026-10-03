@@ -1,15 +1,16 @@
 module world_mod
   use cell_mod
   use hashmap_mod
+  use iso_fortran_env, only: real64
   implicit none
   private
   public :: World, world_new, world_free, world_tick, world_render
 
   type :: World
-    integer :: width
-    integer :: height
     integer :: tick
-    type(HashMap) :: cells
+    integer, private :: width
+    integer, private :: height
+    type(HashMap), private :: cells
   end type World
 
   integer, parameter :: DIRECTIONS(2,8) = reshape([ &
@@ -27,7 +28,7 @@ contains
     w%width = width
     w%height = height
     w%tick = 0
-    w%cells = hashmap_new()
+    w%cells = hashmap_new(width * height)
 
     call populate_cells(w)
     call prepopulate_neighbours(w)
@@ -35,10 +36,10 @@ contains
 
   subroutine world_free(w)
     type(World), intent(inout) :: w
-    type(CellPtr), allocatable :: cells(:)
+    type(CellPtr), pointer :: cells(:)
     integer :: i
 
-    cells = hashmap_get_all_values(w%cells)
+    cells => hashmap_get_all_values(w%cells)
     do i = 1, size(cells)
       call cell_free(cells(i)%ptr)
     end do
@@ -49,9 +50,9 @@ contains
     type(World), intent(inout) :: w
     integer :: i, alive_neighbours
     type(Cell), pointer :: c
-    type(CellPtr), allocatable :: cells(:)
+    type(CellPtr), pointer :: cells(:)
 
-    cells = hashmap_get_all_values(w%cells)
+    cells => hashmap_get_all_values(w%cells)
 
     ! First determine the action for all cells
     do i = 1, size(cells)
@@ -78,7 +79,7 @@ contains
   function world_render(w) result(rendering)
     type(World), intent(in) :: w
     type(Cell), pointer :: c
-    integer :: x, y, idx, render_size, i
+    integer :: x, y, idx, render_size
     character(len=:), allocatable :: rendering
 
     ! The following is slower
@@ -124,13 +125,13 @@ contains
   subroutine populate_cells(w)
     type(World), intent(inout) :: w
     integer :: x, y
-    real :: random
+    real(real64) :: random
     logical :: alive, success
 
     do y = 0, w%height - 1
       do x = 0, w%width - 1
         call random_number(random)
-        alive = random <= 0.2
+        alive = random <= 0.2_real64
         success = add_cell(w, x, y, alive)
       end do
     end do
@@ -141,7 +142,7 @@ contains
     integer, intent(in) :: x, y
     logical, intent(in) :: alive
     logical :: added
-    type(Cell), pointer :: existing
+    type(Cell), pointer :: existing, c
     character(len=:), allocatable :: key
     character(len=64) :: message
 
@@ -151,8 +152,9 @@ contains
       error stop trim(message)
     end if
 
+    c => cell_new(x, y, alive)
     key = make_key(x, y)
-    call hashmap_put(w%cells, key, cell_new(x, y, alive))
+    call hashmap_put(w%cells, key, c)
     added = .true.
   end function add_cell
 
@@ -160,9 +162,10 @@ contains
     type(World), intent(inout) :: w
     integer :: i, d, x, y, nx, ny
     type(Cell), pointer :: c, neighbour
-    type(CellPtr), allocatable :: cells(:)
+    type(CellPtr), pointer :: cells(:)
 
-    cells = hashmap_get_all_values(w%cells)
+    ! Also builds the values array the timed tick reuses
+    cells => hashmap_get_all_values(w%cells)
 
     do i = 1, size(cells)
       c => cells(i)%ptr

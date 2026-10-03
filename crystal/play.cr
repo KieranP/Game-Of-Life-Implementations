@@ -1,10 +1,10 @@
 require "./world"
 
 class Play
-  WORLD_WIDTH = 150_u32
-  WORLD_HEIGHT = 40_u32
-  CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
-  SHOW_SCREEN = "\x1b[?2026l"
+  private WORLD_WIDTH = 150_u32
+  private WORLD_HEIGHT = 40_u32
+  private CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J"
+  private SHOW_SCREEN = "\x1b[?2026l"
 
   def self.run
     world = World.new(

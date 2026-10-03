@@ -11,12 +11,16 @@ fi
 
 compile go build -o play .
 
-echo -n "SQL - SQLite - "
-sqlite3 --version | head -n 1
+# go-sqlite3 compiles in its own SQLite, which can differ from the sqlite3 CLI's
+sqlite_driver=github.com/mattn/go-sqlite3
+sqlite_dir=$(go list -m -f '{{.Dir}}' $sqlite_driver)
+sqlite_version=$(grep -m1 '#define SQLITE_VERSION ' "$sqlite_dir/sqlite3-binding.h" | cut -d'"' -f2)
+echo -n "SQL - SQLite - SQLite $sqlite_version, "
+go list -m $sqlite_driver
 DB_TYPE=sqlite benchmark ./play
 
 echo ""
 
 echo -n "SQL - PostgreSQL - "
-psql --version | head -n 1
+go list -m github.com/lib/pq
 DB_TYPE=postgres benchmark ./play

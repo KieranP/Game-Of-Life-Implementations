@@ -20,9 +20,9 @@ new(X, Y, Alive) ->
 to_char(#cell{alive = true}) -> $o;
 to_char(#cell{alive = false}) -> $\s.
 
--spec alive_neighbours(cell(), world:world()) -> integer().
-alive_neighbours(Cell, World) ->
-  Neighbours = maps:with(Cell#cell.neighbours, world:cells(World)),
+-spec alive_neighbours(cell(), #{string() => cell()}) -> integer().
+alive_neighbours(Cell, Cells) ->
+  Neighbours = maps:with(Cell#cell.neighbours, Cells),
 
   %% The following is slower
   %% maps:fold(

@@ -74,8 +74,8 @@ World <- function(width, height) {
         cell <- cell_at(x, y)
         if (!is.null(cell)) {
           rendering[idx] <- cell$to_char()
+          idx <- idx + 1
         }
-        idx <- idx + 1
       }
       rendering[idx] <- "\n"
       idx <- idx + 1
@@ -114,8 +114,8 @@ World <- function(width, height) {
       stop(location_occupied(x, y))
     }
 
-    key <- make_key(x, y)
     cell <- Cell(x, y, alive)
+    key <- make_key(x, y)
     assign(key, cell, envir = cells)
     TRUE
   }

@@ -69,7 +69,7 @@ contains
       end if
     end do
 
-    ! The following is about the same speed
+    ! The following is slower
     ! alive_neighbours = 0
     ! do i = 1, c%neighbour_count
     !   if (c%neighbours(i)%ptr%alive) then

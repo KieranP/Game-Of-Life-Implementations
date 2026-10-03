@@ -5,16 +5,17 @@ import "core:math/rand"
 import "core:strconv"
 import "core:strings"
 
-DIRECTIONS :: [8][2]int{
+@(private="file")
+DIRECTIONS :: [8][2]i32{
   {-1, 1},  {0, 1},  {1, 1},  // above
   {-1, 0},           {1, 0},  // sides
   {-1, -1}, {0, -1}, {1, -1}, // below
 }
 
 World :: struct {
+  tick: u32,
   width: u32,
   height: u32,
-  tick: u32,
   cells: map[string]^Cell
 }
 
@@ -86,6 +87,7 @@ world_render :: proc(world: ^World) -> string {
   return strings.to_string(rendering)
 }
 
+@(private="file")
 world_make_key :: proc(buf: []u8, x: u32, y: u32) -> string {
   // The following is slower
   // return fmt.bprintf(buf, "%d-%d", x, y)
@@ -98,6 +100,7 @@ world_make_key :: proc(buf: []u8, x: u32, y: u32) -> string {
   return string(buf[:n])
 }
 
+@(private="file")
 world_cell_at :: proc(world: ^World, x: u32, y: u32) -> (^Cell, bool) {
   buf: [24]u8 = ---
   key := world_make_key(buf[:], x, y)
@@ -105,33 +108,36 @@ world_cell_at :: proc(world: ^World, x: u32, y: u32) -> (^Cell, bool) {
   return world.cells[key]
 }
 
+@(private="file")
 world_populate_cells :: proc(world: ^World) {
   for y in 0..<world.height {
     for x in 0..<world.width {
-      alive := rand.float32() <= 0.2
+      alive := rand.float64() <= 0.2
       world_add_cell(world, x, y, alive)
     }
   }
 }
 
+@(private="file")
 world_add_cell :: proc(world: ^World, x: u32, y: u32, alive: bool = false) -> bool {
   existing, _ := world_cell_at(world, x, y)
   if existing != nil {
     fmt.panicf("LocationOccupied(%d-%d)", x, y)
   }
 
+  cell := new_cell(x, y, alive)
+
   buf: [24]u8 = ---
   key := strings.clone(world_make_key(buf[:], x, y))
-
-  cell := new_cell(x, y, alive)
   world.cells[key] = cell
   return true
 }
 
+@(private="file")
 world_prepopulate_neighbours :: proc(world: ^World) {
   for _, cell in world.cells {
-    x := int(cell.x)
-    y := int(cell.y)
+    x := i32(cell.x)
+    y := i32(cell.y)
 
     for set in DIRECTIONS {
       nx := x + set[0]

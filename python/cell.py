@@ -5,8 +5,8 @@ class Cell:
   x: int
   y: int
   alive: bool = False
-  next_state: bool | None = None
-  neighbours: list["Cell"] = field(default_factory=list)
+  next_state: bool | None = field(default=None, init=False)
+  neighbours: list["Cell"] = field(default_factory=list, init=False)
 
   def to_char(self) -> str:
     return 'o' if self.alive else ' '

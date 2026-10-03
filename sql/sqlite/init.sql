@@ -53,6 +53,6 @@ INNER JOIN cells c2
   AND c2.y BETWEEN c1.y - 1 AND c1.y + 1
   AND NOT (c2.x = c1.x AND c2.y = c1.y);
 
--- Collect table statistics up front; a freshly created database has none
--- until autoanalyze runs, leaving the first minute of ticks on bad plans.
+-- Collect table statistics up front; SQLite never gathers them on its own,
+-- so the planner would otherwise fall back to default estimates.
 ANALYZE;

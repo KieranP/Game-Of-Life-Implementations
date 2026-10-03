@@ -9,7 +9,12 @@ double get_time_ns(void) {
 }
 
 // Return the minimum of two doubles
-double min_double(double a, double b) { return a < b ? a : b; }
+double min_double(double a, double b) {
+  if (a < b) {
+    return a;
+  }
+  return b;
+}
 
 // Fast unsigned integer to string conversion without using sprintf/snprintf
 // Writes the string representation of num into buf

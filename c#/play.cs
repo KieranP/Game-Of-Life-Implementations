@@ -1,5 +1,4 @@
 using System;
-// using System.Linq;
 using System.Diagnostics;
 
 public class Play {
@@ -25,9 +24,9 @@ public class Play {
     }
 
     var totalTick = 0.0;
-    var lowestTick = double.MaxValue;
+    var lowestTick = double.PositiveInfinity;
     var totalRender = 0.0;
-    var lowestRender = double.MaxValue;
+    var lowestRender = double.PositiveInfinity;
 
     while (true) {
       var tickStart = Stopwatch.GetTimestamp();

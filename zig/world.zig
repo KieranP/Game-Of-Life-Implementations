@@ -13,7 +13,7 @@ const directions = [_]struct { i8, i8 }{
 };
 // zig fmt: on
 
-pub const Errors = error{
+const Errors = error{
     LocationOccupied,
 };
 
@@ -65,7 +65,7 @@ pub const World = struct {
         it = self.cells.valueIterator();
         while (it.next()) |val| {
             const cell = val.*;
-            cell.alive = cell.next_state.?;
+            cell.alive = cell.next_state orelse false;
         }
 
         self.tick += 1;
@@ -74,7 +74,7 @@ pub const World = struct {
     pub fn render(self: *World) ![]const u8 {
         const render_size = self.width * self.height + self.height;
 
-        // The following is about the same speed
+        // The following is slower
         // var rendering = ArrayList(u8).empty;
         // try rendering.ensureTotalCapacity(self.allocator, render_size);
         // for (0..self.height) |y| {
@@ -139,15 +139,16 @@ pub const World = struct {
     fn addCell(self: *World, x: u32, y: u32, alive: bool) !bool {
         const existing = self.cellAt(x, y);
         if (existing != null) {
+            std.debug.print("LocationOccupied({d}-{d})\n", .{ x, y });
             return Errors.LocationOccupied;
         }
+
+        const cell = try Cell.init(self.allocator, x, y, alive);
+        errdefer self.allocator.destroy(cell);
 
         var buf: [24]u8 = undefined;
         const key = try self.allocator.dupe(u8, makeKey(&buf, x, y));
         errdefer self.allocator.free(key);
-
-        const cell = try Cell.init(self.allocator, x, y, alive);
-        errdefer self.allocator.destroy(cell);
         try self.cells.put(key, cell);
         return true;
     }

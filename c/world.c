@@ -36,11 +36,14 @@ static bool add_cell(World *world, uint32_t x, uint32_t y, bool alive) {
     exit(1);
   }
 
+  auto cell = cell_new(x, y, alive);
+
   char key[24];
   make_key(key, x, y);
-
-  auto cell = cell_new(x, y, alive);
-  hashmap_put(world->cells, key, cell);
+  if (!hashmap_put(world->cells, key, cell)) {
+    fprintf(stderr, "Out of memory\n");
+    exit(1);
+  }
   return true;
 }
 
@@ -55,9 +58,16 @@ static void populate_cells(World *world) {
 }
 
 static void prepopulate_neighbours(World *world) {
-  auto it = hashmap_iterator(world->cells);
-  while (hashmap_iterator_next(&it)) {
-    auto cell = (Cell *)it.value;
+  // Also builds the values array the timed tick reuses
+  auto cells = (Cell **)hashmap_get_all_values(world->cells);
+  if (!cells) {
+    fprintf(stderr, "Out of memory\n");
+    exit(1);
+  }
+
+  auto cell_count = world->cells->count;
+  for (auto i = 0; i < cell_count; i++) {
+    auto cell = cells[i];
     auto x = (int)cell->x;
     auto y = (int)cell->y;
 
@@ -84,7 +94,11 @@ static void prepopulate_neighbours(World *world) {
 
 World *world_new(uint32_t width, uint32_t height) {
   World *world = malloc(sizeof(*world));
-  *world = (World){.width = width, .height = height, .cells = hashmap_new()};
+  if (!world) {
+    fprintf(stderr, "Out of memory\n");
+    exit(1);
+  }
+  *world = (World){.width = width, .height = height, .cells = hashmap_new(width * height)};
 
   populate_cells(world);
   prepopulate_neighbours(world);
@@ -93,9 +107,10 @@ World *world_new(uint32_t width, uint32_t height) {
 }
 
 void world_free(World *world) {
-  auto it = hashmap_iterator(world->cells);
-  while (hashmap_iterator_next(&it)) {
-    cell_free((Cell *)it.value);
+  auto cells = (Cell **)hashmap_get_all_values(world->cells);
+  auto cell_count = world->cells->count;
+  for (auto i = 0; i < cell_count; i++) {
+    cell_free(cells[i]);
   }
   hashmap_free(world->cells);
   free(world);
@@ -124,13 +139,16 @@ void world_tick(World *world) {
     cell->alive = cell->next_state;
   }
 
-  free(cells);
   world->tick++;
 }
 
 char *world_render(World *world) {
   auto render_size = world->width * world->height + world->height + 1;
   auto rendering = (char *)malloc(render_size);
+  if (!rendering) {
+    fprintf(stderr, "Out of memory\n");
+    exit(1);
+  }
 
   // The following is slower
   // rendering[0] = '\0';

@@ -10,7 +10,7 @@ Cell :: struct {
   neighbours: [dynamic]^Cell
 }
 
-new_cell :: proc(x: u32, y: u32, alive: bool) -> ^Cell {
+new_cell :: proc(x: u32, y: u32, alive: bool = false) -> ^Cell {
   return new_clone(Cell{x = x, y = y, alive = alive})
 }
 
@@ -24,7 +24,7 @@ cell_to_char :: proc(cell: ^Cell) -> u8 {
 }
 
 cell_alive_neighbours :: proc(cell: ^Cell) -> u32 {
-  // The following is about the same speed
+  // The following is slower
   // return u32(slice.count_proc(cell.neighbours[:], proc(neighbour: ^Cell) -> bool {
   //   return neighbour.alive
   // }))

@@ -1,12 +1,12 @@
 (ns play
   (:require [world :as w]))
 
-(def world-width 150)
-(def world-height 40)
-(def clear-screen "\u001b[?2026h\u001b[H\u001b[2J")
-(def show-screen "\u001b[?2026l")
+(def ^:private world-width 150)
+(def ^:private world-height 40)
+(def ^:private clear-screen "\u001b[?2026h\u001b[H\u001b[2J")
+(def ^:private show-screen "\u001b[?2026l")
 
-(defn _f [value]
+(defn- _f [value]
   ;; nanoseconds -> milliseconds
   (/ value 1000000.0))
 

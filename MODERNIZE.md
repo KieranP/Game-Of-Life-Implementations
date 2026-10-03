@@ -21,8 +21,8 @@ Won't compile / not an improvement — don't propose:
 - Groovy: no for-header destructuring (`for ((rel_x, rel_y) in DIRECTIONS)`).
 - Inko: can't call an ownership-taking method on a borrowed field
   (`cell.next_state.or(false)`).
-- Kotlin: no native fixed-precision float formatting
-  (`String.format("%.3f", ...)`).
+- Kotlin: `UInt` makes render ~40% slower, as `toString` goes through
+  `Integer.toUnsignedString` (`x: UInt`).
 - OCaml: `Random.self_init` not deprecated.
 - Odin: `or_else` needs the `.?` assertion (`next_state or_else false`).
 - Perl: n-at-a-time `foreach` doesn't fit list-of-pairs DIRECTIONS

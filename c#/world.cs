@@ -63,7 +63,7 @@ public class World {
     // return rendering;
 
     // The following is slower
-    // var rendering = new List<String>();
+    // var rendering = new List<string>();
     // for (var y = 0u; y < height; y++) {
     //   for (var x = 0u; x < width; x++) {
     //     var cell = CellAt(x, y);
@@ -73,7 +73,7 @@ public class World {
     //   }
     //   rendering.Add("\n");
     // }
-    // return String.Join("", rendering.ToArray());
+    // return string.Join("", rendering);
 
     // The following is the fastest
     var renderSize = (int)(width * height + height);
@@ -123,8 +123,8 @@ public class World {
       throw new LocationOccupied(x, y);
     }
 
-    var key = MakeKey(x, y);
     var cell = new Cell(x, y, alive);
+    var key = MakeKey(x, y);
     cells.Add(key, cell);
     return true;
   }

@@ -1,16 +1,17 @@
-import std.stdio : write, writeln, writefln, stdout;
+import std.stdio : write, writeln, writefln;
 import std.process : environment;
 import std.datetime : MonoTime;
 import std.algorithm.comparison : min;
 import world;
 
 class Play {
-  public:
-    enum worldWidth = 150;
-    enum worldHeight = 40;
+  private:
+    enum uint worldWidth = 150;
+    enum uint worldHeight = 40;
     enum clearScreen = "\x1b[?2026h\x1b[H\x1b[2J";
     enum showScreen = "\x1b[?2026l";
 
+  public:
     static void run() {
       auto world = new World(
         width: worldWidth,
@@ -24,9 +25,9 @@ class Play {
       }
 
       auto totalTick = 0.0;
-      auto lowestTick = float.infinity;
+      auto lowestTick = double.infinity;
       auto totalRender = 0.0;
-      auto lowestRender = float.infinity;
+      auto lowestRender = double.infinity;
 
       while (true) {
         auto tickStart = MonoTime.currTime;
@@ -64,7 +65,8 @@ class Play {
       }
     }
 
-    static float _f(float value) {
+  private:
+    static double _f(double value) {
       // nanoseconds -> milliseconds
       return value / 1_000_000.0;
     }

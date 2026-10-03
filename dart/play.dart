@@ -1,6 +1,7 @@
-import 'world.dart';
 import 'dart:io';
 import 'dart:math';
+
+import 'world.dart';
 
 class Play {
   static const _worldWidth = 150;
@@ -28,7 +29,7 @@ class Play {
     final stopwatch = Stopwatch();
     stopwatch.start();
 
-    while(true) {
+    while (true) {
       final tickStart = stopwatch.elapsedMicroseconds;
       world.doTick();
       final tickFinish = stopwatch.elapsedMicroseconds;

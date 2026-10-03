@@ -14,9 +14,6 @@ type Play =
       height = worldHeight
     )
 
-    world.PopulateCells()
-    world.PrepopulateNeighbours()
-
     let minimal = Environment.GetEnvironmentVariable("MINIMAL") = "1"
 
     if not minimal then

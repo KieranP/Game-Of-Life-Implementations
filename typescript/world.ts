@@ -42,7 +42,7 @@ export class World {
 
     // Then execute the determined action for all cells
     for (const cell of this.#cells.values()) {
-      cell.alive = cell.nextState ?? cell.alive
+      cell.alive = cell.nextState ?? false
     }
 
     this.tick += 1
@@ -63,7 +63,7 @@ export class World {
     return rendering
 
     // The following is slower
-    // let rendering: Array<string> = []
+    // const rendering: Array<string> = []
     // for (let y = 0; y < this.#height; y++) {
     //   for (let x = 0; x < this.#width; x++) {
     //     const cell = this.#cellAt(x, y)
@@ -107,8 +107,8 @@ export class World {
       throw new LocationOccupied(x, y)
     }
 
-    const key = this.#makeKey(x, y)
     const cell = new Cell(x, y, alive)
+    const key = this.#makeKey(x, y)
     this.#cells.set(key, cell)
     return true
   }

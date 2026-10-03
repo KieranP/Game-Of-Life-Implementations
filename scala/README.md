@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-brew install java scala
+brew install scala
 ```
 
 ## Build
@@ -15,7 +15,7 @@ scalac *.scala
 ## Run
 
 ```bash
-scala run -cp . -M play
+scala run -cp . -M Play
 ```
 
 ## Notes

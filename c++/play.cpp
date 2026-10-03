@@ -8,12 +8,13 @@
 #include "world.cpp"
 
 class Play {
-  public:
-    static constexpr int WORLD_WIDTH = 150;
-    static constexpr int WORLD_HEIGHT = 40;
+  private:
+    static constexpr uint32_t WORLD_WIDTH = 150;
+    static constexpr uint32_t WORLD_HEIGHT = 40;
     static constexpr std::string_view CLEAR_SCREEN = "\x1b[?2026h\x1b[H\x1b[2J";
     static constexpr std::string_view SHOW_SCREEN = "\x1b[?2026l";
 
+  public:
     static void run() {
       auto world = World(
         WORLD_WIDTH,
@@ -32,7 +33,7 @@ class Play {
       auto total_render = 0.0;
       auto lowest_render = std::numeric_limits<double>::infinity();
 
-      while(true) {
+      while (true) {
         auto tick_start = std::chrono::steady_clock::now();
         world.dotick();
         auto tick_finish = std::chrono::steady_clock::now();

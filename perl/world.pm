@@ -16,9 +16,16 @@ class World {
     [-1, -1], [0, -1], [1, -1] # below
   ];
 
+  # Lexical methods are private, and must be declared before their first call
+  my method make_key;
+  my method cell_at;
+  my method populate_cells;
+  my method add_cell;
+  my method prepopulate_neighbours;
+
   ADJUST {
-    $self->populate_cells();
-    $self->prepopulate_neighbours();
+    $self->&populate_cells();
+    $self->&prepopulate_neighbours();
   }
 
   # Breaks the neighbour reference cycles so Perl can free the cells
@@ -36,9 +43,9 @@ class World {
     foreach my $cell (values $cells->%*) {
       my $alive_neighbours = $cell->alive_neighbours();
       if (!$cell->alive && $alive_neighbours == 3) {
-        $cell->set_next_state(1);
+        $cell->set_next_state(true);
       } elsif ($alive_neighbours < 2 || $alive_neighbours > 3) {
-        $cell->set_next_state(0);
+        $cell->set_next_state(false);
       } else {
         $cell->set_next_state($cell->alive);
       }
@@ -57,7 +64,7 @@ class World {
     my $rendering = "";
     for my $y ((0..$height-1)) {
       for my $x ((0..$width-1)) {
-        my $cell = $self->cell_at($x, $y);
+        my $cell = $self->&cell_at($x, $y);
         if ($cell) {
           $rendering .= $cell->to_char();
         }
@@ -70,7 +77,7 @@ class World {
     # my @rendering = ();
     # for my $y ((0..$height-1)) {
     #   for my $x ((0..$width-1)) {
-    #     my $cell = $self->cell_at($x, $y);
+    #     my $cell = $self->&cell_at($x, $y);
     #     if ($cell) {
     #       push(@rendering, $cell->to_char());
     #     }
@@ -92,7 +99,7 @@ class World {
   }
 
   method cell_at($x, $y) {
-    my $key = $self->make_key($x, $y);
+    my $key = $self->&make_key($x, $y);
     $cells->{$key};
   }
 
@@ -100,19 +107,19 @@ class World {
     for my $y ((0..$height-1)) {
       for my $x ((0..$width-1)) {
         my $alive = rand() <= 0.2;
-        $self->add_cell($x, $y, $alive);
+        $self->&add_cell($x, $y, $alive);
       }
     }
   }
 
   method add_cell($x, $y, $alive = false) {
-    my $existing = $self->cell_at($x, $y);
+    my $existing = $self->&cell_at($x, $y);
     if ($existing) {
       die "LocationOccupied($x-$y)";
     }
 
-    my $key = $self->make_key($x, $y);
     my $cell = Cell->new(x => $x, y => $y, alive => $alive);
+    my $key = $self->&make_key($x, $y);
     $cells->{$key} = $cell;
     true;
   }
@@ -134,7 +141,7 @@ class World {
           next; # Out of bounds
         }
 
-        my $neighbour = $self->cell_at($nx, $ny);
+        my $neighbour = $self->&cell_at($nx, $ny);
         if ($neighbour) {
           $cell->add_neighbour($neighbour);
         }

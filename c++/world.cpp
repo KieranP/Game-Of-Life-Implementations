@@ -34,7 +34,7 @@ class World {
 
       // Then execute the determined action for all cells
       for (auto& [_, cell] : cells) {
-        cell->alive = cell->next_state.value();
+        cell->alive = cell->next_state.value_or(false);
       }
 
       tick++;
@@ -134,10 +134,10 @@ class World {
         throw LocationOccupied(x, y);
       }
 
+      auto cell = std::make_unique<Cell>(x, y, alive);
+
       char buf[24];
       auto key = std::string(make_key(buf, x, y));
-
-      auto cell = std::make_unique<Cell>(x, y, alive);
       cells[key] = std::move(cell);
       return true;
     }

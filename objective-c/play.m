@@ -1,8 +1,8 @@
 #import <Foundation/Foundation.h>
 #import "World.h"
 
-static const NSUInteger WorldWidth = 150;
-static const NSUInteger WorldHeight = 40;
+static const uint32_t WorldWidth = 150;
+static const uint32_t WorldHeight = 40;
 #define CLEAR_SCREEN "\x1b[?2026h\x1b[H\x1b[2J"
 #define SHOW_SCREEN "\x1b[?2026l"
 
@@ -23,9 +23,9 @@ static const NSUInteger WorldHeight = 40;
     }
 
     double totalTick = 0.0;
-    double lowestTick = DBL_MAX;
+    double lowestTick = INFINITY;
     double totalRender = 0.0;
-    double lowestRender = DBL_MAX;
+    double lowestRender = INFINITY;
 
     NSProcessInfo *processInfo = [NSProcessInfo processInfo];
 
@@ -52,8 +52,8 @@ static const NSUInteger WorldHeight = 40;
           printf(CLEAR_SCREEN);
         }
 
-        printf("#%lu - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
-               (unsigned long)world.tick,
+        printf("#%u - World Tick (L: %.3f; A: %.3f) - Rendering (L: %.3f; A: %.3f)\n",
+               world.tick,
                [self _f:lowestTick],
                [self _f:avgTick],
                [self _f:lowestRender],

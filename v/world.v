@@ -102,13 +102,13 @@ pub fn (w World) render() string {
 }
 
 fn (w World) make_key(x u32, y u32) string {
-  // The following is slower:
+  // The following is slower
   // return '${x}-${y}'
 
-  // The following is the fastest:
+  // The following is the fastest
   return x.str() + '-' + y.str()
 
-  // The following is slower:
+  // The following is slower
   // return [x.str(), y.str()].join('-')
 }
 
