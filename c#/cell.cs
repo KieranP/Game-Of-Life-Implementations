@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-// using System.Linq;
+using System.Linq;
 
 public class Cell(uint x, uint y, bool alive = false) {
   public readonly uint X = x;
@@ -13,10 +13,10 @@ public class Cell(uint x, uint y, bool alive = false) {
   }
 
   public uint AliveNeighbours() {
-    // The following is slower
-    // return (uint)this.Neighbours.Count(
-    //   (neighbour) => neighbour.Alive
-    // );
+    // The following is the fastest
+    return (uint)this.Neighbours.Count(
+      (neighbour) => neighbour.Alive
+    );
 
     // The following is slower
     // var aliveNeighbours = 0u;
@@ -27,15 +27,15 @@ public class Cell(uint x, uint y, bool alive = false) {
     // }
     // return aliveNeighbours;
 
-    // The following is the fastest
-    var aliveNeighbours = 0u;
-    var count = this.Neighbours.Count;
-    for (var i = 0; i < count; i++) {
-      var neighbour = this.Neighbours[i];
-      if (neighbour.Alive) {
-        aliveNeighbours++;
-      }
-    }
-    return aliveNeighbours;
+    // The following is slower
+    // var aliveNeighbours = 0u;
+    // var count = this.Neighbours.Count;
+    // for (var i = 0; i < count; i++) {
+    //   var neighbour = this.Neighbours[i];
+    //   if (neighbour.Alive) {
+    //     aliveNeighbours++;
+    //   }
+    // }
+    // return aliveNeighbours;
   }
 }
